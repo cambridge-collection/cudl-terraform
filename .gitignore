@@ -1,1 +1,8 @@
 /.idea/
+/cudl-dev/.terraform/
+/cudl-dev/.terraform.lock.hcl
+/cudl-live/.terraform/
+/cudl-live/.terraform.lock.hcl
+/cudl-staging/.terraform/
+/cudl-staging/.terraform.lock.hcl
+/.terraform/

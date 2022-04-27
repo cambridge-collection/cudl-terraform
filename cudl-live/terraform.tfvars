@@ -1,4 +1,4 @@
-environment                  = "dev"
+environment                  = "live"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"
 source-bucket-name           = "cudl-data-source"
@@ -10,47 +10,47 @@ lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transfor
 transform-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_TEI_to_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue"
     "transcription" = false
     "filter_prefix" = "items/data/tei/"
     "filter_suffix" = ".xml"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_HTML"
     "transcription" = false
     "filter_prefix" = "pages/html/"
     "filter_suffix" = ".html"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "transcription" = false
     "filter_prefix" = "pages/images/"
     "other_filters" = "cudl.dl-dataset.json|cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_Collections"
     "transcription" = false
     "filter_prefix" = "collections/"
     "filter_suffix" = ".json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   },
   {
     "name"          = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
@@ -61,40 +61,40 @@ transform-lambda-information = [
     "filter_suffix" = ".xml"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 3
   }
 ]
 db-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUpdateDBQueue"
     "filter_prefix" = "collections/"
     "filter_suffix" = ".json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "filter_suffix" = "cudl.dl-dataset.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.1/AWSLambda_Data_Transform-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.5/AWSLambda_Data_Transform-0.5-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUIQueue"
     "filter_suffix" = "cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 2
+    "live_version"  = 4
   }
 ]
-dst-efs-prefix               = "/mnt/cudl-data-releases-dev/"
+dst-efs-prefix               = "/mnt/cudl-data-releases/"
 dst-prefix                   = "html/"
 dst-s3-prefix                = ""
 tmp-dir                      = "/tmp/dest"
