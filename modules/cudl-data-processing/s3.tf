@@ -38,7 +38,7 @@ locals {
   }] if try(lambda.other_filters, "") != ""
   ]))
 
-  other-cidr-blocks = length(var.cidr-blocks) > 1 ? toset(slice(var.cidr-blocks, 1, length(var.cidr-blocks))) : toset([])
+ # other-cidr-blocks = length(var.cidr-blocks) > 1 ? toset(slice(var.cidr-blocks, 1, length(var.cidr-blocks))) : toset([])
 }
 
 resource "aws_s3_bucket_notification" "additional-source-bucket-notifications" {

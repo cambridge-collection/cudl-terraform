@@ -1,4 +1,4 @@
-env-devterraform {
+terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -12,7 +12,7 @@ env-devterraform {
 
   backend "s3" {
     bucket         = "terraform-state-kie4di"
-    key            = "live-cudl-infra.tfstate"
+    key            = "dev-cudl-infra.tfstate"
     dynamodb_table = "terraform-state-lock-kie4di"
     region         = "eu-west-1"
   }
@@ -35,13 +35,10 @@ provider "aws" {
 module "cudl-data-processing" {
   source = "../modules/cudl-data-processing"
   chunks = var.chunks
-  cidr-blocks = var.cidr-blocks
   compressed-lambdas-directory = var.compressed-lambdas-directory
   data-function-name = var.data-function-name
   db-lambda-information = var.db-lambda-information
-  dchp-options-name = var.dchp-options-name
   destination-bucket-name = var.destination-bucket-name
-  domain-name = var.domain-name
   dst-efs-prefix = var.dst-efs-prefix
   dst-prefix = var.dst-prefix
   dst-s3-prefix = var.dst-s3-prefix
@@ -58,5 +55,7 @@ module "cudl-data-processing" {
   transcription-function-name = var.transcription-function-name
   transcriptions-bucket-name = var.transcriptions-bucket-name
   transform-lambda-information = var.transform-lambda-information
-  vpc-name = var.vpc-name
+  vpc-id = var.vpc-id
+  security-group-id = var.security-group-id
+  subnet-id = var.subnet-id
 }

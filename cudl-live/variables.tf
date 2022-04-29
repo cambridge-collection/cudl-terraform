@@ -104,24 +104,19 @@ variable "lambda-alias-name" {
   type        = string
 }
 
-variable "cidr-blocks" {
-  description = "Specify the CIDR blocks to be used by the VPC"
-  type        = list(string)
-}
-
-variable "vpc-name" {
-  description = "Specify a name to be given to the VPC"
+variable "vpc-id" {
+  description = "Specify a id of an existing VPC to use"
   type        = string
 }
 
-variable "domain-name" {
-  description = "Specify the domain name to be used in the VPC"
-  type        = string
+variable "subnet-id" {
+  description = "Specify an existing subnet id for cudl vpn"
+  type = string
 }
 
-variable "dchp-options-name" {
-  description = "Specify the name for the DCHP options set. To be prefixed by the environment."
-  type        = string
+variable "security-group-id" {
+  description = "Specify an existing security group id for cudl vpn"
+  type = string
 }
 
 variable "releases-root-directory-path" {

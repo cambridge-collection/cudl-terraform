@@ -103,10 +103,12 @@ chunks                       = 4
 data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
 transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
 lambda-alias-name            = "LIVE"
-cidr-blocks                  = ["10.0.0.0/24", "10.1.0.0/16"]
-vpc-name                     = "CUDL-NETBLOCK"
-domain-name                  = "internal.cudl.lib.cam.ac.uk"
-dchp-options-name            = "cudl internal domain 3"
+
+# Existing vpc info
+vpc-id                       = "vpc-ab7880ce"
+subnet-id                    = "subnet-fa1ed08d"
+security-group-id            = "sg-b79833d2"
+
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
 

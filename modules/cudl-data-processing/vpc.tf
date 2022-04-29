@@ -17,8 +17,6 @@ data "aws_security_group" "default" {
   id = "sg-b79833d2"
 }
 
-
-
 /*
 resource "aws_vpc" "cudl_vpc" {
   cidr_block = var.cidr-blocks[0]
