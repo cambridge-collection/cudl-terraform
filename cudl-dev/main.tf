@@ -59,4 +59,5 @@ module "cudl-data-processing" {
   transcriptions-bucket-name = var.transcriptions-bucket-name
   transform-lambda-information = var.transform-lambda-information
   vpc-name = var.vpc-name
+  vpc-id = var.vpc-id
 }

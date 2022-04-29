@@ -94,7 +94,7 @@ db-lambda-information = [
     "live_version"  = 5
   }
 ]
-dst-efs-prefix               = "/mnt/cudl-data-releases/"
+dst-efs-prefix               = "/mnt/cudl-data-releases"
 dst-prefix                   = "html/"
 dst-s3-prefix                = ""
 tmp-dir                      = "/tmp/dest"
@@ -103,6 +103,9 @@ chunks                       = 4
 data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
 transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
 lambda-alias-name            = "LIVE"
+
+# Existing vpc info
+vpc-id                       = "vpc-ab7880ce"
 cidr-blocks                  = ["10.0.0.0/24", "10.1.0.0/16"]
 vpc-name                     = "CUDL-NETBLOCK"
 domain-name                  = "internal.cudl.lib.cam.ac.uk"
