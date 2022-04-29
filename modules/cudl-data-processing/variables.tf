@@ -109,6 +109,11 @@ variable "cidr-blocks" {
   type        = list(string)
 }
 
+variable "vpc-id" {
+  description = "Specify a id of an existing VPC to use"
+  type        = string
+}
+
 variable "vpc-name" {
   description = "Specify a name to be given to the VPC"
   type        = string

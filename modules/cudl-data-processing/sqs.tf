@@ -3,7 +3,9 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
 
   name = substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)
 
-  policy = <<POLICY
+  visibility_timeout_seconds = 900
+
+policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -32,6 +34,8 @@ resource "aws_sqs_queue" "db-lambda-sqs-queue" {
   count = length(var.db-lambda-information)
 
   name = substr("${var.environment}-${var.db-lambda-information[count.index].queue_name}", 0, 64)
+
+  visibility_timeout_seconds = 900
 
   policy = <<POLICY
 {

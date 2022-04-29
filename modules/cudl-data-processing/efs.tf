@@ -16,6 +16,9 @@ resource "aws_efs_file_system" "efs-volume" {
 }
 
 resource "aws_efs_access_point" "efs-access-point" {
+  tags = {
+    Name = "${var.environment}-${var.efs-name}-access-point"
+  }
   file_system_id = aws_efs_file_system.efs-volume.id
 
   posix_user {
@@ -32,4 +35,9 @@ resource "aws_efs_access_point" "efs-access-point" {
       permissions = 777
     }
   }
+}
+
+resource "aws_efs_mount_target" "efs-mount-point" {
+  file_system_id = aws_efs_file_system.efs-volume.id
+  subnet_id      = data.aws_subnet.cudl_subnet.id
 }

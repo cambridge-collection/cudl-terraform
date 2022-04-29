@@ -26,6 +26,60 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "arn:aws:s3:::${aws_s3_bucket.dest-bucket.arn}/*"
     ]
   }
+  statement {
+    actions = [
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes"
+    ]
+    resources = [
+      "arn:aws:sqs:*:*:${var.environment}-*"
+    ]
+  }
+  statement {
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:logs:*:*:${var.environment}-*"
+    ]
+  }
+  statement {
+    actions = [
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteNetworkInterface",
+        "ec2:UnassignPrivateIpAddresses",
+        "ec2:AssignPrivateIpAddresses"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    actions = [
+        "secretsmanager:GetRandomPassword",
+        "secretsmanager:GetResourcePolicy",
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:ListSecretVersionIds",
+        "secretsmanager:ListSecrets"
+    ]
+    resources = [
+      "arn:aws:secretsmanager:*:*:${var.environment}/cudl/*"
+    ]
+  }
+  statement {
+    actions = [
+        "lambda:InvokeFunction",
+        "lambda:InvokeAsync"
+      ]
+      resources = [
+        "arn:aws:lambda:*:*:${var.environment}-*"
+      ]
+  }
 }
 
 resource "aws_iam_role" "assume-lambda-role" {
@@ -35,7 +89,7 @@ resource "aws_iam_role" "assume-lambda-role" {
 }
 
 resource "aws_iam_policy" "run-lambda-policy" {
-  name = "${var.environment}-cudl-lambda-test-policy"
+  name = "${var.environment}-cudl-lambda-policy"
 
   policy = data.aws_iam_policy_document.allow-get-and-list-policy.json
 }

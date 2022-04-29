@@ -12,8 +12,6 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
 
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
 
-  #for_each = toset(var.transform-lambda-information)
-
   count  = length(var.transform-lambda-information)
   bucket = aws_s3_bucket.source-bucket.id
 
@@ -23,7 +21,6 @@ resource "aws_s3_bucket_notification" "source-bucket-notifications" {
     filter_prefix = try(var.transform-lambda-information[count.index].filter_prefix, "") != "" ? var.transform-lambda-information[count.index].filter_prefix : null
     filter_suffix = try(var.transform-lambda-information[count.index].filter_suffix, "") != "" ? var.transform-lambda-information[count.index].filter_suffix : null
   }
-  #var.transform-lambda-information[count.index]
 
   # without the `depends_on` argument, the bucket notification creation fails because the
   # lambda function doesn't exist yet
@@ -59,7 +56,7 @@ resource "aws_s3_bucket_notification" "additional-source-bucket-notifications" {
 
   # without the `depends_on` argument, the bucket notification creation fails because the
   # lambda function doesn't exist yet
-  depends_on = [aws_lambda_function.create-transform-lambda-function]
+  depends_on = [aws_lambda_function.create-transform-lambda-function, aws_sqs_queue.transform-lambda-sqs-queue]
 }
 
 resource "aws_s3_bucket_notification" "dest-bucket-notifications" {
