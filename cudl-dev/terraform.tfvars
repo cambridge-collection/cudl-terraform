@@ -45,6 +45,18 @@ source-bucket-sqs-notifications  = [
   },
   {
     "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "filter_prefix" = "cudl.dl-dataset"
+    "filter_suffix" = ".json"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "filter_prefix" = "cudl.ui"
+    "filter_suffix" = ".json5"
+  },
+  {
+    "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_Collections"
     "filter_prefix" = "collections/"
     "filter_suffix" = ".json"

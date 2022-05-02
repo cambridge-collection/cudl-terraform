@@ -19,6 +19,17 @@ policy = <<POLICY
       "Condition": {
         "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.source-bucket.arn}" }
       }
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "sns.amazonaws.com"
+      },
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:SendMessageBatch"
+      ],
+      "Resource": "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}"
     }
   ]
 }
