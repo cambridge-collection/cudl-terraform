@@ -10,11 +10,11 @@ data "aws_vpc" "existing_cudl_vpc" {
 }
 
 data "aws_subnet" "cudl_subnet" {
-  id = "subnet-fa1ed08d"
+  id = var.subnet-id
 }
 
 data "aws_security_group" "default" {
-  id = "sg-b79833d2"
+  id = var.security-group-id
 }
 
 /*

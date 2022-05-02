@@ -14,16 +14,20 @@ data "aws_iam_policy_document" "assume-role-lambda-policy" {
 data "aws_iam_policy_document" "allow-get-and-list-policy" {
   statement {
     actions = [
-      "s3:Get*",
-      "s3:List*",
-      "s3:Put*"
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:GetBucketNotification",
+      "s3:PutObject",
+      "s3:DeleteObject",
+      "s3:PutObjectAcl",
+      "s3:GetObjectAcl"
     ]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.source-bucket.arn}",
-      "arn:aws:s3:::${aws_s3_bucket.source-bucket.arn}/*",
-      "arn:aws:s3:::${aws_s3_bucket.dest-bucket.arn}",
-      "arn:aws:s3:::${aws_s3_bucket.dest-bucket.arn}/*"
+      "arn:aws:s3:::${var.environment}-${var.source-bucket-name}",
+      "arn:aws:s3:::${var.environment}-${var.source-bucket-name}/*",
+      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
+      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*"
     ]
   }
   statement {
@@ -43,7 +47,7 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "logs:PutLogEvents"
     ]
     resources = [
-      "arn:aws:logs:*:*:${var.environment}-*"
+      "arn:aws:logs:*:*:/aws/lambda/${var.environment}-*"
     ]
   }
   statement {

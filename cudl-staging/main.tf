@@ -58,4 +58,7 @@ module "cudl-data-processing" {
   vpc-id = var.vpc-id
   security-group-id = var.security-group-id
   subnet-id = var.subnet-id
+  lambda-db-jdbc-driver = var.lambda-db-jdbc-driver
+  lambda-db-secret-key = var.lambda-db-secret-key
+  lambda-db-url = var.lambda-db-url
 }
