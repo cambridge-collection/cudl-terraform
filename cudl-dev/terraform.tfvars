@@ -24,10 +24,10 @@ source-bucket-sns-notifications  = [
         "queue_name" = "CUDLPackageDataQueue",
         "raw"        = true
       },
-      {
+/*      {
         "queue_name" = "CUDLTranscriptionsQueue",
         "raw"        = true
-      },
+      },*/
     ]
   }
 ]

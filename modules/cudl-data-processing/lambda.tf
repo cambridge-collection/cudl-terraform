@@ -46,6 +46,18 @@ resource "aws_lambda_function" "create-db-lambda-function" {
   function_name = substr("${var.environment}-${var.db-lambda-information[count.index].name}", 0, 64)
   handler       = var.db-lambda-information[count.index].handler
   publish       = true
+
+  vpc_config {
+    subnet_ids         = [data.aws_subnet.cudl_subnet.id]
+    security_group_ids = [data.aws_security_group.default.id]
+  }
+
+  file_system_config {
+    arn = aws_efs_access_point.efs-access-point.arn
+
+    # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
+    local_mount_path = var.dst-efs-prefix
+  }
 }
 
 resource "aws_lambda_alias" "create-db-lambda-alias" {
@@ -126,4 +138,11 @@ resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
 
   event_source_arn = aws_sqs_queue.transform-lambda-sqs-queue[count.index].arn
   function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
+}
+
+resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-db" {
+  count = length(var.db-lambda-information)
+
+  event_source_arn = aws_sqs_queue.db-lambda-sqs-queue[count.index].arn
+  function_name    = aws_lambda_function.create-db-lambda-function[count.index].arn
 }
