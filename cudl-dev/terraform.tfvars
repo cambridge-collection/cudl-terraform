@@ -1,4 +1,5 @@
 environment                  = "dev"
+aws-account-number           = "247242244017"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"
 source-bucket-name           = "cudl-data-source"
@@ -10,6 +11,45 @@ lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transfor
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/viewerdev?autoReconnect=true"
 lambda-db-secret-key         = "dev/cudl/cudl_viewer_db"
+source-bucket-sns-notifications  = [
+  {
+    "filter_prefix" = "items/data/tei/",
+    "filter_suffix" = ".xml"
+    "subscriptions" = [
+      {
+        "queue_name" = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY",
+        "raw"        = true
+      },
+      {
+        "queue_name" = "CUDLPackageDataQueue",
+        "raw"        = true
+      },
+      {
+        "queue_name" = "CUDLTranscriptionsQueue",
+        "raw"        = true
+      },
+    ]
+  }
+]
+source-bucket-sqs-notifications  = [
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_HTML",
+    "filter_prefix" = "pages/html/",
+    "filter_suffix" = ".html"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "filter_prefix" = "pages/images/"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_Collections"
+    "filter_prefix" = "collections/"
+    "filter_suffix" = ".json"
+  }
+]
 transform-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_TEI_to_JSON"
@@ -18,8 +58,6 @@ transform-lambda-information = [
     "transcription" = false
     "timeout"       = 900
     "memory"        = 512
-    "filter_prefix" = "items/data/tei/"
-    "filter_suffix" = ".xml"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
     "runtime"       = "java11"
     "live_version"  = 5
@@ -31,8 +69,6 @@ transform-lambda-information = [
     "transcription" = false
     "timeout"       = 900
     "memory"        = 512
-    "filter_prefix" = "pages/html/"
-    "filter_suffix" = ".html"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
     "runtime"       = "java11"
     "live_version"  = 5
@@ -44,7 +80,6 @@ transform-lambda-information = [
     "transcription" = false
     "timeout"       = 900
     "memory"        = 512
-    "filter_prefix" = "pages/images/"
     "other_filters" = "cudl.dl-dataset.json|cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
     "runtime"       = "java11"
@@ -57,8 +92,6 @@ transform-lambda-information = [
     "transcription" = false
     "timeout"       = 900
     "memory"        = 512
-    "filter_prefix" = "collections/"
-    "filter_suffix" = ".json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
     "runtime"       = "java11"
     "live_version"  = 5
@@ -70,8 +103,6 @@ transform-lambda-information = [
     "transcription" = true
     "timeout"       = 900
     "memory"        = 768
-    "filter_prefix" = "items/data/tei/"
-    "filter_suffix" = ".xml"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent::handleRequest"
     "runtime"       = "java11"
     "live_version"  = 4
@@ -96,7 +127,7 @@ db-lambda-information = [
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "timeout"       = 900
     "memory"        = 512
-    "filter_suffix" = "cudl.dl-dataset.json"
+    "filter_prefix" = "cudl.dl-dataset.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
     "runtime"       = "java11"
     "live_version"  = 5
@@ -107,7 +138,7 @@ db-lambda-information = [
     "queue_name"    = "CUDLPackageDataUIQueue"
     "timeout"       = 900
     "memory"        = 512
-    "filter_suffix" = "cudl.ui.json"
+    "filter_prefix" = "cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
     "runtime"       = "java11"
     "live_version"  = 5

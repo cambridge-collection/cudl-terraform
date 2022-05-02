@@ -61,4 +61,7 @@ module "cudl-data-processing" {
   lambda-db-jdbc-driver = var.lambda-db-jdbc-driver
   lambda-db-secret-key = var.lambda-db-secret-key
   lambda-db-url = var.lambda-db-url
+  aws-account-number = var.aws-account-number
+  source-bucket-sns-notifications = var.source-bucket-sns-notifications
+  source-bucket-sqs-notifications = var.source-bucket-sqs-notifications
 }

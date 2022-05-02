@@ -4,6 +4,11 @@ variable "deployment-aws-region" {
   default     = "eu-west-1"
 }
 
+variable "aws-account-number" {
+  description = "Account number for AWS.  Used to build arn values"
+  type = string
+}
+
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
@@ -142,4 +147,14 @@ variable "releases-root-directory-path" {
 variable "efs-name" {
   description = "Specify the name of the EFS. This will be set as a tag, prefixed by the environment"
   type        = string
+}
+
+variable "source-bucket-sns-notifications" {
+  description = "List of SNS notifications on source s3 bucket"
+  type        = list(any)
+}
+
+variable "source-bucket-sqs-notifications" {
+  description = "List of SQS notifications on source s3 bucket"
+  type        = list(any)
 }
