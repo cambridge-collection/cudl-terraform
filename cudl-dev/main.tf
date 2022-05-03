@@ -64,4 +64,5 @@ module "cudl-data-processing" {
   aws-account-number = var.aws-account-number
   source-bucket-sns-notifications = var.source-bucket-sns-notifications
   source-bucket-sqs-notifications = var.source-bucket-sqs-notifications
+  environment = var.environment
 }

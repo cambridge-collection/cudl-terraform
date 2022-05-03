@@ -9,8 +9,8 @@ lambda-layer-name            = "cudl-xslt-layer"
 lambda-layer-bucket          = "cudl-artefacts"
 lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transform-xslt.zip"
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
-lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/viewerdev?autoReconnect=true"
-lambda-db-secret-key         = "dev/cudl/cudl_viewer_db"
+lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/viewerstaging?autoReconnect=true"
+lambda-db-secret-key         = "staging/cudl/cudl_viewer_db"
 source-bucket-sns-notifications  = [
   {
     "filter_prefix" = "items/data/tei/",

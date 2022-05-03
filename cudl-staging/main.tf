@@ -12,7 +12,7 @@ terraform {
 
   backend "s3" {
     bucket         = "terraform-state-kie4di"
-    key            = "dev-cudl-infra.tfstate"
+    key            = "staging-cudl-infra.tfstate"
     dynamodb_table = "terraform-state-lock-kie4di"
     region         = "eu-west-1"
   }
@@ -64,4 +64,5 @@ module "cudl-data-processing" {
   aws-account-number = var.aws-account-number
   source-bucket-sns-notifications = var.source-bucket-sns-notifications
   source-bucket-sqs-notifications = var.source-bucket-sqs-notifications
+  environment = var.environment
 }
