@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "source-bucket" {
+  count = var.db-only-processing ? 0 : 1
   bucket = lower("${var.environment}-${var.source-bucket-name}")
 }
 
@@ -13,12 +14,14 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
 
   #count  = length(var.transform-lambda-information)
-  bucket = aws_s3_bucket.source-bucket.id
+  count  =  length(var.source-bucket-sns-notifications)>0 || length(var.source-bucket-sqs-notifications)>0 ? 1: 0
+
+  bucket = aws_s3_bucket.source-bucket[0].id
 
   // TODO This is a hack for now, to get multiple notifications working for a bucket
   // If any more lambdas / sqs / sns is added an extra block will need adding.
   topic {
-    topic_arn     = aws_sns_topic.source_item_updated.arn
+    topic_arn     = aws_sns_topic.source_item_updated[0].arn
     events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
     filter_prefix = try(var.source-bucket-sns-notifications[0].filter_prefix, "") != "" ? var.source-bucket-sns-notifications[0].filter_prefix : null
     filter_suffix = try(var.source-bucket-sns-notifications[0].filter_suffix, "") != "" ? var.source-bucket-sns-notifications[0].filter_suffix : null

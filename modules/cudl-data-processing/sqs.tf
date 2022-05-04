@@ -17,7 +17,7 @@ policy = <<POLICY
       "Action": "sqs:SendMessage",
       "Resource": "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}",
       "Condition": {
-        "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.source-bucket.arn}" }
+        "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.source-bucket[0].arn}" }
       }
     },
     {

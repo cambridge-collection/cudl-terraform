@@ -1,4 +1,5 @@
 environment                  = "dev"
+db-only-processing           = false
 aws-account-number           = "247242244017"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"

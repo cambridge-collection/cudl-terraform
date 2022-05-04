@@ -8,3 +8,5 @@
 /.terraform/
 /modules/cudl-data-processing/properties_files/
 /modules/cudl-data-processing/zipped_properties_files/
+/cudl-production/.terraform/
+/cudl-production/.terraform.lock.hcl

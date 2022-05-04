@@ -1,4 +1,5 @@
 resource "aws_efs_file_system" "efs-volume" {
+
   availability_zone_name = "${var.deployment-aws-region}a"
   encrypted              = true
 
@@ -16,6 +17,7 @@ resource "aws_efs_file_system" "efs-volume" {
 }
 
 resource "aws_efs_access_point" "efs-access-point" {
+
   tags = {
     Name = "${var.environment}-${var.efs-name}-access-point"
   }
@@ -35,9 +37,13 @@ resource "aws_efs_access_point" "efs-access-point" {
       permissions = 777
     }
   }
+  depends_on = [aws_efs_file_system.efs-volume]
 }
 
 resource "aws_efs_mount_target" "efs-mount-point" {
+
   file_system_id = aws_efs_file_system.efs-volume.id
   subnet_id      = data.aws_subnet.cudl_subnet.id
+
+  depends_on = [aws_efs_file_system.efs-volume]
 }

@@ -15,6 +15,11 @@ variable "environment" {
   default     = "staging"
 }
 
+variable "db-only-processing" {
+  description = "true for when we just want release s3 and lambdas e.g. for production environment"
+  type = bool
+}
+
 variable "source-bucket-name" {
   description = "The name of the s3 bucket that stores the source CUDL files (pre-processing). Will be prefixed with the environment value."
   type        = string

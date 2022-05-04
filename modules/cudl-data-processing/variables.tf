@@ -12,6 +12,12 @@ variable "aws-account-number" {
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
+  default     = "staging"
+}
+
+variable "db-only-processing" {
+  description = "true for when we just want release s3 and lambdas e.g. for production environment"
+  type = bool
 }
 
 variable "source-bucket-name" {

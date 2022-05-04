@@ -31,6 +31,8 @@ resource "aws_lambda_alias" "create-transform-lambda-alias" {
   name             = var.lambda-alias-name
   function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
   function_version = var.transform-lambda-information[count.index].live_version
+
+  depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
 
 resource "aws_lambda_function" "create-db-lambda-function" {
@@ -39,8 +41,8 @@ resource "aws_lambda_function" "create-db-lambda-function" {
   s3_bucket     = var.lambda-jar-bucket
   s3_key        = var.db-lambda-information[count.index].jar_path
   runtime       = var.db-lambda-information[count.index].runtime
-  timeout       = var.transform-lambda-information[count.index].timeout
-  memory_size   = var.transform-lambda-information[count.index].memory
+  timeout       = var.db-lambda-information[count.index].timeout
+  memory_size   = var.db-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
   layers        = [aws_lambda_layer_version.db-properties-layer.arn]
   function_name = substr("${var.environment}-${var.db-lambda-information[count.index].name}", 0, 64)
@@ -113,7 +115,7 @@ resource "aws_lambda_layer_version" "transform-properties-layer" {
   filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
   layer_name = "${var.environment}-properties"
 
-  compatible_runtimes = ["java11"]
+  compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
 }
 
 resource "aws_lambda_layer_version" "db-properties-layer" {
@@ -121,7 +123,7 @@ resource "aws_lambda_layer_version" "db-properties-layer" {
   filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
   layer_name = "${var.environment}-properties"
 
-  compatible_runtimes = ["java11"]
+  compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
 }
 
 resource "aws_lambda_layer_version" "xslt-layer" {

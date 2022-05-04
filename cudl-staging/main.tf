@@ -65,4 +65,5 @@ module "cudl-data-processing" {
   source-bucket-sns-notifications = var.source-bucket-sns-notifications
   source-bucket-sqs-notifications = var.source-bucket-sqs-notifications
   environment = var.environment
+  db-only-processing = var.db-only-processing
 }
