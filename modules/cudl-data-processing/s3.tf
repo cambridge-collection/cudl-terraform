@@ -22,7 +22,7 @@ resource "aws_s3_bucket_notification" "source-bucket-notifications" {
   // If any more lambdas / sqs / sns is added an extra block will need adding.
   topic {
     topic_arn     = aws_sns_topic.source_item_updated[0].arn
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
+    events        = ["s3:ObjectCreated:*"]   # TODO Removed Event "s3:ObjectRemoved:*" as there is a bug in editing items
     filter_prefix = try(var.source-bucket-sns-notifications[0].filter_prefix, "") != "" ? var.source-bucket-sns-notifications[0].filter_prefix : null
     filter_suffix = try(var.source-bucket-sns-notifications[0].filter_suffix, "") != "" ? var.source-bucket-sns-notifications[0].filter_suffix : null
   }

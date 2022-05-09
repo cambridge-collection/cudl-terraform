@@ -10,7 +10,7 @@ lambda-layer-name            = "cudl-xslt-layer"
 lambda-layer-bucket          = "cudl-artefacts"
 lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transform-xslt.zip"
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
-lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/viewerdev?autoReconnect=true"
+lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "dev/cudl/cudl_viewer_db"
 source-bucket-sns-notifications  = [
   {
@@ -73,7 +73,6 @@ transform-lambda-information = [
     "memory"        = 512
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
@@ -84,7 +83,6 @@ transform-lambda-information = [
     "memory"        = 512
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
@@ -96,7 +94,6 @@ transform-lambda-information = [
     "other_filters" = "cudl.dl-dataset.json|cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
@@ -107,7 +104,6 @@ transform-lambda-information = [
     "memory"        = 512
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   },
   {
     "name"          = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
@@ -118,7 +114,6 @@ transform-lambda-information = [
     "memory"        = 768
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 4
   }
 ]
 db-lambda-information = [
@@ -132,7 +127,6 @@ db-lambda-information = [
     "filter_suffix" = ".json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
@@ -143,7 +137,6 @@ db-lambda-information = [
     "filter_prefix" = "cudl.dl-dataset.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
@@ -154,7 +147,6 @@ db-lambda-information = [
     "filter_prefix" = "cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 5
   }
 ]
 dst-efs-prefix               = "/mnt/cudl-data-releases"

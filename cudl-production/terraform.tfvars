@@ -10,9 +10,9 @@ lambda-layer-name            = "cudl-xslt-layer"
 lambda-layer-bucket          = "cudl-artefacts"
 lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transform-xslt.zip"
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
-lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/viewerlive?autoReconnect=true"
-#lambda-db-secret-key         = "production/cudl/cudl_viewer_db"
-lambda-db-secret-key         = ""
+lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/production_cudl_viewer?autoReconnect=true"
+lambda-db-secret-key         = "production/cudl/cudl_viewer_db"
+
 source-bucket-sns-notifications  = [
 ]
 source-bucket-sqs-notifications  = [
@@ -30,7 +30,6 @@ db-lambda-information = [
     "filter_suffix" = ".json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 1
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
@@ -41,7 +40,6 @@ db-lambda-information = [
     "filter_prefix" = "cudl.dl-dataset.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 1
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
@@ -52,7 +50,6 @@ db-lambda-information = [
     "filter_prefix" = "cudl.ui.json"
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
     "runtime"       = "java11"
-    "live_version"  = 1
   }
 ]
 dst-efs-prefix               = "/mnt/cudl-data-releases"

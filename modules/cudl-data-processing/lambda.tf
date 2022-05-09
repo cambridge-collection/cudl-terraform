@@ -30,7 +30,8 @@ resource "aws_lambda_alias" "create-transform-lambda-alias" {
 
   name             = var.lambda-alias-name
   function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
-  function_version = var.transform-lambda-information[count.index].live_version
+  #function_version = var.transform-lambda-information[count.index].live_version
+  function_version = aws_lambda_function.create-transform-lambda-function[count.index].version
 
   depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
@@ -67,7 +68,8 @@ resource "aws_lambda_alias" "create-db-lambda-alias" {
 
   name             = var.lambda-alias-name
   function_name    = aws_lambda_function.create-db-lambda-function[count.index].arn
-  function_version = var.db-lambda-information[count.index].live_version
+  #function_version = var.db-lambda-information[count.index].live_version
+  function_version = aws_lambda_function.create-db-lambda-function[count.index].version
 }
 
 resource "local_file" "create-local-lambda-properties-file" {
@@ -114,16 +116,20 @@ data "archive_file" "zip_transform_properties_lambda_layer" {
 resource "aws_lambda_layer_version" "transform-properties-layer" {
   filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
   layer_name = "${var.environment}-properties"
+  source_code_hash  = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
   compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
+  depends_on = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
 resource "aws_lambda_layer_version" "db-properties-layer" {
 
   filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
   layer_name = "${var.environment}-properties"
+  source_code_hash  = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
   compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
+  depends_on = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
 resource "aws_lambda_layer_version" "xslt-layer" {
