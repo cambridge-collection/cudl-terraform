@@ -4,10 +4,20 @@ variable "deployment-aws-region" {
   default     = "eu-west-1"
 }
 
+variable "aws-account-number" {
+  description = "Account number for AWS.  Used to build arn values"
+  type = string
+}
+
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "dev"
+  default     = "staging"
+}
+
+variable "db-only-processing" {
+  description = "true for when we just want release s3 and lambdas e.g. for production environment"
+  type = bool
 }
 
 variable "source-bucket-name" {
@@ -47,6 +57,21 @@ variable "lambda-layer-bucket" {
 variable "lambda-layer-filepath" {
   description = "The full path to the XSLT layer ZIP, found in the `lambda-layer-bucket`"
   type        = string
+}
+
+variable "lambda-db-jdbc-driver" {
+  description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
+  type = string
+}
+
+variable "lambda-db-url" {
+  description = "The url used for cudl db connection.  Has placeholders in for <HOST> and <PORT>."
+  type = string
+}
+
+variable "lambda-db-secret-key" {
+  description = "The path to the secret key that's used to access the cudl db credentials"
+  type = string
 }
 
 variable "transform-lambda-information" {
@@ -104,24 +129,19 @@ variable "lambda-alias-name" {
   type        = string
 }
 
-variable "cidr-blocks" {
-  description = "Specify the CIDR blocks to be used by the VPC"
-  type        = list(string)
-}
-
-variable "vpc-name" {
-  description = "Specify a name to be given to the VPC"
+variable "vpc-id" {
+  description = "Specify a id of an existing VPC to use"
   type        = string
 }
 
-variable "domain-name" {
-  description = "Specify the domain name to be used in the VPC"
-  type        = string
+variable "subnet-id" {
+  description = "Specify an existing subnet id for cudl vpn"
+  type = string
 }
 
-variable "dchp-options-name" {
-  description = "Specify the name for the DCHP options set. To be prefixed by the environment."
-  type        = string
+variable "security-group-id" {
+  description = "Specify an existing security group id for cudl vpn"
+  type = string
 }
 
 variable "releases-root-directory-path" {
@@ -132,4 +152,14 @@ variable "releases-root-directory-path" {
 variable "efs-name" {
   description = "Specify the name of the EFS. This will be set as a tag, prefixed by the environment"
   type        = string
+}
+
+variable "source-bucket-sns-notifications" {
+  description = "List of SNS notifications on source s3 bucket"
+  type        = list(any)
+}
+
+variable "source-bucket-sqs-notifications" {
+  description = "List of SQS notifications on source s3 bucket"
+  type        = list(any)
 }
