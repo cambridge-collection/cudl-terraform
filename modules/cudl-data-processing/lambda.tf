@@ -23,6 +23,8 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
     # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
     local_mount_path = var.dst-efs-prefix
   }
+
+  depends_on = [aws_efs_mount_target.efs-mount-point]
 }
 
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
@@ -61,6 +63,8 @@ resource "aws_lambda_function" "create-db-lambda-function" {
     # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
     local_mount_path = var.dst-efs-prefix
   }
+
+  depends_on = [aws_efs_mount_target.efs-mount-point]
 }
 
 resource "aws_lambda_alias" "create-db-lambda-alias" {
