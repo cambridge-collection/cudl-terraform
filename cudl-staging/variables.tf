@@ -79,6 +79,16 @@ variable "transform-lambda-information" {
   type        = list(any)
 }
 
+variable "transcription-pagify-xslt" {
+  description = "Use to set the path to pagify xslt in /opt (from layer)"
+  type        = string
+}
+
+variable "transcription-mstei-xslt" {
+  description = "Use to set the path to mstei xslt in /opt (from layer)"
+  type        = string
+}
+
 variable "db-lambda-information" {
   description = "A list of maps containing information about the database lambda functions"
   type        = list(any)

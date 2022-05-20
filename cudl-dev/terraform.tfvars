@@ -8,7 +8,7 @@ compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name            = "cudl-xslt-layer"
 lambda-layer-bucket          = "cudl-artefacts"
-lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transform-xslt.zip"
+lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transform-xslt-0.0.5.zip"
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "dev/cudl/cudl_viewer_db"
@@ -107,12 +107,12 @@ transform-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_CUDLGenerateTranscriptionHTML/0.1/AWSLambda_CUDLGenerateTranscriptionHTML-0.1-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.6/AWSLambda_Data_Transform-0.6-jar-with-dependencies.jar"
     "queue_name"    = "CUDLTranscriptionsQueue"
     "transcription" = true
     "timeout"       = 900
     "memory"        = 768
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent::handleRequest"
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
     "runtime"       = "java11"
   }
 ]
@@ -157,6 +157,8 @@ large-file-limit             = 1000000
 chunks                       = 4
 data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
 transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
+transcription-pagify-xslt    = "/opt/xslt/transcription/pagify.xsl"
+transcription-mstei-xslt     = "/opt/xslt/transcription/msTeiTrans.xsl"
 lambda-alias-name            = "LIVE"
 
 # Existing vpc info

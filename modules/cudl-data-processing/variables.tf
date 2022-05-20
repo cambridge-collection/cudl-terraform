@@ -124,6 +124,16 @@ variable "transcription-function-name" {
   type        = string
 }
 
+variable "transcription-pagify-xslt" {
+  description = "Use to set the path to pagify xslt in /opt (from layer)"
+  type        = string
+}
+
+variable "transcription-mstei-xslt" {
+  description = "Use to set the path to mstei xslt in /opt (from layer)"
+  type        = string
+}
+
 variable "lambda-alias-name" {
   description = "Use to set the name for the lambda function alias(es)"
   type        = string

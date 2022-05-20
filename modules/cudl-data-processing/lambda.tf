@@ -7,7 +7,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   timeout       = var.transform-lambda-information[count.index].timeout
   memory_size   = var.transform-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
-  layers        = concat(var.transform-lambda-information[count.index].transcription ? [] : [aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn])
+  layers        = concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn])
   function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
   handler       = var.transform-lambda-information[count.index].handler
   publish       = true
@@ -102,6 +102,14 @@ resource "local_file" "create-local-lambda-properties-file" {
     DB_JDBC_DRIVER=${var.lambda-db-jdbc-driver}
     DB_URL=${var.lambda-db-url}
     DB_SECRET_KEY=${var.lambda-db-secret-key}
+
+    TRANSCRIPTION_DST_BUCKET=${var.environment}-${var.transcriptions-bucket-name}
+    TRANSCRIPTION_DST_PREFIX=${var.dst-prefix}
+    TRANSCRIPTION_LARGE_FILE_LIMIT=${var.large-file-limit}
+    TRANSCRIPTION_CHUNKS=${var.chunks}
+    TRANSCRIPTION_FUNCTION_NAME=${var.transcription-function-name}
+    TRANSCRIPTION_PAGIFY_XSLT=${var.transcription-pagify-xslt}
+    TRANSCRIPTION_MSTEI_XSLT=${var.transcription-mstei-xslt}
   EOT
 
   filename = "${path.module}/properties_files/${var.environment}/java/lib/cudl-loader-lambda.properties"

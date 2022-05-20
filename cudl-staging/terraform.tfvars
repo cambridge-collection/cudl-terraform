@@ -158,6 +158,8 @@ large-file-limit             = 1000000
 chunks                       = 4
 data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
 transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
+transcription-pagify-xslt    = "/opt/xslt/transcription/pagify.xsl"
+transcription-mstei-xslt     = "/opt/xslt/transcription/msTeiTrans.xsl"
 lambda-alias-name            = "LIVE"
 
 # Existing vpc info

@@ -66,4 +66,6 @@ module "cudl-data-processing" {
   source-bucket-sqs-notifications = var.source-bucket-sqs-notifications
   environment = var.environment
   db-only-processing = var.db-only-processing
+  transcription-pagify-xslt = var.transcription-pagify-xslt
+  transcription-mstei-xslt = var.transcription-mstei-xslt
 }
