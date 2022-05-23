@@ -12,16 +12,22 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   handler       = var.transform-lambda-information[count.index].handler
   publish       = true
 
-  vpc_config {
-    subnet_ids         = [data.aws_subnet.cudl_subnet.id]
-    security_group_ids = [data.aws_security_group.default.id]
+  dynamic "vpc_config" {
+    for_each = var.transform-lambda-information[count.index].transcription ? []:[1]
+    content {
+      subnet_ids         = [data.aws_subnet.cudl_subnet.id]
+      security_group_ids = [data.aws_security_group.default.id]
+    }
   }
 
-  file_system_config {
-    arn = aws_efs_access_point.efs-access-point.arn
+  dynamic "file_system_config" {
+    for_each = var.transform-lambda-information[count.index].transcription ? []:[1]
+    content {
+      arn = aws_efs_access_point.efs-access-point.arn
 
-    # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
-    local_mount_path = var.dst-efs-prefix
+      # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
+      local_mount_path = var.dst-efs-prefix
+    }
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
@@ -107,7 +113,7 @@ resource "local_file" "create-local-lambda-properties-file" {
     TRANSCRIPTION_DST_PREFIX=${var.dst-prefix}
     TRANSCRIPTION_LARGE_FILE_LIMIT=${var.large-file-limit}
     TRANSCRIPTION_CHUNKS=${var.chunks}
-    TRANSCRIPTION_FUNCTION_NAME=${var.transcription-function-name}
+    TRANSCRIPTION_FUNCTION_NAME=${var.environment}-${var.transcription-function-name}
     TRANSCRIPTION_PAGIFY_XSLT=${var.transcription-pagify-xslt}
     TRANSCRIPTION_MSTEI_XSLT=${var.transcription-mstei-xslt}
   EOT
