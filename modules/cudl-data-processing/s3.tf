@@ -15,20 +15,20 @@ resource "aws_s3_bucket_versioning" "source-bucket-versioning" {
   count = var.db-only-processing ? 0 : 1
   bucket = aws_s3_bucket.source-bucket[0].id
   versioning_configuration {
-    status = "Enabled"
+    status = "Suspended"
   }
 }
 resource "aws_s3_bucket_versioning" "dest-bucket-versioning" {
   bucket = aws_s3_bucket.dest-bucket.id
   versioning_configuration {
-    status = "Enabled"
+    status = "Suspended"
   }
 }
 
 resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
   versioning_configuration {
-    status = "Enabled"
+    status = "Suspended"
   }
 }
 

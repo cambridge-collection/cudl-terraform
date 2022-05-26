@@ -130,3 +130,57 @@ data "aws_iam_policy_document" "s3-transcription-document" {
     ]
   }
 }
+
+data "aws_iam_policy_document" "assume-role-datasync-policy" {
+  statement {
+    actions = [
+      "sts:AssumeRole"
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["datasync.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "s3-deploy-document" {
+  statement {
+    actions = [
+      "s3:GetBucketLocation",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:AbortMultipartUpload",
+      "s3:DeleteObject",
+      "s3:GetObject",
+      "s3:ListMultipartUploadParts",
+      "s3:GetObjectTagging",
+      "s3:PutObjectTagging",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
+      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*",
+      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}",
+      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
+    ]
+  }
+}
+
+resource "aws_iam_role" "assume-datasync-role" {
+  name = "${var.environment}-cudl-assume-datasync-role"
+
+  assume_role_policy = data.aws_iam_policy_document.assume-role-datasync-policy.json
+}
+
+resource "aws_iam_policy" "run-datasync-policy" {
+  name = "${var.environment}-cudl-datasync-policy"
+
+  policy = data.aws_iam_policy_document.s3-deploy-document.json
+}
+
+resource "aws_iam_role_policy_attachment" "cudl-datasync-policy-and-role-attachment" {
+  role       = aws_iam_role.assume-datasync-role.name
+  policy_arn = aws_iam_policy.run-datasync-policy.arn
+}
