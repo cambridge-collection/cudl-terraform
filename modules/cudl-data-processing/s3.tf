@@ -11,6 +11,18 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
   bucket = lower("${var.environment}-${var.transcriptions-bucket-name}")
 }
 
+resource "aws_s3_bucket_website_configuration" "example" {
+  bucket = aws_s3_bucket.transcriptions-bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+}
+
 resource "aws_s3_bucket_versioning" "source-bucket-versioning" {
   count = var.db-only-processing ? 0 : 1
   bucket = aws_s3_bucket.source-bucket[0].id
