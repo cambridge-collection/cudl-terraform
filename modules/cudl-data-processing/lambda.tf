@@ -7,7 +7,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   timeout       = var.transform-lambda-information[count.index].timeout
   memory_size   = var.transform-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
-  layers        = concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn])
+  layers        = concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
   function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
   handler       = var.transform-lambda-information[count.index].handler
   publish       = true
@@ -27,6 +27,16 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 
       # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
       local_mount_path = var.dst-efs-prefix
+    }
+  }
+
+  environment {
+    variables = {
+      DD_API_KEY_SECRET_ARN = "datadog_api",
+      DD_JMXFETCH_ENABLED   = false,
+      DD_SITE               = "https://app.datadoghq.eu",
+      DD_TRACE_ENABLED      = true,
+      JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
     }
   }
 
@@ -53,7 +63,7 @@ resource "aws_lambda_function" "create-db-lambda-function" {
   timeout       = var.db-lambda-information[count.index].timeout
   memory_size   = var.db-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
-  layers        = [aws_lambda_layer_version.db-properties-layer.arn]
+  layers        = [aws_lambda_layer_version.db-properties-layer.arn, var.datadog-layer-1-arn, var.datadog-layer-2-arn]
   function_name = substr("${var.environment}-${var.db-lambda-information[count.index].name}", 0, 64)
   handler       = var.db-lambda-information[count.index].handler
   publish       = true
@@ -68,6 +78,16 @@ resource "aws_lambda_function" "create-db-lambda-function" {
 
     # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
     local_mount_path = var.dst-efs-prefix
+  }
+
+  environment {
+    variables = {
+      DD_API_KEY_SECRET_ARN	= "datadog_api",
+      DD_JMXFETCH_ENABLED = false,
+      DD_SITE = "https://app.datadoghq.eu",
+      DD_TRACE_ENABLED = true,
+      JAVA_TOOL_OPTIONS = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+    }
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]

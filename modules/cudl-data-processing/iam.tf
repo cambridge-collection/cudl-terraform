@@ -86,6 +86,15 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
         "arn:aws:lambda:*:*:${var.environment}-*"
       ]
   }
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:ListSecrets"
+    ]
+    resources = [
+       "arn:aws:secretsmanager:${var.deployment-aws-region}:${var.aws-account-number}:secret:datadog_api*"
+    ]
+  }
 }
 
 resource "aws_iam_role" "assume-lambda-role" {
