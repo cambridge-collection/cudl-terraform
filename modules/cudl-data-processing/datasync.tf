@@ -10,6 +10,23 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
   }
 }
 
+resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs-" {
+  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs.arn
+  name                     = "${var.environment}-cudl-data-releases-pages-s3-to-efs"
+  source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
+
+  includes {
+    filter_type = "SIMPLE_PATTERN"
+    value       = "/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*"
+  }
+
+  options {
+    bytes_per_second = -1
+    preserve_deleted_files = "REMOVE"
+    overwrite_mode = "ALWAYS"
+  }
+}
+
 resource "aws_datasync_location_efs" "cudl-datasync-efs" {
 
   efs_file_system_arn = aws_efs_mount_target.efs-mount-point.file_system_arn
