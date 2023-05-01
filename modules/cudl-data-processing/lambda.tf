@@ -117,8 +117,8 @@ resource "local_file" "create-local-lambda-properties-file" {
     DST_EFS_PREFIX=${var.dst-efs-prefix}
     DST_EFS_ENABLED=true
     DST_S3_PREFIX=${var.dst-s3-prefix}
-    DST_ITEMS_FOLDER=json/
-    DST_ITEMS_SUFFIX=.json
+    DST_XSLT_OUTPUT_FOLDER=json/
+    DST_XSLT_OUTPUT_SUFFIX=.json
     TMP_DIR=${var.tmp-dir}
     LARGE_FILE_LIMIT=${var.large-file-limit}
     CHUNKS=${var.chunks}
