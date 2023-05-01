@@ -115,6 +115,7 @@ resource "local_file" "create-local-lambda-properties-file" {
     DST_BUCKET=${var.environment}-${var.destination-bucket-name}
     DST_PREFIX=${var.dst-prefix}
     DST_EFS_PREFIX=${var.dst-efs-prefix}
+    DST_EFS_ENABLED=true
     DST_S3_PREFIX=${var.dst-s3-prefix}
     DST_ITEMS_FOLDER=json/
     DST_ITEMS_SUFFIX=.json
@@ -122,6 +123,8 @@ resource "local_file" "create-local-lambda-properties-file" {
     LARGE_FILE_LIMIT=${var.large-file-limit}
     CHUNKS=${var.chunks}
     XSLT=/opt/xslt/msTeiPreFilter.xsl,/opt/xslt/jsonDocFormatter.xsl
+    XSLT_1_PARAMS=
+    XSLT_2_PARAMS=
     REGION=${var.deployment-aws-region}
 
     # Database details for editing/inserting collection data into CUDL
