@@ -12,7 +12,7 @@ lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transfor
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "dev/cudl/cudl_viewer_db"
-source-bucket-sns-notifications  = [
+source-bucket-sns-notifications = [
   {
     "filter_prefix" = "items/data/tei/",
     "filter_suffix" = ".xml"
@@ -32,7 +32,7 @@ source-bucket-sns-notifications  = [
     ]
   }
 ]
-source-bucket-sqs-notifications  = [
+source-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_HTML",
@@ -149,22 +149,22 @@ db-lambda-information = [
     "runtime"       = "java11"
   }
 ]
-dst-efs-prefix               = "/mnt/cudl-data-releases"
-dst-prefix                   = "html/"
-dst-s3-prefix                = ""
-tmp-dir                      = "/tmp/dest"
-large-file-limit             = 1000000
-chunks                       = 4
-data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
-transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-transcription-pagify-xslt    = "/opt/xslt/transcription/pagify.xsl"
-transcription-mstei-xslt     = "/opt/xslt/transcription/msTeiTrans.xsl"
-lambda-alias-name            = "LIVE"
+dst-efs-prefix              = "/mnt/cudl-data-releases"
+dst-prefix                  = "html/"
+dst-s3-prefix               = ""
+tmp-dir                     = "/tmp/dest"
+large-file-limit            = 1000000
+chunks                      = 4
+data-function-name          = "AWSLambda_CUDLPackageDataJSON_AddEvent"
+transcription-function-name = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
+transcription-pagify-xslt   = "/opt/xslt/transcription/pagify.xsl"
+transcription-mstei-xslt    = "/opt/xslt/transcription/msTeiTrans.xsl"
+lambda-alias-name           = "LIVE"
 
 # Existing vpc info
-vpc-id                       = "vpc-ab7880ce"
-subnet-id                    = "subnet-fa1ed08d"
-security-group-id            = "sg-b79833d2"
+vpc-id            = "vpc-ab7880ce"
+subnet-id         = "subnet-fa1ed08d"
+security-group-id = "sg-b79833d2"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"

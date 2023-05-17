@@ -6,7 +6,7 @@ variable "deployment-aws-region" {
 
 variable "aws-account-number" {
   description = "Account number for AWS.  Used to build arn values"
-  type = string
+  type        = string
 }
 
 variable "environment" {
@@ -17,7 +17,7 @@ variable "environment" {
 
 variable "db-only-processing" {
   description = "true for when we just want release s3 and lambdas e.g. for production environment"
-  type = bool
+  type        = bool
 }
 
 variable "source-bucket-name" {
@@ -61,17 +61,17 @@ variable "lambda-layer-filepath" {
 
 variable "lambda-db-jdbc-driver" {
   description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
-  type = string
+  type        = string
 }
 
 variable "lambda-db-url" {
   description = "The url used for cudl db connection.  Has placeholders in for <HOST> and <PORT>."
-  type = string
+  type        = string
 }
 
 variable "lambda-db-secret-key" {
   description = "The path to the secret key that's used to access the cudl db credentials"
-  type = string
+  type        = string
 }
 
 variable "transform-lambda-information" {
@@ -146,12 +146,12 @@ variable "vpc-id" {
 
 variable "subnet-id" {
   description = "Specify an existing subnet id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "security-group-id" {
   description = "Specify an existing security group id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "releases-root-directory-path" {
