@@ -70,3 +70,9 @@ module "cudl-data-processing" {
   transcription-pagify-xslt       = var.transcription-pagify-xslt
   transcription-mstei-xslt        = var.transcription-mstei-xslt
 }
+
+module "cudl-data-enhancements" {
+  source                  = "../modules/cudl-data-enhancements"
+  environment             = var.environment
+  transkribus-bucket-name = var.transkribus-bucket-name
+}

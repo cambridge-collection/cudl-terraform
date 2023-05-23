@@ -3,6 +3,7 @@ db-only-processing           = false
 aws-account-number           = "247242244017"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"
+transkribus-bucket-name      = "cudl-data-enhancements"
 source-bucket-name           = "cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "mvn.cudl.lib.cam.ac.uk"
