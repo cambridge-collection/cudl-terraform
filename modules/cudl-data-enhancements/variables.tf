@@ -3,7 +3,12 @@ variable "transkribus-bucket-name" {
 }
 
 variable "environment" {
-description = "The environment you're working with. Should be one of: dev, staging, live."
-type        = string
-default     = "dev"
+  description = "The environment you're working with. Should be one of: dev, staging, live."
+  type        = string
+  default     = "dev"
+}
+
+variable "enhancements-lambda-information" {
+  description = "A map containing information about the enhancements lambda functions"
+  type        = map(string)
 }

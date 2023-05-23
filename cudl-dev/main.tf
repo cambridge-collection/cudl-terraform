@@ -72,7 +72,8 @@ module "cudl-data-processing" {
 }
 
 module "cudl-data-enhancements" {
-  source                  = "../modules/cudl-data-enhancements"
-  environment             = var.environment
-  transkribus-bucket-name = var.transkribus-bucket-name
+  source                          = "../modules/cudl-data-enhancements"
+  environment                     = var.environment
+  transkribus-bucket-name         = var.transkribus-bucket-name
+  enhancements-lambda-information = var.enhancements-lambda-information
 }

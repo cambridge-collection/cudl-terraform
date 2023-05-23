@@ -8,3 +8,16 @@ resource "aws_s3_bucket_versioning" "transkribus-bucket-versioning" {
     status = "Suspended"
   }
 }
+
+resource "aws_s3_bucket_notification" "transkribus-bucket-notification" {
+  bucket = aws_s3_bucket.transkribus-bucket.id
+
+  queue {
+    queue_arn     = aws_sqs_queue.enhancements-lambda-sqs-queue.arn
+    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
+    filter_prefix       = "transkribus/"
+    filter_suffix       = ".xml"
+  }
+
+  depends_on = [aws_sqs_queue.enhancements-lambda-sqs-queue]
+}

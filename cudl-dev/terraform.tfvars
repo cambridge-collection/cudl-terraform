@@ -117,6 +117,16 @@ transform-lambda-information = [
     "runtime"       = "java11"
   }
 ]
+enhancements-lambda-information = {
+  "name"          = "AWSLambda_CUDLDataEnhancements_TranskribusMergeTEI"
+  "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+  "queue_name"    = "CUDLTranskribusQueue"
+  "transcription" = true
+  "timeout"       = 900
+  "memory"        = 512
+  "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
+  "runtime"       = "java11"
+}
 db-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
