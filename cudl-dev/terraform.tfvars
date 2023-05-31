@@ -1,18 +1,21 @@
-environment                  = "dev"
-db-only-processing           = false
-aws-account-number           = "247242244017"
-destination-bucket-name      = "cudl-data-releases"
-transcriptions-bucket-name   = "cudl-transcriptions"
-transkribus-bucket-name      = "cudl-data-enhancements"
-source-bucket-name           = "cudl-data-source"
-compressed-lambdas-directory = "compressed_lambdas"
-lambda-jar-bucket            = "mvn.cudl.lib.cam.ac.uk"
-lambda-layer-name            = "cudl-xslt-layer"
-lambda-layer-bucket          = "cudl-artefacts"
-lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transform-xslt-0.0.13.zip"
-lambda-db-jdbc-driver        = "org.postgresql.Driver"
-lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
-lambda-db-secret-key         = "dev/cudl/cudl_viewer_db"
+environment                          = "dev"
+db-only-processing                   = false
+aws-account-number                   = "247242244017"
+destination-bucket-name              = "cudl-data-releases"
+transcriptions-bucket-name           = "cudl-transcriptions"
+transkribus-bucket-name              = "cudl-data-enhancements"
+enhancements-destination-bucket-name = "cudl-data-source"
+source-bucket-name                   = "cudl-data-source"
+compressed-lambdas-directory         = "compressed_lambdas"
+lambda-jar-bucket                    = "mvn.cudl.lib.cam.ac.uk"
+lambda-layer-name                    = "cudl-xslt-layer"
+enhancements-lambda-layer-name       = "cudl-transkribus-xslt-layer"
+lambda-layer-bucket                  = "cudl-artefacts"
+lambda-layer-filepath                = "projects/cudl-data-processing/xslt/cudl-transform-xslt-0.0.13.zip"
+enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cures-xslt-0.0.2.zip"
+lambda-db-jdbc-driver                = "org.postgresql.Driver"
+lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
+lambda-db-secret-key                 = "dev/cudl/cudl_viewer_db"
 source-bucket-sns-notifications = [
   {
     "filter_prefix" = "items/data/tei/",
@@ -124,7 +127,7 @@ enhancements-lambda-information = {
   "transcription" = true
   "timeout"       = 900
   "memory"        = 512
-  "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
+  "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
   "runtime"       = "java11"
 }
 db-lambda-information = [
@@ -163,6 +166,7 @@ db-lambda-information = [
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
 dst-s3-prefix               = ""
+enhancements-dst-s3-prefix  = "items/data/tei/"
 tmp-dir                     = "/tmp/dest"
 large-file-limit            = 1000000
 chunks                      = 4

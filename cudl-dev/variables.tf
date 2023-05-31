@@ -38,6 +38,11 @@ variable "transkribus-bucket-name" {
   description = "The name of the s3 bucket that stores the Transkribus transcriptions. Will be prefixed with the environment value."
 }
 
+variable "enhancements-destination-bucket-name" {
+  description = "The name of the s3 bucket that stores the source CUDL files (before processing). Will be prefixed with the environment value."
+  type        = string
+}
+
 variable "compressed-lambdas-directory" {
   description = "The name of the local directory where the CUDL lambdas can be found"
   type        = string
@@ -53,6 +58,11 @@ variable "lambda-layer-name" {
   type        = string
 }
 
+variable "enhancements-lambda-layer-name" {
+  description = "The name to be given to the XSLT Transkribus transform layer"
+  type        = string
+}
+
 variable "lambda-layer-bucket" {
   description = "The s3 bucket in which the XSLT layer ZIP can be found"
   type        = string
@@ -60,6 +70,11 @@ variable "lambda-layer-bucket" {
 
 variable "lambda-layer-filepath" {
   description = "The full path to the XSLT layer ZIP, found in the `lambda-layer-bucket`"
+  type        = string
+}
+
+variable "enhancements-lambda-layer-filepath" {
+  description = "The full path to the Transkribus XSLT layer ZIP, found in the `lambda-layer-bucket`"
   type        = string
 }
 
@@ -105,6 +120,11 @@ variable "dst-prefix" {
 
 variable "dst-s3-prefix" {
   description = "Use to set the DST_S3_PREFIX variable in the properties file passed to the lambda layer"
+  type        = string
+}
+
+variable "enhancements-dst-s3-prefix" {
+  description = "Use to set the DST_S3_PREFIX variable in the properties file passed to the enhancements lambda layer"
   type        = string
 }
 

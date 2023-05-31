@@ -72,8 +72,23 @@ module "cudl-data-processing" {
 }
 
 module "cudl-data-enhancements" {
-  source                          = "../modules/cudl-data-enhancements"
-  environment                     = var.environment
-  transkribus-bucket-name         = var.transkribus-bucket-name
-  enhancements-lambda-information = var.enhancements-lambda-information
+  source                               = "../modules/cudl-data-enhancements"
+  environment                          = var.environment
+  transkribus-bucket-name              = var.transkribus-bucket-name
+  enhancements-lambda-information      = var.enhancements-lambda-information
+  lambda-jar-bucket                    = var.lambda-jar-bucket
+  enhancements-lambda-layer-name       = var.enhancements-lambda-layer-name
+  lambda-layer-bucket                  = var.lambda-layer-bucket
+  enhancements-lambda-layer-filepath   = var.enhancements-lambda-layer-filepath
+  subnet-id                            = var.subnet-id
+  security-group-id                    = var.security-group-id
+  dst-efs-prefix                       = var.dst-efs-prefix
+  releases-root-directory-path         = var.releases-root-directory-path
+  efs-name                             = var.efs-name
+  enhancements-destination-bucket-name = var.enhancements-destination-bucket-name
+  enhancements-dst-s3-prefix           = var.enhancements-dst-s3-prefix
+  tmp-dir                              = var.tmp-dir
+  large-file-limit                     = var.large-file-limit
+  chunks                               = var.chunks
+
 }
