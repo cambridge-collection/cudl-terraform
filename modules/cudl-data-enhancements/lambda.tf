@@ -1,19 +1,19 @@
 resource "aws_lambda_function" "create-transkribus-lambda-function" {
 
   s3_bucket     = var.lambda-jar-bucket
-  s3_key        = var.enhancements-lambda-information.jar_path
-  runtime       = var.enhancements-lambda-information.runtime
-  timeout       = var.enhancements-lambda-information.timeout
-  memory_size   = var.enhancements-lambda-information.memory
+  s3_key        = var.enhancements-lambda-information[0].jar_path
+  runtime       = var.enhancements-lambda-information[0].runtime
+  timeout       = var.enhancements-lambda-information[0].timeout
+  memory_size   = var.enhancements-lambda-information[0].memory
   role          = aws_iam_role.assume-lambda-role.arn
   layers        = concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.enhancements-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
-  function_name = "${var.environment}-${var.enhancements-lambda-information.name}"
-  handler       = var.enhancements-lambda-information.handler
+  function_name = "${var.environment}-${var.enhancements-lambda-information[0].name}"
+  handler       = var.enhancements-lambda-information[0].handler
   publish       = true
-  vpc_config {
-    subnet_ids         = [data.aws_subnet.cudl_subnet.id]
-    security_group_ids = [data.aws_security_group.default.id]
-  }
+#  vpc_config {
+#    subnet_ids         = [data.aws_subnet.cudl_subnet.id]
+#    security_group_ids = [data.aws_security_group.default.id]
+#  }
 #  file_system_config {
 #    arn = aws_efs_access_point.efs-access-point.arn
 #    local_mount_path = var.dst-efs-prefix
@@ -28,35 +28,22 @@ resource "aws_lambda_function" "create-transkribus-lambda-function" {
       JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
     }
   }
-
-#  depends_on = [aws_efs_mount_target.efs-mount-point]
-
-}
-
-resource "aws_lambda_alias" "create-transkribus-lambda-alias" {
-
-  name       = "LATEST"
-  function_name    = aws_lambda_function.create-transkribus-lambda-function.arn
-  function_version = aws_lambda_function.create-transkribus-lambda-function.version
-
-  depends_on = [aws_lambda_function.create-transkribus-lambda-function]
-
 }
 
 resource "aws_lambda_layer_version" "xslt-layer" {
   s3_bucket  = var.lambda-layer-bucket
   s3_key     = var.enhancements-lambda-layer-filepath
-  layer_name = "${var.environment}-LATEST"
+  layer_name = "${var.environment}-${var.enhancements-lambda-layer-name}"
 
-  compatible_runtimes = [var.enhancements-lambda-information.runtime]
+  compatible_runtimes = [var.enhancements-lambda-information[0].runtime]
 }
 
 resource "aws_lambda_layer_version" "enhancements-properties-layer" {
   filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-properties"
+  layer_name = "${var.environment}-transkribus-properties"
   source_code_hash  = data.archive_file.zip_enhancements_properties_lambda_layer.output_base64sha256
 
-  compatible_runtimes = [var.enhancements-lambda-information.runtime]
+  compatible_runtimes = [var.enhancements-lambda-information[0].runtime]
   depends_on = [data.archive_file.zip_enhancements_properties_lambda_layer]
 }
 
@@ -78,24 +65,24 @@ resource "local_file" "create-local-enhancements-lambda-properties-file" {
     VERSION=${upper(var.environment)}
     DST_BUCKET=${var.environment}-${var.enhancements-destination-bucket-name}
     DST_EFS_ENABLED=false
+    DST_EFS_PREFIX=
     DST_S3_PREFIX=${var.enhancements-dst-s3-prefix}
     DST_XSLT_OUTPUT_FOLDER=<ITEM_ID>/
     DST_XSLT_OUTPUT_SUFFIX=.xml
     TMP_DIR=${var.tmp-dir}
-    LARGE_FILE_LIMIT=${var.large-file-limit}
-    CHUNKS=${var.chunks}
     XSLT=/opt/xslt/curious-cures.xslt
-    XSLT_1_PARAMS=full_path_to_cudl_data_source:/mnt/cudl-data-source/
+    XSLT_1_PARAMS=full_path_to_cudl_data_source:/tmp/${var.environment}-cudl-data-source/
+    XSLT_S3_ITEM_RESOURCES=s3://${var.environment}-cudl-data-source/items/data/tei/<ITEM_ID>/<ITEM_ID>.xml
     REGION=${var.deployment-aws-region}
   EOT
 
   filename = "${path.module}/properties_files/${var.environment}/java/lib/cudl-loader-lambda.properties"
 }
 
-#resource "aws_efs_mount_target" "efs-mount-point" {
-#
-#  file_system_id = aws_efs_file_system.efs-volume.id
-#  subnet_id      = data.aws_subnet.cudl_subnet.id
-#
-#  depends_on = [aws_efs_file_system.efs-volume]
-#}
+# Trigger lambda from the SQS queues
+resource "aws_lambda_event_source_mapping" "enhancements-sqs-trigger-lambda" {
+  count = length(var.enhancements-lambda-information)
+
+  event_source_arn = aws_sqs_queue.enhancements-lambda-sqs-queue[count.index].arn
+  function_name    = aws_lambda_function.create-transkribus-lambda-function.arn
+}

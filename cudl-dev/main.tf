@@ -74,6 +74,7 @@ module "cudl-data-processing" {
 module "cudl-data-enhancements" {
   source                               = "../modules/cudl-data-enhancements"
   environment                          = var.environment
+  aws-account-number                   = var.aws-account-number
   transkribus-bucket-name              = var.transkribus-bucket-name
   enhancements-lambda-information      = var.enhancements-lambda-information
   lambda-jar-bucket                    = var.lambda-jar-bucket
@@ -88,7 +89,5 @@ module "cudl-data-enhancements" {
   enhancements-destination-bucket-name = var.enhancements-destination-bucket-name
   enhancements-dst-s3-prefix           = var.enhancements-dst-s3-prefix
   tmp-dir                              = var.tmp-dir
-  large-file-limit                     = var.large-file-limit
-  chunks                               = var.chunks
 
 }

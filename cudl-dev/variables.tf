@@ -100,7 +100,7 @@ variable "transform-lambda-information" {
 
 variable "enhancements-lambda-information" {
   description = "A map containing information about the enhancements lambda functions"
-  type        = map(string)
+  type        = list(any)
 }
 
 variable "db-lambda-information" {

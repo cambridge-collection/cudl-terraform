@@ -4,6 +4,11 @@ variable "deployment-aws-region" {
   default     = "eu-west-1"
 }
 
+variable "aws-account-number" {
+  description = "Account number for AWS.  Used to build arn values"
+  type = string
+}
+
 variable "transkribus-bucket-name" {
   description = "The name of the s3 bucket that stores the Transkribus transcriptions. Will be prefixed with the environment value."
 }
@@ -16,7 +21,7 @@ variable "environment" {
 
 variable "enhancements-lambda-information" {
   description = "A map containing information about the enhancements lambda functions"
-  type        = map(string)
+  type        = list(any)
 }
 
 variable "lambda-jar-bucket" {
@@ -89,14 +94,4 @@ variable "enhancements-destination-bucket-name" {
 variable "tmp-dir" {
   description = "Use to set the TMP_DIR variable in the properties file passed to the lambda layer"
   type        = string
-}
-
-variable "large-file-limit" {
-  description = "Use to set the LARGE_FILE_LIMIT variable in the properties file passed to the lambda layer"
-  type        = number
-}
-
-variable "chunks" {
-  description = "Use to set the CHUNKS variable in the properties file passed to the lambda layer"
-  type        = number
 }

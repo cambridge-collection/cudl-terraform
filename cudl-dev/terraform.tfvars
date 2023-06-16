@@ -70,7 +70,7 @@ source-bucket-sqs-notifications = [
 transform-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_TEI_to_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue"
     "transcription" = false
     "timeout"       = 900
@@ -80,7 +80,7 @@ transform-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_HTML"
     "transcription" = false
     "timeout"       = 900
@@ -90,7 +90,7 @@ transform-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "transcription" = false
     "timeout"       = 900
@@ -101,7 +101,7 @@ transform-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_Collections"
     "transcription" = false
     "timeout"       = 900
@@ -111,7 +111,7 @@ transform-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLTranscriptionsQueue"
     "transcription" = true
     "timeout"       = 900
@@ -120,20 +120,20 @@ transform-lambda-information = [
     "runtime"       = "java11"
   }
 ]
-enhancements-lambda-information = {
+enhancements-lambda-information = [{
   "name"          = "AWSLambda_CUDLDataEnhancements_TranskribusMergeTEI"
-  "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+  "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
   "queue_name"    = "CUDLTranskribusQueue"
   "transcription" = true
   "timeout"       = 900
   "memory"        = 512
   "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
   "runtime"       = "java11"
-}
+}]
 db-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUpdateDBQueue"
     "timeout"       = 900
     "memory"        = 512
@@ -144,7 +144,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "timeout"       = 900
     "memory"        = 512
@@ -154,7 +154,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUIQueue"
     "timeout"       = 900
     "memory"        = 512
@@ -167,7 +167,7 @@ dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
 dst-s3-prefix               = ""
 enhancements-dst-s3-prefix  = "items/data/tei/"
-tmp-dir                     = "/tmp/dest"
+tmp-dir                     = "/tmp/dest/"
 large-file-limit            = 1000000
 chunks                      = 4
 data-function-name          = "AWSLambda_CUDLPackageDataJSON_AddEvent"

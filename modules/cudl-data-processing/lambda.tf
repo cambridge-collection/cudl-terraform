@@ -125,6 +125,7 @@ resource "local_file" "create-local-lambda-properties-file" {
     XSLT=/opt/xslt/msTeiPreFilter.xsl,/opt/xslt/jsonDocFormatter.xsl
     XSLT_1_PARAMS=
     XSLT_2_PARAMS=
+    XSLT_S3_ITEM_RESOURCES=
     REGION=${var.deployment-aws-region}
 
     # Database details for editing/inserting collection data into CUDL
