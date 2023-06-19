@@ -10,14 +10,6 @@ resource "aws_lambda_function" "create-transkribus-lambda-function" {
   function_name = "${var.environment}-${var.enhancements-lambda-information[0].name}"
   handler       = var.enhancements-lambda-information[0].handler
   publish       = true
-#  vpc_config {
-#    subnet_ids         = [data.aws_subnet.cudl_subnet.id]
-#    security_group_ids = [data.aws_security_group.default.id]
-#  }
-#  file_system_config {
-#    arn = aws_efs_access_point.efs-access-point.arn
-#    local_mount_path = var.dst-efs-prefix
-#  }
 
   environment {
     variables = {
