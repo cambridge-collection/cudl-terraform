@@ -10,3 +10,5 @@
 /modules/cudl-data-processing/zipped_properties_files/
 /cudl-production/.terraform/
 /cudl-production/.terraform.lock.hcl
+/modules/cudl-data-enhancements/properties_files/
+/modules/cudl-data-enhancements/zipped_properties_files/
