@@ -11,11 +11,12 @@ lambda-jar-bucket                    = "mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name                    = "cudl-xslt-layer"
 enhancements-lambda-layer-name       = "cudl-transkribus-xslt-layer"
 lambda-layer-bucket                  = "cudl-artefacts"
-lambda-layer-filepath                = "projects/cudl-data-processing/xslt/cudl-transform-xslt-0.0.13.zip"
+lambda-layer-filepath                = "projects/cudl-data-processing/xslt/cudl-transform-xslt-0.0.14.zip"
 enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cures-xslt-0.0.2.zip"
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "dev/cudl/cudl_viewer_db"
+
 source-bucket-sns-notifications = [
   {
     "filter_prefix" = "items/data/tei/",
