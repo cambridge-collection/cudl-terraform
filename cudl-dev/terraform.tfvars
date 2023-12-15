@@ -17,6 +17,8 @@ lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "dev/cudl/cudl_viewer_db"
 
+// NOTE: If you are adding anything here you need to add a code block to
+// the s3.tf file
 source-bucket-sns-notifications = [
   {
     "filter_prefix" = "items/data/tei/",
@@ -37,6 +39,8 @@ source-bucket-sns-notifications = [
     ]
   }
 ]
+// NOTE: If you are adding anything here you need to add a code block to
+// the s3.tf file
 source-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
@@ -63,15 +67,15 @@ source-bucket-sqs-notifications = [
   },
   {
     "type"          = "SQS",
-    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
-    "filter_prefix" = "ui/"
-    "filter_suffix" = ""
-  },
-  {
-    "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_Collections"
     "filter_prefix" = "collections/"
     "filter_suffix" = ".json"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "filter_prefix" = "ui/"
+    "filter_suffix" = ""
   }
 ]
 transform-lambda-information = [

@@ -95,6 +95,12 @@ resource "aws_s3_bucket_notification" "source-bucket-notifications" {
     filter_suffix = try(var.source-bucket-sqs-notifications[4].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[4].filter_suffix : null
   }
 
+  queue {
+    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[5].queue_name}"
+    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
+    filter_prefix = try(var.source-bucket-sqs-notifications[5].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[5].filter_prefix : null
+    filter_suffix = try(var.source-bucket-sqs-notifications[5].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[5].filter_suffix : null
+  }
   # without the `depends_on` argument, the bucket notification creation fails because the
   # lambda function doesn't exist yet
   depends_on = [aws_sqs_queue.transform-lambda-sqs-queue, aws_lambda_function.create-transform-lambda-function, aws_sns_topic.source_item_updated]
