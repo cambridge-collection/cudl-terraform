@@ -17,7 +17,7 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs
 
   includes {
     filter_type = "SIMPLE_PATTERN"
-    value       = "/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*"
+    value       = "/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
   }
 
   options {
