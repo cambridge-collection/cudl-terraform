@@ -5,6 +5,8 @@
 /cudl-live/.terraform.lock.hcl
 /cudl-staging/.terraform/
 /cudl-staging/.terraform.lock.hcl
+/cudl-sandbox/.terraform/
+/cudl-sandbox/.terraform.lock.hcl
 /.terraform/
 /modules/cudl-data-processing/properties_files/
 /modules/cudl-data-processing/zipped_properties_files/

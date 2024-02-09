@@ -118,11 +118,32 @@ resource "aws_iam_role_policy_attachment" "cudl-policy-and-role-attachment" {
 resource "aws_s3_bucket_acl" "transcriptions-bucket-acl" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
   acl    = "public-read"
+  depends_on = [aws_s3_bucket_public_access_block.transcriptions-bucket-public-access,
+    aws_s3_bucket_ownership_controls.transcriptions-bucket-acl-ownership]
+}
+
+# Resource to avoid error "AccessControlListNotSupported: The bucket does not allow ACLs"
+resource "aws_s3_bucket_ownership_controls" "transcriptions-bucket-acl-ownership" {
+  bucket = aws_s3_bucket.transcriptions-bucket.id
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
+# Turns off block for public access on bucket
+resource "aws_s3_bucket_public_access_block" "transcriptions-bucket-public-access" {
+  bucket = aws_s3_bucket.transcriptions-bucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_policy" "transcriptions-bucket-policy" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
   policy = data.aws_iam_policy_document.s3-transcription-document.json
+  depends_on = [aws_s3_bucket_acl.transcriptions-bucket-acl]
 }
 
 data "aws_iam_policy_document" "s3-transcription-document" {
