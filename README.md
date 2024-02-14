@@ -69,6 +69,17 @@ This diagram shows the AWS infrastructure setup required for the data loading pr
 
 - Cudl viewer and Services and RDS database (shown in blue)
 
+## EXTERNAL RESOURCES REQUIRED BY THIS TERRAFORM SCRIPT
+
+- Existing VPN
+- Secret Manager secrets - for DB passwords
+- S3 maven bucket which contains the compiled and deployed lambdas from https://github.com/cambridge-collection/data-lambda-transform
+- RDS database (required if using viewer)
+- S3 bucket for containing the zipped xslt used for transformations from https://github.com/cambridge-collection/cudl-data-processing-xslt 
+- (Transkribus extension) S3 bucket for containing the zipped xslt used for transformations from https://github.com/cambridge-collection/transkribus-to-cudl
+
+When created, update the appropriate terraform.tfvars properties to point to these resources.
+
 ## Puppet 
 In addition to the Terraform setup, Puppet is used to control the software 
 installed on the architecture, and is used for example to sync the data between EFS and S3.
