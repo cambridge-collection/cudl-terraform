@@ -1,0 +1,151 @@
+[
+  {
+    "name": "dl-loading-db",
+    "image": "${cudl_loader_image_loader_db}",
+    "cpu": 1024,
+    "memory": 1024,
+    "memoryReservation": 1024,
+    "portMappings": [
+      {
+        "containerPort": 5432,
+        "hostPort": 5432,
+        "protocol": "tcp"
+      }
+    ],
+    "essential": true,
+    "command": [
+      "-p 5432"
+    ],
+    "environment": [
+      {
+        "name": "POSTGRES_USER",
+        "value": "dl-loading-ui"
+      },
+      {
+        "name": "POSTGRES_PASSWORD",
+        "value": "password"
+      },
+      {
+        "name": "POSTGRES_DB",
+        "value": "dl-loading-ui"
+      }
+    ],
+    "environmentFiles": [
+      {
+        "value": "${cudl_loader_env_file}",
+        "type": "s3"
+      }
+    ],
+    "mountPoints": [
+      {
+        "sourceVolume": "${environment}-dl-loading-db-volume",
+        "containerPath": "/var/lib/postgresql/data",
+        "readOnly": false
+      }
+    ],
+    "volumesFrom": [],
+    "hostname": "dl-loading-db",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-create-group": "true",
+        "awslogs-group": "/ecs/CUDLContent",
+        "awslogs-region": "eu-west-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "healthCheck": {
+      "command": [
+        "CMD-SHELL",
+        "pg_isready  || exit 1"
+      ],
+      "interval": 30,
+      "timeout": 5,
+      "retries": 3,
+      "startPeriod": 300
+    }
+  },
+  {
+    "name": "dl-loader-ui",
+    "image": "${cudl_loader_image_loader_ui}",
+    "cpu": 0,
+    "links": [
+      "dl-loading-db"
+    ],
+    "portMappings": [
+      {
+        "containerPort": ${cudl_loader_container_port},
+        "hostPort": ${cudl_loader_host_port},
+        "protocol": "tcp"
+      }
+    ],
+    "essential": true,
+    "entryPoint": [
+      "bash",
+      "-c",
+      "mount-s3 --version && mkdir -p /mnt/s3data/data && mount-s3 --allow-overwrite --allow-delete $AWS_S3_BUCKET /mnt/s3data/data && java -jar -debug /usr/local/dl-loading-ui.war --spring.config.additional-location=/etc/dl-loading-ui/"
+    ],
+    "environment": [
+      {
+        "name": "LOADING_DB_HOST_AND_PORT",
+        "value": "dl-loading-db:5432"
+      }
+    ],
+    "environmentFiles": [
+      {
+        "value": "${cudl_loader_env_file}",
+        "type": "s3"
+      }
+    ],
+    "mountPoints": [],
+    "volumesFrom": [],
+    "linuxParameters": {
+      "capabilities": {
+        "add": [
+          "SYS_ADMIN"
+        ]
+      },
+      "devices": [
+        {
+          "hostPath": "/dev/fuse",
+          "containerPath": "/dev/fuse"
+        }
+      ]
+    },
+    "secrets": [
+      {
+        "name": "AWS_ACCESS_KEY_ID",
+        "valueFrom": "${cudl_loader_secret_access_key_id}"
+      },
+      {
+        "name": "AWS_S3_ACCESS_KEY_ID",
+        "valueFrom": "${cudl_loader_secret_access_key_id}"
+      },
+      {
+        "name": "AWS_S3_SECRET_ACCESS_KEY",
+        "valueFrom": "${cudl_loader_secret_access_key}"
+      },
+      {
+        "name": "AWS_SECRET_ACCESS_KEY",
+        "valueFrom": "${cudl_loader_secret_access_key}"
+      }
+    ],
+    "dependsOn": [
+      {
+        "containerName": "dl-loading-db",
+        "condition": "HEALTHY"
+      }
+    ],
+    "hostname": "dl-loader-ui",
+    "privileged": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-create-group": "true",
+        "awslogs-group": "${cudl_loader_logs_name}",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "ecs"
+      }
+    }
+  }
+]
