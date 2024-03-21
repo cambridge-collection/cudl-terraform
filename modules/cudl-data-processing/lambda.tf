@@ -1,19 +1,35 @@
 resource "aws_lambda_function" "create-transform-lambda-function" {
   count = length(var.transform-lambda-information)
 
-  s3_bucket     = var.lambda-jar-bucket
+  /* Conditional Debate
+var.transform-lambda-information[count.index].jar_path != null ? var.transform-lambda-information[count.index].jar_path : null
+or
+X ? X : Y
+*/
+  function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
+  package_type  = var.transform-lambda-information[count.index].jar_path != null ? "Zip" : "Image"
+  s3_bucket     = var.transform-lambda-information[count.index].jar_path != null ? var.lambda-jar-bucket : null
   s3_key        = var.transform-lambda-information[count.index].jar_path
+  image_uri     = var.transform-lambda-information[count.index].image_uri
   runtime       = var.transform-lambda-information[count.index].runtime
   timeout       = var.transform-lambda-information[count.index].timeout
   memory_size   = var.transform-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
-  layers        = concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
-  function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
+  layers        = var.transform-lambda-information[count.index].image_uri != null ? null : concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
   handler       = var.transform-lambda-information[count.index].handler
   publish       = true
 
+  dynamic "image_config" {
+    for_each = var.transform-lambda-information[count.index].image_uri != null ? [1] : []
+    content {
+      command           = try(var.transform-lambda-information[count.index].command, null)
+      entry_point       = try(var.transform-lambda-information[count.index].entry_point, null)
+      working_directory = try(var.transform-lambda-information[count.index].working_directory, null)
+    }
+  }
+
   dynamic "vpc_config" {
-    for_each = var.transform-lambda-information[count.index].transcription ? []:[1]
+    for_each = var.transform-lambda-information[count.index].transcription != null ? [] : [1]
     content {
       subnet_ids         = [data.aws_subnet.cudl_subnet.id]
       security_group_ids = [data.aws_security_group.default.id]
@@ -21,7 +37,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "file_system_config" {
-    for_each = var.transform-lambda-information[count.index].transcription ? []:[1]
+    for_each = var.transform-lambda-information[count.index].transcription != null ? [] : [1]
     content {
       arn = aws_efs_access_point.efs-access-point.arn
 
@@ -31,13 +47,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   environment {
-    variables = {
-      DD_API_KEY_SECRET_ARN = "datadog_api",
-      DD_JMXFETCH_ENABLED   = false,
-      DD_SITE               = "https://app.datadoghq.eu",
-      DD_TRACE_ENABLED      = true,
-      JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-    }
+    variables = merge(var.lambda_environment_datadog_variables, var.transform-lambda-information[count.index].environment_variables)
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
@@ -46,8 +56,8 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
   count = length(var.transform-lambda-information)
 
-  name             = var.lambda-alias-name
-  function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
+  name          = var.lambda-alias-name
+  function_name = aws_lambda_function.create-transform-lambda-function[count.index].arn
   #function_version = var.transform-lambda-information[count.index].live_version
   function_version = aws_lambda_function.create-transform-lambda-function[count.index].version
 
@@ -81,13 +91,17 @@ resource "aws_lambda_function" "create-db-lambda-function" {
   }
 
   environment {
+<<<<<<< HEAD
     variables = {
-      DD_API_KEY_SECRET_ARN	= "datadog_api",
-      DD_JMXFETCH_ENABLED = false,
-      DD_SITE = "https://app.datadoghq.eu",
-      DD_TRACE_ENABLED = true,
-      JAVA_TOOL_OPTIONS = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+      DD_API_KEY_SECRET_ARN = "datadog_api",
+      DD_JMXFETCH_ENABLED   = false,
+      DD_SITE               = "https://app.datadoghq.eu",
+      DD_TRACE_ENABLED      = true,
+      JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
     }
+=======
+    variables = var.lambda_environment_datadog_variables
+>>>>>>> 88bc11d (feat(tf): Add tei-data-processing lambda container)
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
@@ -96,8 +110,8 @@ resource "aws_lambda_function" "create-db-lambda-function" {
 resource "aws_lambda_alias" "create-db-lambda-alias" {
   count = length(var.db-lambda-information)
 
-  name             = var.lambda-alias-name
-  function_name    = aws_lambda_function.create-db-lambda-function[count.index].arn
+  name          = var.lambda-alias-name
+  function_name = aws_lambda_function.create-db-lambda-function[count.index].arn
   #function_version = var.db-lambda-information[count.index].live_version
   function_version = aws_lambda_function.create-db-lambda-function[count.index].version
 }
@@ -156,22 +170,22 @@ data "archive_file" "zip_transform_properties_lambda_layer" {
 }
 
 resource "aws_lambda_layer_version" "transform-properties-layer" {
-  filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-properties"
-  source_code_hash  = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
+  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
+  layer_name       = "${var.environment}-properties"
+  source_code_hash = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
-  compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
-  depends_on = [data.archive_file.zip_transform_properties_lambda_layer]
+  compatible_runtimes = compact(distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime]))
+  depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
 resource "aws_lambda_layer_version" "db-properties-layer" {
 
-  filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-properties"
-  source_code_hash  = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
+  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
+  layer_name       = "${var.environment}-properties"
+  source_code_hash = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
-  compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
-  depends_on = [data.archive_file.zip_transform_properties_lambda_layer]
+  compatible_runtimes = compact(distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime]))
+  depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
 resource "aws_lambda_layer_version" "xslt-layer" {
@@ -179,7 +193,7 @@ resource "aws_lambda_layer_version" "xslt-layer" {
   s3_key     = var.lambda-layer-filepath
   layer_name = "${var.environment}-${var.lambda-layer-name}"
 
-  compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
+  compatible_runtimes = compact(distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime]))
 }
 
 # Trigger lambda from the SQS queues

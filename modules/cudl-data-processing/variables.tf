@@ -6,7 +6,7 @@ variable "deployment-aws-region" {
 
 variable "aws-account-number" {
   description = "Account number for AWS.  Used to build arn values"
-  type = string
+  type        = string
 }
 
 variable "environment" {
@@ -17,7 +17,7 @@ variable "environment" {
 
 variable "db-only-processing" {
   description = "true for when we just want release s3 and lambdas e.g. for production environment"
-  type = bool
+  type        = bool
 }
 
 variable "source-bucket-name" {
@@ -61,17 +61,17 @@ variable "lambda-layer-filepath" {
 
 variable "lambda-db-jdbc-driver" {
   description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
-  type = string
+  type        = string
 }
 
 variable "lambda-db-url" {
   description = "The url used for cudl db connection.  Has placeholders in for <HOST> and <PORT>."
-  type = string
+  type        = string
 }
 
 variable "lambda-db-secret-key" {
   description = "The path to the secret key that's used to access the cudl db credentials"
-  type = string
+  type        = string
 }
 
 variable "transform-lambda-information" {
@@ -146,12 +146,12 @@ variable "vpc-id" {
 
 variable "subnet-id" {
   description = "Specify an existing subnet id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "security-group-id" {
   description = "Specify an existing security group id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "releases-root-directory-path" {
@@ -185,3 +185,22 @@ variable "datadog-layer-2-arn" {
   type        = string
   default     = "arn:aws:lambda:eu-west-1:464622532012:layer:Datadog-Extension:23"
 }
+
+variable "additional_lambda_environment_variables" {
+  description = "Additional environment variables"
+  type        = map(string)
+  default     = {}
+}
+
+variable "lambda_environment_datadog_variables" {
+  description = "Environment variables for DataDog"
+  type        = map(string)
+  default = {
+    DD_API_KEY_SECRET_ARN = "datadog_api",
+    DD_JMXFETCH_ENABLED   = false,
+    DD_SITE               = "https://app.datadoghq.eu",
+    DD_TRACE_ENABLED      = true,
+    JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+  }
+}
+

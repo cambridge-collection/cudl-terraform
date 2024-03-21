@@ -16,6 +16,7 @@ enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cure
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "sandboxtf/cudl/cudl_viewer_db"
+use_cudl_data_enhancements           = true
 
 // NOTE: If you are adding anything here you need to add a code block to
 // the s3.tf file
@@ -129,6 +130,31 @@ transform-lambda-information = [
     "memory"        = 1024
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
     "runtime"       = "java11"
+  },
+  {
+    "name"       = "AWSLambda_CUDLPackageData_TEI_Processing"
+    "image_uri"  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:26850691fd0ad0db9c0166bee937f1e5a389a9f47f64b7f82790bf9aafafcba6"
+    "queue_name" = "CUDLPackageDataQueue_UNUSED" # this is here to ensure resources declared in sqs.tf build correctly
+    "timeout"    = 300
+    "memory"     = 2048
+    environment_variables = {
+      ANT_TARGET                 = "full"
+      AWS_DATA_RELEASES_BUCKET   = "sandboxtf-cudl-data-releases"  # environment + destination-bucket-name
+      AWS_DATA_SOURCE_BUCKET     = "sandboxtf-cudl-data-source"    # environment + source-bucket-name
+      AWS_DIST_BUCKET            = "cudlnew-dist"                  # Move to environment + transcriptions-bucket-name?
+      AWS_PAGE_XML_SOURCE_BUCKET = "sandboxtf-cudl-transcriptions" # environment + transcriptions-bucket-name
+      AWS_TRANSCRIPTION_BUCKET   = "sandboxtf-cudl-transcriptions" # environment + transcriptions-bucket-name
+      COLLECTION_XML_S3_SOURCE   = "cudlnew-dist/collection-xml"   # multiple concats
+      COLLECTION_XML_SOURCE      = "/tmp/opt/cdcp/dist-pending/collection-xml"
+      CORE_XML_S3_DEST           = "cudlnew-dist/core-xml" # multiple concats
+      CORE_XML_SOURCE            = "/tmp/opt/cdcp/dist-pending/core-xml"
+      DP_S3_DEST                 = "cudlnew-dist/dp-json"                   # multiple concats
+      PAGE_XML_S3_DEST           = "sandboxtf-cudl-transcriptions/page-xml" # multiple concats
+      PAGE_XML_SOURCE            = "/tmp/opt/cdcp/dist-pending/page-xml"
+      SOLR_S3_DEST               = "cudlnew-dist/solr-json"             # multiple concats
+      VIEWER_S3_DEST             = "sandboxtf-cudl-data-releases/json"  # multiple concats
+      WWW_S3_DEST                = "sandboxtf-cudl-transcriptions/html" # multiple concats
+    }
   }
 ]
 enhancements-lambda-information = [{

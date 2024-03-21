@@ -16,6 +16,7 @@ enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cure
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/staging_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "staging/cudl/cudl_viewer_db"
+use_cudl_data_enhancements           = true
 
 // NOTE: If you are adding anything here you need to add a code block to
 // the s3.tf file
@@ -72,11 +73,11 @@ source-bucket-sqs-notifications = [
     "filter_suffix" = ".json"
   },
   {
-     "type"          = "SQS",
-     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
-     "filter_prefix" = "ui/"
-     "filter_suffix" = ""
-   }
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "filter_prefix" = "ui/"
+    "filter_suffix" = ""
+  }
 ]
 transform-lambda-information = [
   {
@@ -174,23 +175,23 @@ db-lambda-information = [
     "runtime"       = "java11"
   }
 ]
-dst-efs-prefix               = "/mnt/cudl-data-releases"
-dst-prefix                   = "html/"
-dst-s3-prefix                = ""
+dst-efs-prefix              = "/mnt/cudl-data-releases"
+dst-prefix                  = "html/"
+dst-s3-prefix               = ""
 enhancements-dst-s3-prefix  = "items/data/tei/"
-tmp-dir                      = "/tmp/dest/"
-large-file-limit             = 1000000
-chunks                       = 4
-data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
-transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-transcription-pagify-xslt    = "/opt/xslt/transcription/pagify.xsl"
-transcription-mstei-xslt     = "/opt/xslt/transcription/msTeiTrans.xsl"
-lambda-alias-name            = "LIVE"
+tmp-dir                     = "/tmp/dest/"
+large-file-limit            = 1000000
+chunks                      = 4
+data-function-name          = "AWSLambda_CUDLPackageDataJSON_AddEvent"
+transcription-function-name = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
+transcription-pagify-xslt   = "/opt/xslt/transcription/pagify.xsl"
+transcription-mstei-xslt    = "/opt/xslt/transcription/msTeiTrans.xsl"
+lambda-alias-name           = "LIVE"
 
 # Existing vpc info
-vpc-id                       = "vpc-ab7880ce"
-subnet-id                    = "subnet-fa1ed08d"
-security-group-id            = "sg-b79833d2"
+vpc-id            = "vpc-ab7880ce"
+subnet-id         = "subnet-fa1ed08d"
+security-group-id = "sg-b79833d2"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"

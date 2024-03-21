@@ -1,5 +1,6 @@
 resource "aws_lambda_function" "create-transkribus-lambda-function" {
 
+  function_name = substr("${var.environment}-${var.enhancements-lambda-information[0].name}", 0, 64)
   s3_bucket     = var.lambda-jar-bucket
   s3_key        = var.enhancements-lambda-information[0].jar_path
   runtime       = var.enhancements-lambda-information[0].runtime
@@ -7,7 +8,6 @@ resource "aws_lambda_function" "create-transkribus-lambda-function" {
   memory_size   = var.enhancements-lambda-information[0].memory
   role          = aws_iam_role.assume-lambda-role.arn
   layers        = concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.enhancements-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
-  function_name = "${var.environment}-${var.enhancements-lambda-information[0].name}"
   handler       = var.enhancements-lambda-information[0].handler
   publish       = true
 
@@ -31,12 +31,12 @@ resource "aws_lambda_layer_version" "xslt-layer" {
 }
 
 resource "aws_lambda_layer_version" "enhancements-properties-layer" {
-  filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-transkribus-properties"
-  source_code_hash  = data.archive_file.zip_enhancements_properties_lambda_layer.output_base64sha256
+  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
+  layer_name       = "${var.environment}-transkribus-properties"
+  source_code_hash = data.archive_file.zip_enhancements_properties_lambda_layer.output_base64sha256
 
   compatible_runtimes = [var.enhancements-lambda-information[0].runtime]
-  depends_on = [data.archive_file.zip_enhancements_properties_lambda_layer]
+  depends_on          = [data.archive_file.zip_enhancements_properties_lambda_layer]
 }
 
 data "archive_file" "zip_enhancements_properties_lambda_layer" {

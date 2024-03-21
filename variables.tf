@@ -12,7 +12,6 @@ variable "aws-account-number" {
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "dev"
 }
 
 variable "db-only-processing" {
@@ -95,7 +94,18 @@ variable "lambda-db-secret-key" {
 
 variable "transform-lambda-information" {
   description = "A list of maps containing information about the transformation lambda functions"
-  type        = list(any)
+  type = list(object({
+    name                  = string
+    timeout               = number
+    memory                = number
+    queue_name            = string
+    jar_path              = optional(string)
+    transcription         = optional(bool)
+    handler               = optional(string)
+    runtime               = optional(string)
+    environment_variables = optional(map(string))
+    image_uri             = optional(string)
+  }))
 }
 
 variable "enhancements-lambda-information" {
@@ -201,4 +211,10 @@ variable "source-bucket-sns-notifications" {
 variable "source-bucket-sqs-notifications" {
   description = "List of SQS notifications on source s3 bucket"
   type        = list(any)
+}
+
+variable "use_cudl_data_enhancements" {
+  description = "Specify whether cudl-data-enchancements are to be deployed"
+  type        = bool
+  default     = true
 }
