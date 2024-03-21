@@ -21,7 +21,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.deployment-aws-region
+  region  = var.deployment-aws-region
   profile = "default"
 
   default_tags {

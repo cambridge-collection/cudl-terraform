@@ -12,6 +12,7 @@ lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transfor
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/production_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "production/cudl/cudl_viewer_db"
+use_cudl_data_enhancements   = false
 
 source-bucket-sns-notifications = [
 ]

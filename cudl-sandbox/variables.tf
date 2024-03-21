@@ -12,7 +12,6 @@ variable "aws-account-number" {
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "staging"
 }
 
 variable "db-only-processing" {
@@ -34,6 +33,15 @@ variable "transcriptions-bucket-name" {
   description = "The name of the s3 bucket that stores the HTMl transcriptions (post-processing). Will be prefixed with the environment value."
 }
 
+variable "transkribus-bucket-name" {
+  description = "The name of the s3 bucket that stores the Transkribus transcriptions. Will be prefixed with the environment value."
+}
+
+variable "enhancements-destination-bucket-name" {
+  description = "The name of the s3 bucket that stores the source CUDL files (before processing). Will be prefixed with the environment value."
+  type        = string
+}
+
 variable "compressed-lambdas-directory" {
   description = "The name of the local directory where the CUDL lambdas can be found"
   type        = string
@@ -49,6 +57,11 @@ variable "lambda-layer-name" {
   type        = string
 }
 
+variable "enhancements-lambda-layer-name" {
+  description = "The name to be given to the XSLT Transkribus transform layer"
+  type        = string
+}
+
 variable "lambda-layer-bucket" {
   description = "The s3 bucket in which the XSLT layer ZIP can be found"
   type        = string
@@ -56,6 +69,11 @@ variable "lambda-layer-bucket" {
 
 variable "lambda-layer-filepath" {
   description = "The full path to the XSLT layer ZIP, found in the `lambda-layer-bucket`"
+  type        = string
+}
+
+variable "enhancements-lambda-layer-filepath" {
+  description = "The full path to the Transkribus XSLT layer ZIP, found in the `lambda-layer-bucket`"
   type        = string
 }
 
@@ -76,6 +94,22 @@ variable "lambda-db-secret-key" {
 
 variable "transform-lambda-information" {
   description = "A list of maps containing information about the transformation lambda functions"
+  type = list(object({
+    name                  = string
+    timeout               = number
+    memory                = number
+    queue_name            = string
+    jar_path              = optional(string)
+    transcription         = optional(bool)
+    handler               = optional(string)
+    runtime               = optional(string)
+    environment_variables = optional(map(string))
+    image_uri             = optional(string)
+  }))
+}
+
+variable "enhancements-lambda-information" {
+  description = "A map containing information about the enhancements lambda functions"
   type        = list(any)
 }
 
@@ -96,6 +130,11 @@ variable "dst-prefix" {
 
 variable "dst-s3-prefix" {
   description = "Use to set the DST_S3_PREFIX variable in the properties file passed to the lambda layer"
+  type        = string
+}
+
+variable "enhancements-dst-s3-prefix" {
+  description = "Use to set the DST_S3_PREFIX variable in the properties file passed to the enhancements lambda layer"
   type        = string
 }
 
@@ -174,33 +213,8 @@ variable "source-bucket-sqs-notifications" {
   type        = list(any)
 }
 
-variable "datadog-layer-1-arn" {
-  description = "Required layer for datadog"
-  type        = string
-  default     = "arn:aws:lambda:eu-west-1:464622532012:layer:dd-trace-java:4"
+variable "use_cudl_data_enhancements" {
+  description = "Specify whether cudl-data-enchancements are to be deployed"
+  type        = bool
+  default     = true
 }
-
-variable "datadog-layer-2-arn" {
-  description = "Required layer for datadog"
-  type        = string
-  default     = "arn:aws:lambda:eu-west-1:464622532012:layer:Datadog-Extension:23"
-}
-
-variable "additional_lambda_environment_variables" {
-  description = "Additional environment variables"
-  type        = map(string)
-  default     = {}
-}
-
-variable "lambda_environment_datadog_variables" {
-  description = "Environment variables for DataDog"
-  type        = map(string)
-  default = {
-    DD_API_KEY_SECRET_ARN = "datadog_api",
-    DD_JMXFETCH_ENABLED   = false,
-    DD_SITE               = "https://app.datadoghq.eu",
-    DD_TRACE_ENABLED      = true,
-    JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-  }
-}
-
