@@ -13,7 +13,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   publish       = true
 
   dynamic "vpc_config" {
-    for_each = var.transform-lambda-information[count.index].transcription ? []:[1]
+    for_each = var.transform-lambda-information[count.index].transcription ? [] : [1]
     content {
       subnet_ids         = [data.aws_subnet.cudl_subnet.id]
       security_group_ids = [data.aws_security_group.default.id]
@@ -21,7 +21,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "file_system_config" {
-    for_each = var.transform-lambda-information[count.index].transcription ? []:[1]
+    for_each = var.transform-lambda-information[count.index].transcription ? [] : [1]
     content {
       arn = aws_efs_access_point.efs-access-point.arn
 
@@ -46,8 +46,8 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
   count = length(var.transform-lambda-information)
 
-  name             = var.lambda-alias-name
-  function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
+  name          = var.lambda-alias-name
+  function_name = aws_lambda_function.create-transform-lambda-function[count.index].arn
   #function_version = var.transform-lambda-information[count.index].live_version
   function_version = aws_lambda_function.create-transform-lambda-function[count.index].version
 
@@ -96,8 +96,8 @@ resource "aws_lambda_function" "create-db-lambda-function" {
 resource "aws_lambda_alias" "create-db-lambda-alias" {
   count = length(var.db-lambda-information)
 
-  name             = var.lambda-alias-name
-  function_name    = aws_lambda_function.create-db-lambda-function[count.index].arn
+  name          = var.lambda-alias-name
+  function_name = aws_lambda_function.create-db-lambda-function[count.index].arn
   #function_version = var.db-lambda-information[count.index].live_version
   function_version = aws_lambda_function.create-db-lambda-function[count.index].version
 }
@@ -156,22 +156,22 @@ data "archive_file" "zip_transform_properties_lambda_layer" {
 }
 
 resource "aws_lambda_layer_version" "transform-properties-layer" {
-  filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-properties"
-  source_code_hash  = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
+  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
+  layer_name       = "${var.environment}-properties"
+  source_code_hash = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
   compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
-  depends_on = [data.archive_file.zip_transform_properties_lambda_layer]
+  depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
 resource "aws_lambda_layer_version" "db-properties-layer" {
 
-  filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-properties"
-  source_code_hash  = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
+  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
+  layer_name       = "${var.environment}-properties"
+  source_code_hash = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
   compatible_runtimes = distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime])
-  depends_on = [data.archive_file.zip_transform_properties_lambda_layer]
+  depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
 resource "aws_lambda_layer_version" "xslt-layer" {

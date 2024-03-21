@@ -5,7 +5,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
 
   visibility_timeout_seconds = 900
 
-policy = <<POLICY
+  policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -76,13 +76,13 @@ POLICY
 
 
 resource "aws_sqs_queue" "transform-lambda-dead-letter-queue" {
-  count = length(var.transform-lambda-information)
+  count                      = length(var.transform-lambda-information)
   visibility_timeout_seconds = 900
-  name = substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}_DeadLetterQueue", 0, 80)
+  name                       = substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}_DeadLetterQueue", 0, 80)
 }
 
 resource "aws_sqs_queue" "db-lambda-dead-letter-queue" {
-  count = length(var.db-lambda-information)
+  count                      = length(var.db-lambda-information)
   visibility_timeout_seconds = 900
-  name = substr("${var.environment}-${var.db-lambda-information[count.index].queue_name}_DeadLetterQueue", 0, 80)
+  name                       = substr("${var.environment}-${var.db-lambda-information[count.index].queue_name}_DeadLetterQueue", 0, 80)
 }

@@ -15,8 +15,8 @@ resource "aws_s3_bucket_notification" "transkribus-bucket-notification" {
   queue {
     queue_arn     = aws_sqs_queue.enhancements-lambda-sqs-queue[0].arn
     events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix       = "transkribus/"
-    filter_suffix       = ".xml"
+    filter_prefix = "transkribus/"
+    filter_suffix = ".xml"
   }
 
   depends_on = [aws_sqs_queue.enhancements-lambda-sqs-queue, aws_lambda_function.create-transkribus-lambda-function]

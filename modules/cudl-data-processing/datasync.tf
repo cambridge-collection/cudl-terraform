@@ -4,9 +4,9 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
   source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
 
   options {
-    bytes_per_second = -1
+    bytes_per_second       = -1
     preserve_deleted_files = "REMOVE"
-    overwrite_mode = "ALWAYS"
+    overwrite_mode         = "ALWAYS"
   }
 }
 
@@ -21,16 +21,16 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs
   }
 
   options {
-    bytes_per_second = -1
+    bytes_per_second       = -1
     preserve_deleted_files = "REMOVE"
-    overwrite_mode = "ALWAYS"
+    overwrite_mode         = "ALWAYS"
   }
 }
 
 resource "aws_datasync_location_efs" "cudl-datasync-efs" {
 
   efs_file_system_arn = aws_efs_mount_target.efs-mount-point.file_system_arn
-  subdirectory = "/data/"
+  subdirectory        = "/data/"
 
   ec2_config {
     security_group_arns = [data.aws_security_group.default.arn]

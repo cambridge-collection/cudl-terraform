@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "source-bucket" {
-  count = var.db-only-processing ? 0 : 1
+  count  = var.db-only-processing ? 0 : 1
   bucket = lower("${var.environment}-${var.source-bucket-name}")
 }
 
@@ -24,7 +24,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
 }
 
 resource "aws_s3_bucket_versioning" "source-bucket-versioning" {
-  count = var.db-only-processing ? 0 : 1
+  count  = var.db-only-processing ? 0 : 1
   bucket = aws_s3_bucket.source-bucket[0].id
   versioning_configuration {
     status = "Suspended"
@@ -47,7 +47,7 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
 
   #count  = length(var.transform-lambda-information)
-  count  =  length(var.source-bucket-sns-notifications)>0 || length(var.source-bucket-sqs-notifications)>0 ? 1: 0
+  count = length(var.source-bucket-sns-notifications) > 0 || length(var.source-bucket-sqs-notifications) > 0 ? 1 : 0
 
   bucket = aws_s3_bucket.source-bucket[0].id
 

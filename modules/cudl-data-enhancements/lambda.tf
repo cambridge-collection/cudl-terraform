@@ -31,12 +31,12 @@ resource "aws_lambda_layer_version" "xslt-layer" {
 }
 
 resource "aws_lambda_layer_version" "enhancements-properties-layer" {
-  filename   = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name = "${var.environment}-transkribus-properties"
-  source_code_hash  = data.archive_file.zip_enhancements_properties_lambda_layer.output_base64sha256
+  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
+  layer_name       = "${var.environment}-transkribus-properties"
+  source_code_hash = data.archive_file.zip_enhancements_properties_lambda_layer.output_base64sha256
 
   compatible_runtimes = [var.enhancements-lambda-information[0].runtime]
-  depends_on = [data.archive_file.zip_enhancements_properties_lambda_layer]
+  depends_on          = [data.archive_file.zip_enhancements_properties_lambda_layer]
 }
 
 data "archive_file" "zip_enhancements_properties_lambda_layer" {
