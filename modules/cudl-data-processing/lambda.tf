@@ -47,7 +47,11 @@ X ? X : Y
   }
 
   environment {
-    variables = merge(var.lambda_environment_datadog_variables, var.transform-lambda-information[count.index].environment_variables)
+    variables = merge(
+      var.lambda_environment_datadog_variables,
+      var.transform-lambda-information[count.index].environment_variables,
+      var.additional_lambda_environment_variables
+    )
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
