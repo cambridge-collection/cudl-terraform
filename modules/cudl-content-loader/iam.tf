@@ -87,13 +87,9 @@ resource "aws_iam_policy" "cudl-content-loader-iam-edit-s3-release" {
 EOF
 }
 
-
 resource "aws_iam_user" "cudl-content-loader-iam-user" {
   path = "/"
   name = "${var.environment}-dl_loading_ui_sandbox"
-  tags = {
-
-  }
 
 }
 
