@@ -92,7 +92,7 @@ resource "aws_iam_user" "cudl-content-loader-iam-user" {
   path = "/"
   name = "${var.environment}-dl_loading_ui_sandbox"
   tags = {
-    AKIAYGIB2F2YDCKCDLOH = "dl-loading-ui"  //TODO ?
+
   }
 
 }
