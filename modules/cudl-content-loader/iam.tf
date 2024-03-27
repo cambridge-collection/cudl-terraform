@@ -1,3 +1,4 @@
+// TODO There are far too generous permissions here, and also lots of hardcoded stuff.
 resource "aws_iam_policy" "cudl-content-loader-iam-edit-s3-source" {
   name = "${var.environment}-cudl-content-loader-dl-loader-edit-s3-source"
   path = "/"
@@ -13,14 +14,16 @@ resource "aws_iam_policy" "cudl-content-loader-iam-edit-s3-source" {
 			],
 			"Resource": [
 				"arn:aws:s3:::${var.environment}-${var.source-bucket-name}",
-				"arn:aws:s3:::${var.environment}-${var.source-bucket-name}/*"
+				"arn:aws:s3:::${var.environment}-${var.source-bucket-name}/*",
+				"arn:aws:s3:::sandboxtf-cudl-data-source",
+				"arn:aws:s3:::sandboxtf-cudl-data-source/*"
 			]
 		}
 	]
 }
 EOF
 }
-
+//TODO fix
 resource "aws_iam_policy" "cudl-content-loader-iam-edit-s3-release" {
   name = "${var.environment}-cudl-content-loader-edit-s3-release"
   path = "/"
@@ -74,7 +77,9 @@ resource "aws_iam_policy" "cudl-content-loader-iam-edit-s3-release" {
             ],
             "Resource": [
 				"arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
-				"arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*"
+				"arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*",
+				"arn:aws:s3:::sandboxtf-cudl-data-releases",
+				"arn:aws:s3:::sandboxtf-cudl-data-releases/*"
             ]
         }
     ]
@@ -90,6 +95,18 @@ resource "aws_iam_user" "cudl-content-loader-iam-user" {
     AKIAYGIB2F2YDCKCDLOH = "dl-loading-ui"  //TODO ?
   }
 
+}
+
+resource "aws_iam_user_policy" "cudl-content-loader-iam-user-policy-source" {
+  name   = "${var.environment}-cudl-content-loader-user-policy-source"
+  user   = aws_iam_user.cudl-content-loader-iam-user.name
+  policy = aws_iam_policy.cudl-content-loader-iam-edit-s3-source.policy
+}
+
+resource "aws_iam_user_policy" "cudl-content-loader-iam-user-policy-release" {
+  name   = "${var.environment}-cudl-content-loader-user-policy-release"
+  user   = aws_iam_user.cudl-content-loader-iam-user.name
+  policy = aws_iam_policy.cudl-content-loader-iam-edit-s3-release.policy
 }
 
 resource "aws_iam_role" "cudl-content-loader-iam-task-role" {
@@ -204,6 +221,31 @@ resource "aws_iam_role_policy" "cudl-content-loader-iam-policy" {
                 "${aws_ssm_parameter.cudl-content-loader-ssm-dl-loader-ui-s3-access-key.arn}",
                 "${aws_ssm_parameter.cudl-content-loader-ssm-dl-loader-ui-s3-access-key-id.arn}"
             ]
+		},
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::sandbox.mvn.cudl.lib.cam.ac.uk",
+                "arn:aws:s3:::sandbox.mvn.cudl.lib.cam.ac.uk/*",
+                "arn:aws:s3:::${var.environment}-cudl-env-files",
+                "arn:aws:s3:::${var.environment}-cudl-env-files/",
+                "arn:aws:s3:::${var.environment}-cudl-env-files/*"
+            ]
+        },
+		{
+			"Sid": "Statement2",
+			"Effect": "Allow",
+			"Action": [
+				"ecr:*"
+			],
+			"Resource": [
+				"${aws_ecr_repository.cudl-content-loader-db-ecr-repository.arn}",
+                "${aws_ecr_repository.cudl-content-loader-ui-ecr-repository.arn}"
+			]
 		}
 	]
 }

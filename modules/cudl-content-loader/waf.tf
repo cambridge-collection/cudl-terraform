@@ -1,3 +1,6 @@
+// Former2 was used to create most of the bones for this but it does not seem to support exporting the WAYF so
+// we need to create an entry for one.  This should include custom rule to restrict to 131.111.0.0./16 IPs.
+
 #resource "aws_wafv2_web_acl" "example" {
 #  name        = "managed-rule-example"
 #  provider = "us-east-1"

@@ -1,3 +1,5 @@
+// TODO Should this is target by ip?
+// TODO At the moment everything is using on security group - divide this up.
 resource "aws_lb_target_group" "cudl-content-loader-lb-target-group" {
   health_check {
     interval = 30
@@ -69,15 +71,11 @@ resource "aws_lb_listener" "cudl-loader-elastic-load-balancing-listener" {
   ]
 }
 
-//TODO security group
 resource "aws_network_interface" "cudl-loader-ec2-elb-network-interface" {
   tags = {
     Name = "${var.environment}-cudl-elb-ni"
   }
   description = "ELB app/${aws_lb.cudl-content-elastic-load-balancer.name}/${aws_lb.cudl-content-elastic-load-balancer.id}"
-  private_ips = [
-    "10.0.16.222"
-  ]
   subnet_id = aws_subnet.cudl-content-loader-ec2-subnet-public2.id
   source_dest_check = true
   security_groups = [
@@ -90,15 +88,11 @@ resource "aws_network_interface" "cudl-loader-ec2-elb-network-interface" {
   ]
 }
 
-//TODO security group
 resource "aws_network_interface" "cudl-loader-ec2-elb-network-interface2" {
   tags = {
     Name = "${var.environment}-cudl-elb-ni2"
   }
   description = "ELB app/${aws_lb.cudl-content-elastic-load-balancer.name}/${aws_lb.cudl-content-elastic-load-balancer.id}"
-  private_ips = [
-    "10.0.15.88"
-  ]
   subnet_id = aws_subnet.cudl-content-loader-ec2-subnet-public1.id
   source_dest_check = true
   security_groups = [

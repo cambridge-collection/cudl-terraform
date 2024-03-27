@@ -46,8 +46,8 @@ resource "aws_ecs_task_definition" "cudl-content-loader-ecs-task-definition" {
     cudl_loader_secret_access_key = aws_ssm_parameter.cudl-content-loader-ssm-dl-loader-ui-s3-access-key.arn
     cudl_loader_secret_access_key_id = aws_ssm_parameter.cudl-content-loader-ssm-dl-loader-ui-s3-access-key-id.arn
     cudl_loader_env_file = "${aws_s3_bucket.cudl-env-file-bucket.arn}/${aws_s3_object.cudl-loader-env-file.key}"
-    cudl_loader_image_loader_ui = "${aws_ecr_repository.cudl-content-loader-ui-ecr-repository.name}:latest" //TODO
-    cudl_loader_image_loader_db = "${aws_ecr_repository.cudl-content-loader-db-ecr-repository.name}:latest" //TODO
+    cudl_loader_image_loader_ui = "${aws_ecr_repository.cudl-content-loader-ui-ecr-repository.repository_url}:latest" //TODO
+    cudl_loader_image_loader_db = "${aws_ecr_repository.cudl-content-loader-db-ecr-repository.repository_url}:latest" //TODO
     region = var.deployment-aws-region
     environment = var.environment
     cudl_loader_logs_name = "/ecs/CUDLContent"

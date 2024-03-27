@@ -1,3 +1,19 @@
+// TODO This is still a work in progress
+// At the moment I have manually created a Elastic IP and assigned it to the ec2 instance and put this
+// instance into the public subnet so that I would easily connect to it for debugging.
+// Note SSH is restricted by UL IP range in security group.
+// However we possibly want the EC2 in the private subnet with NAT gateway?
+// Using internet gateway from public subnet atm.
+
+// Also the nameservers for Route 53 hosted Zones need to match nameservers from Route53 Registered domains
+// This was done manually.  It would be good if terraform could sort that. (Note console does not always show correct
+// info for nameservers use CLI to check nameservers
+
+// Also we have manually created the Route53 records from the Certificate Manager in the two zones (it requires
+// a certificate entry in eu-west-1 which is where most of our deployment is and in us-east-1 for CloudFront, both
+// using the same domain registration). We need to update Terraform to do that.
+
+
 #resource "aws_network_interface" "cudl-content-loader-ec2-network-interface" {
 #  tags = {
 #    Name = "${var.environment}-cudl-ec2-ni"
@@ -105,6 +121,10 @@ resource "aws_route_table" "cudl-loader-cudl-rtb-private1-eu-west-1a" {
   tags = {
     Name = "${var.environment}-cudl-rtb-private1-eu-west-1a"
   }
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.cudl-nat-1a.id
+  }
   depends_on = [
     aws_vpc.cudl-content-loader-vpc
   ]
@@ -167,6 +187,7 @@ resource "aws_vpc_dhcp_options_association" "cudl-loader-cudl-vpc-dhcp-options-a
 
 resource "aws_vpc_dhcp_options" "cudl-loader-cudl-vpc-dhcp-options" {
   domain_name = "eu-west-1.compute.internal"
+  domain_name_servers = ["AmazonProvidedDNS"]
   tags = {
     Name = "${var.environment}-cudl-loader-vpc-dhcp-options"
   }
@@ -222,6 +243,16 @@ resource "aws_vpc_endpoint_route_table_association" "cudl-loader-cudl-vpc-ec2-ro
   ]
 }
 
+
+resource "aws_route_table_association" "cudl-route-table-association-nat" {
+  subnet_id      = aws_subnet.cudl-content-loader-ec2-subnet-private1.id
+  route_table_id = aws_route_table.cudl-loader-cudl-rtb-private1-eu-west-1a.id
+  depends_on = [
+    aws_route_table.cudl-loader-cudl-rtb-private1-eu-west-1a
+  ]
+}
+
+
 resource "aws_route" "cudl-loader-cudl-vpc-ec2-route-ig" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id = aws_internet_gateway.cudl-loader-cudl-vpc-internet-gateway.id
@@ -233,17 +264,25 @@ resource "aws_route" "cudl-loader-cudl-vpc-ec2-route-ig" {
   ]
 }
 
-##// TODO remove
-#resource "aws_eip" "cudl-loader-elastic-ip" {
-#  tags = {
-#    Name = "${var.environment}-cudl-elastic-ip"
-#  }
-#  vpc = true
-#  instance = aws_instance.cudl-content-loader-ec2-instance.id
-#  depends_on = [
-#    aws_instance.cudl-content-loader-ec2-instance
-#  ]
-#}
+resource "aws_eip" "cudl-nat-1a-elastic-ip" {
+  tags = {
+    Name = "${var.environment}-cudl-nat-1a-elastic-ip"
+  }
+  vpc = true
+}
+
+resource "aws_nat_gateway" "cudl-nat-1a" {
+  allocation_id = aws_eip.cudl-nat-1a-elastic-ip.id
+  subnet_id     = aws_subnet.cudl-content-loader-ec2-subnet-public1.id
+
+  tags = {
+    Name = "${var.environment}-cudl-nat-1a"
+  }
+
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.cudl-loader-cudl-vpc-internet-gateway]
+}
 
 ## //TODO remove?
 #resource "aws_network_interface_attachment" "cudl-loader-ec2-network-interface-attachment" {

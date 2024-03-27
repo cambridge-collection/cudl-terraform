@@ -1,3 +1,4 @@
+// Ensures there is one ec2 instance available at all times.
 resource "aws_autoscaling_group" "cudl-loader-cudl-auto-scaling-group" {
   name = "${var.environment}-cudlautoscalinggroup"
   launch_template {

@@ -1,6 +1,7 @@
 [
   {
     "name": "dl-loading-db",
+    "systemControls": [],
     "image": "${cudl_loader_image_loader_db}",
     "cpu": 1024,
     "memory": 1024,
@@ -67,6 +68,7 @@
   },
   {
     "name": "dl-loader-ui",
+    "systemControls": [],
     "image": "${cudl_loader_image_loader_ui}",
     "cpu": 0,
     "links": [
@@ -101,6 +103,7 @@
     "volumesFrom": [],
     "linuxParameters": {
       "capabilities": {
+        "drop": [],
         "add": [
           "SYS_ADMIN"
         ]

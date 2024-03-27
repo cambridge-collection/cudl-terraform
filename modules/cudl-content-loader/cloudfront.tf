@@ -17,7 +17,8 @@ resource "aws_cloudfront_distribution" "cudl-content-loader-cloudfront-distribut
     origin_path = ""
   }
 
-  web_acl_id = "arn:aws:wafv2:us-east-1:563181399728:global/webacl/CreatedByCloudFront-43355072-4897-4c63-930f-7d4bb73453a2/be5d015f-f0e9-47ab-911e-5fecc8ca5414"
+  //TODO create and link waf
+  //web_acl_id = "arn:aws:wafv2:us-east-1:563181399728:global/webacl/CreatedByCloudFront-43355072-4897-4c63-930f-7d4bb73453a2/be5d015f-f0e9-47ab-911e-5fecc8ca5414"
   http_version = "http2"
   is_ipv6_enabled = true
   aliases = [
@@ -44,7 +45,7 @@ resource "aws_cloudfront_distribution" "cudl-content-loader-cloudfront-distribut
     }
   }
 
-  comment = ""
+  comment = "cudl content loader"
   price_class = "PriceClass_100"
   enabled = true
 
