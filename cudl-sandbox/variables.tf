@@ -99,6 +99,9 @@ variable "transform-lambda-information" {
     timeout               = number
     memory                = number
     queue_name            = string
+    batch_size            = optional(number)
+    batch_window          = optional(number)
+    maximum_concurrency   = optional(number)
     jar_path              = optional(string)
     transcription         = optional(bool)
     handler               = optional(string)

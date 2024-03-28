@@ -81,16 +81,6 @@ source-bucket-sqs-notifications = [
 ]
 transform-lambda-information = [
   {
-    "name"          = "AWSLambda_CUDLPackageData_TEI_to_JSON"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataQueue"
-    "transcription" = false
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
     "name"          = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataQueue_HTML"
@@ -122,22 +112,15 @@ transform-lambda-information = [
     "runtime"       = "java11"
   },
   {
-    "name"          = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLTranscriptionsQueue"
-    "transcription" = true
-    "timeout"       = 900
-    "memory"        = 1024
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
-    "name"       = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:26850691fd0ad0db9c0166bee937f1e5a389a9f47f64b7f82790bf9aafafcba6"
-    "queue_name" = "CUDLPackageDataQueue_UNUSED" # this is here to ensure resources declared in sqs.tf build correctly
-    "timeout"    = 300
-    "memory"     = 2048
-    environment_variables = {
+    "name"                = "AWSLambda_CUDLPackageData_TEI_Processing"
+    "image_uri"           = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:26850691fd0ad0db9c0166bee937f1e5a389a9f47f64b7f82790bf9aafafcba6"
+    "queue_name"          = "CUDLTranscriptionsQueue"
+    "timeout"             = 300
+    "memory"              = 2048
+    "batch_size"          = 1
+    "batch_window"        = 2
+    "maximum_concurrency" = 100
+    "environment_variables" = {
       ANT_TARGET                 = "full"
       AWS_DATA_RELEASES_BUCKET   = "sandboxtf-cudl-data-releases"  # environment + destination-bucket-name
       AWS_DATA_SOURCE_BUCKET     = "sandboxtf-cudl-data-source"    # environment + source-bucket-name
