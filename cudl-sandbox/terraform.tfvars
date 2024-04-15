@@ -6,6 +6,7 @@ transcriptions-bucket-name           = "cudl-transcriptions"
 transkribus-bucket-name              = "cudl-data-enhancements"
 enhancements-destination-bucket-name = "cudl-data-source"
 source-bucket-name                   = "cudl-data-source"
+distribution-bucket-name             = "cudl-dist"
 compressed-lambdas-directory         = "compressed_lambdas"
 lambda-jar-bucket                    = "sandbox.mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name                    = "cudl-xslt-layer"
@@ -134,7 +135,7 @@ transform-lambda-information = [
   {
     "name"       = "AWSLambda_CUDLPackageData_TEI_Processing"
     "image_url"  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a7fdab4f5ee6ab637669cbdf46c4a5f59783b87566fcc884cd65686c605387d"
-    "queue_name" = "CUDLPackageDataQueue_UNUSED" # this is here to ensure resources declared in sqs.tf build correctly
+    "queue_name" = "CUDLTranscriptionsQueue"
     "timeout"    = 300
     "memory"     = 4096
     "environment_variables" = {

@@ -11,6 +11,10 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
   bucket = lower("${var.environment}-${var.transcriptions-bucket-name}")
 }
 
+resource "aws_s3_bucket" "distribution-bucket" {
+  bucket = lower("${var.environment}-${var.distribution-bucket-name}")
+}
+
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
 

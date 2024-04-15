@@ -34,6 +34,10 @@ variable "transcriptions-bucket-name" {
   description = "The name of the s3 bucket that stores the HTMl transcriptions (post-processing). Will be prefixed with the environment value."
 }
 
+variable "distribution-bucket-name" {
+  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
+}
+
 variable "compressed-lambdas-directory" {
   description = "The name of the local directory where the CUDL lambdas can be found"
   type        = string

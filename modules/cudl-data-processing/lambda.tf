@@ -1,11 +1,6 @@
 resource "aws_lambda_function" "create-transform-lambda-function" {
   count = length(var.transform-lambda-information)
 
-  /* Conditional Debate
-var.transform-lambda-information[count.index].jar_path != null ? var.transform-lambda-information[count.index].jar_path : null
-or
-X ? X : Y
-*/
   function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
   package_type  = var.transform-lambda-information[count.index].jar_path != null ? "Zip" : "Image"
   s3_bucket     = var.transform-lambda-information[count.index].jar_path != null ? var.lambda-jar-bucket : null
@@ -56,6 +51,8 @@ X ? X : Y
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
 }
+
+# Upgrade provider to change batch size
 
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
   count = length(var.transform-lambda-information)
@@ -130,7 +127,7 @@ resource "local_file" "create-local-lambda-properties-file" {
     # to cudl-data 'live' branch).
 
     VERSION=${upper(var.environment)}
-    DST_BUCKET=${var.environment}-${var.destination-bucket-name}
+    DST_BUCKET=${aws_s3_bucket.dest-bucket.id}
     DST_PREFIX=${var.dst-prefix}
     DST_EFS_PREFIX=${var.dst-efs-prefix}
     DST_EFS_ENABLED=true
@@ -151,7 +148,7 @@ resource "local_file" "create-local-lambda-properties-file" {
     DB_URL=${var.lambda-db-url}
     DB_SECRET_KEY=${var.lambda-db-secret-key}
 
-    TRANSCRIPTION_DST_BUCKET=${var.environment}-${var.transcriptions-bucket-name}
+    TRANSCRIPTION_DST_BUCKET=${aws_s3_bucket.transcriptions-bucket.id}
     TRANSCRIPTION_DST_PREFIX=${var.dst-prefix}
     TRANSCRIPTION_LARGE_FILE_LIMIT=${var.large-file-limit}
     TRANSCRIPTION_CHUNKS=${var.chunks}

@@ -22,14 +22,15 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "s3:PutObjectAcl",
       "s3:GetObjectAcl"
     ]
-
     resources = [
-      "arn:aws:s3:::${var.environment}-${var.source-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.source-bucket-name}/*",
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
+      aws_s3_bucket.source-bucket.arn,
+      "${aws_s3_bucket.source-bucket.arn}/*",
+      aws_s3_bucket.dest-bucket.arn,
+      "${aws_s3_bucket.dest-bucket.arn}/*",
+      aws_s3_bucket.transcriptions-bucket.arn,
+      "${aws_s3_bucket.transcriptions-bucket.arn}/*",
+      aws_s3_bucket.distribution-bucket.arn,
+      "${aws_s3_bucket.distribution-bucket.arn}/*",
     ]
   }
   statement {
@@ -156,7 +157,7 @@ data "aws_iam_policy_document" "s3-transcription-document" {
       type        = "AWS"
     }
     resources = [
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
+      "${aws_s3_bucket.transcriptions-bucket.arn,}/*"
     ]
   }
 }
@@ -190,10 +191,10 @@ data "aws_iam_policy_document" "s3-deploy-document" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
+      aws_s3_bucket.dest-bucket.arn,
+      "${aws_s3_bucket.dest-bucket.arn}/*",
+      aws_s3_bucket.transcriptions-bucket.arn,
+      "${aws_s3_bucket.transcriptions-bucket.arn}/*",
     ]
   }
 }
