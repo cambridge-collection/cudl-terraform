@@ -133,24 +133,15 @@ transform-lambda-information = [
   },
   {
     "name"       = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:26850691fd0ad0db9c0166bee937f1e5a389a9f47f64b7f82790bf9aafafcba6"
+    "image_url"  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a7fdab4f5ee6ab637669cbdf46c4a5f59783b87566fcc884cd65686c605387d"
     "queue_name" = "CUDLPackageDataQueue_UNUSED" # this is here to ensure resources declared in sqs.tf build correctly
     "timeout"    = 300
-    "memory"     = 2048
-    environment_variables = {
+    "memory"     = 4096
+    "environment_variables" = {
       ANT_TARGET                 = "full"
-      AWS_DIST_BUCKET            = "cudlnew-dist"                  # Move to environment + transcriptions-bucket-name?
-      AWS_PAGE_XML_SOURCE_BUCKET = "sandboxtf-cudl-transcriptions" # environment + transcriptions-bucket-name
-      COLLECTION_XML_S3_SOURCE   = "cudlnew-dist/collection-xml"   # multiple concats
       COLLECTION_XML_SOURCE      = "/tmp/opt/cdcp/dist-pending/collection-xml"
-      CORE_XML_S3_DEST           = "cudlnew-dist/core-xml" # multiple concats
       CORE_XML_SOURCE            = "/tmp/opt/cdcp/dist-pending/core-xml"
-      DP_S3_DEST                 = "cudlnew-dist/dp-json"                   # multiple concats
-      PAGE_XML_S3_DEST           = "sandboxtf-cudl-transcriptions/page-xml" # multiple concats
       PAGE_XML_SOURCE            = "/tmp/opt/cdcp/dist-pending/page-xml"
-      SOLR_S3_DEST               = "cudlnew-dist/solr-json"             # multiple concats
-      VIEWER_S3_DEST             = "sandboxtf-cudl-data-releases/json"  # multiple concats
-      WWW_S3_DEST                = "sandboxtf-cudl-transcriptions/html" # multiple concats
     }
   }
 ]
