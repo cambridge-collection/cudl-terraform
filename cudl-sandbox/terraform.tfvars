@@ -133,16 +133,17 @@ transform-lambda-information = [
     "runtime"       = "java11"
   },
   {
-    "name"       = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_url"  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a7fdab4f5ee6ab637669cbdf46c4a5f59783b87566fcc884cd65686c605387d"
-    "queue_name" = "CUDLTranscriptionsQueue"
-    "timeout"    = 300
-    "memory"     = 4096
+    "name"         = "AWSLambda_CUDLPackageData_TEI_Processing"
+    "image_url"    = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a7fdab4f5ee6ab637669cbdf46c4a5f59783b87566fcc884cd65686c605387d"
+    "queue_name"   = "CUDLTranscriptionsQueue"
+    "timeout"      = 300
+    "memory"       = 4096
+    "batch_window" = 2
     "environment_variables" = {
-      ANT_TARGET                 = "full"
-      COLLECTION_XML_SOURCE      = "/tmp/opt/cdcp/dist-pending/collection-xml"
-      CORE_XML_SOURCE            = "/tmp/opt/cdcp/dist-pending/core-xml"
-      PAGE_XML_SOURCE            = "/tmp/opt/cdcp/dist-pending/page-xml"
+      ANT_TARGET            = "full"
+      COLLECTION_XML_SOURCE = "/tmp/opt/cdcp/dist-pending/collection-xml"
+      CORE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/core-xml"
+      PAGE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/page-xml"
     }
   }
 ]

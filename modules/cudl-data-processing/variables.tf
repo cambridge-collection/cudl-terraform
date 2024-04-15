@@ -80,7 +80,20 @@ variable "lambda-db-secret-key" {
 
 variable "transform-lambda-information" {
   description = "A list of maps containing information about the transformation lambda functions"
-  type        = list(any)
+  type = list(object({
+    name                  = string
+    timeout               = number
+    memory                = number
+    queue_name            = string
+    jar_path              = optional(string)
+    transcription         = optional(bool)
+    handler               = optional(string)
+    runtime               = optional(string)
+    environment_variables = optional(map(string))
+    image_uri             = optional(string)
+    batch_size            = optional(number)
+    batch_window          = optional(number)
+  }))
 }
 
 variable "db-lambda-information" {

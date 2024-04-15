@@ -105,6 +105,8 @@ variable "transform-lambda-information" {
     runtime               = optional(string)
     environment_variables = optional(map(string))
     image_uri             = optional(string)
+    batch_size            = optional(number)
+    batch_window          = optional(number)
   }))
 }
 

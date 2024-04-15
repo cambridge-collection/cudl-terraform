@@ -205,7 +205,7 @@ resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
   function_name                      = aws_lambda_function.create-transform-lambda-function[count.index].arn
   batch_size                         = coalesce(var.transform-lambda-information[count.index].batch_size, 10)
   maximum_batching_window_in_seconds = var.transform-lambda-information[count.index].batch_window
-  
+
   # NOTE not available in aws provider 4.24.0
   # dynamic "scaling_config" {
   #   for_each = var.transform-lambda-information[count.index].maximum_concurrency != null ? [] : [1]
