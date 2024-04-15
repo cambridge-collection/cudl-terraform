@@ -23,8 +23,8 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "s3:GetObjectAcl"
     ]
     resources = [
-      aws_s3_bucket.source-bucket.arn,
-      "${aws_s3_bucket.source-bucket.arn}/*",
+      aws_s3_bucket.source-bucket.0.arn,
+      "${aws_s3_bucket.source-bucket.0.arn}/*",
       aws_s3_bucket.dest-bucket.arn,
       "${aws_s3_bucket.dest-bucket.arn}/*",
       aws_s3_bucket.transcriptions-bucket.arn,
@@ -157,7 +157,7 @@ data "aws_iam_policy_document" "s3-transcription-document" {
       type        = "AWS"
     }
     resources = [
-      "${aws_s3_bucket.transcriptions-bucket.arn,}/*"
+      "${aws_s3_bucket.transcriptions-bucket.arn}/*"
     ]
   }
 }

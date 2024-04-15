@@ -1,5 +1,5 @@
 module "cudl-data-processing" {
-  source                                  = "./modules/cudl-data-processing"
+  source                                  = "../modules/cudl-data-processing"
   chunks                                  = var.chunks
   compressed-lambdas-directory            = var.compressed-lambdas-directory
   data-function-name                      = var.data-function-name
@@ -35,11 +35,12 @@ module "cudl-data-processing" {
   db-only-processing                      = var.db-only-processing
   transcription-pagify-xslt               = var.transcription-pagify-xslt
   transcription-mstei-xslt                = var.transcription-mstei-xslt
+  distribution-bucket-name                = var.distribution-bucket-name
 }
 
 module "cudl-data-enhancements" {
   count                                = var.use_cudl_data_enhancements ? 1 : 0
-  source                               = "./modules/cudl-data-enhancements"
+  source                               = "../modules/cudl-data-enhancements"
   environment                          = var.environment
   aws-account-number                   = var.aws-account-number
   transkribus-bucket-name              = var.transkribus-bucket-name

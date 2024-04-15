@@ -218,3 +218,7 @@ variable "use_cudl_data_enhancements" {
   type        = bool
   default     = true
 }
+
+variable "distribution-bucket-name" {
+  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
+}
