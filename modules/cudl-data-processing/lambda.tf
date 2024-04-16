@@ -207,12 +207,12 @@ resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
   maximum_batching_window_in_seconds = var.transform-lambda-information[count.index].batch_window
 
   # NOTE not available in aws provider 4.24.0
-  # dynamic "scaling_config" {
-  #   for_each = var.transform-lambda-information[count.index].maximum_concurrency != null ? [] : [1]
-  #   content {
-  #     maximum_concurrency = var.transform-lambda-information[count.index].maximum_concurrency
-  #   }
-  # }
+  dynamic "scaling_config" {
+    for_each = var.transform-lambda-information[count.index].maximum_concurrency != null ? [1] : []
+    content {
+      maximum_concurrency = var.transform-lambda-information[count.index].maximum_concurrency
+    }
+  }
 }
 
 resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-db" {

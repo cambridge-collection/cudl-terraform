@@ -107,6 +107,7 @@ variable "transform-lambda-information" {
     image_uri             = optional(string)
     batch_size            = optional(number)
     batch_window          = optional(number)
+    maximum_concurrency   = optional(number)
   }))
 }
 
