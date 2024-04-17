@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 module "cudl-data-processing" {
   source                                  = "../modules/cudl-data-processing"
   chunks                                  = var.chunks
@@ -28,10 +30,10 @@ module "cudl-data-processing" {
   lambda-db-jdbc-driver                   = var.lambda-db-jdbc-driver
   lambda-db-secret-key                    = var.lambda-db-secret-key
   lambda-db-url                           = var.lambda-db-url
-  aws-account-number                      = var.aws-account-number
+  aws-account-number                      = data.aws_caller_identity.current.account_id
   source-bucket-sns-notifications         = var.source-bucket-sns-notifications
   source-bucket-sqs-notifications         = var.source-bucket-sqs-notifications
-  environment                             = var.environment
+  environment                             = join("-", [var.owner, var.environment])
   db-only-processing                      = var.db-only-processing
   transcription-pagify-xslt               = var.transcription-pagify-xslt
   transcription-mstei-xslt                = var.transcription-mstei-xslt
@@ -41,8 +43,8 @@ module "cudl-data-processing" {
 module "cudl-data-enhancements" {
   count                                = var.use_cudl_data_enhancements ? 1 : 0
   source                               = "../modules/cudl-data-enhancements"
-  environment                          = var.environment
-  aws-account-number                   = var.aws-account-number
+  environment                          = join("-", [var.owner, var.environment])
+  aws-account-number                   = data.aws_caller_identity.current.account_id
   transkribus-bucket-name              = var.transkribus-bucket-name
   enhancements-lambda-information      = var.enhancements-lambda-information
   lambda-jar-bucket                    = var.lambda-jar-bucket

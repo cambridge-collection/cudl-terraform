@@ -1,17 +1,33 @@
+variable "environment" {
+  type        = string
+  description = "The environment you're working with. Live | Staging | Development | All"
+}
+
+variable "project" {
+  type        = string
+  description = "Project or Service name, e.g. DPS, CUDL, Darwin"
+}
+
+variable "component" {
+  type        = string
+  description = "e.g. Deposit Service | All"
+}
+
+variable "subcomponent" {
+  type        = string
+  description = "If applicable: any value, e.g. Fedora"
+}
+
+variable "owner" {
+  type        = string
+  description = "Optional Owner tag. Your CRSid, e.g. jag245"
+  default     = ""
+}
+
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
   default     = "eu-west-1"
-}
-
-variable "aws-account-number" {
-  description = "Account number for AWS.  Used to build arn values"
-  type        = string
-}
-
-variable "environment" {
-  description = "The environment you're working with. Should be one of: dev, staging, live."
-  type        = string
 }
 
 variable "db-only-processing" {

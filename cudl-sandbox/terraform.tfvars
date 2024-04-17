@@ -1,6 +1,9 @@
 environment                          = "sandboxtf"
+project                              = "CUDL"
+component                            = "cudl-data-workflows"
+subcomponent                         = "cudl-transform-lambda"
+owner                                = "mjh39"
 db-only-processing                   = false
-aws-account-number                   = "563181399728"
 destination-bucket-name              = "cudl-data-releases"
 transcriptions-bucket-name           = "cudl-transcriptions"
 transkribus-bucket-name              = "cudl-data-enhancements"
