@@ -33,7 +33,7 @@ module "cudl-data-processing" {
   aws-account-number                      = data.aws_caller_identity.current.account_id
   source-bucket-sns-notifications         = var.source-bucket-sns-notifications
   source-bucket-sqs-notifications         = var.source-bucket-sqs-notifications
-  environment                             = join("-", [var.owner, var.environment])
+  environment                             = local.environment
   db-only-processing                      = var.db-only-processing
   transcription-pagify-xslt               = var.transcription-pagify-xslt
   transcription-mstei-xslt                = var.transcription-mstei-xslt
@@ -43,7 +43,7 @@ module "cudl-data-processing" {
 module "cudl-data-enhancements" {
   count                                = var.use_cudl_data_enhancements ? 1 : 0
   source                               = "../modules/cudl-data-enhancements"
-  environment                          = join("-", [var.owner, var.environment])
+  environment                          = local.environment
   aws-account-number                   = data.aws_caller_identity.current.account_id
   transkribus-bucket-name              = var.transkribus-bucket-name
   enhancements-lambda-information      = var.enhancements-lambda-information
