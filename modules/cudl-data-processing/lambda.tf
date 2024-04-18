@@ -24,7 +24,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "vpc_config" {
-    for_each = var.transform-lambda-information[count.index].transcription != null ? [] : [1]
+    for_each = coalesce(var.transform-lambda-information[count.index].transcription, false) ? [] : [1]
     content {
       subnet_ids         = [data.aws_subnet.cudl_subnet.id]
       security_group_ids = [data.aws_security_group.default.id]
@@ -32,7 +32,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "file_system_config" {
-    for_each = var.transform-lambda-information[count.index].transcription != null ? [] : [1]
+    for_each = coalesce(var.transform-lambda-information[count.index].transcription, false) ? [] : [1]
     content {
       arn = aws_efs_access_point.efs-access-point.arn
 
@@ -43,9 +43,9 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 
   environment {
     variables = merge(
-      var.lambda_environment_datadog_variables,
+      var.transform-lambda-information[count.index].use_datadog_variables ? var.lambda_environment_datadog_variables : null,
+      var.transform-lambda-information[count.index].use_additional_variables ? var.additional_lambda_environment_variables : null,
       var.transform-lambda-information[count.index].environment_variables,
-      var.additional_lambda_environment_variables
     )
   }
 
