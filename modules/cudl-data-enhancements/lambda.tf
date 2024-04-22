@@ -1,6 +1,7 @@
 resource "aws_lambda_function" "create-transkribus-lambda-function" {
 
   function_name = substr("${var.environment}-${var.enhancements-lambda-information[0].name}", 0, 64)
+  description   = var.enhancements-lambda-information[0].description
   s3_bucket     = var.lambda-jar-bucket
   s3_key        = var.enhancements-lambda-information[0].jar_path
   runtime       = var.enhancements-lambda-information[0].runtime

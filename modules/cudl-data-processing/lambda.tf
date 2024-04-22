@@ -69,6 +69,8 @@ resource "aws_lambda_alias" "create-transform-lambda-alias" {
 resource "aws_lambda_function" "create-db-lambda-function" {
   count = length(var.db-lambda-information)
 
+  function_name = substr("${var.environment}-${var.db-lambda-information[count.index].name}", 0, 64)
+  description   = var.db-lambda-information[count.index].description
   s3_bucket     = var.lambda-jar-bucket
   s3_key        = var.db-lambda-information[count.index].jar_path
   runtime       = var.db-lambda-information[count.index].runtime
@@ -76,7 +78,6 @@ resource "aws_lambda_function" "create-db-lambda-function" {
   memory_size   = var.db-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
   layers        = [aws_lambda_layer_version.db-properties-layer.arn, var.datadog-layer-1-arn, var.datadog-layer-2-arn]
-  function_name = substr("${var.environment}-${var.db-lambda-information[count.index].name}", 0, 64)
   handler       = var.db-lambda-information[count.index].handler
   publish       = true
 

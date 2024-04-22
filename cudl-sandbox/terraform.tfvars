@@ -160,6 +160,7 @@ transform-lambda-information = [
 ]
 enhancements-lambda-information = [{
   "name"          = "AWSLambda_CUDLDataEnhancements_TranskribusMergeTEI"
+  "description"   = "Used by the Transkribus pipeline to merge TEI transcription output from Transkribus into the TEI CUDL metadata.  Enhances the CUDL TEI with the Transkribus transcription data"
   "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
   "queue_name"    = "CUDLTranskribusQueue"
   "transcription" = true
@@ -171,6 +172,7 @@ enhancements-lambda-information = [{
 db-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
+    "description"   = "Updates the CUDL database with collection information from the collections json file"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUpdateDBQueue"
     "timeout"       = 900
@@ -182,6 +184,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
+    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "timeout"       = 900
@@ -192,6 +195,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUIQueue"
     "timeout"       = 900
