@@ -12,7 +12,6 @@ variable "aws-account-number" {
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "staging"
 }
 
 variable "db-only-processing" {

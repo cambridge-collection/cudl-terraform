@@ -16,7 +16,6 @@ variable "transkribus-bucket-name" {
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "dev"
 }
 
 variable "enhancements-lambda-information" {

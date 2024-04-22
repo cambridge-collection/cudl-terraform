@@ -37,7 +37,7 @@ To apply those changes run  **warning this will update the system**
 
 If you want to bring down all components **warning this will detroy all managed components**
     
-    terraform destroy 
+    terraform destroy
 
 For more information see
 
@@ -47,6 +47,10 @@ https://www.terraform-best-practices.com/
 
 State is stored in S3, and will be picked up automatically from the init command.
 It is backend "s3" section of the main.tf file.
+
+## Running Terraform in sandbox environment
+
+Resource naming in the sandbox environment (AWS Account 563181399728) has been changed to include the user's CRSid. When running Terraform commands, you will be prompted to enter a value for the `owner` for which the CRSid should be provided. This will be added as a prefix in resource names. Other environments, dev, staging and production are not prefixed with the owner value.
 
 ## Data Loading Process Infrastructure.
 
