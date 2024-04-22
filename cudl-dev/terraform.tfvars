@@ -16,7 +16,6 @@ enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cure
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/dev_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "dev/cudl/cudl_viewer_db"
-use_cudl_data_enhancements           = true
 
 // NOTE: If you are adding anything here you need to add a code block to
 // the s3.tf file
@@ -130,13 +129,6 @@ transform-lambda-information = [
     "memory"        = 1024
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
     "runtime"       = "java11"
-  },
-  {
-    "name"      = "AWSLambda_CUDLPackageData_TEIProcessing"
-    "image_uri" = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:26850691fd0ad0db9c0166bee937f1e5a389a9f47f64b7f82790bf9aafafcba6"
-    "timeout"   = 300
-    "memory"    = 2048
-
   }
 ]
 enhancements-lambda-information = [{

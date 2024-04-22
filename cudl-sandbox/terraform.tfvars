@@ -1,8 +1,7 @@
-environment                          = "sandboxtf"
+environment                          = "sandbox"
 project                              = "CUDL"
 component                            = "cudl-data-workflows"
 subcomponent                         = "cudl-transform-lambda"
-owner                                = "mjh39"
 db-only-processing                   = false
 destination-bucket-name              = "cudl-data-releases"
 transcriptions-bucket-name           = "cudl-transcriptions"
@@ -20,7 +19,6 @@ enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cure
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "sandboxtf/cudl/cudl_viewer_db"
-use_cudl_data_enhancements           = true
 
 // NOTE: If you are adding anything here you need to add a code block to
 // the s3.tf file

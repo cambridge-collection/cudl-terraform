@@ -16,7 +16,6 @@ enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cure
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/staging_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "staging/cudl/cudl_viewer_db"
-use_cudl_data_enhancements           = true
 
 // NOTE: If you are adding anything here you need to add a code block to
 // the s3.tf file

@@ -41,7 +41,6 @@ module "cudl-data-processing" {
 }
 
 module "cudl-data-enhancements" {
-  count                                = var.use_cudl_data_enhancements ? 1 : 0
   source                               = "../modules/cudl-data-enhancements"
   environment                          = local.environment
   aws-account-number                   = data.aws_caller_identity.current.account_id

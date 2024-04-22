@@ -12,7 +12,7 @@ terraform {
 
   backend "s3" {
     bucket         = "sandbox-cudl-terraform-state"
-    key            = "mjh39-sandbox--content-loader-cudl-infra.tfstate"
+    key            = "sandbox-cudl-infra.tfstate"
     dynamodb_table = "terraform-state-lock-cudl"
     region         = "eu-west-1"
   }

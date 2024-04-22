@@ -21,7 +21,6 @@ variable "subcomponent" {
 variable "owner" {
   type        = string
   description = "Optional Owner tag. Your CRSid, e.g. jag245"
-  default     = ""
 }
 
 variable "deployment-aws-region" {
@@ -116,6 +115,7 @@ variable "transform-lambda-information" {
     memory                   = number
     queue_name               = string
     transcription            = bool
+    description              = optional(string)
     jar_path                 = optional(string)
     handler                  = optional(string)
     runtime                  = optional(string)
@@ -232,12 +232,6 @@ variable "source-bucket-sns-notifications" {
 variable "source-bucket-sqs-notifications" {
   description = "List of SQS notifications on source s3 bucket"
   type        = list(any)
-}
-
-variable "use_cudl_data_enhancements" {
-  description = "Specify whether cudl-data-enchancements are to be deployed"
-  type        = bool
-  default     = true
 }
 
 variable "distribution-bucket-name" {

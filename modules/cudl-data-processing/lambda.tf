@@ -2,6 +2,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   count = length(var.transform-lambda-information)
 
   function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
+  description   = var.transform-lambda-information[count.index].description
   package_type  = var.transform-lambda-information[count.index].jar_path != null ? "Zip" : "Image"
   s3_bucket     = var.transform-lambda-information[count.index].jar_path != null ? var.lambda-jar-bucket : null
   s3_key        = var.transform-lambda-information[count.index].jar_path
@@ -92,17 +93,7 @@ resource "aws_lambda_function" "create-db-lambda-function" {
   }
 
   environment {
-<<<<<<< HEAD
-    variables = {
-      DD_API_KEY_SECRET_ARN = "datadog_api",
-      DD_JMXFETCH_ENABLED   = false,
-      DD_SITE               = "https://app.datadoghq.eu",
-      DD_TRACE_ENABLED      = true,
-      JAVA_TOOL_OPTIONS     = "-javaagent:\"/opt/java/lib/dd-java-agent.jar\" -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
-    }
-=======
     variables = var.lambda_environment_datadog_variables
->>>>>>> 88bc11d (feat(tf): Add tei-data-processing lambda container)
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
