@@ -11,8 +11,10 @@ resource "aws_sns_topic" "source_item_updated" {
         "Principal": { "Service": "s3.amazonaws.com" },
         "Action": "SNS:Publish",
         "Resource": "arn:aws:sns:*:*:${var.environment}-s3-source-item-event-notification-topic",
-        "Condition":{
-            "ArnLike":{"aws:SourceArn":"${aws_s3_bucket.source-bucket[0].arn}"}
+        "Condition": {
+            "ArnLike": {
+                "aws:SourceArn": ["${aws_s3_bucket.source-bucket[0].arn}", "${aws_s3_bucket.distribution-bucket.arn}"]
+            }
         }
     }]
 }

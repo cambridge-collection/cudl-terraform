@@ -17,7 +17,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
       "Action": "sqs:SendMessage",
       "Resource": "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}",
       "Condition": {
-        "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.source-bucket[0].arn}" }
+        "ArnEquals": { "aws:SourceArn": ["${aws_s3_bucket.source-bucket[0].arn}", "${aws_s3_bucket.distribution-bucket.arn}"] }
       }
     },
     {
