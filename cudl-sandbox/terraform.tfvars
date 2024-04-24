@@ -50,35 +50,47 @@ source-bucket-sqs-notifications = [
     "queue_name"    = "CUDLPackageDataQueue_HTML",
     "filter_prefix" = "pages/html/",
     "filter_suffix" = ".html"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "pages/images/"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "cudl.dl-dataset"
     "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "cudl.ui"
     "filter_suffix" = ".json5"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_Collections"
     "filter_prefix" = "collections/"
     "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "ui/"
-    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-source"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLIndexQueue"
+    "filter_prefix" = "solr-json/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-dist"
   }
 ]
 transform-lambda-information = [
