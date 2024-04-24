@@ -25,10 +25,11 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "vpc_config" {
+    # if transcription is false, add to VPC subnets and security groups
     for_each = coalesce(var.transform-lambda-information[count.index].transcription, false) ? [] : [1]
     content {
-      subnet_ids         = [data.aws_subnet.cudl_subnet.id]
-      security_group_ids = [data.aws_security_group.default.id]
+      subnet_ids         = [data.aws_subnet.transform_lambda_subnet[count.index].id]
+      security_group_ids = [data.aws_security_group.transform_lambda_security_group[count.index].id]
     }
   }
 

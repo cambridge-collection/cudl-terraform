@@ -17,6 +17,19 @@ data "aws_security_group" "default" {
   id = var.security-group-id
 }
 
+data "aws_subnet" "transform_lambda_subnet" {
+  count = length(var.transform-lambda-information)
+  tags = {
+    Name = coalesce(var.transform-lambda-information[count.index].subnet_name, var.default-lambda-subnet)
+  }
+}
+
+data "aws_security_group" "transform_lambda_security_group" {
+  count  = length(var.transform-lambda-information)
+  name   = coalesce(var.transform-lambda-information[count.index].security_group_name, var.default-lambda-security-group)
+  vpc_id = data.aws_subnet.transform_lambda_subnet[count.index].vpc_id
+}
+
 /*
 resource "aws_vpc" "cudl_vpc" {
   cidr_block = var.cidr-blocks[0]

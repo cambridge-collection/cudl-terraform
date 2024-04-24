@@ -115,6 +115,8 @@ variable "transform-lambda-information" {
     memory                   = number
     queue_name               = string
     transcription            = bool
+    subnet_name              = optional(string)
+    security_group_name      = optional(string)
     description              = optional(string)
     jar_path                 = optional(string)
     handler                  = optional(string)

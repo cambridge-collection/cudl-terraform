@@ -85,6 +85,8 @@ variable "transform-lambda-information" {
     memory                   = number
     queue_name               = string
     transcription            = bool
+    subnet_name              = optional(string)
+    security_group_name      = optional(string)
     description              = optional(string)
     jar_path                 = optional(string)
     handler                  = optional(string)
@@ -97,6 +99,18 @@ variable "transform-lambda-information" {
     use_datadog_variables    = optional(bool, true)
     use_additional_variables = optional(bool, false)
   }))
+}
+
+variable "default-lambda-subnet" {
+  type        = string
+  description = "Name of the default Subnet for lambdas"
+  default     = "cudl-subnet-public1-eu-west-1a"
+}
+
+variable "default-lambda-security-group" {
+  type        = string
+  description = "Name of the default Security Group for lambdas"
+  default     = "default"
 }
 
 variable "db-lambda-information" {
