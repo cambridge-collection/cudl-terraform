@@ -156,6 +156,22 @@ transform-lambda-information = [
       CORE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/core-xml"
       PAGE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/page-xml"
     }
+  },
+  {
+    "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/sandboxtf-solr-indexer@sha256:c4f0e5fd4675939ca0789bfb4ffe36a240f340a041ee403216cbfbefdd7f2bc8"
+    "queue_name"               = "CUDLIndexQueue"
+    "transcription"            = false
+    "timeout"                  = 60
+    "memory"                   = 1024
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 100
+    "use_datadog_variables"    = false
+    "use_additional_variables" = true
+    "environment_variables" = {
+      SOLR_HOST = "solr-url"
+    }
   }
 ]
 enhancements-lambda-information = [{

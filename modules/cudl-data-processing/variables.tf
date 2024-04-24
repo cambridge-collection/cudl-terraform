@@ -101,6 +101,7 @@ variable "transform-lambda-information" {
   }))
 }
 
+# NOTE EFS file system needs to have mount targets in all availability zones referenced
 variable "default-lambda-subnet" {
   type        = string
   description = "Name of the default Subnet for lambdas"
