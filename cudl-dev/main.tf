@@ -1,39 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.24.0"
-    }
-    local = {
-      source  = "hashicorp/local"
-      version = "~> 2.1.0"
-    }
-  }
-
-  backend "s3" {
-    bucket         = "terraform-state-kie4di"
-    key            = "dev-cudl-infra.tfstate"
-    dynamodb_table = "terraform-state-lock-kie4di"
-    region         = "eu-west-1"
-  }
-
-  required_version = ">= 0.14.9"
-}
-
-provider "aws" {
-  region  = var.deployment-aws-region
-  profile = "default"
-
-  default_tags {
-    tags = {
-      Environment = title(var.environment)
-      Project     = "CUDL"
-      env         = title(var.environment)
-      service     = "CUDL"
-    }
-  }
-}
-
 module "cudl-data-processing" {
   source                          = "../modules/cudl-data-processing"
   chunks                          = var.chunks
@@ -70,6 +34,7 @@ module "cudl-data-processing" {
   db-only-processing              = var.db-only-processing
   transcription-pagify-xslt       = var.transcription-pagify-xslt
   transcription-mstei-xslt        = var.transcription-mstei-xslt
+  distribution-bucket-name        = var.distribution-bucket-name
 }
 
 module "cudl-data-enhancements" {
