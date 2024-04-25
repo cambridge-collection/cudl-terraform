@@ -15,6 +15,11 @@ resource "aws_s3_bucket" "distribution-bucket" {
   bucket = lower("${var.environment}-${var.distribution-bucket-name}")
 }
 
+resource "aws_s3_bucket" "transform-lambda-source-bucket" {
+  for_each = local.source_buckets
+  bucket = lower("${var.environment}-${each.key}")
+}
+
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
 
@@ -51,17 +56,17 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
 
   #count  = length(var.transform-lambda-information)
-  count = length(var.source-bucket-sns-notifications) > 0 || length(var.source-bucket-sqs-notifications) > 0 ? 1 : 0
+  count = length(var.source-bucket-sns-notifications)
 
-  bucket = aws_s3_bucket.source-bucket[0].id
+  bucket = var.source-bucket-sns-notifications[count.index].bucket_name
 
   // TODO This is a hack for now, to get multiple notifications working for a bucket
   // If any more lambdas / sqs / sns is added an extra block will need adding.
   topic {
-    topic_arn     = aws_sns_topic.source_item_updated[0].arn
+    topic_arn     = aws_sns_topic.source_item_updated[var.source-bucket-sns-notifications[count.index].bucket_name].arn
     events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sns-notifications[0].filter_prefix, "") != "" ? var.source-bucket-sns-notifications[0].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sns-notifications[0].filter_suffix, "") != "" ? var.source-bucket-sns-notifications[0].filter_suffix : null
+    filter_prefix = var.source-bucket-sns-notifications[count.index].filter_prefix
+    filter_suffix = var.source-bucket-sns-notifications[count.index].filter_suffix
   }
 
   queue {

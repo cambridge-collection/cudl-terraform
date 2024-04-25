@@ -24,6 +24,7 @@ lambda-db-secret-key                 = "sandboxtf/cudl/cudl_viewer_db"
 // the s3.tf file
 source-bucket-sns-notifications = [
   {
+    "bucket_name"   = "cudl-data-sourcep"
     "filter_prefix" = "items/data/tei/",
     "filter_suffix" = ".xml"
     "subscriptions" = [
@@ -37,6 +38,17 @@ source-bucket-sns-notifications = [
       },
       {
         "queue_name" = "CUDLTranscriptionsQueue",
+        "raw"        = true
+      },
+    ]
+  },
+  {
+    "bucket_name"   = "cudl-distp"
+    "filter_prefix" = "items/data/tei/",
+    "filter_suffix" = ".xml"
+    "subscriptions" = [
+      {
+        "queue_name" = "CUDLIndexQueue",
         "raw"        = true
       },
     ]
