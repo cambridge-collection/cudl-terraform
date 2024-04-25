@@ -1,5 +1,5 @@
 locals {
-  environment = strcontains(lower(var.environment), "sandbox") ? join("-", [var.owner, var.environment]) : var.environment
+  environment = var.environment # NOTE use of local variable allows for owner-specific naming in sandbox environment
   default_tags = {
     Environment  = title(var.environment)
     Project      = var.project
@@ -7,7 +7,6 @@ locals {
     Subcomponent = var.subcomponent
     Deployment   = title(local.environment)
     Source       = "https://github.com/cambridge-collection/cudl-terraform"
-    Owner        = var.owner
     terraform    = true
   }
   additional_lambda_variables = {

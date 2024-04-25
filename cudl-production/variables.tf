@@ -18,11 +18,6 @@ variable "subcomponent" {
   description = "If applicable: any value, e.g. Fedora"
 }
 
-variable "owner" {
-  type        = string
-  description = "Optional Owner tag. Your CRSid, e.g. jag245"
-}
-
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
