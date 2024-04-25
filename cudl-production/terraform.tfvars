@@ -1,9 +1,13 @@
 environment                  = "production"
+project                      = "CUDL"
+component                    = "cudl-data-workflows"
+subcomponent                 = "cudl-transform-lambda"
 db-only-processing           = true
 aws-account-number           = "247242244017"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"
 source-bucket-name           = "cudl-data-source"
+distribution-bucket-name     = "cudl-dist"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name            = "cudl-xslt-layer"
@@ -12,7 +16,6 @@ lambda-layer-filepath        = "projects/cudl-data-processing/xslt/cudl-transfor
 lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/production_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "production/cudl/cudl_viewer_db"
-use_cudl_data_enhancements   = false
 
 source-bucket-sns-notifications = [
 ]
@@ -23,6 +26,7 @@ transform-lambda-information = [
 db-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
+    "description"   = "Updates the CUDL database with collection information from the collections json file"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUpdateDBQueue"
     "timeout"       = 900
@@ -34,6 +38,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
+    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "timeout"       = 900
@@ -44,6 +49,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUIQueue"
     "timeout"       = 900

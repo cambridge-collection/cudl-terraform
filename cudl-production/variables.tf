@@ -1,3 +1,28 @@
+variable "environment" {
+  type        = string
+  description = "The environment you're working with. Live | Staging | Development | All"
+}
+
+variable "project" {
+  type        = string
+  description = "Project or Service name, e.g. DPS, CUDL, Darwin"
+}
+
+variable "component" {
+  type        = string
+  description = "e.g. Deposit Service | All"
+}
+
+variable "subcomponent" {
+  type        = string
+  description = "If applicable: any value, e.g. Fedora"
+}
+
+variable "owner" {
+  type        = string
+  description = "Optional Owner tag. Your CRSid, e.g. jag245"
+}
+
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
@@ -7,12 +32,6 @@ variable "deployment-aws-region" {
 variable "aws-account-number" {
   description = "Account number for AWS.  Used to build arn values"
   type        = string
-}
-
-variable "environment" {
-  description = "The environment you're working with. Should be one of: dev, staging, live."
-  type        = string
-  default     = "production"
 }
 
 variable "db-only-processing" {
@@ -172,4 +191,8 @@ variable "source-bucket-sns-notifications" {
 variable "source-bucket-sqs-notifications" {
   description = "List of SQS notifications on source s3 bucket"
   type        = list(any)
+}
+
+variable "distribution-bucket-name" {
+  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
 }
