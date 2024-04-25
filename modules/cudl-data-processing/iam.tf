@@ -22,16 +22,16 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "s3:PutObjectAcl",
       "s3:GetObjectAcl"
     ]
-    resources = [
-      aws_s3_bucket.source-bucket.0.arn,
-      "${aws_s3_bucket.source-bucket.0.arn}/*",
+    resources = compact([
+      try(aws_s3_bucket.source-bucket.0.arn, null),
+      try("${aws_s3_bucket.source-bucket.0.arn}/*", null),
       aws_s3_bucket.dest-bucket.arn,
       "${aws_s3_bucket.dest-bucket.arn}/*",
       aws_s3_bucket.transcriptions-bucket.arn,
       "${aws_s3_bucket.transcriptions-bucket.arn}/*",
       aws_s3_bucket.distribution-bucket.arn,
       "${aws_s3_bucket.distribution-bucket.arn}/*",
-    ]
+    ])
   }
   statement {
     actions = [
