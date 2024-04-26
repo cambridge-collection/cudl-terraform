@@ -22,15 +22,16 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "s3:PutObjectAcl",
       "s3:GetObjectAcl"
     ]
-
-    resources = [
-      "arn:aws:s3:::${var.environment}-${var.source-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.source-bucket-name}/*",
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
-    ]
+    resources = compact([
+      try(aws_s3_bucket.source-bucket.0.arn, null),
+      try("${aws_s3_bucket.source-bucket.0.arn}/*", null),
+      aws_s3_bucket.dest-bucket.arn,
+      "${aws_s3_bucket.dest-bucket.arn}/*",
+      aws_s3_bucket.transcriptions-bucket.arn,
+      "${aws_s3_bucket.transcriptions-bucket.arn}/*",
+      aws_s3_bucket.distribution-bucket.arn,
+      "${aws_s3_bucket.distribution-bucket.arn}/*",
+    ])
   }
   statement {
     actions = [
@@ -54,11 +55,11 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
   }
   statement {
     actions = [
-        "ec2:CreateNetworkInterface",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DeleteNetworkInterface",
-        "ec2:UnassignPrivateIpAddresses",
-        "ec2:AssignPrivateIpAddresses"
+      "ec2:CreateNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DeleteNetworkInterface",
+      "ec2:UnassignPrivateIpAddresses",
+      "ec2:AssignPrivateIpAddresses"
     ]
     resources = [
       "*"
@@ -66,12 +67,12 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
   }
   statement {
     actions = [
-        "secretsmanager:GetRandomPassword",
-        "secretsmanager:GetResourcePolicy",
-        "secretsmanager:GetSecretValue",
-        "secretsmanager:DescribeSecret",
-        "secretsmanager:ListSecretVersionIds",
-        "secretsmanager:ListSecrets"
+      "secretsmanager:GetRandomPassword",
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds",
+      "secretsmanager:ListSecrets"
     ]
     resources = [
       "arn:aws:secretsmanager:*:*:${var.environment}/cudl/*"
@@ -79,12 +80,12 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
   }
   statement {
     actions = [
-        "lambda:InvokeFunction",
-        "lambda:InvokeAsync"
-      ]
-      resources = [
-        "arn:aws:lambda:*:*:${var.environment}-*"
-      ]
+      "lambda:InvokeFunction",
+      "lambda:InvokeAsync"
+    ]
+    resources = [
+      "arn:aws:lambda:*:*:${var.environment}-*"
+    ]
   }
   statement {
     actions = [
@@ -92,7 +93,7 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "secretsmanager:ListSecrets"
     ]
     resources = [
-       "arn:aws:secretsmanager:${var.deployment-aws-region}:${var.aws-account-number}:secret:datadog_api*"
+      "arn:aws:secretsmanager:${var.deployment-aws-region}:${var.aws-account-number}:secret:datadog_api*"
     ]
   }
 }
@@ -119,7 +120,7 @@ resource "aws_s3_bucket_acl" "transcriptions-bucket-acl" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
   acl    = "public-read"
   depends_on = [aws_s3_bucket_public_access_block.transcriptions-bucket-public-access,
-    aws_s3_bucket_ownership_controls.transcriptions-bucket-acl-ownership]
+  aws_s3_bucket_ownership_controls.transcriptions-bucket-acl-ownership]
 }
 
 # Resource to avoid error "AccessControlListNotSupported: The bucket does not allow ACLs"
@@ -141,8 +142,8 @@ resource "aws_s3_bucket_public_access_block" "transcriptions-bucket-public-acces
 }
 
 resource "aws_s3_bucket_policy" "transcriptions-bucket-policy" {
-  bucket = aws_s3_bucket.transcriptions-bucket.id
-  policy = data.aws_iam_policy_document.s3-transcription-document.json
+  bucket     = aws_s3_bucket.transcriptions-bucket.id
+  policy     = data.aws_iam_policy_document.s3-transcription-document.json
   depends_on = [aws_s3_bucket_acl.transcriptions-bucket-acl]
 }
 
@@ -153,10 +154,10 @@ data "aws_iam_policy_document" "s3-transcription-document" {
     ]
     principals {
       identifiers = ["*"]
-      type = "AWS"
+      type        = "AWS"
     }
     resources = [
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
+      "${aws_s3_bucket.transcriptions-bucket.arn}/*"
     ]
   }
 }
@@ -190,10 +191,10 @@ data "aws_iam_policy_document" "s3-deploy-document" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.destination-bucket-name}/*",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}",
-      "arn:aws:s3:::${var.environment}-${var.transcriptions-bucket-name}/*"
+      aws_s3_bucket.dest-bucket.arn,
+      "${aws_s3_bucket.dest-bucket.arn}/*",
+      aws_s3_bucket.transcriptions-bucket.arn,
+      "${aws_s3_bucket.transcriptions-bucket.arn}/*",
     ]
   }
 }

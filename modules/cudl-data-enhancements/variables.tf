@@ -6,7 +6,7 @@ variable "deployment-aws-region" {
 
 variable "aws-account-number" {
   description = "Account number for AWS.  Used to build arn values"
-  type = string
+  type        = string
 }
 
 variable "transkribus-bucket-name" {
@@ -16,7 +16,6 @@ variable "transkribus-bucket-name" {
 variable "environment" {
   description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "dev"
 }
 
 variable "enhancements-lambda-information" {
@@ -58,12 +57,12 @@ variable "datadog-layer-2-arn" {
 
 variable "subnet-id" {
   description = "Specify an existing subnet id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "security-group-id" {
   description = "Specify an existing security group id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "efs-name" {

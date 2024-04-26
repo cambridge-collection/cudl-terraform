@@ -1,3 +1,23 @@
+variable "environment" {
+  type        = string
+  description = "The environment you're working with. Live | Staging | Development | All"
+}
+
+variable "project" {
+  type        = string
+  description = "Project or Service name, e.g. DPS, CUDL, Darwin"
+}
+
+variable "component" {
+  type        = string
+  description = "e.g. Deposit Service | All"
+}
+
+variable "subcomponent" {
+  type        = string
+  description = "If applicable: any value, e.g. Fedora"
+}
+
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
@@ -6,18 +26,12 @@ variable "deployment-aws-region" {
 
 variable "aws-account-number" {
   description = "Account number for AWS.  Used to build arn values"
-  type = string
-}
-
-variable "environment" {
-  description = "The environment you're working with. Should be one of: dev, staging, live."
   type        = string
-  default     = "production"
 }
 
 variable "db-only-processing" {
   description = "true for when we just want release s3 and lambdas e.g. for production environment"
-  type = bool
+  type        = bool
 }
 
 variable "source-bucket-name" {
@@ -61,17 +75,17 @@ variable "lambda-layer-filepath" {
 
 variable "lambda-db-jdbc-driver" {
   description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
-  type = string
+  type        = string
 }
 
 variable "lambda-db-url" {
   description = "The url used for cudl db connection.  Has placeholders in for <HOST> and <PORT>."
-  type = string
+  type        = string
 }
 
 variable "lambda-db-secret-key" {
   description = "The path to the secret key that's used to access the cudl db credentials"
-  type = string
+  type        = string
 }
 
 variable "transform-lambda-information" {
@@ -146,12 +160,12 @@ variable "vpc-id" {
 
 variable "subnet-id" {
   description = "Specify an existing subnet id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "security-group-id" {
   description = "Specify an existing security group id for cudl vpn"
-  type = string
+  type        = string
 }
 
 variable "releases-root-directory-path" {
@@ -172,4 +186,8 @@ variable "source-bucket-sns-notifications" {
 variable "source-bucket-sqs-notifications" {
   description = "List of SQS notifications on source s3 bucket"
   type        = list(any)
+}
+
+variable "distribution-bucket-name" {
+  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
 }

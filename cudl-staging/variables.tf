@@ -1,3 +1,23 @@
+variable "environment" {
+  type        = string
+  description = "The environment you're working with. Live | Staging | Development | All"
+}
+
+variable "project" {
+  type        = string
+  description = "Project or Service name, e.g. DPS, CUDL, Darwin"
+}
+
+variable "component" {
+  type        = string
+  description = "e.g. Deposit Service | All"
+}
+
+variable "subcomponent" {
+  type        = string
+  description = "If applicable: any value, e.g. Fedora"
+}
+
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
@@ -7,12 +27,6 @@ variable "deployment-aws-region" {
 variable "aws-account-number" {
   description = "Account number for AWS.  Used to build arn values"
   type        = string
-}
-
-variable "environment" {
-  description = "The environment you're working with. Should be one of: dev, staging, live."
-  type        = string
-  default     = "staging"
 }
 
 variable "db-only-processing" {
@@ -94,8 +108,25 @@ variable "lambda-db-secret-key" {
 }
 
 variable "transform-lambda-information" {
-  description = "A list of maps containing information about the transformation lambda functions"
-  type        = list(any)
+  description = "A list of objects containing information about the transformation lambda functions"
+  type = list(object({
+    name                     = string
+    timeout                  = number
+    memory                   = number
+    queue_name               = string
+    transcription            = bool
+    description              = optional(string)
+    jar_path                 = optional(string)
+    handler                  = optional(string)
+    runtime                  = optional(string)
+    environment_variables    = optional(map(string))
+    image_uri                = optional(string)
+    batch_size               = optional(number)
+    batch_window             = optional(number)
+    maximum_concurrency      = optional(number)
+    use_datadog_variables    = optional(bool, true)
+    use_additional_variables = optional(bool, false)
+  }))
 }
 
 variable "enhancements-lambda-information" {
@@ -201,4 +232,8 @@ variable "source-bucket-sns-notifications" {
 variable "source-bucket-sqs-notifications" {
   description = "List of SQS notifications on source s3 bucket"
   type        = list(any)
+}
+
+variable "distribution-bucket-name" {
+  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
 }

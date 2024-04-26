@@ -1,9 +1,13 @@
 environment                  = "production"
+project                      = "CUDL"
+component                    = "cudl-data-workflows"
+subcomponent                 = "cudl-transform-lambda"
 db-only-processing           = true
 aws-account-number           = "247242244017"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"
 source-bucket-name           = "cudl-data-source"
+distribution-bucket-name     = "cudl-dist"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name            = "cudl-xslt-layer"
@@ -13,15 +17,16 @@ lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/production_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "production/cudl/cudl_viewer_db"
 
-source-bucket-sns-notifications  = [
+source-bucket-sns-notifications = [
 ]
-source-bucket-sqs-notifications  = [
+source-bucket-sqs-notifications = [
 ]
 transform-lambda-information = [
 ]
 db-lambda-information = [
   {
     "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
+    "description"   = "Updates the CUDL database with collection information from the collections json file"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUpdateDBQueue"
     "timeout"       = 900
@@ -33,6 +38,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
+    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "timeout"       = 900
@@ -43,6 +49,7 @@ db-lambda-information = [
   },
   {
     "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.15/AWSLambda_Data_Transform-0.15-jar-with-dependencies.jar"
     "queue_name"    = "CUDLPackageDataUIQueue"
     "timeout"       = 900
@@ -52,22 +59,22 @@ db-lambda-information = [
     "runtime"       = "java11"
   }
 ]
-dst-efs-prefix               = "/mnt/cudl-data-releases"
-dst-prefix                   = "html/"
-dst-s3-prefix                = ""
-tmp-dir                      = "/tmp/dest"
-large-file-limit             = 1000000
-chunks                       = 4
-data-function-name           = "AWSLambda_CUDLPackageDataJSON_AddEvent"
-transcription-function-name  = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-transcription-pagify-xslt    = "/opt/xslt/transcription/pagify.xsl"
-transcription-mstei-xslt     = "/opt/xslt/transcription/msTeiTrans.xsl"
-lambda-alias-name            = "LIVE"
+dst-efs-prefix              = "/mnt/cudl-data-releases"
+dst-prefix                  = "html/"
+dst-s3-prefix               = ""
+tmp-dir                     = "/tmp/dest"
+large-file-limit            = 1000000
+chunks                      = 4
+data-function-name          = "AWSLambda_CUDLPackageDataJSON_AddEvent"
+transcription-function-name = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
+transcription-pagify-xslt   = "/opt/xslt/transcription/pagify.xsl"
+transcription-mstei-xslt    = "/opt/xslt/transcription/msTeiTrans.xsl"
+lambda-alias-name           = "LIVE"
 
 # Existing vpc info
-vpc-id                       = "vpc-ab7880ce"
-subnet-id                    = "subnet-fa1ed08d"
-security-group-id            = "sg-b79833d2"
+vpc-id            = "vpc-ab7880ce"
+subnet-id         = "subnet-fa1ed08d"
+security-group-id = "sg-b79833d2"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
