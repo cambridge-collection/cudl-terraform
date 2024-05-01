@@ -16,8 +16,8 @@ resource "aws_s3_bucket" "distribution-bucket" {
 }
 
 resource "aws_s3_bucket" "transform-lambda-source-bucket" {
-  for_each = local.source_buckets
-  bucket = lower("${var.environment}-${each.key}")
+  for_each = toset(local.source_sns_buckets)
+  bucket   = lower("${var.environment}-${each.key}")
 }
 
 resource "aws_s3_bucket_website_configuration" "example" {
