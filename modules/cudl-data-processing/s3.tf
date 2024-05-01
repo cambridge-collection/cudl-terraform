@@ -45,20 +45,19 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 }
 
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
+  for_each = local.source_bucket_sns_notifications
 
-  count = length(var.source-bucket-sns-notifications)
-
-  bucket = var.source-bucket-sns-notifications[count.index].bucket_name
+  bucket = aws_s3_bucket.transform-lambda-source-bucket[each.key].id
 
   topic {
-    topic_arn     = aws_sns_topic.source_item_updated[var.source-bucket-sns-notifications[count.index].bucket_name].arn
+    topic_arn     = aws_sns_topic.source_item_updated[each.key].arn
     events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = var.source-bucket-sns-notifications[count.index].filter_prefix
-    filter_suffix = var.source-bucket-sns-notifications[count.index].filter_suffix
+    filter_prefix = each.value.filter_prefix
+    filter_suffix = each.value.filter_suffix
   }
 
   dynamic "queue" {
-    for_each = local.source_bucket_sqs_notifications[var.source-bucket-sns-notifications[count.index].bucket_name]
+    for_each = local.source_bucket_sqs_notifications[each.key]
     content {
       queue_arn     = aws_sqs_queue.transform-lambda-sqs-queue[queue.value.queue_name].arn
       events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
