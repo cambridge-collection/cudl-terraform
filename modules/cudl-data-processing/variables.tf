@@ -16,8 +16,8 @@ variable "environment" {
 
 variable "source-bucket-names" {
   description = "List of source buckets used to create triggers."
-  type = list(string)
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 variable "destination-bucket-name" {

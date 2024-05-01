@@ -25,7 +25,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
 
 resource "aws_s3_bucket_versioning" "transform-lambda-source-bucket-versioning" {
   for_each = aws_s3_bucket.transform-lambda-source-bucket
-  bucket = aws_s3_bucket.transform-lambda-source-bucket[each.key].id
+  bucket   = aws_s3_bucket.transform-lambda-source-bucket[each.key].id
   versioning_configuration {
     status = "Suspended"
   }
@@ -46,13 +46,10 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
 
-  #count  = length(var.transform-lambda-information)
   count = length(var.source-bucket-sns-notifications)
 
   bucket = var.source-bucket-sns-notifications[count.index].bucket_name
 
-  // TODO This is a hack for now, to get multiple notifications working for a bucket
-  // If any more lambdas / sqs / sns is added an extra block will need adding.
   topic {
     topic_arn     = aws_sns_topic.source_item_updated[var.source-bucket-sns-notifications[count.index].bucket_name].arn
     events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
@@ -60,47 +57,16 @@ resource "aws_s3_bucket_notification" "source-bucket-notifications" {
     filter_suffix = var.source-bucket-sns-notifications[count.index].filter_suffix
   }
 
-  queue {
-    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[0].queue_name}"
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sqs-notifications[0].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[0].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sqs-notifications[0].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[0].filter_suffix : null
+  dynamic "queue" {
+    for_each = local.source_bucket_sqs_notifications[var.source-bucket-sns-notifications[count.index].bucket_name]
+    content {
+      queue_arn     = aws_sqs_queue.transform-lambda-sqs-queue[queue.value.queue_name].arn
+      events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
+      filter_prefix = try(queue.value.filter_prefix, null)
+      filter_suffix = try(queue.value.filter_suffix, null)
+    }
   }
 
-  queue {
-    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[1].queue_name}"
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sqs-notifications[1].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[1].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sqs-notifications[1].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[1].filter_suffix : null
-  }
-
-  queue {
-    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[2].queue_name}"
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sqs-notifications[2].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[2].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sqs-notifications[2].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[2].filter_suffix : null
-  }
-
-  queue {
-    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[3].queue_name}"
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sqs-notifications[3].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[3].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sqs-notifications[3].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[3].filter_suffix : null
-  }
-
-  queue {
-    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[4].queue_name}"
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sqs-notifications[4].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[4].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sqs-notifications[4].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[4].filter_suffix : null
-  }
-
-  queue {
-    queue_arn     = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sqs-notifications[5].queue_name}"
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = try(var.source-bucket-sqs-notifications[5].filter_prefix, "") != "" ? var.source-bucket-sqs-notifications[5].filter_prefix : null
-    filter_suffix = try(var.source-bucket-sqs-notifications[5].filter_suffix, "") != "" ? var.source-bucket-sqs-notifications[5].filter_suffix : null
-  }
   # without the `depends_on` argument, the bucket notification creation fails because the
   # lambda function doesn't exist yet
   depends_on = [aws_sqs_queue.transform-lambda-sqs-queue, aws_lambda_function.create-transform-lambda-function, aws_sns_topic.source_item_updated]

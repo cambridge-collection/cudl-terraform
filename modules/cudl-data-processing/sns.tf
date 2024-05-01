@@ -20,11 +20,12 @@ resource "aws_sns_topic" "source_item_updated" {
 POLICY
 }
 
+# NOTE need a separate local variable for the loop here as Terraform can't do resources with nested for_each blocks
 resource "aws_sns_topic_subscription" "item_update_subscriptions" {
   count = length(local.source_sns_subscriptions)
 
   topic_arn            = aws_sns_topic.source_item_updated[local.source_sns_subscriptions[count.index].bucket_name].arn
   protocol             = "sqs"
   raw_message_delivery = local.source_sns_subscriptions[count.index].raw
-  endpoint             = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${local.source_sns_subscriptions[count.index].queue_name}"
+  endpoint             = aws_sqs_queue.transform-lambda-sqs-queue[local.source_sns_subscriptions[count.index].queue_name].arn
 }

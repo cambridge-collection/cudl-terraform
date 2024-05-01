@@ -1,7 +1,7 @@
 resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
-  count = length(var.transform-lambda-information)
+  for_each = local.transform_lambda_queues
 
-  name = substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)
+  name = substr("${var.environment}-${each.key}", 0, 64)
 
   visibility_timeout_seconds = 900
 
@@ -14,7 +14,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
           Service = "s3.amazonaws.com"
         }
         Action   = "sqs:SendMessage"
-        Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}"
+        Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${each.key}", 0, 64)}"
         Condition = {
           ArnEquals = {
             "aws:SourceArn" = [for bucket in aws_s3_bucket.transform-lambda-source-bucket : bucket.arn]
@@ -30,12 +30,12 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
           "sqs:SendMessage",
           "sqs:SendMessageBatch"
         ]
-        Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}"
+        Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${each.key}", 0, 64)}"
       }
     ]
   })
   redrive_policy = jsonencode({
-    "deadLetterTargetArn" = aws_sqs_queue.transform-lambda-dead-letter-queue[count.index].arn,
+    "deadLetterTargetArn" = aws_sqs_queue.transform-lambda-dead-letter-queue[each.key].arn,
     "maxReceiveCount"     = 3
   })
 }
@@ -75,9 +75,9 @@ POLICY
 
 
 resource "aws_sqs_queue" "transform-lambda-dead-letter-queue" {
-  count                      = length(var.transform-lambda-information)
+  for_each                   = local.transform_lambda_queues
   visibility_timeout_seconds = 900
-  name                       = substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}_DeadLetterQueue", 0, 80)
+  name                       = substr("${var.environment}-${each.key}_DeadLetterQueue", 0, 80)
 }
 
 resource "aws_sqs_queue" "db-lambda-dead-letter-queue" {
