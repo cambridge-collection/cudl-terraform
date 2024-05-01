@@ -14,14 +14,10 @@ variable "environment" {
   type        = string
 }
 
-variable "db-only-processing" {
-  description = "true for when we just want release s3 and lambdas e.g. for production environment"
-  type        = bool
-}
-
-variable "source-bucket-name" {
-  description = "The name of the s3 bucket that stores the source CUDL files (pre-processing). Will be prefixed with the environment value."
-  type        = string
+variable "source-bucket-names" {
+  description = "List of source buckets used to create triggers."
+  type = list(string)
+  default = []
 }
 
 variable "destination-bucket-name" {
@@ -31,10 +27,6 @@ variable "destination-bucket-name" {
 
 variable "transcriptions-bucket-name" {
   description = "The name of the s3 bucket that stores the HTMl transcriptions (post-processing). Will be prefixed with the environment value."
-}
-
-variable "distribution-bucket-name" {
-  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
 }
 
 variable "compressed-lambdas-directory" {

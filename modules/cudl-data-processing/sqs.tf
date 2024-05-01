@@ -5,36 +5,35 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
 
   visibility_timeout_seconds = 900
 
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "s3.amazonaws.com"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "s3.amazonaws.com"
+        }
+        Action   = "sqs:SendMessage"
+        Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}"
+        Condition = {
+          ArnEquals = {
+            "aws:SourceArn" = [for bucket in aws_s3_bucket.transform-lambda-source-bucket : bucket.arn]
+          }
+        }
       },
-      "Action": "sqs:SendMessage",
-      "Resource": "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}",
-      "Condition": {
-        "ArnEquals": { "aws:SourceArn": ["${aws_s3_bucket.source-bucket[0].arn}", "${aws_s3_bucket.distribution-bucket.arn}"] }
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "sns.amazonaws.com"
+        }
+        Action = [
+          "sqs:SendMessage",
+          "sqs:SendMessageBatch"
+        ]
+        Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}"
       }
-    },
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "sns.amazonaws.com"
-      },
-      "Action": [
-        "sqs:SendMessage",
-        "sqs:SendMessageBatch"
-      ],
-      "Resource": "arn:aws:sqs:*:*:${substr("${var.environment}-${var.transform-lambda-information[count.index].queue_name}", 0, 64)}"
-    }
-  ]
-}
-POLICY
-
+    ]
+  })
   redrive_policy = jsonencode({
     "deadLetterTargetArn" = aws_sqs_queue.transform-lambda-dead-letter-queue[count.index].arn,
     "maxReceiveCount"     = 3

@@ -1,8 +1,3 @@
-resource "aws_s3_bucket" "source-bucket" {
-  count  = var.db-only-processing ? 0 : 1
-  bucket = lower("${var.environment}-${var.source-bucket-name}")
-}
-
 resource "aws_s3_bucket" "dest-bucket" {
   bucket = lower("${var.environment}-${var.destination-bucket-name}")
 }
@@ -11,12 +6,8 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
   bucket = lower("${var.environment}-${var.transcriptions-bucket-name}")
 }
 
-resource "aws_s3_bucket" "distribution-bucket" {
-  bucket = lower("${var.environment}-${var.distribution-bucket-name}")
-}
-
 resource "aws_s3_bucket" "transform-lambda-source-bucket" {
-  for_each = toset(local.source_sns_buckets)
+  for_each = toset(var.source-bucket-names)
   bucket   = lower("${var.environment}-${each.key}")
 }
 
@@ -32,9 +23,9 @@ resource "aws_s3_bucket_website_configuration" "example" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "source-bucket-versioning" {
-  count  = var.db-only-processing ? 0 : 1
-  bucket = aws_s3_bucket.source-bucket[0].id
+resource "aws_s3_bucket_versioning" "transform-lambda-source-bucket-versioning" {
+  for_each = aws_s3_bucket.transform-lambda-source-bucket
+  bucket = aws_s3_bucket.transform-lambda-source-bucket[each.key].id
   versioning_configuration {
     status = "Suspended"
   }
