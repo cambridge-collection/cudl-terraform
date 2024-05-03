@@ -27,7 +27,8 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "${aws_s3_bucket.dest-bucket.arn}/*",
       aws_s3_bucket.transcriptions-bucket.arn,
       "${aws_s3_bucket.transcriptions-bucket.arn}/*",
-      [for bucket in aws_s3_bucket.transform-lambda-source-bucket : bucket.arn]
+      [for bucket in aws_s3_bucket.transform-lambda-source-bucket : bucket.arn],
+      [for bucket in aws_s3_bucket.transform-lambda-source-bucket : "${bucket.arn}/*"]
     ]))
   }
   statement {
