@@ -196,7 +196,7 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      SOLR_HOST = "https://sandbox-ccc-solr.cudl-sandbox.net"
+      SOLR_HOST = "http://7b7d272bf8b94404b47c3d1d70f41a4c.solr-api-ccc.sandbox-solr:8081"
     }
   }
 ]
