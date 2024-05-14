@@ -115,8 +115,9 @@ variable "transform-lambda-information" {
     memory                   = number
     queue_name               = string
     transcription            = bool
-    subnet_name              = optional(string)
-    security_group_name      = optional(string)
+    vpc_name                 = optional(string)
+    subnet_names             = optional(list(string), [])
+    security_group_names     = optional(list(string), [])
     description              = optional(string)
     jar_path                 = optional(string)
     handler                  = optional(string)
@@ -128,6 +129,7 @@ variable "transform-lambda-information" {
     maximum_concurrency      = optional(number)
     use_datadog_variables    = optional(bool, true)
     use_additional_variables = optional(bool, false)
+    mount_fs                 = optional(bool, true)
   }))
 }
 

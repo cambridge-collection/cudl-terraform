@@ -28,13 +28,14 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
     # if transcription is false, add to VPC subnets and security groups
     for_each = coalesce(var.transform-lambda-information[count.index].transcription, false) ? [] : [1]
     content {
-      subnet_ids         = [data.aws_subnet.transform_lambda_subnet[count.index].id]
-      security_group_ids = [data.aws_security_group.transform_lambda_security_group[count.index].id]
+      subnet_ids         = data.aws_subnets.transform_lambda_subnets[count.index].ids
+      security_group_ids = data.aws_security_groups.transform_lambda_security_groups[count.index].ids
     }
   }
 
   dynamic "file_system_config" {
-    for_each = coalesce(var.transform-lambda-information[count.index].transcription, false) ? [] : [1]
+    # if transscription is false, and mount_fs is true, add file system
+    for_each = !coalesce(var.transform-lambda-information[count.index].transcription, false) && var.transform-lambda-information[count.index].mount_fs ? [1] : []
     content {
       arn = aws_efs_access_point.efs-access-point.arn
 

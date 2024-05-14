@@ -41,17 +41,6 @@ source-bucket-sns-notifications = [
         "raw"        = true
       },
     ]
-  },
-  {
-    "bucket_name"   = "cudl-dist"
-    "filter_prefix" = "items/data/tei/",
-    "filter_suffix" = ".xml"
-    "subscriptions" = [
-      {
-        "queue_name" = "CUDLIndexQueue",
-        "raw"        = true
-      },
-    ]
   }
 ]
 // NOTE: If you are adding anything here you need to add a code block to
@@ -161,6 +150,7 @@ transform-lambda-information = [
     "memory"        = 1024
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
     "runtime"       = "java11"
+    "mount_fs"      = false
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
@@ -174,6 +164,7 @@ transform-lambda-information = [
     "maximum_concurrency"      = 100
     "use_datadog_variables"    = false
     "use_additional_variables" = true
+    "mount_fs"                 = false
     "environment_variables" = {
       ANT_TARGET            = "full"
       COLLECTION_XML_SOURCE = "/tmp/opt/cdcp/dist-pending/collection-xml"
@@ -186,17 +177,20 @@ transform-lambda-information = [
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/sandboxtf-solr-indexer@sha256:c4f0e5fd4675939ca0789bfb4ffe36a240f340a041ee403216cbfbefdd7f2bc8"
     "queue_name"               = "CUDLIndexQueue"
     "transcription"            = false
-    "subnet_name"              = "sandbox-ccc-subnet-public-a"
-    "security_group_name"      = "sandbox-ccc-vpc-endpoints"
-    "timeout"                  = 60
+    "vpc_name"                 = "sandbox-ccc-vpc"
+    "subnet_names"             = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
+    "security_group_names"     = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-private-access"]
+    "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
     "batch_size"               = 1
     "maximum_concurrency"      = 100
     "use_datadog_variables"    = false
     "use_additional_variables" = true
+    "mount_fs"                 = false
     "environment_variables" = {
-      SOLR_HOST = "http://7b7d272bf8b94404b47c3d1d70f41a4c.solr-api-ccc.sandbox-solr:8081"
+      API_HOST = "7b9da32f8e684ac9a1f1d54ea99182b1.solr-api-ccc.sandbox-solr"
+      API_PORT = "8081"
     }
   }
 ]
