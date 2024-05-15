@@ -45,15 +45,20 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 }
 
 resource "aws_s3_bucket_notification" "source-bucket-notifications" {
-  for_each = local.source_bucket_sns_notifications
+  for_each = toset(var.source-bucket-names)
 
   bucket = aws_s3_bucket.transform-lambda-source-bucket[each.key].id
 
-  topic {
-    topic_arn     = aws_sns_topic.source_item_updated[each.key].arn
-    events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-    filter_prefix = each.value.filter_prefix
-    filter_suffix = each.value.filter_suffix
+  # Add a topic if there is an SNS topic relating to the bucket (the keys of
+  # local.source_bucket_s3_notifications)
+  dynamic "topic" {
+    for_each = contains(keys(local.source_bucket_sns_notifications), each.key) ? [1] : []
+    content {
+      topic_arn     = aws_sns_topic.source_item_updated[each.key].arn
+      events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
+      filter_prefix = local.source_bucket_sns_notifications[each.key].filter_prefix
+      filter_suffix = local.source_bucket_sns_notifications[each.key].filter_suffix
+    }
   }
 
   dynamic "queue" {

@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "source_item_updated" {
-  for_each = toset(var.source-bucket-names)
+  for_each = local.source_bucket_sns_notifications
 
   name   = "${var.environment}-${each.key}-event-notification-topic"
   policy = <<POLICY
