@@ -174,7 +174,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/sandboxtf-solr-indexer@sha256:c4f0e5fd4675939ca0789bfb4ffe36a240f340a041ee403216cbfbefdd7f2bc8"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:404cb9574cc1a1f72969fc4f399d3176dc3d2217af62c59d3494eab24dfa13a6"
     "queue_name"               = "CUDLIndexQueue"
     "transcription"            = false
     "vpc_name"                 = "sandbox-ccc-vpc"
