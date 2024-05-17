@@ -41,7 +41,7 @@ data "aws_subnets" "transform_lambda_subnets" {
 }
 
 data "aws_security_groups" "transform_lambda_security_groups" {
-  count  = length(var.transform-lambda-information)
+  count = length(var.transform-lambda-information)
 
   filter {
     name   = "group-name"
