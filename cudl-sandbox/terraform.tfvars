@@ -33,11 +33,7 @@ source-bucket-sns-notifications = [
         "raw"        = true
       },
       {
-        "queue_name" = "CUDLPackageDataQueue",
-        "raw"        = true
-      },
-      {
-        "queue_name" = "CUDLTranscriptionsQueue",
+        "queue_name" = "CUDL_TEIProcessingQueue",
         "raw"        = true
       },
     ]
@@ -96,17 +92,6 @@ source-bucket-sqs-notifications = [
 ]
 transform-lambda-information = [
   {
-    "name"          = "AWSLambda_CUDLPackageData_TEI_to_JSON"
-    "description"   = "Transforms the CUDL TEI into JSON format for the cudl viewer to consume"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataQueue"
-    "transcription" = false
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
     "name"          = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
     "description"   = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
     "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
@@ -141,21 +126,9 @@ transform-lambda-information = [
     "runtime"       = "java11"
   },
   {
-    "name"          = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
-    "description"   = "Generates transcription HTML from the CUDL TEI for display"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLTranscriptionsQueue"
-    "transcription" = true
-    "timeout"       = 900
-    "memory"        = 1024
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
-    "runtime"       = "java11"
-    "mount_fs"      = false
-  },
-  {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a7fdab4f5ee6ab637669cbdf46c4a5f59783b87566fcc884cd65686c605387d"
-    "queue_name"               = "CUDLTranscriptionsQueue"
+    "queue_name"               = "CUDL_TEIProcessingQueue"
     "transcription"            = true
     "timeout"                  = 300
     "memory"                   = 4096
@@ -189,7 +162,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      API_HOST = "7b9da32f8e684ac9a1f1d54ea99182b1.solr-api-ccc.sandbox-solr"
+      API_HOST = "11ba65d537784e509d852e40ec7f6f21.solr-api-ccc.sandbox-solr"
       API_PORT = "8081"
     }
   }
@@ -249,7 +222,7 @@ tmp-dir                     = "/tmp/dest/"
 large-file-limit            = 1000000
 chunks                      = 4
 data-function-name          = "AWSLambda_CUDLPackageDataJSON_AddEvent"
-transcription-function-name = "AWSLambda_CUDLGenerateTranscriptionHTML_AddEvent"
+transcription-function-name = "DEPRECATED"
 transcription-pagify-xslt   = "/opt/xslt/transcription/pagify.xsl"
 transcription-mstei-xslt    = "/opt/xslt/transcription/msTeiTrans.xsl"
 lambda-alias-name           = "LIVE"

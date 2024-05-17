@@ -184,7 +184,7 @@ variable "data-function-name" {
 }
 
 variable "transcription-function-name" {
-  description = "Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `transcription-lambda-transform` repository"
+  description = "DEPRECATED. Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `transcription-lambda-transform` repository"
   type        = string
 }
 
