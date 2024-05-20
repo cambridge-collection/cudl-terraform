@@ -162,7 +162,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      API_HOST = "11ba65d537784e509d852e40ec7f6f21.solr-api-ccc.sandbox-solr"
+      API_HOST = "3228e23cefe14d1291b146570655133a.solr-api-ccc.sandbox-solr"
       API_PORT = "8081"
     }
   }
