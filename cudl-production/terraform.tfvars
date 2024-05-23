@@ -2,7 +2,6 @@ environment                  = "production"
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
-db-only-processing           = true
 aws-account-number           = "247242244017"
 destination-bucket-name      = "cudl-data-releases"
 transcriptions-bucket-name   = "cudl-transcriptions"
