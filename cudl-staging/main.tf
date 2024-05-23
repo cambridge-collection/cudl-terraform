@@ -16,7 +16,6 @@ module "cudl-data-processing" {
   lambda-layer-name               = var.lambda-layer-name
   large-file-limit                = var.large-file-limit
   releases-root-directory-path    = var.releases-root-directory-path
-  source-bucket-name              = var.source-bucket-name
   tmp-dir                         = var.tmp-dir
   transcription-function-name     = var.transcription-function-name
   transcriptions-bucket-name      = var.transcriptions-bucket-name
@@ -31,10 +30,9 @@ module "cudl-data-processing" {
   source-bucket-sns-notifications = var.source-bucket-sns-notifications
   source-bucket-sqs-notifications = var.source-bucket-sqs-notifications
   environment                     = var.environment
-  db-only-processing              = var.db-only-processing
   transcription-pagify-xslt       = var.transcription-pagify-xslt
   transcription-mstei-xslt        = var.transcription-mstei-xslt
-  distribution-bucket-name        = var.distribution-bucket-name
+  source-bucket-names             = [var.source-bucket-name, var.distribution-bucket-name]
 }
 
 module "cudl-data-enhancements" {
