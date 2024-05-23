@@ -52,6 +52,24 @@ It is backend "s3" section of the main.tf file.
 
 Resource naming in the sandbox environment (AWS Account 563181399728) has been changed to include the user's CRSid. When running Terraform commands, you will be prompted to enter a value for the `owner` for which the CRSid should be provided. This will be added as a prefix in resource names. Other environments, dev, staging and production are not prefixed with the owner value. In the sandbox environment, a tag Owner will also be added to resources. This will not be used in dev, staging and production.
 
+## Running Terraform Tests
+
+Before applying the Terraform in each environment, it is advisable to run tests to validate that the modules being used generate expected outputs.
+
+Terraform tests can be run in cudl-dev, cudl-staging and cudl-production. This can be done by entering the directory of choice, e.g.
+
+    cd cudl-dev
+
+Then entering a command 
+
+    terraform test dev
+
+Which will run a suite of tests against that environment. The test file in this case is located in the path `cudl-dev/tests/dev.tftest.hcl`.
+
+Currently the tests are intended to be run using an IAM role from the sandbox environment (AWS Account 563181399728). Variables from each environment are used, with overrides from the test file enabling the tests to be run in the sandbox environment.
+
+Currently all tests run Terraform plan, although they could be adapted to run apply if desired.
+
 ## Data Loading Process Infrastructure.
 
 The data loading process converts the data from the input format into the output format.
