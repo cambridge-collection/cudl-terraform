@@ -182,7 +182,3 @@ variable "source-bucket-sqs-notifications" {
   description = "List of SQS notifications on source s3 bucket"
   type        = list(any)
 }
-
-variable "distribution-bucket-name" {
-  description = "The name of the s3 bucket that stores the output of the data processing pipeline. Will be prefixed with the environment value."
-}

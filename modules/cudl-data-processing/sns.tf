@@ -12,7 +12,7 @@ resource "aws_sns_topic" "source_item_updated" {
         "Resource": "arn:aws:sns:*:*:${var.environment}-${each.key}-event-notification-topic",
         "Condition": {
             "ArnLike": {
-                "aws:SourceArn": "${aws_s3_bucket.transform-lambda-source-bucket[each.key].arn}"
+                "aws:SourceArn": "${local.transform-lambda-buckets[each.key].arn}"
             }
         }
     }]

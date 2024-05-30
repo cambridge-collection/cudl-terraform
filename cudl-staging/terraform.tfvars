@@ -8,7 +8,6 @@ transcriptions-bucket-name           = "cudl-transcriptions"
 transkribus-bucket-name              = "cudl-data-enhancements"
 enhancements-destination-bucket-name = "cudl-data-source"
 source-bucket-name                   = "cudl-data-source"
-distribution-bucket-name             = "cudl-dist"
 compressed-lambdas-directory         = "compressed_lambdas"
 lambda-jar-bucket                    = "mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name                    = "cudl-xslt-layer"
@@ -20,8 +19,6 @@ lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/staging_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "staging/cudl/cudl_viewer_db"
 
-// NOTE: If you are adding anything here you need to add a code block to
-// the s3.tf file
 source-bucket-sns-notifications = [
   {
     "bucket_name"   = "cudl-data-source"
@@ -43,8 +40,7 @@ source-bucket-sns-notifications = [
     ]
   }
 ]
-// NOTE: If you are adding anything here you need to add a code block to
-// the s3.tf file
+
 source-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
@@ -86,6 +82,27 @@ source-bucket-sqs-notifications = [
     "filter_prefix" = "ui/"
     "filter_suffix" = ""
     "bucket_name"   = "cudl-data-source"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataDatasetQueue"
+    "filter_prefix" = "cudl.dl-dataset.json"
+    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataUIQueue"
+    "filter_prefix" = "cudl.ui.json"
+    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataUpdateDBQueue"
+    "filter_prefix" = "collections/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-data-releases"
   }
 ]
 transform-lambda-information = [
@@ -144,6 +161,39 @@ transform-lambda-information = [
     "memory"        = 1024
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.GenerateTranscriptionHTMLHandler::handleRequest"
     "runtime"       = "java11"
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
+    "description"   = "Updates the CUDL database with collection information from the collections json file"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataUpdateDBQueue"
+    "transcription" = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
+    "runtime"       = "java11"
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
+    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataDatasetQueue"
+    "transcription" = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
+    "runtime"       = "java11"
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataUIQueue"
+    "transcription" = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
+    "runtime"       = "java11"
   }
 ]
 enhancements-lambda-information = [{
@@ -158,40 +208,6 @@ enhancements-lambda-information = [{
   "runtime"       = "java11"
 }]
 db-lambda-information = [
-  {
-    "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
-    "description"   = "Updates the CUDL database with collection information from the collections json file"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataUpdateDBQueue"
-    "timeout"       = 900
-    "memory"        = 512
-    "filter_prefix" = "collections/"
-    "filter_suffix" = ".json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
-    "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
-    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataDatasetQueue"
-    "timeout"       = 900
-    "memory"        = 512
-    "filter_prefix" = "cudl.dl-dataset.json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
-    "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
-    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataUIQueue"
-    "timeout"       = 900
-    "memory"        = 512
-    "filter_prefix" = "cudl.ui.json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
-    "runtime"       = "java11"
-  }
 ]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"

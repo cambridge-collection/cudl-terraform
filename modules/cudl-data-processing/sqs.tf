@@ -17,7 +17,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
         Resource = "arn:aws:sqs:*:*:${substr("${var.environment}-${each.key}", 0, 64)}"
         Condition = {
           ArnEquals = {
-            "aws:SourceArn" = [for bucket in aws_s3_bucket.transform-lambda-source-bucket : bucket.arn]
+            "aws:SourceArn" = [for bucket in values(local.transform-lambda-buckets) : bucket.arn]
           }
         }
       },

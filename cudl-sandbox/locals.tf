@@ -13,6 +13,6 @@ locals {
   additional_lambda_variables = {
     AWS_DATA_SOURCE_BUCKET   = "${local.environment}-cudl-data-source"
     AWS_TRANSCRIPTION_BUCKET = "${local.environment}-cudl-transcriptions" # NOTE to be removed
-    AWS_DIST_BUCKET          = "${local.environment}-cudl-dist"
+    AWS_OUTPUT_BUCKET        = "${local.environment}-cudl-data-releases"
   }
 }

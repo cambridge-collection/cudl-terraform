@@ -32,5 +32,5 @@ module "cudl-data-processing" {
   environment                     = var.environment
   transcription-pagify-xslt       = var.transcription-pagify-xslt
   transcription-mstei-xslt        = var.transcription-mstei-xslt
-  source-bucket-names             = [var.source-bucket-name, var.distribution-bucket-name]
+  source-bucket-name              = var.source-bucket-name
 }

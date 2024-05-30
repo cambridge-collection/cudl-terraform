@@ -14,10 +14,9 @@ variable "environment" {
   type        = string
 }
 
-variable "source-bucket-names" {
-  description = "List of source buckets used to create triggers."
-  type        = list(string)
-  default     = []
+variable "source-bucket-name" {
+  description = "The name of the s3 bucket that is used as a data source to trigger transformation."
+  type        = string
 }
 
 variable "destination-bucket-name" {
