@@ -6,18 +6,18 @@ output "transform_lambda_sqs_queue_length" {
   value = length(aws_sqs_queue.transform-lambda-sqs-queue)
 }
 
-output "source_item_updated_sns_topic_length" {
-  value = length(aws_sns_topic.source_item_updated)
+output "transform_sns_topic_length" {
+  value = length(aws_sns_topic.transform_sns_topics)
 }
 
-output "item_update_topic_subscriptions_length" {
-  value = length(aws_sns_topic_subscription.item_update_subscriptions)
+output "transform_sns_topic_subscriptions_length" {
+  value = length(aws_sns_topic_subscription.transform_sns_event_subscriptions)
 }
 
-output "source_bucket_notification_topics_length" {
-  value = length(flatten([for notification in aws_s3_bucket_notification.source-bucket-notifications : [for topic in notification.topic : topic.topic_arn]]))
+output "transform_bucket_notification_topics_length" {
+  value = length(flatten([for notification in aws_s3_bucket_notification.transform-lambda-bucket-notifications : [for topic in notification.topic : topic.topic_arn]]))
 }
 
-output "source_bucket_notification_queues_length" {
-  value = length(flatten([for notification in aws_s3_bucket_notification.source-bucket-notifications : [for queue in notification.queue : queue.queue_arn]]))
+output "transform_bucket_notification_queues_length" {
+  value = length(flatten([for notification in aws_s3_bucket_notification.transform-lambda-bucket-notifications : [for queue in notification.queue : queue.queue_arn]]))
 }

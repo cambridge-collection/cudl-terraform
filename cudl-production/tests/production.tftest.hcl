@@ -28,38 +28,38 @@ run "transform_lambda_sqs_queue_length" {
   }
 }
 
-run "source_item_updated_sns_topic_length" {
+run "transform_sns_topic_length" {
   command = plan
 
   assert {
-    condition     = module.cudl-data-processing.source_item_updated_sns_topic_length == length(var.source-bucket-sns-notifications)
+    condition     = module.cudl-data-processing.transform_sns_topic_length == length(var.transform-lambda-bucket-sns-notifications)
     error_message = "Number of SNS topics does not match expected value"
   }
 }
 
-run "item_update_topic_subscriptions_length" {
+run "transform_sns_topic_subscriptions_length" {
   command = plan
 
   assert {
-    condition     = module.cudl-data-processing.item_update_topic_subscriptions_length == length(flatten(var.source-bucket-sns-notifications[*].subscriptions))
+    condition     = module.cudl-data-processing.transform_sns_topic_subscriptions_length == length(flatten(var.transform-lambda-bucket-sns-notifications[*].subscriptions))
     error_message = "Number of SNS topics subscriptions does not match expected value"
   }
 }
 
-run "source_bucket_notification_topics_length" {
+run "transform_bucket_notification_topics_length" {
   command = plan
 
   assert {
-    condition     = module.cudl-data-processing.source_bucket_notification_topics_length == length(var.source-bucket-sns-notifications)
+    condition     = module.cudl-data-processing.transform_bucket_notification_topics_length == length(var.transform-lambda-bucket-sns-notifications)
     error_message = "Number of S3 Bucket SNS topic subscriptions does not match expected value"
   }
 }
 
-run "source_bucket_notification_queues_length" {
+run "transform_bucket_notification_queues_length" {
   command = plan
 
   assert {
-    condition     = module.cudl-data-processing.source_bucket_notification_queues_length == length(var.source-bucket-sqs-notifications)
+    condition     = module.cudl-data-processing.transform_bucket_notification_queues_length == length(var.transform-lambda-bucket-sns-notifications)
     error_message = "Number of S3 Bucket SQS Queue subscriptions does not match expected value"
   }
 }

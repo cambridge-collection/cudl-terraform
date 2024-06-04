@@ -8,7 +8,6 @@ transcriptions-bucket-name           = "cudl-transcriptions"
 transkribus-bucket-name              = "cudl-data-enhancements"
 enhancements-destination-bucket-name = "cudl-data-source"
 source-bucket-name                   = "cudl-data-source"
-distribution-bucket-name             = "cudl-dist"
 compressed-lambdas-directory         = "compressed_lambdas"
 lambda-jar-bucket                    = "sandbox.mvn.cudl.lib.cam.ac.uk"
 lambda-layer-name                    = "cudl-xslt-layer"
@@ -20,9 +19,7 @@ lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "sandboxtf/cudl/cudl_viewer_db"
 
-// NOTE: If you are adding anything here you need to add a code block to
-// the s3.tf file
-source-bucket-sns-notifications = [
+transform-lambda-bucket-sns-notifications = [
   {
     "bucket_name"   = "cudl-data-source"
     "filter_prefix" = "items/data/tei/",
@@ -37,11 +34,24 @@ source-bucket-sns-notifications = [
         "raw"        = true
       },
     ]
+  },
+  {
+    "bucket_name"   = "cudl-data-releases"
+    "filter_prefix" = "collections/",
+    "filter_suffix" = ".json"
+    "subscriptions" = [
+      {
+        "queue_name" = "CUDLIndexCollectionQueue",
+        "raw"        = true
+      },
+      {
+        "queue_name" = "CUDLPackageDataUpdateDBQueue",
+        "raw"        = true
+      },
+    ]
   }
 ]
-// NOTE: If you are adding anything here you need to add a code block to
-// the s3.tf file
-source-bucket-sqs-notifications = [
+transform-lambda-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_HTML",
@@ -87,7 +97,21 @@ source-bucket-sqs-notifications = [
     "queue_name"    = "CUDLIndexQueue"
     "filter_prefix" = "solr-json/"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cudl-dist"
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataDatasetQueue"
+    "filter_prefix" = "cudl.dl-dataset.json"
+    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataUIQueue"
+    "filter_prefix" = "cudl.ui.json"
+    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-releases"
   }
 ]
 transform-lambda-information = [
@@ -127,7 +151,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a7fdab4f5ee6ab637669cbdf46c4a5f59783b87566fcc884cd65686c605387d"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:5c2fdf33a259ee2bc3c21de7e19eccef41aa5126781ddd56eef0d66d2d58bc84"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "transcription"            = true
     "timeout"                  = 300
@@ -140,14 +164,14 @@ transform-lambda-information = [
     "mount_fs"                 = false
     "environment_variables" = {
       ANT_TARGET            = "full"
-      COLLECTION_XML_SOURCE = "/tmp/opt/cdcp/dist-pending/collection-xml"
-      CORE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/core-xml"
-      PAGE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/page-xml"
+      SEARCH_HOST           = "3228e23cefe14d1291b146570655133a.solr-api-ccc.sandbox-solr"
+      SEARCH_PORT           = 8081
+      SEARCH_COLLECTION_PATH = "collection"
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:404cb9574cc1a1f72969fc4f399d3176dc3d2217af62c59d3494eab24dfa13a6"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:04e64aaeed3ac04a06952010dfae0d22397a567f3d39d03796d4124c8c0b439b"
     "queue_name"               = "CUDLIndexQueue"
     "transcription"            = false
     "vpc_name"                 = "sandbox-ccc-vpc"
@@ -164,7 +188,63 @@ transform-lambda-information = [
     "environment_variables" = {
       API_HOST = "3228e23cefe14d1291b146570655133a.solr-api-ccc.sandbox-solr"
       API_PORT = "8081"
+      API_PATH = "item"
     }
+  },
+  {
+    "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:04e64aaeed3ac04a06952010dfae0d22397a567f3d39d03796d4124c8c0b439b"
+    "queue_name"               = "CUDLIndexCollectionQueue"
+    "transcription"            = false
+    "vpc_name"                 = "sandbox-ccc-vpc"
+    "subnet_names"             = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
+    "security_group_names"     = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-private-access"]
+    "timeout"                  = 180
+    "memory"                   = 1024
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 100
+    "use_datadog_variables"    = false
+    "use_additional_variables" = true
+    "mount_fs"                 = false
+    "environment_variables" = {
+      API_HOST = "3228e23cefe14d1291b146570655133a.solr-api-ccc.sandbox-solr"
+      API_PORT = "8081"
+      API_PATH = "collection"
+    }
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
+    "description"   = "Updates the CUDL database with collection information from the collections json file"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataUpdateDBQueue"
+    "transcription"            = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
+    "runtime"       = "java11"
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
+    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataDatasetQueue"
+    "transcription"            = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
+    "runtime"       = "java11"
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataUIQueue"
+    "transcription"            = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
+    "runtime"       = "java11"
   }
 ]
 enhancements-lambda-information = [{
@@ -178,42 +258,6 @@ enhancements-lambda-information = [{
   "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
   "runtime"       = "java11"
 }]
-db-lambda-information = [
-  {
-    "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
-    "description"   = "Updates the CUDL database with collection information from the collections json file"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataUpdateDBQueue"
-    "timeout"       = 900
-    "memory"        = 512
-    "filter_prefix" = "collections/"
-    "filter_suffix" = ".json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
-    "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
-    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataDatasetQueue"
-    "timeout"       = 900
-    "memory"        = 512
-    "filter_prefix" = "cudl.dl-dataset.json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
-    "runtime"       = "java11"
-  },
-  {
-    "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
-    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataUIQueue"
-    "timeout"       = 900
-    "memory"        = 512
-    "filter_prefix" = "cudl.ui.json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
-    "runtime"       = "java11"
-  }
-]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
 dst-s3-prefix               = ""
@@ -229,7 +273,7 @@ lambda-alias-name           = "LIVE"
 
 # Existing vpc info
 vpc-id            = "vpc-057886e0bdd7c4e43"
-subnet-id         = "subnet-0f2b1a30b3838d5f1"
+subnet-id         = "subnet-02c0767268df8f171"
 security-group-id = "sg-032f9f202ea602d21"
 
 releases-root-directory-path = "/data"
