@@ -19,7 +19,7 @@ lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/staging_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "staging/cudl/cudl_viewer_db"
 
-source-bucket-sns-notifications = [
+transform-lambda-bucket-sns-notifications = [
   {
     "bucket_name"   = "cudl-data-source"
     "filter_prefix" = "items/data/tei/",
@@ -41,7 +41,7 @@ source-bucket-sns-notifications = [
   }
 ]
 
-source-bucket-sqs-notifications = [
+transform-lambda-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_HTML",
@@ -207,8 +207,6 @@ enhancements-lambda-information = [{
   "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
   "runtime"       = "java11"
 }]
-db-lambda-information = [
-]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
 dst-s3-prefix               = ""

@@ -68,49 +68,6 @@ resource "aws_lambda_alias" "create-transform-lambda-alias" {
   depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
 
-# resource "aws_lambda_function" "create-db-lambda-function" {
-#   count = length(var.db-lambda-information)
-#
-#   function_name = substr("${var.environment}-${var.db-lambda-information[count.index].name}", 0, 64)
-#   description   = var.db-lambda-information[count.index].description
-#   s3_bucket     = var.lambda-jar-bucket
-#   s3_key        = var.db-lambda-information[count.index].jar_path
-#   runtime       = var.db-lambda-information[count.index].runtime
-#   timeout       = var.db-lambda-information[count.index].timeout
-#   memory_size   = var.db-lambda-information[count.index].memory
-#   role          = aws_iam_role.assume-lambda-role.arn
-#   layers        = [aws_lambda_layer_version.db-properties-layer.arn, var.datadog-layer-1-arn, var.datadog-layer-2-arn]
-#   handler       = var.db-lambda-information[count.index].handler
-#   publish       = true
-#
-#   vpc_config {
-#     subnet_ids         = [data.aws_subnet.cudl_subnet.id]
-#     security_group_ids = [data.aws_security_group.default.id]
-#   }
-#
-#   file_system_config {
-#     arn = aws_efs_access_point.efs-access-point.arn
-#
-#     # Local mount path inside the lambda function. Must start with '/mnt/', and must not end with /
-#     local_mount_path = var.dst-efs-prefix
-#   }
-#
-#   environment {
-#     variables = var.lambda_environment_datadog_variables
-#   }
-#
-#   depends_on = [aws_efs_mount_target.efs-mount-point]
-# }
-
-# resource "aws_lambda_alias" "create-db-lambda-alias" {
-#   count = length(var.db-lambda-information)
-#
-#   name          = var.lambda-alias-name
-#   function_name = aws_lambda_function.create-db-lambda-function[count.index].arn
-#   #function_version = var.db-lambda-information[count.index].live_version
-#   function_version = aws_lambda_function.create-db-lambda-function[count.index].version
-# }
-
 resource "local_file" "create-local-lambda-properties-file" {
 
   content = <<-EOT
@@ -169,17 +126,7 @@ resource "aws_lambda_layer_version" "transform-properties-layer" {
   layer_name       = "${var.environment}-properties"
   source_code_hash = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
 
-  compatible_runtimes = compact(distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime]))
-  depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
-}
-
-resource "aws_lambda_layer_version" "db-properties-layer" {
-
-  filename         = "${path.module}/zipped_properties_files/${var.environment}.properties.zip"
-  layer_name       = "${var.environment}-properties"
-  source_code_hash = data.archive_file.zip_transform_properties_lambda_layer.output_base64sha256
-
-  compatible_runtimes = compact(distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime]))
+  compatible_runtimes = compact(distinct([for lambda in var.transform-lambda-information : lambda.runtime]))
   depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
@@ -188,7 +135,7 @@ resource "aws_lambda_layer_version" "xslt-layer" {
   s3_key     = var.lambda-layer-filepath
   layer_name = "${var.environment}-${var.lambda-layer-name}"
 
-  compatible_runtimes = compact(distinct([for lambda in concat(var.transform-lambda-information, var.db-lambda-information) : lambda.runtime]))
+  compatible_runtimes = compact(distinct([for lambda in var.transform-lambda-information : lambda.runtime]))
 }
 
 # Trigger lambda from the SQS queues
@@ -208,10 +155,3 @@ resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
     }
   }
 }
-
-# resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-db" {
-#   count = length(var.db-lambda-information)
-#
-#   event_source_arn = aws_sqs_queue.db-lambda-sqs-queue[count.index].arn
-#   function_name    = aws_lambda_function.create-db-lambda-function[count.index].arn
-# }

@@ -23,8 +23,6 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "s3:GetObjectAcl"
     ]
     resources = compact(flatten([
-      aws_s3_bucket.dest-bucket.arn,
-      "${aws_s3_bucket.dest-bucket.arn}/*",
       aws_s3_bucket.transcriptions-bucket.arn,
       "${aws_s3_bucket.transcriptions-bucket.arn}/*",
       [for bucket in values(local.transform-lambda-buckets) : bucket.arn],

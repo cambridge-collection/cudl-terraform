@@ -129,11 +129,6 @@ variable "enhancements-lambda-information" {
   type        = list(any)
 }
 
-variable "db-lambda-information" {
-  description = "A list of maps containing information about the database lambda functions"
-  type        = list(any)
-}
-
 variable "dst-efs-prefix" {
   description = "Use to set the DST_EFS_PREFIX variable in the properties file passed to the lambda layer"
   type        = string
@@ -219,12 +214,12 @@ variable "efs-name" {
   type        = string
 }
 
-variable "source-bucket-sns-notifications" {
-  description = "List of SNS notifications on source s3 bucket"
+variable "transform-lambda-bucket-sns-notifications" {
+  description = "List of SNS notifications on an s3 bucket"
   type        = list(any)
 }
 
-variable "source-bucket-sqs-notifications" {
-  description = "List of SQS notifications on source s3 bucket"
+variable "transform-lambda-bucket-sqs-notifications" {
+  description = "List of SQS notifications on an s3 bucket"
   type        = list(any)
 }

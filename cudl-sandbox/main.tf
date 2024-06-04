@@ -5,7 +5,6 @@ module "cudl-data-processing" {
   chunks                                  = var.chunks
   compressed-lambdas-directory            = var.compressed-lambdas-directory
   data-function-name                      = var.data-function-name
-  db-lambda-information                   = var.db-lambda-information
   destination-bucket-name                 = var.destination-bucket-name
   dst-efs-prefix                          = var.dst-efs-prefix
   dst-prefix                              = var.dst-prefix
@@ -30,8 +29,8 @@ module "cudl-data-processing" {
   lambda-db-secret-key                    = var.lambda-db-secret-key
   lambda-db-url                           = var.lambda-db-url
   aws-account-number                      = data.aws_caller_identity.current.account_id
-  source-bucket-sns-notifications         = var.source-bucket-sns-notifications
-  source-bucket-sqs-notifications         = var.source-bucket-sqs-notifications
+  transform-lambda-bucket-sns-notifications         = var.transform-lambda-bucket-sns-notifications
+  transform-lambda-bucket-sqs-notifications         = var.transform-lambda-bucket-sqs-notifications
   environment                             = local.environment
   transcription-pagify-xslt               = var.transcription-pagify-xslt
   transcription-mstei-xslt                = var.transcription-mstei-xslt

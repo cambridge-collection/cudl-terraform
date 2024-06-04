@@ -19,7 +19,7 @@ lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "sandboxtf/cudl/cudl_viewer_db"
 
-source-bucket-sns-notifications = [
+transform-lambda-bucket-sns-notifications = [
   {
     "bucket_name"   = "cudl-data-source"
     "filter_prefix" = "items/data/tei/",
@@ -51,7 +51,7 @@ source-bucket-sns-notifications = [
     ]
   }
 ]
-source-bucket-sqs-notifications = [
+transform-lambda-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_HTML",
@@ -99,20 +99,6 @@ source-bucket-sqs-notifications = [
     "filter_suffix" = ".json"
     "bucket_name"   = "cudl-data-releases"
   },
-#   {
-#     "type"          = "SQS",
-#     "queue_name"    = "CUDLIndexCollectionQueue"
-#     "filter_prefix" = "collection/"
-#     "filter_suffix" = ".json"
-#     "bucket_name"   = "cudl-data-releases"
-#   },
-#   {
-#     "type"          = "SQS",
-#     "queue_name"    = "CUDLPackageDataUpdateDBQueue"
-#     "filter_prefix" = "collections/"
-#     "filter_suffix" = ".json"
-#     "bucket_name"   = "cudl-data-releases"
-#   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataDatasetQueue"
@@ -178,9 +164,6 @@ transform-lambda-information = [
     "mount_fs"                 = false
     "environment_variables" = {
       ANT_TARGET            = "full"
-      #COLLECTION_XML_SOURCE = "/tmp/opt/cdcp/dist-pending/collection-xml"
-      #CORE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/core-xml"
-      #PAGE_XML_SOURCE       = "/tmp/opt/cdcp/dist-pending/page-xml"
       SEARCH_HOST           = "3228e23cefe14d1291b146570655133a.solr-api-ccc.sandbox-solr"
       SEARCH_PORT           = 8081
       SEARCH_COLLECTION_PATH = "collection"
@@ -275,9 +258,6 @@ enhancements-lambda-information = [{
   "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
   "runtime"       = "java11"
 }]
-db-lambda-information = [
-
-]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
 dst-s3-prefix               = ""

@@ -15,9 +15,9 @@ lambda-db-jdbc-driver        = "org.postgresql.Driver"
 lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/production_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key         = "production/cudl/cudl_viewer_db"
 
-source-bucket-sns-notifications = [
+transform-lambda-bucket-sns-notifications = [
 ]
-source-bucket-sqs-notifications = [
+transform-lambda-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataDatasetQueue"
@@ -74,9 +74,6 @@ transform-lambda-information = [
     "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
     "runtime"       = "java11"
   }
-]
-db-lambda-information = [
-
 ]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
