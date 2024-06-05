@@ -75,7 +75,6 @@ variable "transform-lambda-information" {
     timeout                  = number
     memory                   = number
     queue_name               = string
-    transcription            = bool
     vpc_name                 = optional(string)
     subnet_names             = optional(list(string), [])
     security_group_names     = optional(list(string), [])
