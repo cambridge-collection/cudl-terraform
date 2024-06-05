@@ -109,7 +109,6 @@ variable "transform-lambda-information" {
     timeout                  = number
     memory                   = number
     queue_name               = string
-    transcription            = bool
     description              = optional(string)
     jar_path                 = optional(string)
     handler                  = optional(string)

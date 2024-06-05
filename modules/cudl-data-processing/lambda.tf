@@ -25,8 +25,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "vpc_config" {
-    # if transcription is false, add to VPC subnets and security groups
-    for_each = coalesce(var.transform-lambda-information[count.index].transcription, false) ? [] : [1]
+    for_each = var.transform-lambda-information[count.index].subnet_names != null ? [1] : []
     content {
       subnet_ids         = data.aws_subnets.transform_lambda_subnets[count.index].ids
       security_group_ids = data.aws_security_groups.transform_lambda_security_groups[count.index].ids
@@ -34,8 +33,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   dynamic "file_system_config" {
-    # if transscription is false, and mount_fs is true, add file system
-    for_each = !coalesce(var.transform-lambda-information[count.index].transcription, false) && var.transform-lambda-information[count.index].mount_fs ? [1] : []
+    for_each = var.transform-lambda-information[count.index].mount_fs ? [1] : []
     content {
       arn = aws_efs_access_point.efs-access-point.arn
 

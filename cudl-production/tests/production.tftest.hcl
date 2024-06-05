@@ -59,7 +59,7 @@ run "transform_bucket_notification_queues_length" {
   command = plan
 
   assert {
-    condition     = module.cudl-data-processing.transform_bucket_notification_queues_length == length(var.transform-lambda-bucket-sns-notifications)
+    condition     = module.cudl-data-processing.transform_bucket_notification_queues_length == length(var.transform-lambda-bucket-sqs-notifications)
     error_message = "Number of S3 Bucket SQS Queue subscriptions does not match expected value"
   }
 }
