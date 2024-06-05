@@ -113,11 +113,6 @@ variable "default-lambda-security-group" {
   default     = "default"
 }
 
-# variable "db-lambda-information" {
-#   description = "A list of maps containing information about the database lambda functions"
-#   type        = list(any)
-# }
-
 variable "dst-efs-prefix" {
   description = "Use to set the DST_EFS_PREFIX variable in the properties file passed to the lambda layer"
   type        = string
