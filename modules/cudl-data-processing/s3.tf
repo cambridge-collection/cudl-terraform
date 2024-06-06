@@ -41,7 +41,7 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 
 resource "aws_s3_bucket_notification" "transform-lambda-bucket-notifications" {
   for_each = local.transform-lambda-bucket-names
-  bucket = local.transform-lambda-buckets[each.key].id
+  bucket   = local.transform-lambda-buckets[each.key].id
 
   # Add a topic if there is an SNS topic relating to the bucket (the keys of
   # local.source_bucket_s3_notifications)

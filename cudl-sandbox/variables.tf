@@ -231,3 +231,8 @@ variable "transform-lambda-bucket-sqs-notifications" {
   description = "List of SQS notifications on an s3 bucket"
   type        = list(any)
 }
+
+variable "route53_zone_id" {
+  description = "Route 53 Zone ID for transcription bucket"
+  type        = string
+}

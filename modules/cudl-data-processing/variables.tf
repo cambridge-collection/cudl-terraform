@@ -232,3 +232,8 @@ variable "lambda_environment_datadog_variables" {
   }
 }
 
+variable "route53_zone_id" {
+  description = "Route 53 Zone ID for transcription bucket"
+  type        = string
+}
+
