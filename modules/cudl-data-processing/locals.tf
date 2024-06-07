@@ -1,6 +1,6 @@
 locals {
 
-  transform-lambda-bucket-names = toset([var.source-bucket-name, var.destination-bucket-name])
+  transform-lambda-bucket-names = toset([var.source-bucket-name, var.destination-bucket-name, var.enhancements-bucket-name])
 
   transform_sns_subscriptions = flatten([
     for notification in var.transform-lambda-bucket-sns-notifications : [
@@ -22,8 +22,8 @@ locals {
   transform_lambda_queues = toset([for lambda in var.transform-lambda-information : lambda.queue_name])
 
   transform-lambda-buckets = {
-    for bucket in toset([aws_s3_bucket.source-bucket, aws_s3_bucket.dest-bucket]) :
-    replace(bucket.id, lower("${var.environment}-"), "") => bucket
+    for bucket in toset([aws_s3_bucket.source-bucket, aws_s3_bucket.dest-bucket, aws_s3_bucket.enhancements-bucket]) :
+      replace(bucket.id, lower("${var.environment}-"), "") => bucket
   }
 
   create_cloudfront_distribution = var.create_cloudfront_distribution && var.cloudfront_route53_zone_id != null

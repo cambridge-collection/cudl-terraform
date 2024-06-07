@@ -15,7 +15,7 @@ variable "environment" {
 }
 
 variable "source-bucket-name" {
-  description = "The name of the s3 bucket that is used as a data source to trigger transformation."
+  description = "The name of the s3 bucket that stores the source CUDL files (pre-processing). Will be prefixed with the environment value."
   type        = string
 }
 
@@ -24,9 +24,9 @@ variable "destination-bucket-name" {
   type        = string
 }
 
-variable "transcriptions-bucket-name" {
-  description = "The name of the s3 bucket that stores the HTMl transcriptions (post-processing). Will be prefixed with the environment value."
-}
+# variable "transcriptions-bucket-name" {
+#   description = "The name of the s3 bucket that stores the HTMl transcriptions (post-processing). Will be prefixed with the environment value."
+# }
 
 variable "compressed-lambdas-directory" {
   description = "The name of the local directory where the CUDL lambdas can be found"
@@ -38,20 +38,25 @@ variable "lambda-jar-bucket" {
   type        = string
 }
 
-variable "lambda-layer-name" {
-  description = "The name to be given to the XSLT transform layer"
-  type        = string
+variable "enhancements-bucket-name" {
+  description = "The name of the s3 bucket that stores the Transkribus transcriptions. Will be prefixed with the environment value."
 }
 
-variable "lambda-layer-bucket" {
-  description = "The s3 bucket in which the XSLT layer ZIP can be found"
-  type        = string
-}
-
-variable "lambda-layer-filepath" {
-  description = "The full path to the XSLT layer ZIP, found in the `lambda-layer-bucket`"
-  type        = string
-}
+#
+# variable "lambda-layer-name" {
+#   description = "The name to be given to the XSLT transform layer"
+#   type        = string
+# }
+#
+# variable "lambda-layer-bucket" {
+#   description = "The s3 bucket in which the XSLT layer ZIP can be found"
+#   type        = string
+# }
+#
+# variable "lambda-layer-filepath" {
+#   description = "The full path to the XSLT layer ZIP, found in the `lambda-layer-bucket`"
+#   type        = string
+# }
 
 variable "lambda-db-jdbc-driver" {
   description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
@@ -89,6 +94,7 @@ variable "transform-lambda-information" {
     maximum_concurrency      = optional(number)
     use_datadog_variables    = optional(bool, true)
     use_additional_variables = optional(bool, false)
+    use_enhancements_variables = optional(bool, false)
     mount_fs                 = optional(bool, true)
   }))
 }
@@ -132,35 +138,35 @@ variable "tmp-dir" {
   type        = string
 }
 
-variable "large-file-limit" {
-  description = "Use to set the LARGE_FILE_LIMIT variable in the properties file passed to the lambda layer"
-  type        = number
-}
-
-variable "chunks" {
-  description = "Use to set the CHUNKS variable in the properties file passed to the lambda layer"
-  type        = number
-}
-
-variable "data-function-name" {
-  description = "Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `cudl-lambda-transform` repository"
-  type        = string
-}
-
-variable "transcription-function-name" {
-  description = "DEPRECATED. Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `transcription-lambda-transform` repository"
-  type        = string
-}
-
-variable "transcription-pagify-xslt" {
-  description = "Use to set the path to pagify xslt in /opt (from layer)"
-  type        = string
-}
-
-variable "transcription-mstei-xslt" {
-  description = "Use to set the path to mstei xslt in /opt (from layer)"
-  type        = string
-}
+# variable "large-file-limit" {
+#   description = "Use to set the LARGE_FILE_LIMIT variable in the properties file passed to the lambda layer"
+#   type        = number
+# }
+#
+# variable "chunks" {
+#   description = "Use to set the CHUNKS variable in the properties file passed to the lambda layer"
+#   type        = number
+# }
+#
+# variable "data-function-name" {
+#   description = "Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `cudl-lambda-transform` repository"
+#   type        = string
+# }
+#
+# variable "transcription-function-name" {
+#   description = "DEPRECATED. Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `transcription-lambda-transform` repository"
+#   type        = string
+# }
+#
+# variable "transcription-pagify-xslt" {
+#   description = "Use to set the path to pagify xslt in /opt (from layer)"
+#   type        = string
+# }
+#
+# variable "transcription-mstei-xslt" {
+#   description = "Use to set the path to mstei xslt in /opt (from layer)"
+#   type        = string
+# }
 
 variable "lambda-alias-name" {
   description = "Use to set the name for the lambda function alias(es)"
@@ -193,12 +199,12 @@ variable "efs-name" {
 }
 
 variable "transform-lambda-bucket-sns-notifications" {
-  description = "List of SNS notifications an s3 bucket"
+  description = "List of SNS notifications on an s3 bucket"
   type        = list(any)
 }
 
 variable "transform-lambda-bucket-sqs-notifications" {
-  description = "List of SQS notifications an s3 bucket"
+  description = "List of SQS notifications on an s3 bucket"
   type        = list(any)
 }
 
@@ -216,6 +222,12 @@ variable "datadog-layer-2-arn" {
 
 variable "additional_lambda_environment_variables" {
   description = "Additional environment variables"
+  type        = map(string)
+  default     = {}
+}
+
+variable "enhancements_lambda_environment_variables" {
+  description = "Enhancement environment variables use for Pre-processing"
   type        = map(string)
   default     = {}
 }

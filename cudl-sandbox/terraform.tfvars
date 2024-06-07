@@ -2,19 +2,12 @@ environment                          = "sandbox"
 project                              = "CUDL"
 component                            = "cudl-data-workflows"
 subcomponent                         = "cudl-transform-lambda"
-db-only-processing                   = false
 destination-bucket-name              = "cudl-data-releases"
 transcriptions-bucket-name           = "cudl-transcriptions"
-transkribus-bucket-name              = "cudl-data-enhancements"
-enhancements-destination-bucket-name = "cudl-data-source"
+enhancements-bucket-name             = "cudl-data-enhancements"
 source-bucket-name                   = "cudl-data-source"
 compressed-lambdas-directory         = "compressed_lambdas"
 lambda-jar-bucket                    = "sandbox.mvn.cudl.lib.cam.ac.uk"
-lambda-layer-name                    = "cudl-xslt-layer"
-enhancements-lambda-layer-name       = "cudl-transkribus-xslt-layer"
-lambda-layer-bucket                  = "sandbox-cudl-artefacts"
-lambda-layer-filepath                = "projects/cudl-data-processing/xslt/cudl-transform-xslt-0.0.15.zip"
-enhancements-lambda-layer-filepath   = "projects/curious-cures/xslt/curious-cures-xslt-0.0.2.zip"
 lambda-db-jdbc-driver                = "org.postgresql.Driver"
 lambda-db-url                        = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
 lambda-db-secret-key                 = "sandboxtf/cudl/cudl_viewer_db"
@@ -112,6 +105,34 @@ transform-lambda-bucket-sqs-notifications = [
     "filter_prefix" = "cudl.ui.json"
     "filter_suffix" = ""
     "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "filter_prefix" = "json/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "filter_prefix" = "pages/"
+    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "filter_prefix" = "ui/"
+    "filter_suffix" = ""
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDL_Transkribus_IngestQueue"
+    "filter_prefix" = "transkribus/curious-cures/"
+    "filter_suffix" = ".xml"
+    "bucket_name"   = "cudl-data-enhancements"
   }
 ]
 transform-lambda-information = [
@@ -241,39 +262,60 @@ transform-lambda-information = [
     "runtime"               = "java11"
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_UI_JSON"
-    "description"           = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataUIQueue"
-    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataUIQueue"
+    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables"    = false
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
+    "runtime"       = "java11"
+  },
+  {
+    "name"          = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
+    "description"   = "Copies file from S3 to EFS"
+    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables"    = false
+    "mount_fs"      = true
+    "timeout"       = 900
+    "memory"        = 512
+    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
+    "runtime"       = "java11"
+  },
+  {
+    "name"                     = "AWSLambda_CUDL_Transkribus_Ingest"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/curious-cures-transkribus-processing@sha256:e5dc4317c3cf20f57e951a110bf6c121ac8959e98b0f51fb5dc7a6c35a9c9556"
+    "queue_name"               = "CUDL_Transkribus_IngestQueue"
+    "vpc_name"                 = "sandbox-ccc-vpc"
+    "subnet_names"             = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
+    "security_group_names"     = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-persist-private-access"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 100
+    "use_datadog_variables"    = false
+    "use_additional_variables" = false
+    "use_enhancements_variables" = true
+    "mount_fs"                 = false
+    "environment_variables" = {
+      ANT_TARGET: "full"
+      ANT_BUILDFILE: "bin/build.xml"
+      XSLT_ENTRYPOINT: "xslt/curious-cures.xsl"
+      OUTPUT_EXTENSION: "xml"
+      EXPAND_DEFAULT_ATTRIBUTES: false
+      ALLOW_DELETE: false
+    }
   }
 ]
-enhancements-lambda-information = [{
-  "name"        = "AWSLambda_CUDLDataEnhancements_TranskribusMergeTEI"
-  "description" = "Used by the Transkribus pipeline to merge TEI transcription output from Transkribus into the TEI CUDL metadata.  Enhances the CUDL TEI with the Transkribus transcription data"
-  "jar_path"    = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-  "queue_name"  = "CUDLTranskribusQueue"
-  "timeout"     = 900
-  "memory"      = 512
-  "handler"     = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
-  "runtime"     = "java11"
-}]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
 dst-s3-prefix               = ""
-enhancements-dst-s3-prefix  = "items/data/tei/"
 tmp-dir                     = "/tmp/dest/"
-large-file-limit            = 1000000
-chunks                      = 4
-data-function-name          = "AWSLambda_CUDLPackageDataJSON_AddEvent"
-transcription-function-name = "DEPRECATED"
-transcription-pagify-xslt   = "/opt/xslt/transcription/pagify.xsl"
-transcription-mstei-xslt    = "/opt/xslt/transcription/msTeiTrans.xsl"
 lambda-alias-name           = "LIVE"
 
 # Existing vpc info
@@ -283,4 +325,4 @@ security-group-id = "sg-032f9f202ea602d21"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
-cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
+
