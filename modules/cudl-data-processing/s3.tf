@@ -23,12 +23,28 @@ resource "aws_s3_bucket_website_configuration" "example" {
   }
 }
 
-resource "aws_s3_bucket_website_configuration" "dest-bucket" {
-  bucket = aws_s3_bucket.dest-bucket.id
+data "aws_iam_policy_document" "dest-bucket" {
+  statement {
+    sid       = "AllowCloudFrontServicePrincipalReadOnly"
+    actions   = ["s3:GetObject"]
+    resources = [format("%s/*", aws_s3_bucket.dest-bucket.arn)]
 
-  index_document {
-    suffix = "index.html"
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.transcriptions.arn]
+    }
   }
+}
+
+resource "aws_s3_bucket_policy" "dest-bucket" {
+  bucket = aws_s3_bucket.dest-bucket.id
+  policy = data.aws_iam_policy_document.dest-bucket.json
 }
 
 resource "aws_s3_bucket_versioning" "transform-lambda-source-bucket-versioning" {

@@ -3,11 +3,6 @@ data "aws_cloudfront_cache_policy" "managed_caching_disabled" {
   name     = "Managed-CachingDisabled"
 }
 
-data "aws_cloudfront_origin_request_policy" "managed_all_viewer" {
-  provider = aws.us-east-1
-  name     = "Managed-AllViewer"
-}
-
 resource "aws_cloudfront_origin_access_control" "transcriptions" {
   name                              = aws_s3_bucket.dest-bucket.id
   description                       = "Access Control for ${aws_s3_bucket.dest-bucket.id}"
@@ -24,8 +19,6 @@ resource "aws_cloudfront_distribution" "transcriptions" {
   enabled      = true
   http_version = "http2"
   web_acl_id   = aws_wafv2_web_acl.transcriptions.arn
-  # is_ipv6_enabled = true
-  # default_root_object = "index.html"
 
   aliases = [
     aws_acm_certificate.transcriptions_us-east-1.domain_name
@@ -45,7 +38,6 @@ resource "aws_cloudfront_distribution" "transcriptions" {
     target_origin_id       = aws_acm_certificate.transcriptions_us-east-1.domain_name
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = data.aws_cloudfront_cache_policy.managed_caching_disabled.id
-    # origin_request_policy_id = data.aws_cloudfront_origin_request_policy.managed_all_viewer.id
   }
 
   viewer_certificate {
