@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
   bucket = lower("${var.environment}-${var.transcriptions-bucket-name}")
 }
 
-
+# NOTE: is this needed for the transcription bucket?
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
 
@@ -20,6 +20,14 @@ resource "aws_s3_bucket_website_configuration" "example" {
 
   error_document {
     key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_website_configuration" "dest-bucket" {
+  bucket = aws_s3_bucket.dest-bucket.id
+
+  index_document {
+    suffix = "index.html"
   }
 }
 
