@@ -35,7 +35,7 @@ module "cudl-data-processing" {
   transcription-pagify-xslt                 = var.transcription-pagify-xslt
   transcription-mstei-xslt                  = var.transcription-mstei-xslt
   source-bucket-name                        = var.source-bucket-name
-  route53_zone_id                           = var.route53_zone_id
+  cloudfront_route53_zone_id                = var.cloudfront_route53_zone_id
   create_cloudfront_distribution            = var.create_cloudfront_distribution
   providers = {
     aws.us-east-1 = aws.us-east-1

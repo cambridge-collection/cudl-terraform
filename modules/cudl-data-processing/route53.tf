@@ -1,7 +1,7 @@
 data "aws_route53_zone" "domain" {
   count = local.create_cloudfront_distribution ? 1 : 0
 
-  zone_id = var.route53_zone_id
+  zone_id = var.cloudfront_route53_zone_id
 }
 
 resource "aws_route53_record" "transcriptions_cloudfront_alias" {
