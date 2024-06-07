@@ -24,10 +24,6 @@ variable "destination-bucket-name" {
   type        = string
 }
 
-# variable "transcriptions-bucket-name" {
-#   description = "The name of the s3 bucket that stores the HTMl transcriptions (post-processing). Will be prefixed with the environment value."
-# }
-
 variable "compressed-lambdas-directory" {
   description = "The name of the local directory where the CUDL lambdas can be found"
   type        = string
@@ -41,22 +37,6 @@ variable "lambda-jar-bucket" {
 variable "enhancements-bucket-name" {
   description = "The name of the s3 bucket that stores the Transkribus transcriptions. Will be prefixed with the environment value."
 }
-
-#
-# variable "lambda-layer-name" {
-#   description = "The name to be given to the XSLT transform layer"
-#   type        = string
-# }
-#
-# variable "lambda-layer-bucket" {
-#   description = "The s3 bucket in which the XSLT layer ZIP can be found"
-#   type        = string
-# }
-#
-# variable "lambda-layer-filepath" {
-#   description = "The full path to the XSLT layer ZIP, found in the `lambda-layer-bucket`"
-#   type        = string
-# }
 
 variable "lambda-db-jdbc-driver" {
   description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
@@ -137,36 +117,6 @@ variable "tmp-dir" {
   description = "Use to set the TMP_DIR variable in the properties file passed to the lambda layer"
   type        = string
 }
-
-# variable "large-file-limit" {
-#   description = "Use to set the LARGE_FILE_LIMIT variable in the properties file passed to the lambda layer"
-#   type        = number
-# }
-#
-# variable "chunks" {
-#   description = "Use to set the CHUNKS variable in the properties file passed to the lambda layer"
-#   type        = number
-# }
-#
-# variable "data-function-name" {
-#   description = "Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `cudl-lambda-transform` repository"
-#   type        = string
-# }
-#
-# variable "transcription-function-name" {
-#   description = "DEPRECATED. Use to set the FUNCTION_NAME variable in the properties file passed to the lambda layer, for lambdas from the `transcription-lambda-transform` repository"
-#   type        = string
-# }
-#
-# variable "transcription-pagify-xslt" {
-#   description = "Use to set the path to pagify xslt in /opt (from layer)"
-#   type        = string
-# }
-#
-# variable "transcription-mstei-xslt" {
-#   description = "Use to set the path to mstei xslt in /opt (from layer)"
-#   type        = string
-# }
 
 variable "lambda-alias-name" {
   description = "Use to set the name for the lambda function alias(es)"

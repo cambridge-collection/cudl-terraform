@@ -116,14 +116,6 @@ resource "aws_lambda_layer_version" "transform-properties-layer" {
   depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
 }
 
-# resource "aws_lambda_layer_version" "xslt-layer" {
-#   s3_bucket  = var.lambda-layer-bucket
-#   s3_key     = var.lambda-layer-filepath
-#   layer_name = "${var.environment}-${var.lambda-layer-name}"
-#
-#   compatible_runtimes = compact(distinct([for lambda in var.transform-lambda-information : lambda.runtime]))
-# }
-
 # Trigger lambda from the SQS queues
 resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
   count = length(var.transform-lambda-information)

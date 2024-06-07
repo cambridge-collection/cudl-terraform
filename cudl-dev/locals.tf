@@ -10,8 +10,12 @@ locals {
     terraform    = true
   }
   additional_lambda_variables = {
-    AWS_DATA_SOURCE_BUCKET   = "${local.environment}-cudl-data-source"
-    AWS_TRANSCRIPTION_BUCKET = "${local.environment}-cudl-transcriptions" # NOTE to be removed
-    AWS_OUTPUT_BUCKET        = "${local.environment}-cudl-data-releases"
+    AWS_DATA_ENHANCEMENTS_BUCKET = "${local.environment}-cudl-data-enhancements"
+    AWS_DATA_SOURCE_BUCKET       = "${local.environment}-cudl-data-source"
+    AWS_OUTPUT_BUCKET            = "${local.environment}-cudl-data-releases"
+  }
+  enhancements_lambda_variables = {
+    AWS_DATA_SOURCE_BUCKET = "${local.environment}-cudl-data-enhancements"
+    AWS_OUTPUT_BUCKET      = "${local.environment}-cudl-data-source"
   }
 }
