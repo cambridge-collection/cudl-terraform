@@ -1,12 +1,6 @@
-locals {
-  transcriptions_domain_name = "${var.environment}-transcriptions.${data.aws_route53_zone.domain.name}"
-}
-
-data "aws_route53_zone" "domain" {
-  zone_id = var.route53_zone_id
-}
-
 resource "aws_acm_certificate" "transcriptions" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+
   domain_name       = local.transcriptions_domain_name
   validation_method = "DNS"
   subject_alternative_names = [
@@ -19,7 +13,9 @@ resource "aws_acm_certificate" "transcriptions" {
 }
 
 resource "aws_acm_certificate_validation" "transcriptions" {
-  certificate_arn         = aws_acm_certificate.transcriptions.arn
+  count = local.create_cloudfront_distribution ? 1 : 0
+
+  certificate_arn         = aws_acm_certificate.transcriptions.0.arn
   validation_record_fqdns = [for record in aws_route53_record.transcriptions_acm_validation_cname : record.fqdn]
 
   timeouts {
@@ -28,6 +24,8 @@ resource "aws_acm_certificate_validation" "transcriptions" {
 }
 
 resource "aws_acm_certificate" "transcriptions_us-east-1" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+  
   provider          = aws.us-east-1
   domain_name       = local.transcriptions_domain_name
   validation_method = "DNS"

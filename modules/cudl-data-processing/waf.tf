@@ -1,4 +1,6 @@
 resource "aws_wafv2_web_acl" "transcriptions" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+
   name        = "${var.environment}-transcriptions-waf-web-acl"
   provider    = aws.us-east-1
   description = "Managed by Terraform for ${var.environment}"

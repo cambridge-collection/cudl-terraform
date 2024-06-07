@@ -26,4 +26,6 @@ locals {
     replace(bucket.id, lower("${var.environment}-"), "") => bucket
   }
 
+  create_cloudfront_distribution = var.create_cloudfront_distribution && var.route53_zone_id != null
+  transcriptions_domain_name     = local.create_cloudfront_distribution ? "${var.environment}-transcriptions.${data.aws_route53_zone.domain.0.name}" : ""
 }

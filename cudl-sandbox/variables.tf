@@ -232,7 +232,14 @@ variable "transform-lambda-bucket-sqs-notifications" {
   type        = list(any)
 }
 
-variable "route53_zone_id" {
-  description = "Route 53 Zone ID for transcription bucket"
+variable "create_cloudfront_distribution" {
+  description = "Whether to create a CloudFront distribution for access to the dest-bucket"
   type        = string
+  default     = true
+}
+
+variable "route53_zone_id" {
+  description = "Route 53 Zone ID for CloudFront distribution"
+  type        = string
+  default     = null
 }

@@ -232,8 +232,14 @@ variable "lambda_environment_datadog_variables" {
   }
 }
 
-variable "route53_zone_id" {
-  description = "Route 53 Zone ID for transcription bucket"
+variable "create_cloudfront_distribution" {
+  description = "Whether to create a CloudFront distribution for access to the dest-bucket"
   type        = string
+  default     = false
 }
 
+variable "route53_zone_id" {
+  description = "Route 53 Zone ID for CloudFront distribution"
+  type        = string
+  default     = null
+}

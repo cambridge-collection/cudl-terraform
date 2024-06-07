@@ -24,6 +24,8 @@ resource "aws_s3_bucket_website_configuration" "example" {
 }
 
 data "aws_iam_policy_document" "dest-bucket" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+
   statement {
     sid       = "AllowCloudFrontServicePrincipalReadOnly"
     actions   = ["s3:GetObject"]
@@ -37,14 +39,16 @@ data "aws_iam_policy_document" "dest-bucket" {
     condition {
       test     = "StringEquals"
       variable = "AWS:SourceArn"
-      values   = [aws_cloudfront_distribution.transcriptions.arn]
+      values   = [aws_cloudfront_distribution.transcriptions.0.arn]
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "dest-bucket" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+
   bucket = aws_s3_bucket.dest-bucket.id
-  policy = data.aws_iam_policy_document.dest-bucket.json
+  policy = data.aws_iam_policy_document.dest-bucket.0.json
 }
 
 resource "aws_s3_bucket_versioning" "transform-lambda-source-bucket-versioning" {
