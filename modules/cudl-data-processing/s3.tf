@@ -10,7 +10,7 @@ resource "aws_s3_bucket" "transcriptions-bucket" {
   bucket = lower("${var.environment}-${var.transcriptions-bucket-name}")
 }
 
-
+# NOTE: is this needed for the transcription bucket?
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.transcriptions-bucket.id
 
@@ -21,6 +21,34 @@ resource "aws_s3_bucket_website_configuration" "example" {
   error_document {
     key = "error.html"
   }
+}
+
+data "aws_iam_policy_document" "dest-bucket" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+
+  statement {
+    sid       = "AllowCloudFrontServicePrincipalReadOnly"
+    actions   = ["s3:GetObject"]
+    resources = [format("%s/*", aws_s3_bucket.dest-bucket.arn)]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.transcriptions.0.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "dest-bucket" {
+  count = local.create_cloudfront_distribution ? 1 : 0
+
+  bucket = aws_s3_bucket.dest-bucket.id
+  policy = data.aws_iam_policy_document.dest-bucket.0.json
 }
 
 resource "aws_s3_bucket_versioning" "transform-lambda-source-bucket-versioning" {
@@ -41,7 +69,7 @@ resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
 
 resource "aws_s3_bucket_notification" "transform-lambda-bucket-notifications" {
   for_each = local.transform-lambda-bucket-names
-  bucket = local.transform-lambda-buckets[each.key].id
+  bucket   = local.transform-lambda-buckets[each.key].id
 
   # Add a topic if there is an SNS topic relating to the bucket (the keys of
   # local.source_bucket_s3_notifications)

@@ -232,3 +232,14 @@ variable "lambda_environment_datadog_variables" {
   }
 }
 
+variable "create_cloudfront_distribution" {
+  description = "Whether to create a CloudFront distribution for access to the dest-bucket"
+  type        = string
+  default     = false
+}
+
+variable "cloudfront_route53_zone_id" {
+  description = "Route 53 Zone ID for CloudFront distribution"
+  type        = string
+  default     = null
+}

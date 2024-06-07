@@ -116,41 +116,41 @@ transform-lambda-bucket-sqs-notifications = [
 ]
 transform-lambda-information = [
   {
-    "name"          = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
-    "description"   = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataQueue_HTML"
-    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
-    "use_datadog_variables"    = false
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
-    "runtime"       = "java11"
+    "name"                  = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
+    "description"           = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
+    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"            = "CUDLPackageDataQueue_HTML"
+    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables" = false
+    "timeout"               = 900
+    "memory"                = 512
+    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
+    "runtime"               = "java11"
   },
   {
-    "name"          = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
-    "description"   = "Copies file from the source s3 bucket into the destination (release) s3 bucket, unchanged"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
-    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
-    "use_datadog_variables"    = false
-    "timeout"       = 900
-    "memory"        = 512
-    "other_filters" = "cudl.dl-dataset.json|cudl.ui.json"
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
-    "runtime"       = "java11"
+    "name"                  = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
+    "description"           = "Copies file from the source s3 bucket into the destination (release) s3 bucket, unchanged"
+    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"            = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables" = false
+    "timeout"               = 900
+    "memory"                = 512
+    "other_filters"         = "cudl.dl-dataset.json|cudl.ui.json"
+    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
+    "runtime"               = "java11"
   },
   {
-    "name"          = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
-    "description"   = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataQueue_Collections"
-    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
-    "use_datadog_variables"    = false
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
-    "runtime"       = "java11"
+    "name"                  = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
+    "description"           = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
+    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"            = "CUDLPackageDataQueue_Collections"
+    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables" = false
+    "timeout"               = 900
+    "memory"                = 512
+    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
+    "runtime"               = "java11"
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
@@ -168,9 +168,9 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      ANT_TARGET            = "full"
-      SEARCH_HOST           = "a064b0b5c52e49afa469b4ec4567e17e.solr-api-ccc.sandbox-solr-persist"
-      SEARCH_PORT           = 8091
+      ANT_TARGET             = "full"
+      SEARCH_HOST            = "a064b0b5c52e49afa469b4ec4567e17e.solr-api-ccc.sandbox-solr-persist"
+      SEARCH_PORT            = 8091
       SEARCH_COLLECTION_PATH = "collections"
     }
   },
@@ -217,51 +217,51 @@ transform-lambda-information = [
     }
   },
   {
-    "name"          = "AWSLambda_CUDLPackageData_UPDATE_DB"
-    "description"   = "Updates the CUDL database with collection information from the collections json file"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataUpdateDBQueue"
-    "use_datadog_variables"    = false
-    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
-    "runtime"       = "java11"
+    "name"                  = "AWSLambda_CUDLPackageData_UPDATE_DB"
+    "description"           = "Updates the CUDL database with collection information from the collections json file"
+    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"            = "CUDLPackageDataUpdateDBQueue"
+    "use_datadog_variables" = false
+    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
+    "timeout"               = 900
+    "memory"                = 512
+    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
+    "runtime"               = "java11"
   },
   {
-    "name"          = "AWSLambda_CUDLPackageData_DATASET_JSON"
-    "description"   = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataDatasetQueue"
-    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
-    "use_datadog_variables"    = false
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
-    "runtime"       = "java11"
+    "name"                  = "AWSLambda_CUDLPackageData_DATASET_JSON"
+    "description"           = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
+    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"            = "CUDLPackageDataDatasetQueue"
+    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables" = false
+    "timeout"               = 900
+    "memory"                = 512
+    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
+    "runtime"               = "java11"
   },
   {
-    "name"          = "AWSLambda_CUDLPackageData_UI_JSON"
-    "description"   = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
-    "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-    "queue_name"    = "CUDLPackageDataUIQueue"
-    "subnet_names"  = ["cudl-subnet-private1-eu-west-1a"]
-    "use_datadog_variables"    = false
-    "timeout"       = 900
-    "memory"        = 512
-    "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
-    "runtime"       = "java11"
+    "name"                  = "AWSLambda_CUDLPackageData_UI_JSON"
+    "description"           = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
+    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+    "queue_name"            = "CUDLPackageDataUIQueue"
+    "subnet_names"          = ["cudl-subnet-private1-eu-west-1a"]
+    "use_datadog_variables" = false
+    "timeout"               = 900
+    "memory"                = 512
+    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
+    "runtime"               = "java11"
   }
 ]
 enhancements-lambda-information = [{
-  "name"          = "AWSLambda_CUDLDataEnhancements_TranskribusMergeTEI"
-  "description"   = "Used by the Transkribus pipeline to merge TEI transcription output from Transkribus into the TEI CUDL metadata.  Enhances the CUDL TEI with the Transkribus transcription data"
-  "jar_path"      = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
-  "queue_name"    = "CUDLTranskribusQueue"
-  "timeout"       = 900
-  "memory"        = 512
-  "handler"       = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
-  "runtime"       = "java11"
+  "name"        = "AWSLambda_CUDLDataEnhancements_TranskribusMergeTEI"
+  "description" = "Used by the Transkribus pipeline to merge TEI transcription output from Transkribus into the TEI CUDL metadata.  Enhances the CUDL TEI with the Transkribus transcription data"
+  "jar_path"    = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/0.16/AWSLambda_Data_Transform-0.16-jar-with-dependencies.jar"
+  "queue_name"  = "CUDLTranskribusQueue"
+  "timeout"     = 900
+  "memory"      = 512
+  "handler"     = "uk.ac.cam.lib.cudl.awslambda.handlers.XSLTTransformRequestHandler::handleRequest"
+  "runtime"     = "java11"
 }]
 dst-efs-prefix              = "/mnt/cudl-data-releases"
 dst-prefix                  = "html/"
@@ -283,4 +283,4 @@ security-group-id = "sg-032f9f202ea602d21"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
-
+cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
