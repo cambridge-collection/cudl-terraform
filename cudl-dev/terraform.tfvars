@@ -304,12 +304,12 @@ transform-lambda-information = [
     "use_enhancements_variables" = true
     "mount_fs"                   = false
     "environment_variables" = {
-      ANT_TARGET : "full"
-      ANT_BUILDFILE : "bin/build.xml"
-      XSLT_ENTRYPOINT : "xslt/curious-cures.xsl"
-      OUTPUT_EXTENSION : "xml"
-      EXPAND_DEFAULT_ATTRIBUTES : false
-      ALLOW_DELETE : false
+      ANT_TARGET                = "full"
+      ANT_BUILDFILE             = "bin/build.xml"
+      XSLT_ENTRYPOINT           = "xslt/curious-cures.xsl"
+      OUTPUT_EXTENSION          = "xml"
+      EXPAND_DEFAULT_ATTRIBUTES = false
+      ALLOW_DELETE              = false
     }
   }
 ]
