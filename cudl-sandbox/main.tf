@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 module "cudl-data-processing" {
   source                                    = "../modules/cudl-data-processing"
   compressed-lambdas-directory              = var.compressed-lambdas-directory
@@ -29,6 +27,118 @@ module "cudl-data-processing" {
   enhancements-bucket-name                  = var.enhancements-bucket-name
   cloudfront_route53_zone_id                = var.cloudfront_route53_zone_id
   create_cloudfront_distribution            = var.create_cloudfront_distribution
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
+
+module "base_architecture" {
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.2.0"
+
+  name_prefix                    = join("-", compact([local.environment, var.cluster_name_suffix]))
+  ec2_instance_type              = var.ec2_instance_type
+  route53_zone_domain_name       = var.registered_domain_name
+  route53_zone_id_existing       = var.route53_zone_id_existing
+  route53_zone_force_destroy     = var.route53_zone_force_destroy
+  asg_desired_capacity           = var.asg_desired_capacity
+  asg_max_size                   = var.asg_max_size
+  alb_enable_deletion_protection = var.alb_enable_deletion_protection
+  vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
+  cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
+  vpc_endpoint_services          = var.vpc_endpoint_services
+  vpc_cidr_block                 = var.vpc_cidr_block
+  vpc_peering_vpc_ids            = var.vpc_peering_vpc_ids
+  tags                           = local.default_tags
+}
+
+module "content_loader" {
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v1.1.0"
+
+  name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
+  account_id                                = data.aws_caller_identity.current.account_id
+  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.content_loader_domain_name])), var.registered_domain_name])
+  alb_target_group_port                     = var.content_loader_target_group_port
+  alb_target_group_health_check_status_code = var.content_loader_health_check_status_code
+  ecr_repository_names                      = var.content_loader_ecr_repository_names
+  ecr_repositories_exist                    = true
+  s3_task_bucket                            = module.cudl-data-processing.source_bucket
+  s3_task_execution_bucket                  = module.base_architecture.s3_bucket
+  s3_task_execution_additional_buckets      = ["sandbox.mvn.cudl.lib.cam.ac.uk"]
+  ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
+  ecs_task_def_volumes                      = keys(var.content_loader_ecs_task_def_volumes)
+  ecs_service_container_name                = local.content_loader_container_name_ui
+  ecs_service_container_port                = var.content_loader_application_port
+  s3_task_execution_bucket_objects = {
+    "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/cudl-loader-ui.env.ttfpl", {
+      region          = var.deployment-aws-region
+      source_bucket   = module.cudl-data-processing.source_bucket
+      releases_bucket = module.cudl-data-processing.destination_bucket
+    })
+  }
+  s3_task_bucket_objects = {
+    "cudl.dl-dataset.json" = file("${path.root}/assets/cl/cudl.dl-dataset.json")
+    "cudl.ui.json5"        = file("${path.root}/assets/cl/cudl.ui.json5")
+  }
+  vpc_id                     = module.base_architecture.vpc_id
+  alb_arn                    = module.base_architecture.alb_arn
+  alb_dns_name               = module.base_architecture.alb_dns_name
+  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
+  ecs_cluster_name           = module.base_architecture.ecs_cluster_name
+  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
+  asg_name                   = module.base_architecture.asg_name
+  asg_security_group_id      = module.base_architecture.asg_security_group_id
+  alb_security_group_id      = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
+  cloudfront_allowed_methods = var.content_loader_allowed_methods
+  tags                       = local.default_tags
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
+
+module "solr" {
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v1.1.0"
+
+  name_prefix                               = join("-", compact([local.environment, var.solr_name_suffix, "persist"]))
+  account_id                                = data.aws_caller_identity.current.account_id
+  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name, "persist"])), var.registered_domain_name])
+  alb_target_group_port                     = 8091
+  alb_target_group_health_check_status_code = var.solr_health_check_status_code
+  ecr_repository_names                      = var.solr_ecr_repository_names
+  ecr_repositories_exist                    = true
+  s3_task_bucket                            = module.cudl-data-processing.destination_bucket
+  s3_task_execution_bucket                  = module.base_architecture.s3_bucket
+  ecs_task_def_container_definitions        = jsonencode(local.solr_persist_container_defs)
+  ecs_task_def_volumes                      = keys(var.solr_persist_ecs_task_def_volumes)
+  ecs_task_def_cpu                          = var.solr_ecs_task_def_cpu
+  ecs_task_def_memory                       = var.solr_ecs_task_def_memory
+  ecs_service_container_name                = local.solr_persist_container_name_api
+  ecs_service_container_port                = var.solr_api_port
+  s3_task_execution_bucket_objects = {
+    for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix, "persist"])), f]) => file("${path.module}/assets/solr/${f}")
+  }
+  vpc_id                     = module.base_architecture.vpc_id
+  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
+  alb_arn                    = module.base_architecture.alb_arn
+  alb_dns_name               = module.base_architecture.alb_dns_name
+  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
+  ecs_cluster_name           = module.base_architecture.ecs_cluster_name
+  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
+  asg_name                   = module.base_architecture.asg_name
+  asg_security_group_id      = module.base_architecture.asg_security_group_id
+  alb_security_group_id      = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
+  cloudfront_allowed_methods = var.solr_allowed_methods
+  allow_private_access       = var.solr_use_service_discovery
+  ingress_security_group_id  = var.solr_ingress_security_group_id
+  cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids
+  use_efs_persistence        = true
+  datasync_s3_objects_to_efs = true
+  tags                       = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }

@@ -180,7 +180,6 @@ transform-lambda-information = [
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "cudl-vpc"
     "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
-    "security_group_names"     = []
     "timeout"                  = 300
     "memory"                   = 4096
     "batch_window"             = 2
@@ -191,7 +190,7 @@ transform-lambda-information = [
     "mount_fs"                 = false
     "environment_variables" = {
       ANT_TARGET             = "full"
-      SEARCH_HOST            = "a064b0b5c52e49afa469b4ec4567e17e.solr-api-ccc.sandbox-solr-persist"
+      SEARCH_HOST            = "20448ad646e647adb82d624acecc0970.solr-api-ccc.rmm98-sandbox-solr-persist"
       SEARCH_PORT            = 8091
       SEARCH_COLLECTION_PATH = "collections"
     }
@@ -202,7 +201,6 @@ transform-lambda-information = [
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "cudl-vpc"
     "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
-    "security_group_names"     = ["cudl-vpc-security-group"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -212,7 +210,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      API_HOST = "a064b0b5c52e49afa469b4ec4567e17e.solr-api-ccc.sandbox-solr-persist"
+      API_HOST = "20448ad646e647adb82d624acecc0970.solr-api-ccc.rmm98-sandbox-solr-persist"
       API_PORT = "8091"
       API_PATH = "item"
     }
@@ -223,7 +221,6 @@ transform-lambda-information = [
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "cudl-vpc"
     "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
-    "security_group_names"     = ["cudl-vpc-security-group"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -233,7 +230,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      API_HOST = "a064b0b5c52e49afa469b4ec4567e17e.solr-api-ccc.sandbox-solr-persist"
+      API_HOST = "20448ad646e647adb82d624acecc0970.solr-api-ccc.rmm98-sandbox-solr-persist"
       API_PORT = "8091"
       API_PATH = "collection"
     }
@@ -293,7 +290,6 @@ transform-lambda-information = [
     "queue_name"                 = "CUDL_Transkribus_IngestQueue"
     "vpc_name"                   = "cudl-vpc"
     "subnet_names"               = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
-    "security_group_names"       = ["cudl-vpc-security-group"]
     "timeout"                    = 300
     "memory"                     = 4096
     "batch_window"               = 2
@@ -327,3 +323,48 @@ security-group-id = "sg-032f9f202ea602d21"
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
 cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
+
+# Base Architecture
+cluster_name_suffix            = "ccc"
+registered_domain_name         = "cudl-sandbox.net."
+asg_desired_capacity           = 3
+asg_max_size                   = 3
+route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
+route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
+route53_zone_force_destroy     = true
+alb_enable_deletion_protection = false
+vpc_cidr_block                 = "10.42.0.0/22" #1024 adresses
+vpc_public_subnet_public_ip    = false
+vpc_peering_vpc_ids            = ["vpc-057886e0bdd7c4e43"]
+cloudwatch_log_group           = "/ecs/CUDLContent"
+vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem"]
+
+# Content Loader Workload
+content_loader_name_suffix              = "cl"
+content_loader_domain_name              = "contentloader"
+content_loader_application_port         = 8081
+content_loader_target_group_port        = 9009
+content_loader_ecr_repository_names     = ["dl-loader-db", "dl-loader-ui"]
+content_loader_ecs_task_def_volumes     = { "db-volume" = "/var/lib/postgresql/data" }
+content_loader_container_name_ui        = "dl-loader-ui"
+content_loader_container_name_db        = "dl-loading-db"
+content_loader_health_check_status_code = "401"
+content_loader_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+
+# SOLR Worload
+solr_name_suffix                  = "solr"
+solr_domain_name                  = "solr"
+solr_api_port                     = 80
+solr_application_port             = 8983
+solr_target_group_port            = 8081
+solr_ecr_repository_names         = ["cudl-solr-api", "cudl-solr"]
+solr_ecs_task_def_volumes         = { "solr-volume" = "/var/solr" }
+solr_container_name_api           = "solr-api"
+solr_container_name_solr          = "solr"
+solr_health_check_status_code     = "404"
+solr_allowed_methods              = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu             = 1536
+solr_ecs_task_def_memory          = 1638
+solr_use_service_discovery        = true
+solr_persist_ecs_task_def_volumes = { "solr-persist-volume" = "/var/solr" }
+solr_ingress_security_group_id    = "sg-032f9f202ea602d21"
