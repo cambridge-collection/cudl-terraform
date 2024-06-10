@@ -158,9 +158,3 @@ variable "create_cloudfront_distribution" {
   type        = string
   default     = true
 }
-
-variable "cloudfront_route53_zone_id" {
-  description = "Route 53 Zone ID for CloudFront distribution"
-  type        = string
-  default     = null
-}

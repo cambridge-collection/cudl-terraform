@@ -326,4 +326,3 @@ security-group-id = "sg-b79833d2"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
-cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"

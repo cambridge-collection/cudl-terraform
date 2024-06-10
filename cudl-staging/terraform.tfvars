@@ -304,12 +304,12 @@ transform-lambda-information = [
     "use_enhancements_variables" = true
     "mount_fs"                   = false
     "environment_variables" = {
-      ANT_TARGET : "full"
-      ANT_BUILDFILE : "bin/build.xml"
-      XSLT_ENTRYPOINT : "xslt/curious-cures.xsl"
-      OUTPUT_EXTENSION : "xml"
-      EXPAND_DEFAULT_ATTRIBUTES : false
-      ALLOW_DELETE : false
+      ANT_TARGET                = "full"
+      ANT_BUILDFILE             = "bin/build.xml"
+      XSLT_ENTRYPOINT           = "xslt/curious-cures.xsl"
+      OUTPUT_EXTENSION          = "xml"
+      EXPAND_DEFAULT_ATTRIBUTES = false
+      ALLOW_DELETE              = false
     }
   }
 ]
@@ -326,4 +326,3 @@ security-group-id = "sg-b79833d2"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
-cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"

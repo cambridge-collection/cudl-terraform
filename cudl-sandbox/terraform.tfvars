@@ -289,7 +289,7 @@ transform-lambda-information = [
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
-    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/curious-cures-transkribus-processing@sha256:e5dc4317c3cf20f57e951a110bf6c121ac8959e98b0f51fb5dc7a6c35a9c9556"
+    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/curious-cures-transkribus-processing@sha256:9f9567895171a803f879158a1196c319d69efa6b483955365ec325ffd609ee45"
     "queue_name"                 = "CUDL_Transkribus_IngestQueue"
     "vpc_name"                   = "sandbox-ccc-vpc"
     "subnet_names"               = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
@@ -304,12 +304,12 @@ transform-lambda-information = [
     "use_enhancements_variables" = true
     "mount_fs"                   = false
     "environment_variables" = {
-      ANT_TARGET : "full"
-      ANT_BUILDFILE : "bin/build.xml"
-      XSLT_ENTRYPOINT : "xslt/curious-cures.xsl"
-      OUTPUT_EXTENSION : "xml"
-      EXPAND_DEFAULT_ATTRIBUTES : false
-      ALLOW_DELETE : false
+      ANT_TARGET                = "full"
+      ANT_BUILDFILE             = "bin/build.xml"
+      XSLT_ENTRYPOINT           = "xslt/curious-cures.xsl"
+      OUTPUT_EXTENSION          = "xml"
+      EXPAND_DEFAULT_ATTRIBUTES = false
+      ALLOW_DELETE              = false
     }
   }
 ]
