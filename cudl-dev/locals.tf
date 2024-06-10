@@ -16,6 +16,6 @@ locals {
   }
   enhancements_lambda_variables = {
     AWS_CUDL_DATA_SOURCE_BUCKET = "${local.environment}-cudl-data-enhancements"
-    AWS_OUTPUT_BUCKET      = "${local.environment}-cudl-data-source"
+    AWS_OUTPUT_BUCKET           = "${local.environment}-cudl-data-source"
   }
 }

@@ -23,7 +23,7 @@ locals {
 
   transform-lambda-buckets = {
     for bucket in toset([aws_s3_bucket.source-bucket, aws_s3_bucket.dest-bucket, aws_s3_bucket.enhancements-bucket]) :
-      replace(bucket.id, lower("${var.environment}-"), "") => bucket
+    replace(bucket.id, lower("${var.environment}-"), "") => bucket
   }
 
   create_cloudfront_distribution = var.create_cloudfront_distribution && var.cloudfront_route53_zone_id != null

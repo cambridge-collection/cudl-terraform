@@ -56,26 +56,26 @@ variable "lambda-db-secret-key" {
 variable "transform-lambda-information" {
   description = "A list of objects containing information about the transformation lambda functions"
   type = list(object({
-    name                     = string
-    timeout                  = number
-    memory                   = number
-    queue_name               = string
-    vpc_name                 = optional(string)
-    subnet_names             = optional(list(string), [])
-    security_group_names     = optional(list(string), [])
-    description              = optional(string)
-    jar_path                 = optional(string)
-    handler                  = optional(string)
-    runtime                  = optional(string)
-    environment_variables    = optional(map(string))
-    image_uri                = optional(string)
-    batch_size               = optional(number)
-    batch_window             = optional(number)
-    maximum_concurrency      = optional(number)
-    use_datadog_variables    = optional(bool, true)
-    use_additional_variables = optional(bool, false)
+    name                       = string
+    timeout                    = number
+    memory                     = number
+    queue_name                 = string
+    vpc_name                   = optional(string)
+    subnet_names               = optional(list(string), [])
+    security_group_names       = optional(list(string), [])
+    description                = optional(string)
+    jar_path                   = optional(string)
+    handler                    = optional(string)
+    runtime                    = optional(string)
+    environment_variables      = optional(map(string))
+    image_uri                  = optional(string)
+    batch_size                 = optional(number)
+    batch_window               = optional(number)
+    maximum_concurrency        = optional(number)
+    use_datadog_variables      = optional(bool, true)
+    use_additional_variables   = optional(bool, false)
     use_enhancements_variables = optional(bool, false)
-    mount_fs                 = optional(bool, true)
+    mount_fs                   = optional(bool, true)
   }))
 }
 

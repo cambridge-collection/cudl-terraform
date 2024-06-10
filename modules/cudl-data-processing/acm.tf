@@ -25,7 +25,7 @@ resource "aws_acm_certificate_validation" "transcriptions" {
 
 resource "aws_acm_certificate" "transcriptions_us-east-1" {
   count = local.create_cloudfront_distribution ? 1 : 0
-  
+
   provider          = aws.us-east-1
   domain_name       = local.transcriptions_domain_name
   validation_method = "DNS"
