@@ -6,21 +6,8 @@ resource "aws_s3_bucket" "source-bucket" {
   bucket = lower("${var.environment}-${var.source-bucket-name}")
 }
 
-resource "aws_s3_bucket" "transcriptions-bucket" {
-  bucket = lower("${var.environment}-${var.transcriptions-bucket-name}")
-}
-
-# NOTE: is this needed for the transcription bucket?
-resource "aws_s3_bucket_website_configuration" "example" {
-  bucket = aws_s3_bucket.transcriptions-bucket.id
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "error.html"
-  }
+resource "aws_s3_bucket" "enhancements-bucket" {
+  bucket = lower("${var.environment}-${var.enhancements-bucket-name}")
 }
 
 data "aws_iam_policy_document" "dest-bucket" {
@@ -55,13 +42,6 @@ resource "aws_s3_bucket_versioning" "transform-lambda-source-bucket-versioning" 
   for_each = local.transform-lambda-bucket-names
   bucket   = local.transform-lambda-buckets[each.key].id
 
-  versioning_configuration {
-    status = "Suspended"
-  }
-}
-
-resource "aws_s3_bucket_versioning" "transcriptions-bucket-versioning" {
-  bucket = aws_s3_bucket.transcriptions-bucket.id
   versioning_configuration {
     status = "Suspended"
   }

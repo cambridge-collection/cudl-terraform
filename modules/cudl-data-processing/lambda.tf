@@ -11,7 +11,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   timeout       = var.transform-lambda-information[count.index].timeout
   memory_size   = var.transform-lambda-information[count.index].memory
   role          = aws_iam_role.assume-lambda-role.arn
-  layers        = var.transform-lambda-information[count.index].image_uri != null ? null : concat([aws_lambda_layer_version.xslt-layer.arn], [aws_lambda_layer_version.transform-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
+  layers        = var.transform-lambda-information[count.index].image_uri != null ? null : concat([aws_lambda_layer_version.transform-properties-layer.arn], [var.datadog-layer-1-arn, var.datadog-layer-2-arn])
   handler       = var.transform-lambda-information[count.index].handler
   publish       = true
 
@@ -46,6 +46,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
     variables = merge(
       var.transform-lambda-information[count.index].use_datadog_variables ? var.lambda_environment_datadog_variables : null,
       var.transform-lambda-information[count.index].use_additional_variables ? var.additional_lambda_environment_variables : null,
+      var.transform-lambda-information[count.index].use_enhancements_variables ? var.enhancements_lambda_environment_variables : null,
       var.transform-lambda-information[count.index].environment_variables,
     )
   }
@@ -78,18 +79,12 @@ resource "local_file" "create-local-lambda-properties-file" {
     VERSION=${upper(var.environment)}
     DST_BUCKET=${aws_s3_bucket.dest-bucket.id}
     DST_PREFIX=${var.dst-prefix}
-    DST_EFS_PREFIX=${var.dst-efs-prefix}
     DST_EFS_ENABLED=true
+    DST_EFS_PREFIX=${var.dst-efs-prefix}
     DST_S3_PREFIX=${var.dst-s3-prefix}
     DST_XSLT_OUTPUT_FOLDER=json/
     DST_XSLT_OUTPUT_SUFFIX=.json
     TMP_DIR=${var.tmp-dir}
-    LARGE_FILE_LIMIT=${var.large-file-limit}
-    CHUNKS=${var.chunks}
-    XSLT=/opt/xslt/msTeiPreFilter.xsl,/opt/xslt/jsonDocFormatter.xsl
-    XSLT_1_PARAMS=
-    XSLT_2_PARAMS=
-    XSLT_S3_ITEM_RESOURCES=
     REGION=${var.deployment-aws-region}
 
     # Database details for editing/inserting collection data into CUDL
@@ -97,13 +92,6 @@ resource "local_file" "create-local-lambda-properties-file" {
     DB_URL=${var.lambda-db-url}
     DB_SECRET_KEY=${var.lambda-db-secret-key}
 
-    TRANSCRIPTION_DST_BUCKET=${aws_s3_bucket.transcriptions-bucket.id}
-    TRANSCRIPTION_DST_PREFIX=${var.dst-prefix}
-    TRANSCRIPTION_LARGE_FILE_LIMIT=${var.large-file-limit}
-    TRANSCRIPTION_CHUNKS=${var.chunks}
-    TRANSCRIPTION_FUNCTION_NAME=${var.environment}-${var.transcription-function-name}
-    TRANSCRIPTION_PAGIFY_XSLT=${var.transcription-pagify-xslt}
-    TRANSCRIPTION_MSTEI_XSLT=${var.transcription-mstei-xslt}
   EOT
 
   filename = "${path.module}/properties_files/${var.environment}/java/lib/cudl-loader-lambda.properties"
@@ -126,14 +114,6 @@ resource "aws_lambda_layer_version" "transform-properties-layer" {
 
   compatible_runtimes = compact(distinct([for lambda in var.transform-lambda-information : lambda.runtime]))
   depends_on          = [data.archive_file.zip_transform_properties_lambda_layer]
-}
-
-resource "aws_lambda_layer_version" "xslt-layer" {
-  s3_bucket  = var.lambda-layer-bucket
-  s3_key     = var.lambda-layer-filepath
-  layer_name = "${var.environment}-${var.lambda-layer-name}"
-
-  compatible_runtimes = compact(distinct([for lambda in var.transform-lambda-information : lambda.runtime]))
 }
 
 # Trigger lambda from the SQS queues
