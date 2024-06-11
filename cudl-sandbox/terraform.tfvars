@@ -176,11 +176,11 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:a35d1beea05ffffe1461f260648d1bcf6521ceba8309cd9d071a34422a288015"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:367706710d9e68693e256c2737349b1750a75c274641036d2d1400dd00ef63df"
     "queue_name"               = "CUDL_TEIProcessingQueue"
-    "vpc_name"                 = "sandbox-ccc-vpc"
-    "subnet_names"             = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
-    "security_group_names"     = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-persist-private-access"]
+    "vpc_name"                 = "cudl-vpc"
+    "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
+    "security_group_names"     = []
     "timeout"                  = 300
     "memory"                   = 4096
     "batch_window"             = 2
@@ -198,11 +198,11 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:04e64aaeed3ac04a06952010dfae0d22397a567f3d39d03796d4124c8c0b439b"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:fc6f79c9a5f68029b2d2de3ec49690b27e9baf948e43ce34d6d744d864d4fca8"
     "queue_name"               = "CUDLIndexQueue"
-    "vpc_name"                 = "sandbox-ccc-vpc"
-    "subnet_names"             = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
-    "security_group_names"     = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-persist-private-access"]
+    "vpc_name"                 = "cudl-vpc"
+    "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
+    "security_group_names"     = ["cudl-vpc-security-group"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -219,11 +219,11 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:04e64aaeed3ac04a06952010dfae0d22397a567f3d39d03796d4124c8c0b439b"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:fc6f79c9a5f68029b2d2de3ec49690b27e9baf948e43ce34d6d744d864d4fca8"
     "queue_name"               = "CUDLIndexCollectionQueue"
-    "vpc_name"                 = "sandbox-ccc-vpc"
-    "subnet_names"             = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
-    "security_group_names"     = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-persist-private-access"]
+    "vpc_name"                 = "cudl-vpc"
+    "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
+    "security_group_names"     = ["cudl-vpc-security-group"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -289,11 +289,11 @@ transform-lambda-information = [
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
-    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/curious-cures-transkribus-processing@sha256:9f9567895171a803f879158a1196c319d69efa6b483955365ec325ffd609ee45"
+    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/curious-cures-transkribus-processing@sha256:03cf5047a7ddd72163edc8081e7cfad652c6072daa91d0ab941fc96b4d481a40"
     "queue_name"                 = "CUDL_Transkribus_IngestQueue"
-    "vpc_name"                   = "sandbox-ccc-vpc"
-    "subnet_names"               = ["sandbox-ccc-subnet-private-a", "sandbox-ccc-subnet-private-b"]
-    "security_group_names"       = ["sandbox-ccc-vpc-endpoints", "sandbox-solr-persist-private-access"]
+    "vpc_name"                   = "cudl-vpc"
+    "subnet_names"               = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
+    "security_group_names"       = ["cudl-vpc-security-group"]
     "timeout"                    = 300
     "memory"                     = 4096
     "batch_window"               = 2
