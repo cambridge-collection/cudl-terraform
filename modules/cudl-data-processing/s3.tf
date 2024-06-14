@@ -54,12 +54,12 @@ resource "aws_s3_bucket_notification" "transform-lambda-bucket-notifications" {
   # Add a topic if there is an SNS topic relating to the bucket (the keys of
   # local.source_bucket_s3_notifications)
   dynamic "topic" {
-    for_each = contains(keys(local.transform_bucket_sns_notifications), each.key) ? [1] : []
+    for_each = { for k, v in local.transform_bucket_sns_notifications : k => v if local.transform_bucket_sns_notifications[k].bucket_name == each.key }
     content {
-      topic_arn     = aws_sns_topic.transform_sns_topics[each.key].arn
+      topic_arn     = aws_sns_topic.transform_sns_topics[topic.key].arn
       events        = ["s3:ObjectCreated:*", "s3:ObjectRemoved:*"]
-      filter_prefix = local.transform_bucket_sns_notifications[each.key].filter_prefix
-      filter_suffix = local.transform_bucket_sns_notifications[each.key].filter_suffix
+      filter_prefix = try(topic.value.filter_prefix, null)
+      filter_suffix = try(topic.value.filter_suffix, null)
     }
   }
 
