@@ -42,6 +42,21 @@ transform-lambda-bucket-sns-notifications = [
         "raw"        = true
       },
     ]
+  },
+  {
+    "bucket_name"   = "cudl-data-releases"
+    "filter_prefix" = "cudl.ui.json",
+    "filter_suffix" = ""
+    "subscriptions" = [
+      {
+        "queue_name" = "CUDLPackageDataUIQueue",
+        "raw"        = true
+      },
+      {
+        "queue_name" = "CUDLPackageDataCopyFileToEFSQueue",
+        "raw"        = true
+      },
+    ]
   }
 ]
 transform-lambda-bucket-sqs-notifications = [
@@ -97,13 +112,6 @@ transform-lambda-bucket-sqs-notifications = [
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataDatasetQueue"
     "filter_prefix" = "cudl.dl-dataset.json"
-    "filter_suffix" = ""
-    "bucket_name"   = "cudl-data-releases"
-  },
-  {
-    "type"          = "SQS",
-    "queue_name"    = "CUDLPackageDataUIQueue"
-    "filter_prefix" = "cudl.ui.json"
     "filter_suffix" = ""
     "bucket_name"   = "cudl-data-releases"
   },
@@ -182,7 +190,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:367706710d9e68693e256c2737349b1750a75c274641036d2d1400dd00ef63df"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:198b3946d4d215e6093a474442d075cece37c8c9d734121acf8b6c1ec553c7a7"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "CUDL-NETBLOCK"
     "subnet_names"             = ["CUDL-EUW1A"]
