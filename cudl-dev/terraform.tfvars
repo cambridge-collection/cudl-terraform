@@ -349,3 +349,30 @@ security-group-id = "sg-b79833d2"
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases"
 cloudfront_route53_zone_id   = "Z1TSUAQ9EOFHVW"
+
+# Base Architecture
+cluster_name_suffix            = "dev"
+registered_domain_name         = "dev-cudl.link."
+asg_desired_capacity           = 2
+asg_max_size                   = 2
+route53_delegation_set_id      = ""
+route53_zone_id_existing       = "Z06703993W52C8N81D2N"
+route53_zone_force_destroy     = true
+alb_enable_deletion_protection = false
+vpc_public_subnet_public_ip    = false
+cloudwatch_log_group           = "/ecs/CUDLContent"
+
+# SOLR Workload
+solr_name_suffix              = "solr"
+solr_domain_name              = "solr"
+solr_api_port                 = 80
+solr_application_port         = 8983
+solr_target_group_port        = 8081
+solr_ecr_repository_names     = ["cudl-solr-api", "cudl-solr"]
+solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
+solr_container_name_api       = "solr-api"
+solr_container_name_solr      = "solr"
+solr_health_check_status_code = "404"
+solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu         = 1536
+solr_ecs_task_def_memory      = 1638

@@ -164,3 +164,124 @@ variable "cloudfront_route53_zone_id" {
   type        = string
   default     = null
 }
+
+variable "cluster_name_suffix" {
+  type        = string
+  description = "Name suffix of the ECS Cluster"
+}
+
+variable "ec2_instance_type" {
+  type        = string
+  description = "EC2 Instance type used by EC2 Instances"
+  default     = "t3.small"
+}
+
+variable "asg_max_size" {
+  type        = number
+  description = "Maximum number of instances in the Autoscaling Group"
+}
+
+variable "asg_desired_capacity" {
+  type        = number
+  description = "Desired number of instances in the Autoscaling Group"
+}
+
+variable "vpc_public_subnet_public_ip" {
+  type        = bool
+  description = "Whether to automatically assign public IP addresses in the public subnets"
+}
+
+variable "registered_domain_name" {
+  type        = string
+  description = "Registered Domain Name"
+}
+
+variable "route53_delegation_set_id" {
+  type        = string
+  description = "The ID of the reusable delegation set whose NS records should be assigned to the hosted zone"
+}
+
+variable "route53_zone_id_existing" {
+  type        = string
+  description = "ID of an existing Route 53 Hosted zone as an alternative to creating a hosted zone"
+}
+
+variable "route53_zone_force_destroy" {
+  type        = bool
+  description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone"
+}
+
+variable "alb_enable_deletion_protection" {
+  type        = bool
+  description = "Whether to enable deletion protection for the ALB"
+}
+
+variable "cloudwatch_log_group" {
+  type        = string
+  description = "Name of the cloudwatch log group"
+}
+
+variable "solr_name_suffix" {
+  type        = string
+  description = "Suffix to add to SOLR resource names"
+}
+
+variable "solr_domain_name" {
+  type        = string
+  description = "Domain Name for the SOLR service"
+}
+
+variable "solr_application_port" {
+  type        = number
+  description = "Port number to be used for the SOLR application"
+}
+
+variable "solr_api_port" {
+  type        = number
+  description = "Port number to be used for the SOLR API"
+}
+
+variable "solr_target_group_port" {
+  type        = number
+  description = "Port number to be used for the SOLR Target Group"
+}
+
+variable "solr_ecr_repository_names" {
+  type        = list(string)
+  description = "List of ECR Repository names for SOLR"
+}
+
+variable "solr_ecs_task_def_volumes" {
+  type        = map(string)
+  description = "Map of volume names and container paths to attach to the SOLR ECS Task Definition"
+}
+
+variable "solr_container_name_api" {
+  type        = string
+  description = "Name of the SOLR API container"
+}
+
+variable "solr_container_name_solr" {
+  type        = string
+  description = "Name of the SOLR container"
+}
+
+variable "solr_health_check_status_code" {
+  type        = string
+  description = "HTTP Status Code to use in target group health check"
+}
+
+variable "solr_allowed_methods" {
+  type        = list(string)
+  description = "List of methods allowed by the CloudFront Distribution"
+}
+
+variable "solr_ecs_task_def_cpu" {
+  type        = number
+  description = "Number of cpu units used by the SOLR tasks"
+}
+
+variable "solr_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the SOLR tasks"
+}
