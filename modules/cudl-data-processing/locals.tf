@@ -6,8 +6,8 @@ locals {
     for index, notification in var.transform-lambda-bucket-sns-notifications : [
       for subscription in notification.subscriptions : merge(subscription, {
         bucket_name = notification.bucket_name,
-        topic_name = replace(lower(format("%s-%s-%s", notification.bucket_name,
-        notification.filter_prefix, notification.filter_suffix)), "/[^0-9a-z_-]/", "")
+        topic_name = replace(lower(join("-", compact([notification.bucket_name,
+        notification.filter_prefix, notification.filter_suffix]))), "/[^0-9a-z_-]/", "")
       })
     ]
   ])
@@ -17,8 +17,9 @@ locals {
   There is unlikely possibility of this being a duplicate in the future, but I think it will do as a reference for now.
    */
   transform_bucket_sns_notifications = {
-    for index, notification in var.transform-lambda-bucket-sns-notifications : replace(lower(format("%s-%s-%s",
-      notification.bucket_name, notification.filter_prefix, notification.filter_suffix)), "/[^0-9a-z_-]/", "") => {
+    for index, notification in var.transform-lambda-bucket-sns-notifications : replace(lower(join("-",
+      compact([notification.bucket_name, notification.filter_prefix, notification.filter_suffix]))),
+      "/[^0-9a-z_-]/", "") => {
       bucket_name   = notification.bucket_name
       filter_prefix = notification.filter_prefix
       filter_suffix = notification.filter_suffix
