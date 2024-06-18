@@ -351,7 +351,7 @@ efs-name                     = "cudl-data-releases"
 cloudfront_route53_zone_id   = "Z1TSUAQ9EOFHVW"
 
 # Base Architecture
-cluster_name_suffix            = "dev"
+cluster_name_suffix            = "cudlsolr"
 registered_domain_name         = "dev-cudl.link."
 asg_desired_capacity           = 2
 asg_max_size                   = 2

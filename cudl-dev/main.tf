@@ -36,7 +36,8 @@ module "cudl-data-processing" {
 
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs"
+  source = "../../terraform-aws-architecture-ecs"
+  #source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs"
 
   name_prefix                    = join("-", compact([var.environment, var.cluster_name_suffix]))
   ec2_instance_type              = var.ec2_instance_type
@@ -54,7 +55,7 @@ module "base_architecture" {
 module "solr" {
   source = "../../terraform-aws-workload-ecs/"
 
-  ecs_cluster_name                          = "CUDLSolr"
+  ecs_cluster_name                          = var.cluster_name_suffix
   name_prefix                               = join("-", compact([var.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
