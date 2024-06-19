@@ -285,3 +285,15 @@ variable "solr_ecs_task_def_memory" {
   type        = number
   description = "Amount (in MiB) of memory used by the SOLR tasks"
 }
+
+variable "vpc_cidr_block" {
+  type        = string
+  description = "CIDR block for the VPC"
+  default     = "10.0.0.0/16"
+}
+
+variable "solr_use_efs_persistence" {
+  type        = bool
+  description = "Whether to use EFS to persist data"
+  default     = false
+}

@@ -49,13 +49,14 @@ module "base_architecture" {
   alb_enable_deletion_protection = var.alb_enable_deletion_protection
   vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
+  vpc_peering_vpc_ids            = [var.vpc-id]
+  vpc_cidr_block                 = var.vpc_cidr_block
   tags                           = local.default_tags
 }
 
 module "solr" {
   source = "../../terraform-aws-workload-ecs/"
 
-  ecs_cluster_name                          = var.cluster_name_suffix
   name_prefix                               = join("-", compact([var.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
@@ -63,6 +64,8 @@ module "solr" {
   alb_target_group_health_check_status_code = var.solr_health_check_status_code
   ecr_repository_names                      = var.solr_ecr_repository_names
   ecr_repositories_exist                    = true
+  allow_private_access                      = true
+  ingress_security_group_id                 = "sg-b79833d2"
   ecs_task_def_container_definitions = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes               = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                   = var.solr_ecs_task_def_cpu
@@ -81,6 +84,7 @@ module "solr" {
   cloudwatch_log_group_arn           = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn             = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods         = var.solr_allowed_methods
+  use_efs_persistence                = var.solr_use_efs_persistence
   tags                               = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1

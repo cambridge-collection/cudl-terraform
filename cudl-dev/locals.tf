@@ -28,9 +28,6 @@ locals {
       systemControls = [],
       image          = "${module.solr.ecr_repository_urls["cudl-solr"]}:latest",
       cpu            = 0,
-      links = [
-        local.solr_container_name_api
-      ],
       portMappings = [
         {
           containerPort = var.solr_application_port,
@@ -94,6 +91,9 @@ locals {
           hostPort      = var.solr_target_group_port,
           protocol      = "tcp"
         }
+      ],
+      links = [
+        local.solr_container_name_solr
       ],
       essential = true,
       command   = [],
