@@ -327,8 +327,8 @@ cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl-sandbox.net."
-asg_desired_capacity           = 3
-asg_max_size                   = 3
+asg_desired_capacity           = 2
+asg_max_size                   = 2
 route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
 route53_zone_force_destroy     = true
