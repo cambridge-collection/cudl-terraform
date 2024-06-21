@@ -75,10 +75,6 @@ module "content_loader" {
       releases_bucket = module.cudl-data-processing.destination_bucket
     })
   }
-  s3_task_bucket_objects = {
-    "cudl.dl-dataset.json" = file("${path.root}/assets/cl/cudl.dl-dataset.json")
-    "cudl.ui.json5"        = file("${path.root}/assets/cl/cudl.ui.json5")
-  }
   vpc_id                     = module.base_architecture.vpc_id
   alb_arn                    = module.base_architecture.alb_arn
   alb_dns_name               = module.base_architecture.alb_dns_name
@@ -101,23 +97,23 @@ module "content_loader" {
 module "solr" {
   source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v1.1.0"
 
-  name_prefix                               = join("-", compact([local.environment, var.solr_name_suffix, "persist"]))
+  name_prefix                               = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
-  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name, "persist"])), var.registered_domain_name])
+  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = 8091
   alb_target_group_health_check_status_code = var.solr_health_check_status_code
   ecr_repository_names                      = var.solr_ecr_repository_names
   ecr_repositories_exist                    = true
   s3_task_bucket                            = module.cudl-data-processing.destination_bucket
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
-  ecs_task_def_container_definitions        = jsonencode(local.solr_persist_container_defs)
-  ecs_task_def_volumes                      = keys(var.solr_persist_ecs_task_def_volumes)
+  ecs_task_def_container_definitions        = jsonencode(local.solr_container_defs)
+  ecs_task_def_volumes                      = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                          = var.solr_ecs_task_def_cpu
   ecs_task_def_memory                       = var.solr_ecs_task_def_memory
-  ecs_service_container_name                = local.solr_persist_container_name_api
+  ecs_service_container_name                = local.solr_container_name_api
   ecs_service_container_port                = var.solr_api_port
   s3_task_execution_bucket_objects = {
-    for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix, "persist"])), f]) => file("${path.module}/assets/solr/${f}")
+    for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix])), f]) => file("${path.module}/assets/solr/${f}")
   }
   vpc_id                     = module.base_architecture.vpc_id
   vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
@@ -137,7 +133,6 @@ module "solr" {
   ingress_security_group_id  = var.solr_ingress_security_group_id
   cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids
   use_efs_persistence        = true
-  datasync_s3_objects_to_efs = true
   tags                       = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1

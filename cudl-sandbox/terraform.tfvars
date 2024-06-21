@@ -325,7 +325,7 @@ efs-name                     = "cudl-data-releases"
 cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 
 # Base Architecture
-cluster_name_suffix            = "ccc"
+cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl-sandbox.net."
 asg_desired_capacity           = 3
 asg_max_size                   = 3

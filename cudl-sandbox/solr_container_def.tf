@@ -1,9 +1,9 @@
 locals {
-  solr_persist_container_name_solr = join("-", [var.solr_container_name_solr, var.cluster_name_suffix])
-  solr_persist_container_name_api  = join("-", [var.solr_container_name_api, var.cluster_name_suffix])
-  solr_persist_container_defs = [
+  solr_container_name_solr = join("-", [var.solr_container_name_solr, var.cluster_name_suffix])
+  solr_container_name_api  = join("-", [var.solr_container_name_api, var.cluster_name_suffix])
+  solr_container_defs = [
     {
-      name           = local.solr_persist_container_name_solr,
+      name           = local.solr_container_name_solr,
       systemControls = [],
       image          = data.aws_ecr_image.solr["cudl-solr"].image_uri,
       cpu            = 0,
@@ -27,7 +27,7 @@ locals {
       environmentFiles = [],
       # NOTE it does not seem to be possible to specify the host path here
       # Volume must match name specified in task definition
-      mountPoints = [for name, path in var.solr_persist_ecs_task_def_volumes :
+      mountPoints = [for name, path in var.solr_ecs_task_def_volumes :
         {
           sourceVolume  = join("-", [module.solr.name_prefix, name]),
           containerPath = path,
@@ -46,11 +46,11 @@ locals {
       },
       # dependsOn = [
       #   {
-      #     containerName = local.solr_persist_container_name_api,
+      #     containerName = local.solr_container_name_api,
       #     condition     = "HEALTHY"
       #   }
       # ],
-      hostname   = local.solr_persist_container_name_solr,
+      hostname   = local.solr_container_name_solr,
       privileged = true,
       logConfiguration = {
         logDriver = "awslogs",
@@ -63,14 +63,14 @@ locals {
       }
     },
     {
-      name              = local.solr_persist_container_name_api,
+      name              = local.solr_container_name_api,
       systemControls    = [],
       image             = data.aws_ecr_image.solr["cudl-solr-api"].image_uri,
       cpu               = 1024,
       memory            = 1024,
       memoryReservation = 1024,
       links = [
-        local.solr_persist_container_name_solr
+        local.solr_container_name_solr
       ],
       portMappings = [
         {
@@ -86,7 +86,7 @@ locals {
       environment = [
         {
           name  = "SOLR_HOST",
-          value = local.solr_persist_container_name_solr
+          value = local.solr_container_name_solr
         },
         {
           name  = "SOLR_PORT",
@@ -96,7 +96,7 @@ locals {
       environmentFiles = [],
       mountPoints      = [],
       volumesFrom      = [],
-      hostname         = local.solr_persist_container_name_api,
+      hostname         = local.solr_container_name_api,
       logConfiguration = {
         logDriver = "awslogs",
         options = {
