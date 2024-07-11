@@ -47,12 +47,12 @@ module "base_architecture" {
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
   vpc_endpoint_services          = var.vpc_endpoint_services
   vpc_cidr_block                 = var.vpc_cidr_block
-  vpc_peering_vpc_ids            = var.vpc_peering_vpc_ids
-  tags                           = local.default_tags
+  # vpc_peering_vpc_ids            = var.vpc_peering_vpc_ids
+  tags = local.default_tags
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v1.1.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=fix/task-iam-role-conditionals"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -61,7 +61,7 @@ module "content_loader" {
   alb_target_group_health_check_status_code = var.content_loader_health_check_status_code
   ecr_repository_names                      = var.content_loader_ecr_repository_names
   ecr_repositories_exist                    = true
-  s3_task_bucket                            = module.cudl-data-processing.source_bucket
+  s3_task_buckets                           = [module.cudl-data-processing.source_bucket]
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   s3_task_execution_additional_buckets      = ["sandbox.mvn.cudl.lib.cam.ac.uk"]
   ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
@@ -80,7 +80,6 @@ module "content_loader" {
   alb_dns_name               = module.base_architecture.alb_dns_name
   alb_listener_arn           = module.base_architecture.alb_https_listener_arn
   ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  ecs_cluster_name           = module.base_architecture.ecs_cluster_name
   route53_zone_id            = module.base_architecture.route53_public_hosted_zone
   asg_name                   = module.base_architecture.asg_name
   asg_security_group_id      = module.base_architecture.asg_security_group_id
@@ -95,7 +94,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v1.1.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=fix/task-iam-role-conditionals"
 
   name_prefix                               = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -104,7 +103,7 @@ module "solr" {
   alb_target_group_health_check_status_code = var.solr_health_check_status_code
   ecr_repository_names                      = var.solr_ecr_repository_names
   ecr_repositories_exist                    = true
-  s3_task_bucket                            = module.cudl-data-processing.destination_bucket
+  s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_task_def_container_definitions        = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes                      = keys(var.solr_ecs_task_def_volumes)
@@ -121,19 +120,18 @@ module "solr" {
   alb_dns_name               = module.base_architecture.alb_dns_name
   alb_listener_arn           = module.base_architecture.alb_https_listener_arn
   ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  ecs_cluster_name           = module.base_architecture.ecs_cluster_name
   route53_zone_id            = module.base_architecture.route53_public_hosted_zone
   asg_name                   = module.base_architecture.asg_name
   asg_security_group_id      = module.base_architecture.asg_security_group_id
   alb_security_group_id      = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
+  cloudfront_waf_acl_arn     = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   cloudfront_allowed_methods = var.solr_allowed_methods
-  allow_private_access       = var.solr_use_service_discovery
-  ingress_security_group_id  = var.solr_ingress_security_group_id
-  cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids
-  use_efs_persistence        = true
-  tags                       = local.default_tags
+  # allow_private_access       = var.solr_use_service_discovery
+  # ingress_security_group_id  = var.solr_ingress_security_group_id
+  # cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids
+  use_efs_persistence = true
+  tags                = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }

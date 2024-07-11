@@ -100,10 +100,11 @@ locals {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          awslogs-group           = module.base_architecture.cloudwatch_log_group_name,
-          awslogs-region          = var.deployment-aws-region,
-          awslogs-stream-prefix   = "ecs"
-          awslogs-datetime-format = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3}"
+          # syslog-address = "tcp://fluentd.sandbox-fluentd:5140"
+          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
+          awslogs-region        = var.deployment-aws-region,
+          awslogs-stream-prefix = "ecs"
+          # awslogs-datetime-format = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3}"
         }
       }
     },
