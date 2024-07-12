@@ -51,6 +51,7 @@ module "base_architecture" {
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
   vpc_peering_vpc_ids            = [var.vpc-id]
   vpc_cidr_block                 = var.vpc_cidr_block
+  vpc_endpoint_services          = var.vpc_endpoint_services
   tags                           = local.default_tags
 }
 
@@ -73,6 +74,7 @@ module "solr" {
   ecs_service_container_name         = local.solr_container_name_api
   ecs_service_container_port         = var.solr_api_port
   vpc_id                             = module.base_architecture.vpc_id
+  vpc_subnet_ids                     = module.base_architecture.vpc_private_subnet_ids
   alb_arn                            = module.base_architecture.alb_arn
   alb_dns_name                       = module.base_architecture.alb_dns_name
   alb_listener_arn                   = module.base_architecture.alb_https_listener_arn
@@ -82,8 +84,8 @@ module "solr" {
   asg_security_group_id              = module.base_architecture.asg_security_group_id
   alb_security_group_id              = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn           = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn             = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods         = var.solr_allowed_methods
+  cloudfront_waf_acl_arn             = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   use_efs_persistence                = var.solr_use_efs_persistence
   tags                               = local.default_tags
   providers = {

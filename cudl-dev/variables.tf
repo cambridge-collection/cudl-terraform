@@ -297,3 +297,8 @@ variable "solr_use_efs_persistence" {
   description = "Whether to use EFS to persist data"
   default     = false
 }
+
+variable "vpc_endpoint_services" {
+  type        = list(string)
+  description = "List of services to create VPC Endpoints for"
+}
