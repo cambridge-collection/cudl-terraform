@@ -205,7 +205,7 @@ transform-lambda-information = [
     "mount_fs"                 = false
     "environment_variables" = {
       ANT_TARGET             = "full"
-      SEARCH_HOST            = "b816215954c044c08b7809ed16c7fdfe.solr-api-cudlsolr.dev-solr"
+      SEARCH_HOST            = "fa745a59b2aa4b8497f8651cf804fd69.solr-api-cudlsolr.dev-solr"
       SEARCH_PORT            = 8081
       SEARCH_COLLECTION_PATH = "collections"
     }
@@ -226,7 +226,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      API_HOST = "b816215954c044c08b7809ed16c7fdfe.solr-api-cudlsolr.dev-solr"
+      API_HOST = "fa745a59b2aa4b8497f8651cf804fd69.solr-api-cudlsolr.dev-solr"
       API_PORT = "8081"
       API_PATH = "item"
     }
@@ -247,7 +247,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      API_HOST = "b816215954c044c08b7809ed16c7fdfe.solr-api-cudlsolr.dev-solr"
+      API_HOST = "fa745a59b2aa4b8497f8651cf804fd69.solr-api-cudlsolr.dev-solr"
       API_PORT = "8081"
       API_PATH = "collection"
     }
