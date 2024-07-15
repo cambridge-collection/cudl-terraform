@@ -44,13 +44,6 @@ locals {
         },
         devices = []
       },
-      # dependsOn = [
-      #   {
-      #     containerName = local.solr_container_name_api,
-      #     condition     = "HEALTHY"
-      #   }
-      # ],
-      hostname   = local.solr_container_name_solr,
       privileged = true,
       logConfiguration = {
         logDriver = "awslogs",
@@ -69,13 +62,10 @@ locals {
       cpu               = 1024,
       memory            = 1024,
       memoryReservation = 1024,
-      links = [
-        local.solr_container_name_solr
-      ],
       portMappings = [
         {
           containerPort = var.solr_api_port,
-          hostPort      = 8091
+          hostPort      = var.solr_api_port
           protocol      = "tcp"
           name          = tostring(var.solr_api_port)
           appProtocol   = "http"
@@ -86,7 +76,7 @@ locals {
       environment = [
         {
           name  = "SOLR_HOST",
-          value = local.solr_container_name_solr
+          value = "localhost"
         },
         {
           name  = "SOLR_PORT",
@@ -96,7 +86,6 @@ locals {
       environmentFiles = [],
       mountPoints      = [],
       volumesFrom      = [],
-      hostname         = local.solr_container_name_api,
       logConfiguration = {
         logDriver = "awslogs",
         options = {
