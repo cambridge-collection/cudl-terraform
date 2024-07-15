@@ -52,7 +52,7 @@ module "base_architecture" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=fix/task-iam-role-conditionals"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.0.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -68,6 +68,10 @@ module "content_loader" {
   ecs_task_def_volumes                      = keys(var.content_loader_ecs_task_def_volumes)
   ecs_service_container_name                = local.content_loader_container_name_ui
   ecs_service_container_port                = var.content_loader_application_port
+  s3_task_bucket_objects = {
+    "cudl.dl-dataset.json" = file("${path.root}/assets/cl/cudl.dl-dataset.json")
+    "cudl.ui.json5"        = file("${path.root}/assets/cl/cudl.ui.json5")
+  }
   s3_task_execution_bucket_objects = {
     "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/cudl-loader-ui.env.ttfpl", {
       region          = var.deployment-aws-region
@@ -94,17 +98,18 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=fix/task-iam-role-conditionals"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=fix/awsvpc-network-mode"
 
   name_prefix                               = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = 8091
+  alb_target_group_port                     = var.solr_api_port
   alb_target_group_health_check_status_code = var.solr_health_check_status_code
   ecr_repository_names                      = var.solr_ecr_repository_names
   ecr_repositories_exist                    = true
   s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
+  ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes                      = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                          = var.solr_ecs_task_def_cpu
@@ -127,8 +132,9 @@ module "solr" {
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn     = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   cloudfront_allowed_methods = var.solr_allowed_methods
-  # allow_private_access       = var.solr_use_service_discovery
-  # ingress_security_group_id  = var.solr_ingress_security_group_id
+  # use_codedeploy             = true
+  allow_private_access       = var.solr_use_service_discovery
+  ingress_security_group_id  = aws_security_group.solr.id
   # cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids
   use_efs_persistence = true
   tags                = local.default_tags
