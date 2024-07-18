@@ -302,3 +302,9 @@ variable "vpc_endpoint_services" {
   type        = list(string)
   description = "List of services to create VPC Endpoints for"
 }
+
+variable "ecs_network_mode" {
+  type        = string
+  description = "Networking mode specified in the ECS Task Definition. One of host, bridge, awsvpc"
+  default     = "bridge"
+}

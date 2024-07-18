@@ -61,7 +61,7 @@ module "solr" {
   name_prefix                               = join("-", compact([var.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = var.solr_target_group_port
+  alb_target_group_port                     = var.solr_api_port
   alb_target_group_health_check_status_code = var.solr_health_check_status_code
   ecr_repository_names                      = var.solr_ecr_repository_names
   ecr_repositories_exist                    = true
@@ -87,6 +87,7 @@ module "solr" {
   cloudfront_allowed_methods         = var.solr_allowed_methods
   cloudfront_waf_acl_arn             = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   use_efs_persistence                = var.solr_use_efs_persistence
+  ecs_network_mode                   = var.ecs_network_mode
   tags                               = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
