@@ -33,7 +33,7 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.2.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.3.0"
 
   name_prefix                    = join("-", compact([local.environment, var.cluster_name_suffix]))
   ec2_instance_type              = var.ec2_instance_type
@@ -52,7 +52,7 @@ module "base_architecture" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.2.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -98,12 +98,12 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=fix/awsvpc-network-mode"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.2.0"
 
   name_prefix                               = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = var.solr_api_port
+  alb_target_group_port                     = var.solr_target_group_port
   alb_target_group_health_check_status_code = var.solr_health_check_status_code
   ecr_repository_names                      = var.solr_ecr_repository_names
   ecr_repositories_exist                    = true
@@ -115,7 +115,8 @@ module "solr" {
   ecs_task_def_cpu                          = var.solr_ecs_task_def_cpu
   ecs_task_def_memory                       = var.solr_ecs_task_def_memory
   ecs_service_container_name                = local.solr_container_name_api
-  ecs_service_container_port                = var.solr_api_port
+  ecs_service_container_port                = var.solr_target_group_port
+  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_execution_bucket_objects = {
     for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix])), f]) => file("${path.module}/assets/solr/${f}")
   }
@@ -132,7 +133,6 @@ module "solr" {
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn     = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   cloudfront_allowed_methods = var.solr_allowed_methods
-  # use_codedeploy             = true
   allow_private_access       = var.solr_use_service_discovery
   ingress_security_group_id  = aws_security_group.solr.id
   # cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids

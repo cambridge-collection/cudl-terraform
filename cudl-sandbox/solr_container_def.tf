@@ -46,12 +46,10 @@ locals {
       },
       privileged = true,
       logConfiguration = {
-        logDriver = "awslogs",
+        logDriver = "syslog",
         options = {
-          awslogs-group           = module.base_architecture.cloudwatch_log_group_name,
-          awslogs-region          = var.deployment-aws-region,
-          awslogs-stream-prefix   = "ecs"
-          awslogs-datetime-format = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}"
+          syslog-address = "tcp://fluentd.sandbox-fluentd:5140"
+          tag            = local.solr_container_name_solr
         }
       }
     },
@@ -64,10 +62,10 @@ locals {
       memoryReservation = 1024,
       portMappings = [
         {
-          containerPort = var.solr_api_port,
-          hostPort      = var.solr_api_port
+          containerPort = var.solr_target_group_port,
+          hostPort      = var.solr_target_group_port
           protocol      = "tcp"
-          name          = tostring(var.solr_api_port)
+          name          = tostring(var.solr_target_group_port)
           appProtocol   = "http"
         }
       ],
@@ -81,19 +79,24 @@ locals {
         {
           name  = "SOLR_PORT",
           value = tostring(var.solr_application_port)
+        },
+        {
+          name  = "API_PORT",
+          value = tostring(var.solr_target_group_port)
+        },
+        {
+          name  = "EXTRA_VAR"
+          value = "7"
         }
       ],
       environmentFiles = [],
       mountPoints      = [],
       volumesFrom      = [],
       logConfiguration = {
-        logDriver = "awslogs",
+        logDriver = "syslog",
         options = {
-          # syslog-address = "tcp://fluentd.sandbox-fluentd:5140"
-          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
-          awslogs-region        = var.deployment-aws-region,
-          awslogs-stream-prefix = "ecs"
-          # awslogs-datetime-format = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3}"
+          syslog-address = "tcp://fluentd.sandbox-fluentd:5140"
+          tag            = local.solr_container_name_api
         }
       }
     },
