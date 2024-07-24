@@ -286,6 +286,11 @@ variable "solr_ecs_task_def_memory" {
   description = "Amount (in MiB) of memory used by the SOLR tasks"
 }
 
+variable "solr_ecs_network_mode" {
+  type        = string
+  description = "Networking mode specified in the ECS Task Definition. One of host, bridge, awsvpc"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   description = "CIDR block for the VPC"
@@ -301,10 +306,4 @@ variable "solr_use_efs_persistence" {
 variable "vpc_endpoint_services" {
   type        = list(string)
   description = "List of services to create VPC Endpoints for"
-}
-
-variable "ecs_network_mode" {
-  type        = string
-  description = "Networking mode specified in the ECS Task Definition. One of host, bridge, awsvpc"
-  default     = "bridge"
 }

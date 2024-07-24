@@ -105,7 +105,11 @@ locals {
         {
           name  = "SOLR_PORT",
           value = tostring(var.solr_application_port)
-        }
+        },
+        {
+          name  = "API_PORT",
+          value = tostring(var.solr_api_port)
+        },
       ],
       environmentFiles = [],
       mountPoints      = [],

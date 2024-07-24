@@ -73,6 +73,7 @@ module "solr" {
   ecs_task_def_memory                = var.solr_ecs_task_def_memory
   ecs_service_container_name         = local.solr_container_name_api
   ecs_service_container_port         = var.solr_api_port
+  ecs_service_capacity_provider_name = module.base_architecture.ecs_capacity_provider_name
   vpc_id                             = module.base_architecture.vpc_id
   vpc_subnet_ids                     = module.base_architecture.vpc_private_subnet_ids
   alb_arn                            = module.base_architecture.alb_arn
@@ -87,7 +88,7 @@ module "solr" {
   cloudfront_allowed_methods         = var.solr_allowed_methods
   cloudfront_waf_acl_arn             = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   use_efs_persistence                = var.solr_use_efs_persistence
-  ecs_network_mode                   = var.ecs_network_mode
+  ecs_network_mode                   = var.solr_ecs_network_mode
   tags                               = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
