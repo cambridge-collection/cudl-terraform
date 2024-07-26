@@ -327,8 +327,8 @@ cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl-sandbox.net."
-asg_desired_capacity           = 2 # n = number of tasks
-asg_max_size                   = 3 # n + 1
+asg_desired_capacity           = 3 # n = number of tasks
+asg_max_size                   = 4 # n + 1
 route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
 route53_zone_force_destroy     = true
@@ -368,3 +368,11 @@ solr_ecs_task_def_memory          = 1638
 solr_use_service_discovery        = true
 solr_persist_ecs_task_def_volumes = { "solr-persist-volume" = "/var/solr" }
 solr_ingress_security_group_id    = "sg-032f9f202ea602d21"
+
+cudl_services_name_suffix              = "cudl-services"
+cudl_services_domain_name              = "services"
+cudl_services_target_group_port        = 8085
+cudl_services_container_port           = 3000
+cudl_services_ecr_repository_names     = ["cudl-services"]
+cudl_services_health_check_status_code = "404"
+cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]

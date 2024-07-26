@@ -142,3 +142,38 @@ module "solr" {
     aws.us-east-1 = aws.us-east-1
   }
 }
+
+module "cudl_services" {
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/task-execution-ssm"
+
+  name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
+  account_id                                = data.aws_caller_identity.current.account_id
+  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_services_domain_name])), var.registered_domain_name])
+  alb_target_group_port                     = var.cudl_services_target_group_port
+  alb_target_group_health_check_status_code = var.cudl_services_health_check_status_code
+  ecr_repository_names                      = var.cudl_services_ecr_repository_names
+  ecr_repositories_exist                    = true
+  s3_task_execution_bucket                  = module.base_architecture.s3_bucket
+  ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
+  ecs_service_container_name                = local.cudl_services_container_name
+  ecs_service_container_port                = var.cudl_services_container_port
+  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
+  s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
+  ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.database_password.arn, data.aws_ssm_parameter.apikey_darwin.arn]
+  vpc_id                                    = module.base_architecture.vpc_id
+  alb_arn                                   = module.base_architecture.alb_arn
+  alb_dns_name                              = module.base_architecture.alb_dns_name
+  alb_listener_arn                          = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                           = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                           = module.base_architecture.route53_public_hosted_zone
+  asg_name                                  = module.base_architecture.asg_name
+  asg_security_group_id                     = module.base_architecture.asg_security_group_id
+  alb_security_group_id                     = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn                  = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn                    = module.base_architecture.waf_acl_arn
+  cloudfront_allowed_methods                = var.cudl_services_allowed_methods
+  tags                                      = local.default_tags
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
