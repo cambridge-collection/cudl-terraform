@@ -371,3 +371,44 @@ variable "solr_ingress_security_group_id" {
   type        = string
   description = "ID of the Security Group to allow access to SOLR service"
 }
+
+variable "cudl_services_name_suffix" {
+  type        = string
+  description = "Suffix to add to CUDL services resource names"
+}
+
+variable "cudl_services_domain_name" {
+  type        = string
+  description = "Domain Name for the CUDL services service"
+}
+
+variable "cudl_services_target_group_port" {
+  type        = number
+  description = "Port number to be used for the CUDL services Target Group"
+}
+
+variable "cudl_services_container_port" {
+  type        = number
+  description = "Port number to be used for the CUDL services Container"
+}
+
+variable "cudl_services_ecr_repository_names" {
+  type        = list(string)
+  description = "List of ECR Repository names for CUDL Services"
+}
+
+
+variable "cudl_services_health_check_status_code" {
+  type        = string
+  description = "HTTP Status Code to use in target group health check"
+}
+
+# variable "cudl_services_ecs_task_def_volumes" {
+#   type        = map(string)
+#   description = "Map of volume names and container paths to attach to the CUDL Services ECS Task Definition"
+# }
+
+variable "cudl_services_allowed_methods" {
+  type        = list(string)
+  description = "List of methods allowed by the CloudFront Distribution"
+}
