@@ -64,6 +64,8 @@ data "aws_lambda_function" "create-transform-lambda-function-versioned" {
   count = length(var.transform-lambda-information)
 
   function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
+
+  depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
 
 # Upgrade provider to change batch size
@@ -73,7 +75,7 @@ resource "aws_lambda_alias" "create-transform-lambda-alias" {
 
   name             = var.lambda-alias-name
   function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
-  function_version = data.aws_lambda_function.create-transform-lambda-function-versioned[count.index].version
+  function_version = try(data.aws_lambda_function.create-transform-lambda-function-versioned[count.index].version, "LATEST")
 
   depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
