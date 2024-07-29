@@ -17,8 +17,8 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 
   dynamic "image_config" {
     for_each = (var.transform-lambda-information[count.index].command != null ||
-                var.transform-lambda-information[count.index].entry_point != null ||
-                var.transform-lambda-information[count.index].working_directory != null) ? [1] : []
+      var.transform-lambda-information[count.index].entry_point != null ||
+    var.transform-lambda-information[count.index].working_directory != null) ? [1] : []
     content {
       command           = var.transform-lambda-information[count.index].command
       entry_point       = var.transform-lambda-information[count.index].entry_point
@@ -60,15 +60,20 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 }
 
+data "aws_lambda_function" "create-transform-lambda-function-versioned" {
+  count = length(var.transform-lambda-information)
+
+  function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
+}
+
 # Upgrade provider to change batch size
 
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
   count = length(var.transform-lambda-information)
 
-  name          = var.lambda-alias-name
-  function_name = aws_lambda_function.create-transform-lambda-function[count.index].arn
-  #function_version = var.transform-lambda-information[count.index].live_version
-  function_version = aws_lambda_function.create-transform-lambda-function[count.index].version
+  name             = var.lambda-alias-name
+  function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
+  function_version = data.aws_lambda_function.create-transform-lambda-function-versioned[count.index].version
 
   depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
