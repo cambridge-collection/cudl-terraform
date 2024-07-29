@@ -190,7 +190,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:0ed48455482abf4226a62c5c5376eaa67414c6156fe983e5f8c957c5c7354d64"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:d61f2b78bb2a34546b499123fc215c2d9b6bd3a1809de4875b734756175d412c"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
@@ -204,15 +204,13 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "mount_fs"                 = false
     "environment_variables" = {
-      ANT_TARGET             = "full"
       SEARCH_HOST            = "solr-api-cudlsolr.dev-solr"
       SEARCH_PORT            = 80
-      SEARCH_COLLECTION_PATH = "collections"
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:11047b63354191fb885e837f7e208edef3863b89524cd4161b04462144a3d5d0"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:2bdfa3e8bec89cece2790f9aa75207f1276cbb2b58821204c25161386b4912aa"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
@@ -233,7 +231,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:11047b63354191fb885e837f7e208edef3863b89524cd4161b04462144a3d5d0"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:2bdfa3e8bec89cece2790f9aa75207f1276cbb2b58821204c25161386b4912aa"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
