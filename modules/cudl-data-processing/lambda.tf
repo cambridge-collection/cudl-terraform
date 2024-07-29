@@ -16,11 +16,13 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   publish       = true
 
   dynamic "image_config" {
-    for_each = var.transform-lambda-information[count.index].image_uri != null ? [1] : []
+    for_each = (var.transform-lambda-information[count.index].command != null ||
+                var.transform-lambda-information[count.index].entry_point != null ||
+                var.transform-lambda-information[count.index].working_directory != null) ? [1] : []
     content {
-      command           = try(var.transform-lambda-information[count.index].command, null)
-      entry_point       = try(var.transform-lambda-information[count.index].entry_point, null)
-      working_directory = try(var.transform-lambda-information[count.index].working_directory, null)
+      command           = var.transform-lambda-information[count.index].command
+      entry_point       = var.transform-lambda-information[count.index].entry_point
+      working_directory = var.transform-lambda-information[count.index].working_directory
     }
   }
 
@@ -52,6 +54,10 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
+
+  lifecycle {
+    ignore_changes = [qualified_arn, qualified_invoke_arn, version]
+  }
 }
 
 # Upgrade provider to change batch size
