@@ -16,11 +16,13 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   publish       = true
 
   dynamic "image_config" {
-    for_each = var.transform-lambda-information[count.index].image_uri != null ? [1] : []
+    for_each = (var.transform-lambda-information[count.index].command != null ||
+      var.transform-lambda-information[count.index].entry_point != null ||
+    var.transform-lambda-information[count.index].working_directory != null) ? [1] : []
     content {
-      command           = try(var.transform-lambda-information[count.index].command, null)
-      entry_point       = try(var.transform-lambda-information[count.index].entry_point, null)
-      working_directory = try(var.transform-lambda-information[count.index].working_directory, null)
+      command           = var.transform-lambda-information[count.index].command
+      entry_point       = var.transform-lambda-information[count.index].entry_point
+      working_directory = var.transform-lambda-information[count.index].working_directory
     }
   }
 
@@ -52,6 +54,18 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 
   depends_on = [aws_efs_mount_target.efs-mount-point]
+
+  lifecycle {
+    ignore_changes = [qualified_arn, qualified_invoke_arn, version]
+  }
+}
+
+data "aws_lambda_function" "create-transform-lambda-function-versioned" {
+  count = length(var.transform-lambda-information)
+
+  function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
+
+  depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
 
 # Upgrade provider to change batch size
@@ -59,10 +73,9 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
   count = length(var.transform-lambda-information)
 
-  name          = var.lambda-alias-name
-  function_name = aws_lambda_function.create-transform-lambda-function[count.index].arn
-  #function_version = var.transform-lambda-information[count.index].live_version
-  function_version = aws_lambda_function.create-transform-lambda-function[count.index].version
+  name             = var.lambda-alias-name
+  function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
+  function_version = try(data.aws_lambda_function.create-transform-lambda-function-versioned[count.index].version, "LATEST")
 
   depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
