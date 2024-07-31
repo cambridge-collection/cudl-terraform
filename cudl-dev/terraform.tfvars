@@ -190,7 +190,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:d61f2b78bb2a34546b499123fc215c2d9b6bd3a1809de4875b734756175d412c"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:c037244db3eeb57dab7091979210e655455cee264f7fc9fdcac35d81702a7e2d"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
