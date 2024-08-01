@@ -36,8 +36,8 @@ module "cudl-data-processing" {
 
 
 module "base_architecture" {
-  source = "../../terraform-aws-architecture-ecs"
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs"
+  #source = "../../terraform-aws-architecture-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs"
 
   name_prefix                    = join("-", compact([var.environment, var.cluster_name_suffix]))
   ec2_instance_type              = var.ec2_instance_type
@@ -56,7 +56,8 @@ module "base_architecture" {
 }
 
 module "solr" {
-  source = "../../terraform-aws-workload-ecs/"
+  #source = "../../terraform-aws-workload-ecs/"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs"
 
   name_prefix                               = join("-", compact([var.environment, var.solr_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -73,7 +74,7 @@ module "solr" {
   ecs_task_def_memory                = var.solr_ecs_task_def_memory
   ecs_service_container_name         = local.solr_container_name_api
   ecs_service_container_port         = var.solr_api_port
-  //ecs_service_capacity_provider_name = module.base_architecture.ecs_capacity_provider_name
+  ecs_service_capacity_provider_name = module.base_architecture.ecs_capacity_provider_name
   vpc_id                             = module.base_architecture.vpc_id
   vpc_subnet_ids                     = module.base_architecture.vpc_private_subnet_ids
   alb_arn                            = module.base_architecture.alb_arn
