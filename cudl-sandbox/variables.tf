@@ -412,3 +412,44 @@ variable "cudl_services_allowed_methods" {
   type        = list(string)
   description = "List of methods allowed by the CloudFront Distribution"
 }
+
+variable "cudl_viewer_name_suffix" {
+  type        = string
+  description = "Suffix to add to CUDL viewer resource names"
+}
+
+variable "cudl_viewer_domain_name" {
+  type        = string
+  description = "Domain Name for the CUDL viewer service"
+}
+
+variable "cudl_viewer_target_group_port" {
+  type        = number
+  description = "Port number to be used for the CUDL viewer Target Group"
+}
+
+variable "cudl_viewer_container_port" {
+  type        = number
+  description = "Port number to be used for the CUDL viewer Container"
+}
+
+variable "cudl_viewer_ecr_repository_names" {
+  type        = list(string)
+  description = "List of ECR Repository names for CUDL viewer"
+}
+
+
+variable "cudl_viewer_health_check_status_code" {
+  type        = string
+  description = "HTTP Status Code to use in target group health check"
+}
+
+# variable "cudl_viewer_ecs_task_def_volumes" {
+#   type        = map(string)
+#   description = "Map of volume names and container paths to attach to the CUDL viewer ECS Task Definition"
+# }
+
+variable "cudl_viewer_allowed_methods" {
+  type        = list(string)
+  description = "List of methods allowed by the CloudFront Distribution"
+}
