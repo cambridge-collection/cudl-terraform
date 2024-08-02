@@ -212,6 +212,7 @@ transform-lambda-information = [
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
     "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:2bdfa3e8bec89cece2790f9aa75207f1276cbb2b58821204c25161386b4912aa"
     "queue_name"               = "CUDLIndexQueue"
+    "queue_delay_seconds"      = 300
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
     "security_group_names"     = ["dev-cudlsolr-vpc-endpoints", "dev-cudlsolr-alb"]
