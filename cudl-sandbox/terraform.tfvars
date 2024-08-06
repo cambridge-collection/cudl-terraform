@@ -376,3 +376,11 @@ cudl_services_container_port           = 3000
 cudl_services_ecr_repository_names     = ["cudl-services"]
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
+
+cudl_viewer_name_suffix              = "cudl-viewer"
+cudl_viewer_domain_name              = "cudl-viewer"
+cudl_viewer_target_group_port        = 8084
+cudl_viewer_container_port           = 8080
+cudl_viewer_ecr_repository_names     = ["cudl-viewer"]
+cudl_viewer_health_check_status_code = "404"
+cudl_viewer_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
