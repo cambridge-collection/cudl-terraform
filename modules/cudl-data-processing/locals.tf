@@ -31,7 +31,9 @@ locals {
       for notification in var.transform-lambda-bucket-sqs-notifications : notification if notification.bucket_name == bucket
     ]
   }
-  transform_lambda_queues = toset([for lambda in var.transform-lambda-information : lambda.queue_name])
+  transform_lambda_queues = {for lambda in var.transform-lambda-information : lambda.queue_name => {
+    queue_delay_seconds = lambda.queue_delay_seconds
+  }}
 
   transform-lambda-buckets = {
     for bucket in toset([aws_s3_bucket.source-bucket, aws_s3_bucket.dest-bucket, aws_s3_bucket.enhancements-bucket]) :

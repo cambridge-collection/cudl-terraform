@@ -72,6 +72,7 @@ variable "transform-lambda-information" {
     batch_size                 = optional(number)
     batch_window               = optional(number)
     maximum_concurrency        = optional(number)
+    queue_delay_seconds        = optional(number, 0)
     use_datadog_variables      = optional(bool, true)
     use_additional_variables   = optional(bool, false)
     use_enhancements_variables = optional(bool, false)
