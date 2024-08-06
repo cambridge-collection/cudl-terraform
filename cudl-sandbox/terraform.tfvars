@@ -327,8 +327,8 @@ cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl-sandbox.net."
-asg_desired_capacity           = 3 # n = number of tasks
-asg_max_size                   = 4 # n + 1
+asg_desired_capacity           = 4 # n = number of tasks
+asg_max_size                   = 5 # n + 1
 route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
 route53_zone_force_destroy     = true
@@ -379,8 +379,8 @@ cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
 cudl_viewer_name_suffix              = "cudl-viewer"
 cudl_viewer_domain_name              = "cudl-viewer"
-cudl_viewer_target_group_port        = 8084
-cudl_viewer_container_port           = 8080
-cudl_viewer_ecr_repository_names     = ["cudl-viewer"]
-cudl_viewer_health_check_status_code = "404"
+cudl_viewer_target_group_port        = 5008
+cudl_viewer_container_port           = 8005
+cudl_viewer_ecr_repository_names     = ["sandbox-cudl-viewer"]
+cudl_viewer_health_check_status_code = "200"
 cudl_viewer_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
