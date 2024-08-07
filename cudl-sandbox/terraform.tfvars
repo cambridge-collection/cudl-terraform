@@ -381,6 +381,6 @@ cudl_viewer_name_suffix              = "cudl-viewer"
 cudl_viewer_domain_name              = "cudl-viewer"
 cudl_viewer_target_group_port        = 5008
 cudl_viewer_container_port           = 8005
-cudl_viewer_ecr_repository_names     = ["sandbox-cudl-viewer"]
+cudl_viewer_ecr_repository_names     = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
 cudl_viewer_health_check_status_code = "200"
 cudl_viewer_allowed_methods          = ["HEAD", "GET", "OPTIONS"]

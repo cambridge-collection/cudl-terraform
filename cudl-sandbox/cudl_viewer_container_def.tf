@@ -1,9 +1,14 @@
 locals {
   cudl_viewer_container_name = join("-", ["cudl-viewer", var.cluster_name_suffix])
+  cudl_viewer_db_container_name = join("-", ["cudl-viewer-db", var.cluster_name_suffix])
   cudl_viewer_container_defs = [
     {
       name              = local.cudl_viewer_container_name,
-      image             = "${module.cudl_viewer.ecr_repository_urls["sandbox-cudl-viewer"]}:latest",
+      hostname          = local.cudl_viewer_container_name,
+      image             = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer"].image_uri,
+      links = [
+        local.cudl_viewer_db_container_name
+      ],
       cpu               = 0,
       memoryReservation = 512,
       portMappings = [
@@ -22,6 +27,32 @@ locals {
           awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
           awslogs-region        = var.deployment-aws-region,
           awslogs-stream-prefix = "cudl-viewer-log"
+        },
+        secretOptions = []
+      }
+    },
+    {
+      name              = local.cudl_viewer_db_container_name,
+      hostname          = local.cudl_viewer_db_container_name,
+      image             = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer-db"].image_uri,
+      # cpu               = 0,
+      # memoryReservation = 512,
+      portMappings = [
+        {
+          containerPort = 5432,
+          hostPort      = 5432,
+          protocol      = "tcp"
+        }
+      ],
+      essential = true,
+      environment = [],
+      secrets = [],
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
+          awslogs-region        = var.deployment-aws-region,
+          awslogs-stream-prefix = "cudl-viewer-db-log"
         },
         secretOptions = []
       }
