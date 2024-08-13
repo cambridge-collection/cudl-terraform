@@ -190,7 +190,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:6727d91aa9dce8625175a5f4f17d69dfdd4b690b836f141894390c2cecd7e51a"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:5b8b3550008376c90a48e5e59ea3b7104399706ebe1ea2eec1ac7f77e483dd90"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
@@ -210,7 +210,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:2bdfa3e8bec89cece2790f9aa75207f1276cbb2b58821204c25161386b4912aa"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:df5bb50a85b34965951ad5abb99b969d33b2fd1c4d2e378084e311b1e6490af1"
     "queue_name"               = "CUDLIndexQueue"
     "queue_delay_seconds"      = 300
     "vpc_name"                 = "dev-cudlsolr-vpc"
@@ -232,7 +232,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:2bdfa3e8bec89cece2790f9aa75207f1276cbb2b58821204c25161386b4912aa"
+    "image_uri"                = "247242244017.dkr.ecr.eu-west-1.amazonaws.com/cudl-listener@sha256:df5bb50a85b34965951ad5abb99b969d33b2fd1c4d2e378084e311b1e6490af1"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "dev-cudlsolr-vpc"
     "subnet_names"             = ["dev-cudlsolr-subnet-private-b"]
