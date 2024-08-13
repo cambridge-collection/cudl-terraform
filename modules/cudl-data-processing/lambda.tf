@@ -53,7 +53,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
     )
   }
 
-  depends_on = [aws_efs_mount_target.efs-mount-point]
+  # depends_on = [aws_efs_mount_target.efs-mount-point]
 
   lifecycle {
     ignore_changes = [qualified_arn, qualified_invoke_arn, version]

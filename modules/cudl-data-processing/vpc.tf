@@ -9,10 +9,6 @@ data "aws_vpc" "existing_cudl_vpc" {
   id = var.vpc-id
 }
 
-data "aws_subnet" "cudl_subnet" {
-  id = var.subnet-id
-}
-
 data "aws_security_group" "default" {
   id = var.security-group-id
 }
@@ -38,6 +34,24 @@ data "aws_subnets" "transform_lambda_subnets" {
     name   = "vpc-id"
     values = [data.aws_vpc.transform_lambda_vpc[count.index].id]
   }
+}
+
+data "aws_subnets" "efs" {
+  filter {
+    name   = "subnet-id"
+    values = var.efs_subnet_ids
+  }
+
+  # NOTE Filter by VPC to make sure subnets exist in the VPC selected
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.existing_cudl_vpc.id]
+  }
+}
+
+data "aws_subnet" "efs" {
+  for_each = toset(data.aws_subnets.efs.ids)
+  id       = each.value
 }
 
 data "aws_security_groups" "transform_lambda_security_groups" {

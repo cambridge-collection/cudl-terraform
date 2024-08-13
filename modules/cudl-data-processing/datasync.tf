@@ -1,5 +1,7 @@
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
-  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs.arn
+  for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
+
+  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.value].arn
   name                     = "${var.environment}-cudl-data-releases-s3-to-efs"
   source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
 
@@ -11,7 +13,9 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
 }
 
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs-" {
-  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs.arn
+  for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
+
+  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.value].arn
   name                     = "${var.environment}-cudl-data-releases-pages-s3-to-efs"
   source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
 
@@ -28,13 +32,14 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs
 }
 
 resource "aws_datasync_location_efs" "cudl-datasync-efs" {
+  for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
 
-  efs_file_system_arn = aws_efs_mount_target.efs-mount-point.file_system_arn
+  efs_file_system_arn = aws_efs_file_system.efs-volume.arn
   subdirectory        = "/data/"
 
   ec2_config {
     security_group_arns = [aws_security_group.efs.arn]
-    subnet_arn          = data.aws_subnet.cudl_subnet.arn
+    subnet_arn          = each.value
   }
 }
 

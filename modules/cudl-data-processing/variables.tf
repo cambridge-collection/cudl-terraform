@@ -131,11 +131,6 @@ variable "vpc-id" {
   type        = string
 }
 
-variable "subnet-id" {
-  description = "Specify an existing subnet id for cudl vpn"
-  type        = string
-}
-
 variable "security-group-id" {
   description = "Specify an existing security group id for cudl vpn"
   type        = string
@@ -213,4 +208,16 @@ variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
   default     = 2049
+}
+
+variable "efs_subnet_ids" {
+  type        = list(string)
+  description = "List of subnet ids for use by EFS access point"
+  default     = []
+}
+
+variable "efs_availability_zone_name" {
+  type        = string
+  description = "Availability zone used by EFS file system"
+  default     = "Regional"
 }

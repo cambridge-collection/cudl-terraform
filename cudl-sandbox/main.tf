@@ -6,6 +6,7 @@ module "cudl-data-processing" {
   dst-prefix                                = var.dst-prefix
   dst-s3-prefix                             = var.dst-s3-prefix
   efs-name                                  = var.efs-name
+  efs_subnet_ids                            = module.base_architecture.vpc_private_subnet_ids
   lambda-alias-name                         = var.lambda-alias-name
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
@@ -14,7 +15,7 @@ module "cudl-data-processing" {
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
   security-group-id                         = var.security-group-id
-  subnet-id                                 = module.base_architecture.vpc_private_subnet_ids[0]
+  # subnet-id                                 = module.base_architecture.vpc_private_subnet_ids[0]
   lambda-jar-bucket                         = var.lambda-jar-bucket
   lambda-db-jdbc-driver                     = var.lambda-db-jdbc-driver
   lambda-db-secret-key                      = var.lambda-db-secret-key
