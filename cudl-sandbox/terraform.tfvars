@@ -327,7 +327,7 @@ cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl-sandbox.net."
-asg_desired_capacity           = 4 # n = number of tasks
+asg_desired_capacity           = 5 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
@@ -386,3 +386,4 @@ cudl_viewer_health_check_status_code = "200"
 cudl_viewer_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_db_name                  = "cudl"
 cudl_viewer_jdbc_user                = "cudl"
+cudl_viewer_ecs_task_def_volumes     = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data/" }

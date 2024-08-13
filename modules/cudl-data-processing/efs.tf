@@ -42,8 +42,9 @@ resource "aws_efs_access_point" "efs-access-point" {
 
 resource "aws_efs_mount_target" "efs-mount-point" {
 
-  file_system_id = aws_efs_file_system.efs-volume.id
-  subnet_id      = data.aws_subnet.cudl_subnet.id
+  file_system_id  = aws_efs_file_system.efs-volume.id
+  subnet_id       = data.aws_subnet.cudl_subnet.id
+  security_groups = [aws_security_group.efs.id]
 
   depends_on = [aws_efs_file_system.efs-volume]
 }

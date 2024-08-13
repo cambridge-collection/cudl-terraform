@@ -54,3 +54,34 @@ data "aws_security_groups" "transform_lambda_security_groups" {
   }
 }
 
+resource "aws_security_group" "efs" {
+  name        = "${var.environment}-${var.efs-name}"
+  description = "Allows access to EFS mount targets for ${var.efs-name}"
+  vpc_id      = data.aws_vpc.existing_cudl_vpc.id
+
+  tags = {
+    Name = "${var.environment}-${var.efs-name}"
+  }
+}
+
+resource "aws_security_group_rule" "efs_ingress_nfs_from_vpc" {
+  type              = "ingress"
+  protocol          = "tcp"
+  description       = "EFS Ingress on port ${var.efs_nfs_mount_port} for ${var.efs-name}"
+  security_group_id = aws_security_group.efs.id
+  cidr_blocks       = [data.aws_vpc.existing_cudl_vpc.cidr_block]
+  ipv6_cidr_blocks  = data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block != "" ? [data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block] : []
+  from_port         = var.efs_nfs_mount_port
+  to_port           = var.efs_nfs_mount_port
+}
+
+resource "aws_security_group_rule" "efs_egress_nfs_to_vpc" {
+  type              = "egress"
+  protocol          = "tcp"
+  description       = "EFS Egress on port ${var.efs_nfs_mount_port} for ${var.efs-name}"
+  security_group_id = aws_security_group.efs.id
+  cidr_blocks       = [data.aws_vpc.existing_cudl_vpc.cidr_block]
+  ipv6_cidr_blocks  = data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block != "" ? [data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block] : []
+  from_port         = var.efs_nfs_mount_port
+  to_port           = var.efs_nfs_mount_port
+}

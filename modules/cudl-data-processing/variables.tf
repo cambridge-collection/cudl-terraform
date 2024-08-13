@@ -208,3 +208,9 @@ variable "cloudfront_route53_zone_id" {
   type        = string
   default     = null
 }
+
+variable "efs_nfs_mount_port" {
+  type        = number
+  description = "NFS protocol port for EFS mounts"
+  default     = 2049
+}

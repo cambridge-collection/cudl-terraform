@@ -469,3 +469,18 @@ variable "cudl_viewer_jdbc_password" {
   type        = string
   description = "Cudl Viewer database password"
 }
+
+variable "cudl_viewer_smtp_username" {
+  type        = string
+  description = "Cudl Viewer SMTP user name"
+}
+
+variable "cudl_viewer_smtp_password" {
+  type        = string
+  description = "Cudl Viewer SMTP password"
+}
+
+variable "cudl_viewer_ecs_task_def_volumes" {
+  type        = map(string)
+  description = "Map of volume names and container paths to attach to the Cudl Viewer ECS Task Definition"
+}

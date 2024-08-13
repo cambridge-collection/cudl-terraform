@@ -1,12 +1,12 @@
 locals {
-  cudl_viewer_container_name = join("-", ["cudl-viewer", var.cluster_name_suffix])
+  cudl_viewer_container_name    = join("-", ["cudl-viewer", var.cluster_name_suffix])
   cudl_viewer_db_container_name = join("-", ["cudl-viewer-db", var.cluster_name_suffix])
   # cudl_viewer_sidecar_container_name = join("-", ["cudl-viewer-sidecar", var.cluster_name_suffix])
   cudl_viewer_container_defs = [
     {
-      name              = local.cudl_viewer_container_name,
-      hostname          = local.cudl_viewer_container_name,
-      image             = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer"].image_uri,
+      name     = local.cudl_viewer_container_name,
+      hostname = local.cudl_viewer_container_name,
+      image    = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer"].image_uri,
       links = [
         local.cudl_viewer_db_container_name
       ],
@@ -32,6 +32,13 @@ locals {
           type  = "s3"
         }
       ],
+      mountPoints = [for name, path in var.cudl_viewer_ecs_task_def_volumes :
+        {
+          sourceVolume  = join("-", [module.cudl_viewer.name_prefix, name]),
+          containerPath = path,
+          readOnly      = false
+        }
+      ],
       secrets = [],
       logConfiguration = {
         logDriver = "awslogs"
@@ -44,9 +51,9 @@ locals {
       }
     },
     {
-      name              = local.cudl_viewer_db_container_name,
-      hostname          = local.cudl_viewer_db_container_name,
-      image             = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer-db"].image_uri,
+      name     = local.cudl_viewer_db_container_name,
+      hostname = local.cudl_viewer_db_container_name,
+      image    = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer-db"].image_uri,
       # cpu               = 0,
       # memoryReservation = 512,
       portMappings = [
@@ -56,9 +63,9 @@ locals {
           protocol      = "tcp"
         }
       ],
-      essential = true,
+      essential   = true,
       environment = [],
-      secrets = [],
+      secrets     = [],
       logConfiguration = {
         logDriver = "awslogs"
         options = {

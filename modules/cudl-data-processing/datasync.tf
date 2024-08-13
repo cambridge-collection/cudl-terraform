@@ -33,7 +33,7 @@ resource "aws_datasync_location_efs" "cudl-datasync-efs" {
   subdirectory        = "/data/"
 
   ec2_config {
-    security_group_arns = [data.aws_security_group.default.arn]
+    security_group_arns = [aws_security_group.efs.arn]
     subnet_arn          = data.aws_subnet.cudl_subnet.arn
   }
 }
