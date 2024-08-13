@@ -33,7 +33,7 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.3.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/eventbridge"
 
   name_prefix                    = join("-", compact([local.environment, var.cluster_name_suffix]))
   ec2_instance_type              = var.ec2_instance_type
@@ -98,13 +98,16 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.2.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/connection-draining"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
   domain_name                                    = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
   alb_target_group_port                          = var.solr_target_group_port
   alb_target_group_health_check_status_code      = var.solr_health_check_status_code
+  alb_target_group_deregistration_delay          = 60
+  alb_target_group_health_check_interval         = 30
+  alb_target_group_health_check_timeout          = 10
   ecr_repository_names                           = var.solr_ecr_repository_names
   ecr_repositories_exist                         = true
   s3_task_buckets                                = [module.cudl-data-processing.destination_bucket]
@@ -181,7 +184,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/task-execution-ssm"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.2.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -195,12 +198,18 @@ module "cudl_viewer" {
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
-  s3_task_execution_bucket_objects = {
+  s3_task_execution_bucket_objects = merge({
     for f in fileset("assets/viewer", "**") : join("/", [join("-", compact([var.environment, var.cudl_viewer_name_suffix])), f]) => file("${path.module}/assets/viewer/${f}")
-  }
+  }, {
+    "${module.cudl_viewer.name_prefix}/cudl-viewer.env" = templatefile("${path.root}/templates/viewer/cudl-viewer.env.ttfpl", {
+      jdbc_user       = var.cudl_viewer_jdbc_user
+      jdbc_password   = var.cudl_viewer_jdbc_password
+    })
+  })
   s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
   # ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.database_password.arn, data.aws_ssm_parameter.apikey_darwin.arn]
   vpc_id                                    = module.base_architecture.vpc_id
+  vpc_subnet_ids                            = module.base_architecture.vpc_private_subnet_ids
   alb_arn                                   = module.base_architecture.alb_arn
   alb_dns_name                              = module.base_architecture.alb_dns_name
   alb_listener_arn                          = module.base_architecture.alb_https_listener_arn
@@ -212,6 +221,9 @@ module "cudl_viewer" {
   cloudwatch_log_group_arn                  = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn                    = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods                = var.cudl_viewer_allowed_methods
+  # use_efs_persistence                       = true
+  # datasync_s3_objects_to_efs                = true
+  # datasync_s3_bucket_name                   = module.cudl-data-processing.destination_bucket
   tags                                      = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1

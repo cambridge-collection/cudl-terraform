@@ -1,6 +1,7 @@
 locals {
   cudl_viewer_container_name = join("-", ["cudl-viewer", var.cluster_name_suffix])
   cudl_viewer_db_container_name = join("-", ["cudl-viewer-db", var.cluster_name_suffix])
+  # cudl_viewer_sidecar_container_name = join("-", ["cudl-viewer-sidecar", var.cluster_name_suffix])
   cudl_viewer_container_defs = [
     {
       name              = local.cudl_viewer_container_name,
@@ -19,7 +20,18 @@ locals {
         }
       ],
       essential = true,
-      environment = [],
+      environment = [
+        {
+          name  = "JDBC_URL"
+          value = "jdbc:mysql://${local.cudl_viewer_db_container_name}/${var.cudl_viewer_db_name}"
+        }
+      ],
+      environmentFiles = [
+        {
+          value = "${module.base_architecture.s3_bucket_arn}/${module.cudl_viewer.name_prefix}/cudl-viewer.env",
+          type  = "s3"
+        }
+      ],
       secrets = [],
       logConfiguration = {
         logDriver = "awslogs"

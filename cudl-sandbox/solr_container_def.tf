@@ -86,7 +86,7 @@ locals {
         },
         {
           name  = "EXTRA_VAR"
-          value = "14"
+          value = "25"
         }
       ],
       environmentFiles = [],

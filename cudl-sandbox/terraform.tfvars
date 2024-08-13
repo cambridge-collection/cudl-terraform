@@ -176,7 +176,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:367706710d9e68693e256c2737349b1750a75c274641036d2d1400dd00ef63df"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:3b2ab95f0c963f9ac9ec1167a524db1c2d78f452cd5d535e27a10ca0603e45b8"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "cudl-vpc"
     "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
@@ -197,7 +197,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:fc6f79c9a5f68029b2d2de3ec49690b27e9baf948e43ce34d6d744d864d4fca8"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:b770b03827499abe460cedacd7d30ae4566f5acac4f03f00344ad1e35d6ea19e"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "cudl-vpc"
     "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
@@ -217,7 +217,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:fc6f79c9a5f68029b2d2de3ec49690b27e9baf948e43ce34d6d744d864d4fca8"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:b770b03827499abe460cedacd7d30ae4566f5acac4f03f00344ad1e35d6ea19e"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "cudl-vpc"
     "subnet_names"             = ["cudl-subnet-private1-eu-west-1a", "cudl-subnet-private2-eu-west-1b"]
@@ -380,7 +380,9 @@ cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_name_suffix              = "cudl-viewer"
 cudl_viewer_domain_name              = "cudl-viewer"
 cudl_viewer_target_group_port        = 5008
-cudl_viewer_container_port           = 8005
+cudl_viewer_container_port           = 8080
 cudl_viewer_ecr_repository_names     = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
 cudl_viewer_health_check_status_code = "200"
 cudl_viewer_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
+cudl_viewer_db_name                  = "cudl"
+cudl_viewer_jdbc_user                = "cudl"

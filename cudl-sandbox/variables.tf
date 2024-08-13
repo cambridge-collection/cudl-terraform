@@ -453,3 +453,19 @@ variable "cudl_viewer_allowed_methods" {
   type        = list(string)
   description = "List of methods allowed by the CloudFront Distribution"
 }
+
+variable "cudl_viewer_db_name" {
+  type        = string
+  description = "Name of the database used by cudl-viewer"
+  default     = "cudl"
+}
+
+variable "cudl_viewer_jdbc_user" {
+  type        = string
+  description = "Cudl Viewer database user"
+}
+
+variable "cudl_viewer_jdbc_password" {
+  type        = string
+  description = "Cudl Viewer database password"
+}
