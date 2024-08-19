@@ -216,8 +216,8 @@ variable "efs_subnet_ids" {
   default     = []
 }
 
-variable "efs_availability_zone_name" {
+variable "datasync_task_s3_to_efs_pattern" {
   type        = string
-  description = "Availability zone used by EFS file system"
-  default     = "Regional"
+  description = "Pattern regex used in S3 to EFS task"
+  default     = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 }

@@ -1,8 +1,8 @@
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
-  for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
+  for_each      = {for subnet in data.aws_subnet.efs : subnet.id => subnet}
 
-  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.value].arn
-  name                     = "${var.environment}-cudl-data-releases-s3-to-efs"
+  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.key].arn
+  name                     = "${var.environment}-cudl-data-releases-s3-to-efs-${each.value.availability_zone}"
   source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
 
   options {
@@ -13,15 +13,15 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
 }
 
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs-" {
-  for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
+  for_each      = {for subnet in data.aws_subnet.efs : subnet.id => subnet}
 
-  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.value].arn
-  name                     = "${var.environment}-cudl-data-releases-pages-s3-to-efs"
+  destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.key].arn
+  name                     = "${var.environment}-cudl-data-releases-pages-s3-to-efs-${each.value.availability_zone}"
   source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
 
   includes {
     filter_type = "SIMPLE_PATTERN"
-    value       = "/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
+    value       = var.datasync_task_s3_to_efs_pattern
   }
 
   options {
@@ -32,14 +32,14 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs
 }
 
 resource "aws_datasync_location_efs" "cudl-datasync-efs" {
-  for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
+  for_each      = {for subnet in data.aws_subnet.efs : subnet.id => subnet}
 
   efs_file_system_arn = aws_efs_file_system.efs-volume.arn
   subdirectory        = var.releases-root-directory-path
 
   ec2_config {
     security_group_arns = [aws_security_group.efs.arn]
-    subnet_arn          = each.value
+    subnet_arn          = each.value.arn
   }
 }
 
