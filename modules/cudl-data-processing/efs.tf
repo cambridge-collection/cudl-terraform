@@ -1,7 +1,4 @@
 resource "aws_efs_file_system" "efs-volume" {
-
-  # availability_zone_name = "${var.deployment-aws-region}a"
-  availability_zone_name = var.efs_availability_zone_name
   encrypted              = true
 
   lifecycle_policy {

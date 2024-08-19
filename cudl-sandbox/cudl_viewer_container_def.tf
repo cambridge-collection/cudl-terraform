@@ -23,8 +23,8 @@ locals {
       environment = [
         {
           name  = "JDBC_URL"
-          value = "jdbc:mysql://${local.cudl_viewer_db_container_name}/${var.cudl_viewer_db_name}"
-        }
+          value = "jdbc:postgresql://${local.cudl_viewer_db_container_name}:5432/${var.cudl_viewer_db_name}?autoReconnect=true"
+        },
       ],
       environmentFiles = [
         {
@@ -39,7 +39,16 @@ locals {
           readOnly      = false
         }
       ],
-      secrets = [],
+      secrets = [
+        {
+          name      = "JDBC_USER",
+          valueFrom = data.aws_ssm_parameter.cudl_viewer_jdbc_user.arn
+        },
+        {
+          name      = "JDBC_PASSWORD",
+          valueFrom = data.aws_ssm_parameter.cudl_viewer_jdbc_password.arn
+        }
+      ],
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -63,9 +72,23 @@ locals {
           protocol      = "tcp"
         }
       ],
-      essential   = true,
-      environment = [],
-      secrets     = [],
+      environment = [
+        {
+          name  = "POSTGRES_DB"
+          value = var.cudl_viewer_db_name
+        },
+      ],
+      essential = true,
+      secrets = [
+        {
+          name      = "POSTGRES_USER",
+          valueFrom = data.aws_ssm_parameter.cudl_viewer_jdbc_user.arn
+        },
+        {
+          name      = "POSTGRES_PASSWORD",
+          valueFrom = data.aws_ssm_parameter.cudl_viewer_jdbc_password.arn
+        }
+      ],
       logConfiguration = {
         logDriver = "awslogs"
         options = {

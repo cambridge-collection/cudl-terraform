@@ -35,7 +35,7 @@ resource "aws_datasync_location_efs" "cudl-datasync-efs" {
   for_each      = toset([for subnet in data.aws_subnet.efs : subnet.arn])
 
   efs_file_system_arn = aws_efs_file_system.efs-volume.arn
-  subdirectory        = "/data/"
+  subdirectory        = var.releases-root-directory-path
 
   ec2_config {
     security_group_arns = [aws_security_group.efs.arn]

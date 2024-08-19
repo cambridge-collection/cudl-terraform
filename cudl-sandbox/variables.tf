@@ -460,16 +460,6 @@ variable "cudl_viewer_db_name" {
   default     = "cudl"
 }
 
-variable "cudl_viewer_jdbc_user" {
-  type        = string
-  description = "Cudl Viewer database user"
-}
-
-variable "cudl_viewer_jdbc_password" {
-  type        = string
-  description = "Cudl Viewer database password"
-}
-
 variable "cudl_viewer_smtp_username" {
   type        = string
   description = "Cudl Viewer SMTP user name"

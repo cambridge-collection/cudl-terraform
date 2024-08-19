@@ -15,6 +15,7 @@ module "cudl-data-processing" {
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
   security-group-id                         = var.security-group-id
+  default-lambda-vpc                        = "rmm98-sandbox-cudl-ecs-vpc"
   # subnet-id                                 = module.base_architecture.vpc_private_subnet_ids[0]
   lambda-jar-bucket                         = var.lambda-jar-bucket
   lambda-db-jdbc-driver                     = var.lambda-db-jdbc-driver
@@ -185,7 +186,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/efs-extra"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/efs-plus-ssm"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -200,32 +201,36 @@ module "cudl_viewer" {
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
+  efs_use_existing_filesystem               = true
   efs_file_system_id                        = module.cudl-data-processing.efs_file_system_id
+  efs_security_group_id                     = module.cudl-data-processing.efs_security_group_id
+  efs_access_point_root_directory_path      = var.releases-root-directory-path
+  efs_access_point_posix_user_uid           = 1729
+  efs_access_point_posix_user_gid           = 1729
   s3_task_execution_bucket_objects = merge({
     for f in fileset("assets/viewer", "**") : join("/", [join("-", compact([var.environment, var.cudl_viewer_name_suffix])), f]) => file("${path.module}/assets/viewer/${f}")
     }, {
     "${module.cudl_viewer.name_prefix}/cudl-viewer.env" = templatefile("${path.root}/templates/viewer/cudl-viewer.env.ttfpl", {
-      jdbc_user     = var.cudl_viewer_jdbc_user
-      jdbc_password = var.cudl_viewer_jdbc_password
       smtp_username = var.cudl_viewer_smtp_username
       smtp_password = var.cudl_viewer_smtp_password
+      mount_path    = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
     })
   })
-  s3_task_buckets = [module.cudl-data-processing.destination_bucket]
-  # ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.database_password.arn, data.aws_ssm_parameter.apikey_darwin.arn]
-  vpc_id                     = module.base_architecture.vpc_id
-  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
-  alb_arn                    = module.base_architecture.alb_arn
-  alb_dns_name               = module.base_architecture.alb_dns_name
-  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
-  asg_name                   = module.base_architecture.asg_name
-  asg_security_group_id      = module.base_architecture.asg_security_group_id
-  alb_security_group_id      = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
-  cloudfront_allowed_methods = var.cudl_viewer_allowed_methods
+  s3_task_buckets                   = [module.cudl-data-processing.destination_bucket]
+  ssm_task_execution_parameter_arns = [data.aws_ssm_parameter.cudl_viewer_jdbc_user.arn, data.aws_ssm_parameter.cudl_viewer_jdbc_password.arn]
+  vpc_id                            = module.base_architecture.vpc_id
+  vpc_subnet_ids                    = module.base_architecture.vpc_private_subnet_ids
+  alb_arn                           = module.base_architecture.alb_arn
+  alb_dns_name                      = module.base_architecture.alb_dns_name
+  alb_listener_arn                  = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                   = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                   = module.base_architecture.route53_public_hosted_zone
+  asg_name                          = module.base_architecture.asg_name
+  asg_security_group_id             = module.base_architecture.asg_security_group_id
+  alb_security_group_id             = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn          = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn            = module.base_architecture.waf_acl_arn
+  cloudfront_allowed_methods        = var.cudl_viewer_allowed_methods
   # use_efs_persistence                       = true
   # datasync_s3_objects_to_efs                = true
   # datasync_s3_bucket_name                   = module.cudl-data-processing.destination_bucket
