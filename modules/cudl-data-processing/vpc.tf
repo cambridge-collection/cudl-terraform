@@ -9,10 +9,6 @@ data "aws_vpc" "existing_cudl_vpc" {
   id = var.vpc-id
 }
 
-data "aws_security_group" "default" {
-  id = var.security-group-id
-}
-
 data "aws_vpc" "transform_lambda_vpc" {
   count = length(var.transform-lambda-information)
 

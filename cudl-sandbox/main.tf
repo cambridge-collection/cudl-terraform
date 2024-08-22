@@ -14,9 +14,7 @@ module "cudl-data-processing" {
   additional_lambda_environment_variables   = local.additional_lambda_variables
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
-  security-group-id                         = var.security-group-id
   default-lambda-vpc                        = "rmm98-sandbox-cudl-ecs-vpc"
-  # subnet-id                                 = module.base_architecture.vpc_private_subnet_ids[0]
   lambda-jar-bucket                         = var.lambda-jar-bucket
   lambda-db-jdbc-driver                     = var.lambda-db-jdbc-driver
   lambda-db-secret-key                      = var.lambda-db-secret-key

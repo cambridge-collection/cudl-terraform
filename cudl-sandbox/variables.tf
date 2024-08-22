@@ -94,7 +94,7 @@ variable "transform-lambda-information" {
     use_datadog_variables      = optional(bool, true)
     use_additional_variables   = optional(bool, false)
     use_enhancements_variables = optional(bool, false)
-    mount_fs                   = optional(bool, true)
+    mount_fs                   = optional(bool, false)
   }))
 }
 
@@ -120,21 +120,6 @@ variable "tmp-dir" {
 
 variable "lambda-alias-name" {
   description = "Use to set the name for the lambda function alias(es)"
-  type        = string
-}
-
-variable "vpc-id" {
-  description = "Specify a id of an existing VPC to use"
-  type        = string
-}
-
-variable "subnet-id" {
-  description = "Specify an existing subnet id for cudl vpn"
-  type        = string
-}
-
-variable "security-group-id" {
-  description = "Specify an existing security group id for cudl vpn"
   type        = string
 }
 
