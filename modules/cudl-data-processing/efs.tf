@@ -1,5 +1,5 @@
 resource "aws_efs_file_system" "efs-volume" {
-  encrypted              = true
+  encrypted = true
 
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"
@@ -39,7 +39,7 @@ resource "aws_efs_access_point" "efs-access-point" {
 }
 
 resource "aws_efs_mount_target" "efs-mount-point" {
-  for_each      = toset(data.aws_subnets.efs.ids)
+  for_each = toset(data.aws_subnets.efs.ids)
 
   file_system_id  = aws_efs_file_system.efs-volume.id
   subnet_id       = each.value

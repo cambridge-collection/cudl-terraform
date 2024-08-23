@@ -216,3 +216,9 @@ variable "datasync_task_s3_to_efs_pattern" {
   description = "Pattern regex used in S3 to EFS task"
   default     = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 }
+
+variable "dashboard_widget_size" {
+  type        = number
+  description = "Size of CloudWatch Dashboard widget panels"
+  default     = 6
+}

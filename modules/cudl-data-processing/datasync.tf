@@ -1,5 +1,5 @@
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
-  for_each      = {for subnet in data.aws_subnet.efs : subnet.id => subnet}
+  for_each = { for subnet in data.aws_subnet.efs : subnet.id => subnet }
 
   destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.key].arn
   name                     = "${var.environment}-cudl-data-releases-s3-to-efs-${each.value.availability_zone}"
@@ -13,7 +13,7 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
 }
 
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs-" {
-  for_each      = {for subnet in data.aws_subnet.efs : subnet.id => subnet}
+  for_each = { for subnet in data.aws_subnet.efs : subnet.id => subnet }
 
   destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.key].arn
   name                     = "${var.environment}-cudl-data-releases-pages-s3-to-efs-${each.value.availability_zone}"
@@ -32,7 +32,7 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs
 }
 
 resource "aws_datasync_location_efs" "cudl-datasync-efs" {
-  for_each      = {for subnet in data.aws_subnet.efs : subnet.id => subnet}
+  for_each = { for subnet in data.aws_subnet.efs : subnet.id => subnet }
 
   efs_file_system_arn = aws_efs_file_system.efs-volume.arn
   subdirectory        = var.releases-root-directory-path
