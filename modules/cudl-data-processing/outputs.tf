@@ -21,3 +21,11 @@ output "transform_bucket_notification_topics_length" {
 output "transform_bucket_notification_queues_length" {
   value = length(flatten([for notification in aws_s3_bucket_notification.transform-lambda-bucket-notifications : [for queue in notification.queue : queue.queue_arn]]))
 }
+
+output "source_bucket" {
+  value = aws_s3_bucket.source-bucket.id
+}
+
+output "destination_bucket" {
+  value = aws_s3_bucket.dest-bucket.id
+}
