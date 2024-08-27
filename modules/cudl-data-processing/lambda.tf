@@ -103,7 +103,7 @@ resource "local_file" "create-local-lambda-properties-file" {
     # Database details for editing/inserting collection data into CUDL
     DB_JDBC_DRIVER=${var.lambda-db-jdbc-driver}
     DB_URL=${var.lambda-db-url}
-    DB_SECRET_KEY=${var.lambda-db-secret-key}
+    DB_SECRET_KEY=${join("/", [var.environment, var.lambda-db-secret-key])}
 
   EOT
 
