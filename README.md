@@ -80,6 +80,23 @@ https://github.com/cambridge-collection/data-lambda-transform
 This diagram shows the AWS infrastructure setup required for the data loading process. 
 ![](docs/images/CUDL_data_processing.jpg)
 
+## Lambda Definitions
+
+| Lambda name                                           | Type      | Runtime | Source Code                                                   |
+| :---------------------------------------------------- | :-------- | :------ | :------------------------------------------------------------ |
+| AWSLambda_CUDLPackageData_Collection_SOLR_Listener    | Container | Docker  | https://github.com/cambridge-collection/cudl-solr-listener    |
+| AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS         | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+| AWSLambda_CUDLPackageData_DATASET_JSON                | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+| AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY         | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+| AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+| AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+| AWSLambda_CUDLPackageData_SOLR_Listener               | Container | Docker  | https://github.com/cambridge-collection/cudl-solr-listener    |
+| AWSLambda_CUDLPackageData_TEI_Processing              | Container | Docker  | https://github.com/cambridge-collection/transkribus-import    |
+| AWSLambda_CUDL_Transkribus_Ingest                     | Container | Docker  | ??                                                            |
+| AWSLambda_CUDLPackageData_UI_JSON                     | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+| AWSLambda_CUDLPackageData_UPDATE_DB                   | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+
+
 ### AWS Resources created are:
 
 - IAM policies
@@ -102,7 +119,3 @@ This diagram shows the AWS infrastructure setup required for the data loading pr
 
 When created, update the appropriate terraform.tfvars properties to point to these resources.
 
-## Puppet 
-In addition to the Terraform setup, Puppet is used to control the software 
-installed on the architecture, and is used for example to sync the data between EFS and S3.
-See https://gitlab.developers.cam.ac.uk/lib/dev/dev-puppet

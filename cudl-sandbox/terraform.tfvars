@@ -246,6 +246,7 @@ transform-lambda-information = [
     "queue_name"            = "CUDLPackageDataUpdateDBQueue"
     "use_datadog_variables" = false
     "subnet_names"          = ["rmm98-sandbox-cudl-ecs-subnet-private-a", "rmm98-sandbox-cudl-ecs-subnet-private-b"]
+    "security_group_names"  = ["rmm98-sandbox-cudl-ecs-vpc-endpoints"]
     "timeout"               = 900
     "memory"                = 512
     "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
@@ -336,7 +337,7 @@ vpc_cidr_block                 = "10.42.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 vpc_peering_vpc_ids            = ["vpc-057886e0bdd7c4e43"]
 cloudwatch_log_group           = "/ecs/CUDLContent"
-vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem"]
+vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload
 content_loader_name_suffix              = "cl"
