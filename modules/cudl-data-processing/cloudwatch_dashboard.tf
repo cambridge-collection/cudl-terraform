@@ -7,19 +7,19 @@ resource "aws_cloudwatch_dashboard" "lambda" {
         for lambda in var.transform-lambda-information :
         {
           type   = "metric"
-          x      = index(var.transform-lambda-information, lambda) > (length(var.transform-lambda-information ) / 2) ? var.dashboard_widget_size : 0
+          x      = index(var.transform-lambda-information, lambda) > (length(var.transform-lambda-information) / 2) ? var.dashboard_widget_size : 0
           y      = index(var.transform-lambda-information, lambda) * var.dashboard_widget_size
           width  = var.dashboard_widget_size
           height = var.dashboard_widget_size
 
           properties = {
             metrics = [
-               [ "AWS/Lambda", "ConcurrentExecutions", "FunctionName", join("-", [var.environment, lambda.name]), { region = "eu-west-1" } ]
+              ["AWS/Lambda", "ConcurrentExecutions", "FunctionName", join("-", [var.environment, lambda.name]), { region = var.deployment-aws-region, stat = "Maximum" }],
+              ["AWS/Lambda", "Invocations", "FunctionName", join("-", [var.environment, lambda.name]), { region = var.deployment-aws-region, stat = "Sum" }]
             ],
             view    = "timeSeries"
             period  = 180
             stacked = false
-            stat    = "Maximum"
             region  = var.deployment-aws-region
             title   = lambda.name
           }
@@ -29,21 +29,27 @@ resource "aws_cloudwatch_dashboard" "lambda" {
         for lambda in var.transform-lambda-information :
         {
           type   = "metric"
-          x      = index(var.transform-lambda-information, lambda) > (length(var.transform-lambda-information ) / 2) ? var.dashboard_widget_size * 3 : var.dashboard_widget_size * 2
+          x      = index(var.transform-lambda-information, lambda) > (length(var.transform-lambda-information) / 2) ? var.dashboard_widget_size * 3 : var.dashboard_widget_size * 2
           y      = index(var.transform-lambda-information, lambda) * var.dashboard_widget_size
           width  = var.dashboard_widget_size
           height = var.dashboard_widget_size
 
           properties = {
             metrics = [
-               [ "AWS/Lambda", "Errors", "FunctionName", join("-", [var.environment, lambda.name]), { color = "#d62728", region = "eu-west-1" } ]
+              ["AWS/Lambda", "Errors", "FunctionName", join("-", [var.environment, lambda.name]), { id = "errors", stat = "Sum", color = "#d13212", region = var.deployment-aws-region }],
+              [".", "Invocations", ".", ".", { id = "invocations", stat = "Sum", visible = false, region = var.deployment-aws-region }],
+              [{ expression = "100 - 100 * errors / MAX([errors, invocations])", label = "Success rate (%)", id = "availability", yAxis = "right", region = var.deployment-aws-region }]
             ],
             view    = "timeSeries"
             period  = 60
             stacked = false
-            stat    = "Sum"
-            region  = var.deployment-aws-region
-            title   = lambda.name
+            yAxis = {
+              right = {
+                max = 100
+              }
+            },
+            region = var.deployment-aws-region
+            title  = lambda.name
           }
         }
       ]
