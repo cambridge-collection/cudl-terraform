@@ -5,7 +5,7 @@ locals {
     {
       name           = local.content_loader_container_name_db,
       systemControls = [],
-      image          = "${module.content_loader.ecr_repository_urls["dl-loader-db"]}:latest",
+      image          = "${module.content_loader.ecr_repository_urls[var.content_loader_container_name_db]}:latest",
       cpu            = 1024,
       portMappings = [
         {
@@ -38,10 +38,10 @@ locals {
           type  = "s3"
         }
       ],
-      mountPoints = [for name, path in var.content_loader_ecs_task_def_volumes :
+      mountPoints = [
         {
-          sourceVolume  = join("-", [module.content_loader.name_prefix, name]),
-          containerPath = path,
+          sourceVolume  = join("-", [module.content_loader.name_prefix, var.content_loader_container_name_db]),
+          containerPath = var.content_loader_ecs_task_def_volumes[var.content_loader_container_name_db],
           readOnly      = false
         }
       ],
@@ -70,7 +70,7 @@ locals {
     {
       name           = local.content_loader_container_name_ui,
       systemControls = [],
-      image          = "${module.content_loader.ecr_repository_urls["dl-loader-ui"]}:latest",
+      image          = "${module.content_loader.ecr_repository_urls[var.content_loader_container_name_ui]}:latest",
       links = [
         local.content_loader_container_name_db
       ],

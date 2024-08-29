@@ -347,11 +347,6 @@ variable "solr_use_service_discovery" {
   description = "Whether SOLR should use Service Discovery"
 }
 
-variable "solr_persist_ecs_task_def_volumes" {
-  type        = map(string)
-  description = "Map of volume names and container paths to attach to the SOLR ECS Task Definition"
-}
-
 variable "solr_ingress_security_group_id" {
   type        = string
   description = "ID of the Security Group to allow access to SOLR service"

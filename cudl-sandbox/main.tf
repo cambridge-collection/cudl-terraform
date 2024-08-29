@@ -68,10 +68,7 @@ module "content_loader" {
   ecs_task_def_volumes                      = keys(var.content_loader_ecs_task_def_volumes)
   ecs_service_container_name                = local.content_loader_container_name_ui
   ecs_service_container_port                = var.content_loader_application_port
-  s3_task_bucket_objects = {
-    "cudl.dl-dataset.json" = file("${path.root}/assets/cl/cudl.dl-dataset.json")
-    "cudl.ui.json5"        = file("${path.root}/assets/cl/cudl.ui.json5")
-  }
+  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_execution_bucket_objects = {
     "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/cudl-loader-ui.env.ttfpl", {
       region          = var.deployment-aws-region

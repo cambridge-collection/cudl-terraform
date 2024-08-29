@@ -15,7 +15,8 @@ resource "aws_cloudwatch_dashboard" "lambda" {
           properties = {
             metrics = [
               ["AWS/Lambda", "ConcurrentExecutions", "FunctionName", join("-", [var.environment, lambda.name]), { region = var.deployment-aws-region, stat = "Maximum" }],
-              ["AWS/Lambda", "Invocations", "FunctionName", join("-", [var.environment, lambda.name]), { region = var.deployment-aws-region, stat = "Sum" }]
+              ["AWS/Lambda", "Invocations", "FunctionName", join("-", [var.environment, lambda.name]), { region = var.deployment-aws-region, stat = "Sum" }],
+              ["AWS/Lambda", "Throttles", "FunctionName", join("-", [var.environment, lambda.name]), { region = var.deployment-aws-region, stat = "Sum" }]
             ],
             view    = "timeSeries"
             period  = 180
