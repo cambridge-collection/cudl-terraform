@@ -377,13 +377,13 @@ cudl_services_ecr_repository_names     = ["cudl-services"]
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
-cudl_viewer_name_suffix                          = "cudl-viewer"
-cudl_viewer_domain_name                          = "cudl-viewer"
-cudl_viewer_target_group_port                    = 5008
-cudl_viewer_container_port                       = 8080
-cudl_viewer_ecr_repository_names                 = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
-cudl_viewer_health_check_status_code             = "200"
-cudl_viewer_allowed_methods                      = ["HEAD", "GET", "OPTIONS"]
-cudl_viewer_db_name                              = "cudl"
-cudl_viewer_ecs_task_def_volumes                 = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data/" }
-cudl_viewer_efs_access_point_root_directory_path = "/"
+cudl_viewer_name_suffix                     = "cudl-viewer"
+cudl_viewer_domain_name                     = "cudl-viewer"
+cudl_viewer_target_group_port               = 5008
+cudl_viewer_container_port                  = 8080
+cudl_viewer_ecr_repository_names            = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
+cudl_viewer_health_check_status_code        = "200"
+cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
+cudl_viewer_db_name                         = "cudl"
+cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data/" }
+cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
