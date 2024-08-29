@@ -199,7 +199,7 @@ module "cudl_viewer" {
   efs_use_existing_filesystem               = true
   efs_file_system_id                        = module.cudl-data-processing.efs_file_system_id
   efs_security_group_id                     = module.cudl-data-processing.efs_security_group_id
-  efs_access_point_root_directory_path      = var.releases-root-directory-path
+  efs_access_point_root_directory_path      = var.cudl_viewer_efs_access_point_root_directory_path
   efs_access_point_posix_user_uid           = 1729
   efs_access_point_posix_user_gid           = 1729
   s3_task_execution_bucket_objects = merge({

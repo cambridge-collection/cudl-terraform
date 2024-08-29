@@ -454,3 +454,8 @@ variable "cudl_viewer_ecs_task_def_volumes" {
   type        = map(string)
   description = "Map of volume names and container paths to attach to the Cudl Viewer ECS Task Definition"
 }
+
+variable "cudl_viewer_efs_access_point_root_directory_path" {
+  type        = string
+  description = "Root directory for EFS access point used by CUDL Viewer"
+}

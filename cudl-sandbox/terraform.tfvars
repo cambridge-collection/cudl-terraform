@@ -321,7 +321,7 @@ dst-s3-prefix     = ""
 tmp-dir           = "/tmp/dest/"
 lambda-alias-name = "LIVE"
 
-releases-root-directory-path = "/"
+releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases-efs"
 cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 
@@ -353,21 +353,21 @@ content_loader_health_check_status_code = "401"
 content_loader_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 
 # SOLR Worload
-solr_name_suffix                  = "solr"
-solr_domain_name                  = "solr"
-solr_api_port                     = 80
-solr_application_port             = 8983
-solr_target_group_port            = 8081
-solr_ecr_repository_names         = ["cudl-solr-api", "cudl-solr"]
-solr_ecs_task_def_volumes         = { "solr-volume" = "/var/solr" }
-solr_container_name_api           = "solr-api"
-solr_container_name_solr          = "solr"
-solr_health_check_status_code     = "404"
-solr_allowed_methods              = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu             = 1536
-solr_ecs_task_def_memory          = 1638
-solr_use_service_discovery        = true
-solr_ingress_security_group_id    = "sg-032f9f202ea602d21"
+solr_name_suffix               = "solr"
+solr_domain_name               = "solr"
+solr_api_port                  = 80
+solr_application_port          = 8983
+solr_target_group_port         = 8081
+solr_ecr_repository_names      = ["cudl-solr-api", "cudl-solr"]
+solr_ecs_task_def_volumes      = { "solr-volume" = "/var/solr" }
+solr_container_name_api        = "solr-api"
+solr_container_name_solr       = "solr"
+solr_health_check_status_code  = "404"
+solr_allowed_methods           = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu          = 1536
+solr_ecs_task_def_memory       = 1638
+solr_use_service_discovery     = true
+solr_ingress_security_group_id = "sg-032f9f202ea602d21"
 
 cudl_services_name_suffix              = "cudl-services"
 cudl_services_domain_name              = "services"
@@ -377,12 +377,13 @@ cudl_services_ecr_repository_names     = ["cudl-services"]
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
-cudl_viewer_name_suffix              = "cudl-viewer"
-cudl_viewer_domain_name              = "cudl-viewer"
-cudl_viewer_target_group_port        = 5008
-cudl_viewer_container_port           = 8080
-cudl_viewer_ecr_repository_names     = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
-cudl_viewer_health_check_status_code = "200"
-cudl_viewer_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
-cudl_viewer_db_name                  = "cudl"
-cudl_viewer_ecs_task_def_volumes     = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data/" }
+cudl_viewer_name_suffix                          = "cudl-viewer"
+cudl_viewer_domain_name                          = "cudl-viewer"
+cudl_viewer_target_group_port                    = 5008
+cudl_viewer_container_port                       = 8080
+cudl_viewer_ecr_repository_names                 = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
+cudl_viewer_health_check_status_code             = "200"
+cudl_viewer_allowed_methods                      = ["HEAD", "GET", "OPTIONS"]
+cudl_viewer_db_name                              = "cudl"
+cudl_viewer_ecs_task_def_volumes                 = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data/" }
+cudl_viewer_efs_access_point_root_directory_path = "/"
