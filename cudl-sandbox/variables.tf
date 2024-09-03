@@ -434,12 +434,6 @@ variable "cudl_viewer_allowed_methods" {
   description = "List of methods allowed by the CloudFront Distribution"
 }
 
-variable "cudl_viewer_db_name" {
-  type        = string
-  description = "Name of the database used by cudl-viewer"
-  default     = "cudl"
-}
-
 variable "cudl_viewer_smtp_username" {
   type        = string
   description = "Cudl Viewer SMTP user name"

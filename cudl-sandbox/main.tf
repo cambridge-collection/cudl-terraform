@@ -33,7 +33,7 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/eventbridge"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/nat-gateway"
 
   name_prefix                    = join("-", compact([local.environment, var.cluster_name_suffix]))
   ec2_instance_type              = var.ec2_instance_type
@@ -181,16 +181,17 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/datasync-plus-ssm"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/security-groups-extra"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_viewer_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = var.cudl_viewer_target_group_port
+  alb_target_group_port                     = var.cudl_viewer_container_port
   alb_target_group_health_check_status_code = var.cudl_viewer_health_check_status_code
   ecr_repository_names                      = var.cudl_viewer_ecr_repository_names
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
+  ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
   ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
   ecs_service_container_name                = local.cudl_viewer_container_name
@@ -203,12 +204,13 @@ module "cudl_viewer" {
       smtp_username = var.cudl_viewer_smtp_username
       smtp_password = var.cudl_viewer_smtp_password
       mount_path    = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
+      search_url    = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
     })
   })
   s3_task_buckets                   = [module.cudl-data-processing.destination_bucket]
-  ssm_task_execution_parameter_arns = [data.aws_ssm_parameter.cudl_viewer_jdbc_user.arn, data.aws_ssm_parameter.cudl_viewer_jdbc_password.arn]
   vpc_id                            = module.base_architecture.vpc_id
   vpc_subnet_ids                    = module.base_architecture.vpc_private_subnet_ids
+  vpc_security_groups_extra         = [aws_security_group.solr.id]
   alb_arn                           = module.base_architecture.alb_arn
   alb_dns_name                      = module.base_architecture.alb_dns_name
   alb_listener_arn                  = module.base_architecture.alb_https_listener_arn

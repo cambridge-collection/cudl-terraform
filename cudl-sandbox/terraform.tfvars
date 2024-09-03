@@ -38,9 +38,9 @@ transform-lambda-bucket-sns-notifications = [
         "raw"        = true
       },
       {
-        "queue_name" = "CUDLPackageDataUpdateDBQueue",
+        "queue_name" = "CUDLPackageDataCopyFileToEFSQueue",
         "raw"        = true
-      },
+      }
     ]
   }
 ]
@@ -95,15 +95,15 @@ transform-lambda-bucket-sqs-notifications = [
   },
   {
     "type"          = "SQS",
-    "queue_name"    = "CUDLPackageDataDatasetQueue"
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.dl-dataset.json"
     "filter_suffix" = ""
     "bucket_name"   = "cudl-data-releases"
   },
   {
     "type"          = "SQS",
-    "queue_name"    = "CUDLPackageDataUIQueue"
-    "filter_prefix" = "cudl.ui.json"
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "filter_prefix" = "cudl.ui.json5"
     "filter_suffix" = ""
     "bucket_name"   = "cudl-data-releases"
   },
@@ -240,43 +240,6 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_UPDATE_DB"
-    "description"           = "Updates the CUDL database with collection information from the collections json file"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataUpdateDBQueue"
-    "use_datadog_variables" = false
-    "subnet_names"          = ["rmm98-sandbox-cudl-ecs-subnet-private-a", "rmm98-sandbox-cudl-ecs-subnet-private-b"]
-    "security_group_names"  = ["rmm98-sandbox-cudl-ecs-vpc-endpoints"]
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CollectionFileDBHandler::handleRequest"
-    "runtime"               = "java11"
-  },
-  {
-    "name"                  = "AWSLambda_CUDLPackageData_DATASET_JSON"
-    "description"           = "Transforms the dataset json file into a json format with suitable paths for the viewer / db"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataDatasetQueue"
-    "subnet_names"          = ["rmm98-sandbox-cudl-ecs-subnet-private-a", "rmm98-sandbox-cudl-ecs-subnet-private-b"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.DatasetFileDBHandler::handleRequest"
-    "runtime"               = "java11"
-  },
-  {
-    "name"                  = "AWSLambda_CUDLPackageData_UI_JSON"
-    "description"           = "Transforms the UI json file into a json format with suitable paths for the viewer / db"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataUIQueue"
-    "subnet_names"          = ["rmm98-sandbox-cudl-ecs-subnet-private-a", "rmm98-sandbox-cudl-ecs-subnet-private-b"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.UIFileDBHandler::handleRequest"
-    "runtime"               = "java11"
-  },
-  {
     "name"                  = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
     "description"           = "Copies file from S3 to EFS"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
@@ -381,9 +344,8 @@ cudl_viewer_name_suffix                     = "cudl-viewer"
 cudl_viewer_domain_name                     = "cudl-viewer"
 cudl_viewer_target_group_port               = 5008
 cudl_viewer_container_port                  = 8080
-cudl_viewer_ecr_repository_names            = ["sandbox-cudl-viewer", "sandbox-cudl-viewer-db"]
+cudl_viewer_ecr_repository_names            = ["sandbox-cudl-viewer"]
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
-cudl_viewer_db_name                         = "cudl"
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data/" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
