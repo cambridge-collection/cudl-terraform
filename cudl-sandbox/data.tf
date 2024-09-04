@@ -9,5 +9,5 @@ data "aws_ecr_image" "solr" {
 data "aws_ecr_image" "cudl_viewer" {
   for_each        = toset(var.cudl_viewer_ecr_repository_names)
   repository_name = each.key
-  image_tag       = "bdc2137"
+  image_tag       = "bf08a89"
 }

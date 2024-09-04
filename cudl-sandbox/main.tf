@@ -197,16 +197,14 @@ module "cudl_viewer" {
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
-  s3_task_execution_bucket_objects = merge({
-    for f in fileset("assets/viewer", "**") : join("/", [join("-", compact([var.environment, var.cudl_viewer_name_suffix])), f]) => file("${path.module}/assets/viewer/${f}")
-    }, {
-    "${module.cudl_viewer.name_prefix}/cudl-viewer.env" = templatefile("${path.root}/templates/viewer/cudl-viewer.env.ttfpl", {
+  s3_task_bucket_objects = {
+    "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
       smtp_username = var.cudl_viewer_smtp_username
       smtp_password = var.cudl_viewer_smtp_password
       mount_path    = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
       search_url    = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
     })
-  })
+  }
   s3_task_buckets                   = [module.cudl-data-processing.destination_bucket]
   vpc_id                            = module.base_architecture.vpc_id
   vpc_subnet_ids                    = module.base_architecture.vpc_private_subnet_ids

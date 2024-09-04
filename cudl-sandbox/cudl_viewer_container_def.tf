@@ -16,10 +16,10 @@ locals {
         }
       ],
       essential = true,
-      environmentFiles = [
+      environment = [
         {
-          value = "${module.base_architecture.s3_bucket_arn}/${module.cudl_viewer.name_prefix}/cudl-viewer.env",
-          type  = "s3"
+          name  = "S3_URL",
+          value = "s3://${module.cudl-data-processing.destination_bucket}/${module.cudl_viewer.name_prefix}/cudl-global.properties"
         }
       ],
       mountPoints = [for name, path in var.cudl_viewer_ecs_task_def_volumes :
