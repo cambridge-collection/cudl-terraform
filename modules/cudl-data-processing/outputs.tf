@@ -29,3 +29,11 @@ output "source_bucket" {
 output "destination_bucket" {
   value = aws_s3_bucket.dest-bucket.id
 }
+
+output "efs_file_system_id" {
+  value = aws_efs_file_system.efs-volume.id
+}
+
+output "efs_security_group_id" {
+  value = aws_security_group.efs.id
+}

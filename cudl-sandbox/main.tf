@@ -33,7 +33,7 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/nat-gateway"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.4.0"
 
   name_prefix                    = join("-", compact([local.environment, var.cluster_name_suffix]))
   ec2_instance_type              = var.ec2_instance_type
@@ -47,12 +47,11 @@ module "base_architecture" {
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
   vpc_endpoint_services          = var.vpc_endpoint_services
   vpc_cidr_block                 = var.vpc_cidr_block
-  # vpc_peering_vpc_ids            = var.vpc_peering_vpc_ids
   tags = local.default_tags
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v2.2.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -95,7 +94,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/connection-draining"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -137,8 +136,7 @@ module "solr" {
   cloudfront_allowed_methods = var.solr_allowed_methods
   allow_private_access       = var.solr_use_service_discovery
   ingress_security_group_id  = aws_security_group.solr.id
-  # cloudmap_associate_vpc_ids = var.vpc_peering_vpc_ids
-  use_efs_persistence = true
+  efs_create_file_system     = true
   tags                = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -146,7 +144,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/task-execution-ssm"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -181,7 +179,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/security-groups-extra"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -220,10 +218,9 @@ module "cudl_viewer" {
   cloudwatch_log_group_arn          = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn            = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods        = var.cudl_viewer_allowed_methods
-  use_efs_persistence               = true
-  datasync_s3_objects_to_efs        = true
-  datasync_s3_bucket_name           = module.cudl-data-processing.destination_bucket
-  datasync_s3_to_efs_pattern        = var.cudl_viewer_datasync_task_s3_to_efs_pattern
+  efs_use_existing_filesystem       = true
+  efs_file_system_id                = module.cudl-data-processing.efs_file_system_id
+  efs_security_group_id             = module.cudl-data-processing.efs_security_group_id
   tags                              = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1

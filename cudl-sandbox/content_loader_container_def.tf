@@ -6,6 +6,7 @@ locals {
       name           = local.content_loader_container_name_db,
       systemControls = [],
       image          = "${module.content_loader.ecr_repository_urls[var.content_loader_container_name_db]}:latest",
+      image          = data.aws_ecr_image.content_loader["dl-loader-db"].image_uri,
       cpu            = 1024,
       portMappings = [
         {
@@ -70,7 +71,7 @@ locals {
     {
       name           = local.content_loader_container_name_ui,
       systemControls = [],
-      image          = "${module.content_loader.ecr_repository_urls[var.content_loader_container_name_ui]}:latest",
+      image          = data.aws_ecr_image.content_loader["dl-loader-ui"].image_uri,
       links = [
         local.content_loader_container_name_db
       ],

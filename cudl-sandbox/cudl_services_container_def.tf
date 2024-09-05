@@ -3,7 +3,7 @@ locals {
   cudl_services_container_defs = [
     {
       name              = local.cudl_services_container_name,
-      image             = "${module.cudl_services.ecr_repository_urls["cudl-services"]}:ae4e",
+      image             = data.aws_ecr_image.cudl_services["cudl-services"].image_uri,
       cpu               = 0,
       memoryReservation = 512,
       portMappings = [
