@@ -39,10 +39,10 @@ resource "aws_efs_access_point" "efs-access-point" {
 }
 
 resource "aws_efs_mount_target" "efs-mount-point" {
-  for_each = toset(data.aws_subnets.efs.ids)
+  for_each = var.efs_subnets
 
   file_system_id  = aws_efs_file_system.efs-volume.id
-  subnet_id       = each.value
+  subnet_id       = data.aws_subnet.efs[each.key].id
   security_groups = [aws_security_group.efs.id]
 
   depends_on = [aws_efs_file_system.efs-volume]

@@ -8,9 +8,6 @@ enhancements-bucket-name     = "cudl-data-enhancements"
 source-bucket-name           = "cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "cul-cudl.mvn.cudl.lib.cam.ac.uk"
-lambda-db-jdbc-driver        = "org.postgresql.Driver"
-lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
-lambda-db-secret-key         = "cudl/cudl_viewer_db"
 
 transform-lambda-bucket-sns-notifications = [
   {
@@ -286,14 +283,14 @@ lambda-alias-name = "LIVE"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases-efs"
-cloudfront_route53_zone_id   = "Z10391903IIUDFC60D5LQ"
+cloudfront_route53_zone_id   = "Z048007032WTKFJCB78QT"
 
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cul-cudl.net."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
-route53_zone_id_existing       = "Z10391903IIUDFC60D5LQ"
+route53_zone_id_existing       = "Z048007032WTKFJCB78QT"
 route53_zone_force_destroy     = true
 alb_enable_deletion_protection = false
 vpc_cidr_block                 = "10.88.0.0/22" #1024 adresses

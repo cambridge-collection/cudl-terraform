@@ -4,7 +4,7 @@ data "aws_cloudfront_cache_policy" "managed_caching_disabled" {
 }
 
 resource "aws_cloudfront_origin_access_control" "transcriptions" {
-  count = local.create_cloudfront_distribution ? 1 : 0
+  count = var.create_cloudfront_distribution ? 1 : 0
 
   name                              = aws_s3_bucket.dest-bucket.id
   description                       = "Access Control for ${aws_s3_bucket.dest-bucket.id}"
@@ -14,7 +14,7 @@ resource "aws_cloudfront_origin_access_control" "transcriptions" {
 }
 
 resource "aws_cloudfront_distribution" "transcriptions" {
-  count = local.create_cloudfront_distribution ? 1 : 0
+  count = var.create_cloudfront_distribution ? 1 : 0
 
   provider = aws.us-east-1
 

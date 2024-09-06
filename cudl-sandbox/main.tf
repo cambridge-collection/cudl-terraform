@@ -16,9 +16,6 @@ module "cudl-data-processing" {
   vpc-id                                    = module.base_architecture.vpc_id
   default-lambda-vpc                        = "rmm98-sandbox-cudl-ecs-vpc"
   lambda-jar-bucket                         = var.lambda-jar-bucket
-  lambda-db-jdbc-driver                     = var.lambda-db-jdbc-driver
-  lambda-db-secret-key                      = var.lambda-db-secret-key
-  lambda-db-url                             = var.lambda-db-url
   aws-account-number                        = data.aws_caller_identity.current.account_id
   transform-lambda-bucket-sns-notifications = var.transform-lambda-bucket-sns-notifications
   transform-lambda-bucket-sqs-notifications = var.transform-lambda-bucket-sqs-notifications
@@ -62,7 +59,7 @@ module "content_loader" {
   ecr_repositories_exist                    = true
   s3_task_buckets                           = [module.cudl-data-processing.source_bucket]
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
-  s3_task_execution_additional_buckets      = ["sandbox.mvn.cudl.lib.cam.ac.uk"]
+  s3_task_execution_additional_buckets      = [var.lambda-jar-bucket]
   ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
   ecs_task_def_volumes                      = keys(var.content_loader_ecs_task_def_volumes)
   ecs_service_container_name                = local.content_loader_container_name_ui

@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "enhancements-bucket" {
 }
 
 data "aws_iam_policy_document" "dest-bucket" {
-  count = local.create_cloudfront_distribution ? 1 : 0
+  count = var.create_cloudfront_distribution ? 1 : 0
 
   statement {
     sid       = "AllowCloudFrontServicePrincipalReadOnly"
@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "dest-bucket" {
 }
 
 resource "aws_s3_bucket_policy" "dest-bucket" {
-  count = local.create_cloudfront_distribution ? 1 : 0
+  count = var.create_cloudfront_distribution ? 1 : 0
 
   bucket = aws_s3_bucket.dest-bucket.id
   policy = data.aws_iam_policy_document.dest-bucket.0.json

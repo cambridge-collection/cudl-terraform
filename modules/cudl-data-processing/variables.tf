@@ -38,21 +38,6 @@ variable "enhancements-bucket-name" {
   description = "The name of the s3 bucket that stores the Transkribus transcriptions. Will be prefixed with the environment value."
 }
 
-variable "lambda-db-jdbc-driver" {
-  description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
-  type        = string
-}
-
-variable "lambda-db-url" {
-  description = "The url used for cudl db connection.  Has placeholders in for <HOST> and <PORT>."
-  type        = string
-}
-
-variable "lambda-db-secret-key" {
-  description = "The path to the secret key that's used to access the cudl db credentials"
-  type        = string
-}
-
 variable "transform-lambda-information" {
   description = "A list of objects containing information about the transformation lambda functions"
   type = list(object({
@@ -131,6 +116,12 @@ variable "vpc-id" {
   type        = string
 }
 
+variable "vpcs" {
+  description = "Map of VPC names and VPC IDs to use with build"
+  type        = map(string)
+  default     = {}
+}
+
 variable "releases-root-directory-path" {
   description = "Specify the root path for the releases access point in the EFS"
   type        = string
@@ -205,10 +196,10 @@ variable "efs_nfs_mount_port" {
   default     = 2049
 }
 
-variable "efs_subnet_ids" {
-  type        = list(string)
-  description = "List of subnet ids for use by EFS access point"
-  default     = []
+variable "efs_subnets" {
+  type        = map(string)
+  description = "Map of subnet names and ids for use by EFS access point (map rather than list avoids known only after apply error)"
+  default     = {}
 }
 
 variable "datasync_task_s3_to_efs_pattern" {

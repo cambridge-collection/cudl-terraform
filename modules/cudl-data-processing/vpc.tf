@@ -32,21 +32,21 @@ data "aws_subnets" "transform_lambda_subnets" {
   }
 }
 
-data "aws_subnets" "efs" {
-  filter {
-    name   = "subnet-id"
-    values = var.efs_subnet_ids
-  }
+# data "aws_subnets" "efs" {
+#   filter {
+#     name   = "subnet-id"
+#     values = var.efs_subnet_ids
+#   }
 
-  # NOTE Filter by VPC to make sure subnets exist in the VPC selected
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.existing_cudl_vpc.id]
-  }
-}
+#   # NOTE Filter by VPC to make sure subnets exist in the VPC selected
+#   filter {
+#     name   = "vpc-id"
+#     values = [data.aws_vpc.existing_cudl_vpc.id]
+#   }
+# }
 
 data "aws_subnet" "efs" {
-  for_each = toset(data.aws_subnets.efs.ids)
+  for_each = var.efs_subnets
   id       = each.value
 }
 

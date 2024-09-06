@@ -100,11 +100,6 @@ resource "local_file" "create-local-lambda-properties-file" {
     TMP_DIR=${var.tmp-dir}
     REGION=${var.deployment-aws-region}
 
-    # Database details for editing/inserting collection data into CUDL
-    DB_JDBC_DRIVER=${var.lambda-db-jdbc-driver}
-    DB_URL=${var.lambda-db-url}
-    DB_SECRET_KEY=${join("/", [var.environment, var.lambda-db-secret-key])}
-
   EOT
 
   filename = "${path.module}/properties_files/${var.environment}/java/lib/cudl-loader-lambda.properties"

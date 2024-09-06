@@ -8,9 +8,6 @@ enhancements-bucket-name     = "cudl-data-enhancements"
 source-bucket-name           = "cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "sandbox.mvn.cudl.lib.cam.ac.uk"
-lambda-db-jdbc-driver        = "org.postgresql.Driver"
-lambda-db-url                = "jdbc:postgresql://<HOST>:<PORT>/sandboxtf_cudl_viewer?autoReconnect=true"
-lambda-db-secret-key         = "cudl/cudl_viewer_db"
 
 transform-lambda-bucket-sns-notifications = [
   {

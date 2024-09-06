@@ -57,21 +57,6 @@ variable "lambda-jar-bucket" {
   type        = string
 }
 
-variable "lambda-db-jdbc-driver" {
-  description = "The driver used for cudl db connection.  Usually org.postgresql.Driver"
-  type        = string
-}
-
-variable "lambda-db-url" {
-  description = "The url used for cudl db connection.  Has placeholders in for <HOST> and <PORT>."
-  type        = string
-}
-
-variable "lambda-db-secret-key" {
-  description = "The path to the secret key that's used to access the cudl db credentials"
-  type        = string
-}
-
 variable "transform-lambda-information" {
   description = "A list of objects containing information about the transformation lambda functions"
   type = list(object({

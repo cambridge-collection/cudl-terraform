@@ -5,7 +5,6 @@ locals {
     {
       name           = local.content_loader_container_name_db,
       systemControls = [],
-      image          = "${module.content_loader.ecr_repository_urls[var.content_loader_container_name_db]}:latest",
       image          = data.aws_ecr_image.content_loader["cudl/content-loader-db"].image_uri,
       cpu            = 1024,
       portMappings = [
