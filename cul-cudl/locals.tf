@@ -1,5 +1,5 @@
 locals {
-  environment = strcontains(lower(var.environment), "sandbox") ? join("-", [var.owner, var.environment]) : var.environment
+  environment      = strcontains(lower(var.environment), "sandbox") ? join("-", [var.owner, var.environment]) : var.environment
   base_name_prefix = join("-", compact([local.environment, var.cluster_name_suffix]))
   default_tags = {
     Environment  = title(var.environment)

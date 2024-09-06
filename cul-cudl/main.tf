@@ -32,7 +32,7 @@ module "cudl-data-processing" {
   additional_lambda_environment_variables   = local.additional_lambda_variables
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
-  vpcs                                      = {"${local.base_name_prefix}-vpc" = module.base_architecture.vpc_id}
+  vpcs                                      = { "${local.base_name_prefix}-vpc" = module.base_architecture.vpc_id }
   default-lambda-vpc                        = join("-", [local.base_name_prefix, "vpc"])
   lambda-jar-bucket                         = var.lambda-jar-bucket
   aws-account-number                        = data.aws_caller_identity.current.account_id
