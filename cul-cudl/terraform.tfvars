@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:3b2ab95f0c963f9ac9ec1167a524db1c2d78f452cd5d535e27a10ca0603e45b8"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:6e4cb978ca3e673fed2da24b12615fc510745798f9a74aedd6be5a239fa78466"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "first-cudl-ecs-vpc"
     "subnet_names"             = ["first-cudl-ecs-subnet-private-a", "first-cudl-ecs-subnet-private-b"]
@@ -198,7 +198,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:b770b03827499abe460cedacd7d30ae4566f5acac4f03f00344ad1e35d6ea19e"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:7ff916e5d805361e86a81669f83263cb7f65a66d3bff754583d88f3d01b1a962"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "first-cudl-ecs-vpc"
     "subnet_names"             = ["first-cudl-ecs-subnet-private-a", "first-cudl-ecs-subnet-private-b"]
@@ -218,7 +218,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:b770b03827499abe460cedacd7d30ae4566f5acac4f03f00344ad1e35d6ea19e"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:7ff916e5d805361e86a81669f83263cb7f65a66d3bff754583d88f3d01b1a962"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "first-cudl-ecs-vpc"
     "subnet_names"             = ["first-cudl-ecs-subnet-private-a", "first-cudl-ecs-subnet-private-b"]

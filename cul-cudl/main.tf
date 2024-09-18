@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=fix/asg-scale-in"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=fix/asg-scale-in-vpc-endpoints"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -206,7 +206,7 @@ module "cudl_viewer" {
   s3_task_buckets             = [module.cudl-data-processing.destination_bucket]
   vpc_id                      = module.base_architecture.vpc_id
   vpc_subnet_ids              = module.base_architecture.vpc_private_subnet_ids
-  vpc_security_groups_extra   = [aws_security_group.solr.id]
+  vpc_security_groups_extra   = [module.base_architecture.vpc_endpoint_security_group_id, aws_security_group.solr.id]
   alb_arn                     = module.base_architecture.alb_arn
   alb_dns_name                = module.base_architecture.alb_dns_name
   alb_listener_arn            = module.base_architecture.alb_https_listener_arn
