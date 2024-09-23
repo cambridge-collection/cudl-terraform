@@ -325,7 +325,6 @@ solr_allowed_methods           = ["HEAD", "GET", "OPTIONS"]
 solr_ecs_task_def_cpu          = 1536
 solr_ecs_task_def_memory       = 1638
 solr_use_service_discovery     = true
-solr_ingress_security_group_id = "sg-032f9f202ea602d21"
 
 cudl_services_name_suffix              = "cudl-services"
 cudl_services_domain_name              = "services"

@@ -327,11 +327,6 @@ variable "solr_use_service_discovery" {
   description = "Whether SOLR should use Service Discovery"
 }
 
-variable "solr_ingress_security_group_id" {
-  type        = string
-  description = "ID of the Security Group to allow access to SOLR service"
-}
-
 variable "cudl_services_name_suffix" {
   type        = string
   description = "Suffix to add to CUDL services resource names"
