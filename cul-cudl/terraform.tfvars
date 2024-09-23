@@ -314,7 +314,6 @@ content_loader_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPT
 # SOLR Worload
 solr_name_suffix               = "solr"
 solr_domain_name               = "solr"
-solr_api_port                  = 80
 solr_application_port          = 8983
 solr_target_group_port         = 8081
 solr_ecr_repository_names      = ["cudl/solr-api", "cudl/solr"]

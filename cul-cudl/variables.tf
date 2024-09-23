@@ -277,11 +277,6 @@ variable "solr_application_port" {
   description = "Port number to be used for the SOLR application"
 }
 
-variable "solr_api_port" {
-  type        = number
-  description = "Port number to be used for the SOLR API"
-}
-
 variable "solr_target_group_port" {
   type        = number
   description = "Port number to be used for the SOLR Target Group"
