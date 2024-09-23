@@ -290,6 +290,7 @@ cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cul-cudl.net."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
+asg_allow_all_egress           = true
 route53_zone_id_existing       = "Z048007032WTKFJCB78QT"
 route53_zone_force_destroy     = true
 alb_enable_deletion_protection = false

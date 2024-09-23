@@ -161,6 +161,11 @@ variable "asg_desired_capacity" {
   description = "Desired number of instances in the Autoscaling Group"
 }
 
+variable "asg_allow_all_egress" {
+  type        = bool
+  description = "Whether to allow EC2 instances in ASG egress to all targets"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   description = "CIDR block for the base architecture VPC"
