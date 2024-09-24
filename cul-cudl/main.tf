@@ -47,12 +47,10 @@ module "cudl-data-processing" {
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
-
-  # depends_on = [module.base_architecture]
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/task-additional-policies"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -71,9 +69,10 @@ module "content_loader" {
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_execution_bucket_objects = {
     "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/content-loader/cl-ui.env.ttfpl", {
-      region          = var.deployment-aws-region
-      source_bucket   = module.cudl-data-processing.source_bucket
-      releases_bucket = module.cudl-data-processing.destination_bucket
+      region                     = var.deployment-aws-region
+      source_bucket              = module.cudl-data-processing.source_bucket
+      releases_bucket            = module.cudl-data-processing.destination_bucket
+      releases_bucket_production = var.content_loader_releases_bucket_production
     })
   }
   vpc_id                     = module.base_architecture.vpc_id
@@ -88,7 +87,11 @@ module "content_loader" {
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods = var.content_loader_allowed_methods
-  tags                       = local.default_tags
+  iam_task_additional_policy_arns = [
+    aws_iam_policy.staging_cudl_data_releases.arn,
+    aws_iam_policy.production_cudl_data_releases.arn
+  ]
+  tags = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
@@ -119,26 +122,23 @@ module "solr" {
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
   ecs_service_deployment_minimum_healthy_percent = 0
   ecs_service_deployment_maximum_percent         = 100
-  # s3_task_execution_bucket_objects = {
-  #   for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix])), f]) => file("${path.module}/assets/solr/${f}")
-  # }
-  vpc_id                     = module.base_architecture.vpc_id
-  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
-  alb_arn                    = module.base_architecture.alb_arn
-  alb_dns_name               = module.base_architecture.alb_dns_name
-  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
-  asg_name                   = module.base_architecture.asg_name
-  asg_security_group_id      = module.base_architecture.asg_security_group_id
-  alb_security_group_id      = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
-  cloudfront_allowed_methods = var.solr_allowed_methods
-  allow_private_access       = var.solr_use_service_discovery
-  ingress_security_group_id  = aws_security_group.solr.id
-  efs_create_file_system     = true
-  tags                       = local.default_tags
+  vpc_id                                         = module.base_architecture.vpc_id
+  vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
+  alb_arn                                        = module.base_architecture.alb_arn
+  alb_dns_name                                   = module.base_architecture.alb_dns_name
+  alb_listener_arn                               = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                                = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                                = module.base_architecture.route53_public_hosted_zone
+  asg_name                                       = module.base_architecture.asg_name
+  asg_security_group_id                          = module.base_architecture.asg_security_group_id
+  alb_security_group_id                          = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn                       = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn                         = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
+  cloudfront_allowed_methods                     = var.solr_allowed_methods
+  allow_private_access                           = var.solr_use_service_discovery
+  ingress_security_group_id                      = aws_security_group.solr.id
+  efs_create_file_system                         = true
+  tags                                           = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }

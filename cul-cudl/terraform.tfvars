@@ -300,31 +300,32 @@ cloudwatch_log_group           = "/ecs/CUDL"
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload
-content_loader_name_suffix              = "cl"
-content_loader_domain_name              = "contentloader"
-content_loader_application_port         = 8081
-content_loader_target_group_port        = 9009
-content_loader_ecr_repository_names     = ["cudl/content-loader-db", "cudl/content-loader-ui"]
-content_loader_ecs_task_def_volumes     = { "dl-loader-db" = "/var/lib/postgresql" }
-content_loader_container_name_ui        = "dl-loader-ui"
-content_loader_container_name_db        = "dl-loader-db"
-content_loader_health_check_status_code = "401"
-content_loader_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+content_loader_name_suffix                = "cl"
+content_loader_domain_name                = "contentloader"
+content_loader_application_port           = 8081
+content_loader_target_group_port          = 9009
+content_loader_ecr_repository_names       = ["cudl/content-loader-db", "cudl/content-loader-ui"]
+content_loader_ecs_task_def_volumes       = { "dl-loader-db" = "/var/lib/postgresql" }
+content_loader_container_name_ui          = "dl-loader-ui"
+content_loader_container_name_db          = "dl-loader-db"
+content_loader_health_check_status_code   = "401"
+content_loader_allowed_methods            = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+content_loader_releases_bucket_production = "prodfirst-cudl-data-releases"
 
 # SOLR Worload
-solr_name_suffix               = "solr"
-solr_domain_name               = "solr"
-solr_application_port          = 8983
-solr_target_group_port         = 8081
-solr_ecr_repository_names      = ["cudl/solr-api", "cudl/solr"]
-solr_ecs_task_def_volumes      = { "solr-volume" = "/var/solr" }
-solr_container_name_api        = "solr-api"
-solr_container_name_solr       = "solr"
-solr_health_check_status_code  = "404"
-solr_allowed_methods           = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu          = 1536
-solr_ecs_task_def_memory       = 1638
-solr_use_service_discovery     = true
+solr_name_suffix              = "solr"
+solr_domain_name              = "solr"
+solr_application_port         = 8983
+solr_target_group_port        = 8081
+solr_ecr_repository_names     = ["cudl/solr-api", "cudl/solr"]
+solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
+solr_container_name_api       = "solr-api"
+solr_container_name_solr      = "solr"
+solr_health_check_status_code = "404"
+solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu         = 1536
+solr_ecs_task_def_memory      = 1638
+solr_use_service_discovery    = true
 
 cudl_services_name_suffix              = "cudl-services"
 cudl_services_domain_name              = "services"

@@ -262,6 +262,11 @@ variable "content_loader_allowed_methods" {
   description = "List of methods allowed by the CloudFront Distribution"
 }
 
+variable "content_loader_releases_bucket_production" {
+  type        = string
+  description = "Name of the production releases bucket for content loader deployments"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"
