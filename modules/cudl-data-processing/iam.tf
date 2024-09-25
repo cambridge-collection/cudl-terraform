@@ -53,6 +53,7 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
       "ec2:DescribeNetworkInterfaces",
       "ec2:DescribeSubnets",
       "ec2:DeleteNetworkInterface",
+      "ec2:DetachNetworkInterface",
       "ec2:UnassignPrivateIpAddresses",
       "ec2:AssignPrivateIpAddresses"
     ]
