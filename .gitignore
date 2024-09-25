@@ -3,4 +3,4 @@
 /modules/cudl-data-processing/zipped_properties_files/
 .terraform
 .terraform.lock.hcl
-
+local.tfvars
