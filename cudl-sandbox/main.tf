@@ -6,7 +6,7 @@ module "cudl-data-processing" {
   dst-prefix                                = var.dst-prefix
   dst-s3-prefix                             = var.dst-s3-prefix
   efs-name                                  = var.efs-name
-  efs_subnet_ids                            = module.base_architecture.vpc_private_subnet_ids
+  efs_subnets                               = zipmap(["${local.base_name_prefix}-subnet-private-a", "${local.base_name_prefix}-subnet-private-b"], module.base_architecture.vpc_private_subnet_ids)
   lambda-alias-name                         = var.lambda-alias-name
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
@@ -14,7 +14,8 @@ module "cudl-data-processing" {
   additional_lambda_environment_variables   = local.additional_lambda_variables
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
-  default-lambda-vpc                        = "rmm98-sandbox-cudl-ecs-vpc"
+  vpcs                                      = { "${local.base_name_prefix}-vpc" = module.base_architecture.vpc_id }
+  default-lambda-vpc                        = join("-", [local.base_name_prefix, "vpc"])
   lambda-jar-bucket                         = var.lambda-jar-bucket
   aws-account-number                        = data.aws_caller_identity.current.account_id
   transform-lambda-bucket-sns-notifications = var.transform-lambda-bucket-sns-notifications
@@ -30,9 +31,9 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.4.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.6.0"
 
-  name_prefix                    = join("-", compact([local.environment, var.cluster_name_suffix]))
+  name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
   route53_zone_domain_name       = var.registered_domain_name
   route53_zone_id_existing       = var.route53_zone_id_existing
@@ -48,7 +49,7 @@ module "base_architecture" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -91,7 +92,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -115,9 +116,9 @@ module "solr" {
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
   ecs_service_deployment_minimum_healthy_percent = 0
   ecs_service_deployment_maximum_percent         = 100
-  s3_task_execution_bucket_objects = {
-    for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix])), f]) => file("${path.module}/assets/solr/${f}")
-  }
+  # s3_task_execution_bucket_objects = {
+  #   for f in fileset("assets/solr", "**") : join("/", [join("-", compact([var.environment, var.solr_name_suffix])), f]) => file("${path.module}/assets/solr/${f}")
+  # }
   vpc_id                     = module.base_architecture.vpc_id
   vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
   alb_arn                    = module.base_architecture.alb_arn
@@ -141,7 +142,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -176,7 +177,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id

@@ -50,7 +50,7 @@ module "cudl-data-processing" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/task-additional-policies"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -87,10 +87,10 @@ module "content_loader" {
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods = var.content_loader_allowed_methods
-  # iam_task_additional_policies = {
-  #   a = aws_iam_policy.staging_cudl_data_releases.arn,
-  #   b = aws_iam_policy.production_cudl_data_releases.arn
-  # }
+  iam_task_additional_policies = {
+    staging_releases    = aws_iam_policy.staging_cudl_data_releases.arn,
+    production_releases = aws_iam_policy.production_cudl_data_releases.arn
+  }
   tags = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -98,7 +98,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -145,7 +145,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -180,7 +180,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.1.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id

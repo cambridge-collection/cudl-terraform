@@ -310,7 +310,7 @@ content_loader_container_name_ui          = "dl-loader-ui"
 content_loader_container_name_db          = "dl-loader-db"
 content_loader_health_check_status_code   = "401"
 content_loader_allowed_methods            = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
-content_loader_releases_bucket_production = "prodstaging-cudl-data-releases"
+content_loader_releases_bucket_production = "prodfirst-cudl-data-releases"
 
 # SOLR Worload
 solr_name_suffix              = "solr"
