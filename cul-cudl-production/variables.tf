@@ -197,6 +197,16 @@ variable "route53_zone_id_existing" {
   description = "ID of an existing Route 53 Hosted zone as an alternative to creating a hosted zone"
 }
 
+variable "acm_certificate_arn" {
+  type        = string
+  description = "ARN of an existing ACM certificate suitable for the Route 53 domain"
+}
+
+variable "acm_certificate_arn_us-east-1" {
+  type        = string
+  description = "ARN of an existing ACM certificate in us-east-1 region suitable for the Route 53 domain"
+}
+
 variable "route53_zone_force_destroy" {
   type        = bool
   description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone"

@@ -4,8 +4,8 @@ locals {
   # cudl_viewer_sidecar_container_name = join("-", ["cudl-viewer-sidecar", var.cluster_name_suffix])
   cudl_viewer_container_defs = [
     {
-      name     = local.cudl_viewer_container_name,
-      image    = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer"].image_uri,
+      name              = local.cudl_viewer_container_name,
+      image             = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer"].image_uri,
       cpu               = 0,
       memoryReservation = 512,
       portMappings = [

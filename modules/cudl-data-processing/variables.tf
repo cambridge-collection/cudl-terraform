@@ -213,3 +213,15 @@ variable "dashboard_widget_size" {
   description = "Size of CloudWatch Dashboard widget panels"
   default     = 6
 }
+
+variable "acm_create_certificate" {
+  type        = bool
+  description = "Whether to create a certificate in Amazon Certificate Manager"
+  default     = true
+}
+
+variable "acm_certificate_arn" {
+  type        = string
+  description = "ARN of an existing certificate in us-east-1 region of Amazon Certificate Manager"
+  default     = null
+}

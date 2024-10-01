@@ -186,16 +186,18 @@ lambda-alias-name = "LIVE"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases-efs"
-cloudfront_route53_zone_id   = "Z048007032WTKFJCB78QT"
+cloudfront_route53_zone_id   = "Z03809063VDGJ8MKPHFRV"
 
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
-registered_domain_name         = "cul-cudl.net."
-asg_desired_capacity           = 4 # n = number of tasks
-asg_max_size                   = 5 # n + 1
+registered_domain_name         = "cudl.lib.cam.ac.uk."
+asg_desired_capacity           = 3 # n = number of tasks
+asg_max_size                   = 4 # n + 1
 asg_allow_all_egress           = true
-route53_zone_id_existing       = "Z048007032WTKFJCB78QT"
+route53_zone_id_existing       = "Z03809063VDGJ8MKPHFRV"
 route53_zone_force_destroy     = true
+acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
+acm_certificate_arn_us-east-1  = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
 alb_enable_deletion_protection = false
 vpc_cidr_block                 = "10.27.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
@@ -203,19 +205,19 @@ cloudwatch_log_group           = "/ecs/CUDL"
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # SOLR Worload
-solr_name_suffix               = "solr"
-solr_domain_name               = "solr"
-solr_application_port          = 8983
-solr_target_group_port         = 8081
-solr_ecr_repository_names      = ["cudl/solr-api", "cudl/solr"]
-solr_ecs_task_def_volumes      = { "solr-volume" = "/var/solr" }
-solr_container_name_api        = "solr-api"
-solr_container_name_solr       = "solr"
-solr_health_check_status_code  = "404"
-solr_allowed_methods           = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu          = 1536
-solr_ecs_task_def_memory       = 1638
-solr_use_service_discovery     = true
+solr_name_suffix              = "solr"
+solr_domain_name              = "solr"
+solr_application_port         = 8983
+solr_target_group_port        = 8081
+solr_ecr_repository_names     = ["cudl/solr-api", "cudl/solr"]
+solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
+solr_container_name_api       = "solr-api"
+solr_container_name_solr      = "solr"
+solr_health_check_status_code = "404"
+solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu         = 1536
+solr_ecs_task_def_memory      = 1638
+solr_use_service_discovery    = true
 
 cudl_services_name_suffix              = "cudl-services"
 cudl_services_domain_name              = "services"

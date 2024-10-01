@@ -1,5 +1,5 @@
 resource "aws_acm_certificate" "transcriptions" {
-  count = var.create_cloudfront_distribution ? 1 : 0
+  count = var.acm_create_certificate && var.create_cloudfront_distribution ? 1 : 0
 
   domain_name       = local.transcriptions_domain_name
   validation_method = "DNS"
@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "transcriptions" {
 }
 
 resource "aws_acm_certificate_validation" "transcriptions" {
-  count = var.create_cloudfront_distribution ? 1 : 0
+  count = var.acm_create_certificate && var.create_cloudfront_distribution ? 1 : 0
 
   certificate_arn         = aws_acm_certificate.transcriptions.0.arn
   validation_record_fqdns = [for record in aws_route53_record.transcriptions_acm_validation_cname : record.fqdn]
@@ -24,7 +24,7 @@ resource "aws_acm_certificate_validation" "transcriptions" {
 }
 
 resource "aws_acm_certificate" "transcriptions_us-east-1" {
-  count = var.create_cloudfront_distribution ? 1 : 0
+  count = var.acm_create_certificate && var.create_cloudfront_distribution ? 1 : 0
 
   provider          = aws.us-east-1
   domain_name       = local.transcriptions_domain_name

@@ -7,7 +7,7 @@ data "aws_route53_zone" "domain" {
 resource "aws_route53_record" "transcriptions_cloudfront_alias" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
-  name = aws_acm_certificate.transcriptions_us-east-1.0.domain_name # NOTE match CloudFront Distribution alias
+  name = local.transcriptions_domain_name # NOTE match CloudFront Distribution alias
   type = "A"
   alias {
     name                   = aws_cloudfront_distribution.transcriptions.0.domain_name
@@ -18,7 +18,7 @@ resource "aws_route53_record" "transcriptions_cloudfront_alias" {
 }
 
 resource "aws_route53_record" "transcriptions_acm_validation_cname" {
-  for_each = var.create_cloudfront_distribution ? {
+  for_each = var.acm_create_certificate && var.create_cloudfront_distribution ? {
     for dvo in aws_acm_certificate.transcriptions.0.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
