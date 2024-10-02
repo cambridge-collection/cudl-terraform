@@ -8,7 +8,6 @@ locals {
     Subcomponent = var.subcomponent
     Deployment   = title(local.environment)
     Source       = "https://github.com/cambridge-collection/cudl-terraform"
-    Owner        = var.owner
     terraform    = true
   }
   additional_lambda_variables = {

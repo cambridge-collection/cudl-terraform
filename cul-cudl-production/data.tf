@@ -17,3 +17,11 @@ data "aws_ecr_image" "cudl_viewer" {
   repository_name = each.key
   image_tag       = "latest"
 }
+
+data "aws_ssm_parameter" "cudl_viewer_smtp_username" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/SMTP/Username"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_smtp_password" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/SMTP/Password"
+}

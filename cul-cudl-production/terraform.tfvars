@@ -1,17 +1,17 @@
-environment                  = "prodfirst"
+environment                  = "production"
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
-destination-bucket-name      = "cudl-data-releases"
-transcriptions-bucket-name   = "cudl-transcriptions"
-enhancements-bucket-name     = "cudl-data-enhancements"
-source-bucket-name           = "cudl-data-source"
+destination-bucket-name      = "cul-cudl-data-releases"
+transcriptions-bucket-name   = "cul-cudl-transcriptions"
+enhancements-bucket-name     = "cul-cudl-data-enhancements"
+source-bucket-name           = "cul-cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "cul-cudl.mvn.cudl.lib.cam.ac.uk"
 
 transform-lambda-bucket-sns-notifications = [
   {
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
     "filter_prefix" = "collections/",
     "filter_suffix" = ".json"
     "subscriptions" = [
@@ -32,49 +32,49 @@ transform-lambda-bucket-sqs-notifications = [
     "queue_name"    = "CUDLIndexQueue"
     "filter_prefix" = "solr-json/"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.dl-dataset.json"
     "filter_suffix" = ""
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.ui.json5"
     "filter_suffix" = ""
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "json/"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "pages/"
     "filter_suffix" = ""
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "ui/"
     "filter_suffix" = ""
-    "bucket_name"   = "cudl-data-releases"
+    "bucket_name"   = "cul-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDL_Transkribus_IngestQueue"
     "filter_prefix" = "transkribus/curious-cures/"
     "filter_suffix" = ".xml"
-    "bucket_name"   = "cudl-data-enhancements"
+    "bucket_name"   = "cul-cudl-data-enhancements"
   }
 ]
 transform-lambda-information = [
@@ -82,9 +82,9 @@ transform-lambda-information = [
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
     "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:6e4cb978ca3e673fed2da24b12615fc510745798f9a74aedd6be5a239fa78466"
     "queue_name"               = "CUDL_TEIProcessingQueue"
-    "vpc_name"                 = "prodfirst-cudl-ecs-vpc"
-    "subnet_names"             = ["prodfirst-cudl-ecs-subnet-private-a", "prodfirst-cudl-ecs-subnet-private-b"]
-    "security_group_names"     = ["prodfirst-cudl-ecs-vpc-endpoints", "prodfirst-solr-external"]
+    "vpc_name"                 = "production-cudl-ecs-vpc"
+    "subnet_names"             = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
+    "security_group_names"     = ["production-cudl-ecs-vpc-endpoints", "production-solr-external"]
     "timeout"                  = 300
     "memory"                   = 4096
     "batch_window"             = 2
@@ -94,7 +94,7 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "environment_variables" = {
       ANT_TARGET             = "full"
-      SEARCH_HOST            = "solr-api-cudl-ecs.prodfirst-solr"
+      SEARCH_HOST            = "solr-api-cudl-ecs.production-solr"
       SEARCH_PORT            = 8081
       SEARCH_COLLECTION_PATH = "collections"
     }
@@ -103,9 +103,9 @@ transform-lambda-information = [
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
     "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:7ff916e5d805361e86a81669f83263cb7f65a66d3bff754583d88f3d01b1a962"
     "queue_name"               = "CUDLIndexQueue"
-    "vpc_name"                 = "prodfirst-cudl-ecs-vpc"
-    "subnet_names"             = ["prodfirst-cudl-ecs-subnet-private-a", "prodfirst-cudl-ecs-subnet-private-b"]
-    "security_group_names"     = ["prodfirst-cudl-ecs-vpc-endpoints", "prodfirst-solr-external"]
+    "vpc_name"                 = "production-cudl-ecs-vpc"
+    "subnet_names"             = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
+    "security_group_names"     = ["production-cudl-ecs-vpc-endpoints", "production-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -114,7 +114,7 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.prodfirst-solr"
+      API_HOST = "solr-api-cudl-ecs.production-solr"
       API_PORT = "8081"
       API_PATH = "item"
     }
@@ -123,9 +123,9 @@ transform-lambda-information = [
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
     "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:7ff916e5d805361e86a81669f83263cb7f65a66d3bff754583d88f3d01b1a962"
     "queue_name"               = "CUDLIndexCollectionQueue"
-    "vpc_name"                 = "prodfirst-cudl-ecs-vpc"
-    "subnet_names"             = ["prodfirst-cudl-ecs-subnet-private-a", "prodfirst-cudl-ecs-subnet-private-b"]
-    "security_group_names"     = ["prodfirst-cudl-ecs-vpc-endpoints", "prodfirst-solr-external"]
+    "vpc_name"                 = "production-cudl-ecs-vpc"
+    "subnet_names"             = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
+    "security_group_names"     = ["production-cudl-ecs-vpc-endpoints", "production-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -134,7 +134,7 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.prodfirst-solr"
+      API_HOST = "solr-api-cudl-ecs.production-solr"
       API_PORT = "8081"
       API_PATH = "collection"
     }
@@ -144,8 +144,8 @@ transform-lambda-information = [
     "description"           = "Copies file from S3 to EFS"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"          = ["prodfirst-cudl-ecs-subnet-private-a", "prodfirst-cudl-ecs-subnet-private-b"]
-    "security_group_names"  = ["prodfirst-cudl-ecs-vpc-endpoints", "prodfirst-cudl-data-releases-efs"]
+    "subnet_names"          = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
+    "security_group_names"  = ["production-cudl-ecs-vpc-endpoints", "production-cudl-data-releases-efs"]
     "use_datadog_variables" = false
     "mount_fs"              = true
     "timeout"               = 900
@@ -157,9 +157,9 @@ transform-lambda-information = [
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
     "image_uri"                  = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/transkribus-processing@sha256:03cf5047a7ddd72163edc8081e7cfad652c6072daa91d0ab941fc96b4d481a40"
     "queue_name"                 = "CUDL_Transkribus_IngestQueue"
-    "vpc_name"                   = "prodfirst-cudl-ecs-vpc"
-    "subnet_names"               = ["prodfirst-cudl-ecs-subnet-private-a", "prodfirst-cudl-ecs-subnet-private-b"]
-    "security_group_names"       = ["prodfirst-cudl-ecs-vpc-endpoints"]
+    "vpc_name"                   = "production-cudl-ecs-vpc"
+    "subnet_names"               = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
+    "security_group_names"       = ["production-cudl-ecs-vpc-endpoints"]
     "timeout"                    = 300
     "memory"                     = 4096
     "batch_window"               = 2

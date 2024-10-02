@@ -161,8 +161,8 @@ module "cudl_viewer" {
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
-      smtp_username     = var.cudl_viewer_smtp_username
-      smtp_password     = var.cudl_viewer_smtp_password
+      smtp_username     = data.aws_ssm_parameter.cudl_viewer_smtp_username.value
+      smtp_password     = data.aws_ssm_parameter.cudl_viewer_smtp_password.value
       mount_path        = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
       search_url        = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
       cudl_services_url = format("%s/", module.cudl_services.link)

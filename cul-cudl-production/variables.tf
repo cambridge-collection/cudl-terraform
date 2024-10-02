@@ -18,11 +18,6 @@ variable "subcomponent" {
   description = "If applicable: any value, e.g. Fedora"
 }
 
-variable "owner" {
-  type        = string
-  description = "Optional Owner tag. Your CRSid, e.g. jag245"
-}
-
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
@@ -367,16 +362,6 @@ variable "cudl_viewer_health_check_status_code" {
 variable "cudl_viewer_allowed_methods" {
   type        = list(string)
   description = "List of methods allowed by the CloudFront Distribution"
-}
-
-variable "cudl_viewer_smtp_username" {
-  type        = string
-  description = "Cudl Viewer SMTP user name"
-}
-
-variable "cudl_viewer_smtp_password" {
-  type        = string
-  description = "Cudl Viewer SMTP password"
 }
 
 variable "cudl_viewer_ecs_task_def_volumes" {
