@@ -225,3 +225,9 @@ variable "acm_certificate_arn" {
   description = "ARN of an existing certificate in us-east-1 region of Amazon Certificate Manager"
   default     = null
 }
+
+variable "production_deployment" {
+  type        = bool
+  description = "Whether to modify the domain name used by transcriptions for Live service"
+  default     = false
+}

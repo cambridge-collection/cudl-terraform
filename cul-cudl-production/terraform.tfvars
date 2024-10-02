@@ -206,7 +206,7 @@ vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api"
 
 # SOLR Worload
 solr_name_suffix              = "solr"
-solr_domain_name              = "solr"
+solr_domain_name              = "search"
 solr_application_port         = 8983
 solr_target_group_port        = 8081
 solr_ecr_repository_names     = ["cudl/solr-api", "cudl/solr"]
@@ -228,7 +228,7 @@ cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
 cudl_viewer_name_suffix                     = "cudl-viewer"
-cudl_viewer_domain_name                     = "cudl-viewer"
+cudl_viewer_domain_name                     = "viewer"
 cudl_viewer_target_group_port               = 5008
 cudl_viewer_container_port                  = 8080
 cudl_viewer_ecr_repository_names            = ["cudl/viewer"]

@@ -21,6 +21,7 @@ module "base_architecture" {
 
 module "cudl-data-processing" {
   source                                    = "../modules/cudl-data-processing"
+  production_deployment                     = true
   compressed-lambdas-directory              = var.compressed-lambdas-directory
   destination-bucket-name                   = var.destination-bucket-name
   dst-efs-prefix                            = var.dst-efs-prefix
@@ -58,7 +59,7 @@ module "solr" {
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
-  domain_name                                    = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.solr_domain_name])), var.registered_domain_name])
+  domain_name                                    = join(".", [var.solr_domain_name, var.registered_domain_name])
   alb_target_group_port                          = var.solr_target_group_port
   alb_target_group_health_check_status_code      = var.solr_health_check_status_code
   alb_target_group_deregistration_delay          = 60
@@ -108,7 +109,7 @@ module "cudl_services" {
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
-  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_services_domain_name])), var.registered_domain_name])
+  domain_name                               = join(".", [var.cudl_services_domain_name, var.registered_domain_name])
   alb_target_group_port                     = var.cudl_services_target_group_port
   alb_target_group_health_check_status_code = var.cudl_services_health_check_status_code
   ecr_repository_names                      = var.cudl_services_ecr_repository_names
@@ -146,7 +147,7 @@ module "cudl_viewer" {
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
-  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_viewer_domain_name])), var.registered_domain_name])
+  domain_name                               = join(".", [var.cudl_viewer_domain_name, var.registered_domain_name])
   alb_target_group_port                     = var.cudl_viewer_container_port
   alb_target_group_health_check_status_code = var.cudl_viewer_health_check_status_code
   ecr_repository_names                      = var.cudl_viewer_ecr_repository_names
