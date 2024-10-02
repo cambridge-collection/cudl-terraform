@@ -18,11 +18,6 @@ variable "subcomponent" {
   description = "If applicable: any value, e.g. Fedora"
 }
 
-variable "owner" {
-  type        = string
-  description = "Optional Owner tag. Your CRSid, e.g. jag245"
-}
-
 variable "deployment-aws-region" {
   description = "The AWS region to deploy resources to"
   type        = string
@@ -195,6 +190,16 @@ variable "registered_domain_name" {
 variable "route53_zone_id_existing" {
   type        = string
   description = "ID of an existing Route 53 Hosted zone as an alternative to creating a hosted zone"
+}
+
+variable "acm_certificate_arn" {
+  type        = string
+  description = "ARN of an existing ACM certificate suitable for the Route 53 domain"
+}
+
+variable "acm_certificate_arn_us-east-1" {
+  type        = string
+  description = "ARN of an existing ACM certificate in us-east-1 region suitable for the Route 53 domain"
 }
 
 variable "route53_zone_force_destroy" {
@@ -412,16 +417,6 @@ variable "cudl_viewer_health_check_status_code" {
 variable "cudl_viewer_allowed_methods" {
   type        = list(string)
   description = "List of methods allowed by the CloudFront Distribution"
-}
-
-variable "cudl_viewer_smtp_username" {
-  type        = string
-  description = "Cudl Viewer SMTP user name"
-}
-
-variable "cudl_viewer_smtp_password" {
-  type        = string
-  description = "Cudl Viewer SMTP password"
 }
 
 variable "cudl_viewer_ecs_task_def_volumes" {

@@ -1,5 +1,5 @@
 locals {
-  environment      = strcontains(lower(var.environment), "sandbox") ? join("-", [var.owner, var.environment]) : var.environment
+  environment      = var.environment
   base_name_prefix = join("-", compact([local.environment, var.cluster_name_suffix]))
   default_tags = {
     Environment  = title(var.environment)
@@ -8,7 +8,6 @@ locals {
     Subcomponent = var.subcomponent
     Deployment   = title(local.environment)
     Source       = "https://github.com/cambridge-collection/cudl-terraform"
-    Owner        = var.owner
     terraform    = true
   }
   additional_lambda_variables = {

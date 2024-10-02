@@ -287,12 +287,14 @@ cloudfront_route53_zone_id   = "Z048007032WTKFJCB78QT"
 
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
-registered_domain_name         = "cul-cudl.net."
+registered_domain_name         = "cudl.lib.cam.ac.uk."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
 route53_zone_id_existing       = "Z048007032WTKFJCB78QT"
 route53_zone_force_destroy     = true
+acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
+acm_certificate_arn_us-east-1  = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
 alb_enable_deletion_protection = false
 vpc_cidr_block                 = "10.88.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
@@ -301,7 +303,7 @@ vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api"
 
 # Content Loader Workload
 content_loader_name_suffix                = "cl"
-content_loader_domain_name                = "contentloader"
+content_loader_domain_name                = "content-loader"
 content_loader_application_port           = 8081
 content_loader_target_group_port          = 9009
 content_loader_ecr_repository_names       = ["cudl/content-loader-db", "cudl/content-loader-ui"]
@@ -314,7 +316,7 @@ content_loader_releases_bucket_production = "prodfirst-cudl-data-releases"
 
 # SOLR Worload
 solr_name_suffix              = "solr"
-solr_domain_name              = "solr"
+solr_domain_name              = "search"
 solr_application_port         = 8983
 solr_target_group_port        = 8081
 solr_ecr_repository_names     = ["cudl/solr-api", "cudl/solr"]
@@ -336,7 +338,7 @@ cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
 cudl_viewer_name_suffix                     = "cudl-viewer"
-cudl_viewer_domain_name                     = "cudl-viewer"
+cudl_viewer_domain_name                     = "viewer"
 cudl_viewer_target_group_port               = 5008
 cudl_viewer_container_port                  = 8080
 cudl_viewer_ecr_repository_names            = ["cudl/viewer"]
