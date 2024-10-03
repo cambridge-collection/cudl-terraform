@@ -283,7 +283,7 @@ lambda-alias-name = "LIVE"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases-efs"
-cloudfront_route53_zone_id   = "Z048007032WTKFJCB78QT"
+cloudfront_route53_zone_id   = "Z03809063VDGJ8MKPHFRV"
 
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
@@ -291,7 +291,7 @@ registered_domain_name         = "cudl.lib.cam.ac.uk."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
-route53_zone_id_existing       = "Z048007032WTKFJCB78QT"
+route53_zone_id_existing       = "Z03809063VDGJ8MKPHFRV"
 route53_zone_force_destroy     = true
 acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
 acm_certificate_arn_us-east-1  = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
@@ -312,7 +312,7 @@ content_loader_container_name_ui          = "dl-loader-ui"
 content_loader_container_name_db          = "dl-loader-db"
 content_loader_health_check_status_code   = "401"
 content_loader_allowed_methods            = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
-content_loader_releases_bucket_production = "prodfirst-cudl-data-releases"
+content_loader_releases_bucket_production = "production-cul-cudl-data-releases"
 
 # SOLR Worload
 solr_name_suffix              = "solr"
