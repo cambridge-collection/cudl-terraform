@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:6e4cb978ca3e673fed2da24b12615fc510745798f9a74aedd6be5a239fa78466"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:29351327b1cca28d5a6e7a9e305775eb21772e694a60227ee40c701cc73e0aa2"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -198,7 +198,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:7ff916e5d805361e86a81669f83263cb7f65a66d3bff754583d88f3d01b1a962"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -218,7 +218,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:7ff916e5d805361e86a81669f83263cb7f65a66d3bff754583d88f3d01b1a962"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -302,11 +302,14 @@ cloudwatch_log_group           = "/ecs/CUDL"
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload
-content_loader_name_suffix                = "cl"
-content_loader_domain_name                = "content-loader"
-content_loader_application_port           = 8081
-content_loader_target_group_port          = 9009
-content_loader_ecr_repository_names       = ["cudl/content-loader-db", "cudl/content-loader-ui"]
+content_loader_name_suffix       = "cl"
+content_loader_domain_name       = "content-loader"
+content_loader_application_port  = 8081
+content_loader_target_group_port = 9009
+content_loader_ecr_repositories = {
+  "cudl/content-loader-db" = "sha256:d2d846ea5346dd7c639eb0a08aae441437c81a9608b1e98d19a1f351e5b54e87",
+  "cudl/content-loader-ui" = "sha256:cb306689bae97d95d2a606a50bcf6d3b0b746827ce6c8831025ce0b97c3bf6b7"
+}
 content_loader_ecs_task_def_volumes       = { "dl-loader-db" = "/var/lib/postgresql" }
 content_loader_container_name_ui          = "dl-loader-ui"
 content_loader_container_name_db          = "dl-loader-db"
@@ -315,11 +318,14 @@ content_loader_allowed_methods            = ["HEAD", "DELETE", "POST", "GET", "O
 content_loader_releases_bucket_production = "production-cul-cudl-data-releases"
 
 # SOLR Worload
-solr_name_suffix              = "solr"
-solr_domain_name              = "search"
-solr_application_port         = 8983
-solr_target_group_port        = 8081
-solr_ecr_repository_names     = ["cudl/solr-api", "cudl/solr"]
+solr_name_suffix       = "solr"
+solr_domain_name       = "search"
+solr_application_port  = 8983
+solr_target_group_port = 8081
+solr_ecr_repositories = {
+  "cudl/solr-api" = "sha256:00ebbe9c8644f13c6e134c966ca8bd2eccf8e168b34da2a149fd2ae297dd5964",
+  "cudl/solr"     = "sha256:44a4f1e0cfe92ac90c5e9905f2e2764e15edc8aff76bc51a3b5ded9a2c3eff59"
+}
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
 solr_container_name_solr      = "solr"
@@ -329,19 +335,23 @@ solr_ecs_task_def_cpu         = 1536
 solr_ecs_task_def_memory      = 1638
 solr_use_service_discovery    = true
 
-cudl_services_name_suffix              = "cudl-services"
-cudl_services_domain_name              = "services"
-cudl_services_target_group_port        = 8085
-cudl_services_container_port           = 3000
-cudl_services_ecr_repository_names     = ["cudl/services"]
+cudl_services_name_suffix       = "cudl-services"
+cudl_services_domain_name       = "services"
+cudl_services_target_group_port = 8085
+cudl_services_container_port    = 3000
+cudl_services_ecr_repositories = {
+  "cudl/services" = "sha256:98b7ee01cca8c1093d3d719d13640db9f9d7e2439933d847a63e733d96f4660e"
+}
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
-cudl_viewer_name_suffix                     = "cudl-viewer"
-cudl_viewer_domain_name                     = "viewer"
-cudl_viewer_target_group_port               = 5008
-cudl_viewer_container_port                  = 8080
-cudl_viewer_ecr_repository_names            = ["cudl/viewer"]
+cudl_viewer_name_suffix       = "cudl-viewer"
+cudl_viewer_domain_name       = "viewer"
+cudl_viewer_target_group_port = 5008
+cudl_viewer_container_port    = 8080
+cudl_viewer_ecr_repositories = {
+  "cudl/viewer" = "sha256:8d88d10a83fbc84308811678ef689d560ed872417397a473c37c66d6545b317a"
+}
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
