@@ -55,7 +55,7 @@ module "cudl-data-processing" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -65,7 +65,7 @@ module "solr" {
   alb_target_group_deregistration_delay          = 60
   alb_target_group_health_check_interval         = 30
   alb_target_group_health_check_timeout          = 10
-  ecr_repository_names                           = var.solr_ecr_repository_names
+  ecr_repository_names                           = keys(var.solr_ecr_repositories)
   ecr_repositories_exist                         = true
   s3_task_buckets                                = [module.cudl-data-processing.destination_bucket]
   s3_task_execution_bucket                       = module.base_architecture.s3_bucket
@@ -77,8 +77,8 @@ module "solr" {
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
-  ecs_service_deployment_minimum_healthy_percent = 0
-  ecs_service_deployment_maximum_percent         = 100
+  ecs_service_deployment_minimum_healthy_percent = 100 # set to 100 if not deploying a new version
+  ecs_service_deployment_maximum_percent         = 200 # set to 200 if not deploying a new version
   vpc_id                                         = module.base_architecture.vpc_id
   vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
   alb_arn                                        = module.base_architecture.alb_arn
@@ -105,14 +105,14 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [var.cudl_services_domain_name, var.registered_domain_name])
   alb_target_group_port                     = var.cudl_services_target_group_port
   alb_target_group_health_check_status_code = var.cudl_services_health_check_status_code
-  ecr_repository_names                      = var.cudl_services_ecr_repository_names
+  ecr_repository_names                      = keys(var.cudl_services_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
@@ -143,14 +143,15 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [var.cudl_viewer_domain_name, var.registered_domain_name])
   alb_target_group_port                     = var.cudl_viewer_container_port
   alb_target_group_health_check_status_code = var.cudl_viewer_health_check_status_code
-  ecr_repository_names                      = var.cudl_viewer_ecr_repository_names
+  alternative_domain_names                  = var.cudl_viewer_alternative_domain_names
+  ecr_repository_names                      = keys(var.cudl_viewer_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_network_mode                          = "awsvpc"
