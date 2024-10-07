@@ -23,3 +23,11 @@ data "aws_ecr_image" "cudl_viewer" {
   repository_name = each.key
   image_tag       = "bf08a89"
 }
+
+data "aws_ssm_parameter" "cudl_viewer_cloudfront_username" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/CloudFront/Username"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_cloudfront_password" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/CloudFront/Password"
+}
