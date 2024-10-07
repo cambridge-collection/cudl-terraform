@@ -78,7 +78,7 @@ module "solr" {
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
   ecs_service_deployment_minimum_healthy_percent = 100 # set to 100 if not deploying a new version
-  ecs_service_deployment_maximum_percent         = 100 # set to 200 if not deploying a new version
+  ecs_service_deployment_maximum_percent         = 101 # set to 101 if not deploying a new version
   vpc_id                                         = module.base_architecture.vpc_id
   vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
   alb_arn                                        = module.base_architecture.alb_arn

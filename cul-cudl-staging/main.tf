@@ -127,7 +127,7 @@ module "solr" {
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
-  ecs_service_deployment_minimum_healthy_percent = 100
+  ecs_service_deployment_minimum_healthy_percent = 0 # setting to 100 prevents deployments but keeps services running
   ecs_service_deployment_maximum_percent         = 100
   vpc_id                                         = module.base_architecture.vpc_id
   vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
