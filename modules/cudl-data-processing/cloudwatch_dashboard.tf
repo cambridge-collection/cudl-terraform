@@ -64,11 +64,11 @@ resource "aws_cloudwatch_dashboard" "sqs" {
   dashboard_body = jsonencode({
     widgets = concat(
       [
-        for queue in local.transform_lambda_queues :
+        for queue in keys(local.transform_lambda_queues) :
         {
           type   = "metric"
-          x      = index(tolist(local.transform_lambda_queues), queue) > (length(local.transform_lambda_queues) / 2) ? var.dashboard_widget_size : 0
-          y      = index(tolist(local.transform_lambda_queues), queue) * var.dashboard_widget_size
+          x      = index(keys(local.transform_lambda_queues), queue) > (length(keys(local.transform_lambda_queues)) / 2) ? var.dashboard_widget_size : 0
+          y      = index(keys(local.transform_lambda_queues), queue) * var.dashboard_widget_size
           width  = var.dashboard_widget_size
           height = var.dashboard_widget_size
 
@@ -87,11 +87,11 @@ resource "aws_cloudwatch_dashboard" "sqs" {
         }
       ],
       [
-        for queue in local.transform_lambda_queues :
+        for queue in keys(local.transform_lambda_queues) :
         {
           type   = "metric"
-          x      = index(tolist(local.transform_lambda_queues), queue) > (length(local.transform_lambda_queues) / 2) ? var.dashboard_widget_size * 3 : var.dashboard_widget_size * 2
-          y      = index(tolist(local.transform_lambda_queues), queue) * var.dashboard_widget_size
+          x      = index(keys(local.transform_lambda_queues), queue) > (length(keys(local.transform_lambda_queues)) / 2) ? var.dashboard_widget_size * 3 : var.dashboard_widget_size * 2
+          y      = index(keys(local.transform_lambda_queues), queue) * var.dashboard_widget_size
           width  = var.dashboard_widget_size
           height = var.dashboard_widget_size
 
