@@ -25,3 +25,11 @@ data "aws_ssm_parameter" "cudl_viewer_smtp_username" {
 data "aws_ssm_parameter" "cudl_viewer_smtp_password" {
   name = "/Environments/${title(var.environment)}/CUDL/Viewer/SMTP/Password"
 }
+
+data "aws_ssm_parameter" "cudl_viewer_cloudfront_username" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/CloudFront/Username"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_cloudfront_password" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/CloudFront/Password"
+}
