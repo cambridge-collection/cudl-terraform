@@ -54,7 +54,7 @@ module "cudl-data-processing" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -105,7 +105,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -155,7 +155,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -193,7 +193,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -218,28 +218,29 @@ module "cudl_viewer" {
       cudl_services_url = format("%s/", module.cudl_services.link)
     })
   }
-  s3_task_buckets               = [module.cudl-data-processing.destination_bucket]
-  vpc_id                        = module.base_architecture.vpc_id
-  vpc_subnet_ids                = module.base_architecture.vpc_private_subnet_ids
-  vpc_security_groups_extra     = [module.base_architecture.vpc_endpoint_security_group_id, aws_security_group.solr.id]
-  alb_arn                       = module.base_architecture.alb_arn
-  alb_dns_name                  = module.base_architecture.alb_dns_name
-  alb_listener_arn              = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn               = module.base_architecture.ecs_cluster_arn
-  route53_zone_id               = module.base_architecture.route53_public_hosted_zone
-  asg_name                      = module.base_architecture.asg_name
-  asg_security_group_id         = module.base_architecture.asg_security_group_id
-  alb_security_group_id         = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn      = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn        = module.base_architecture.waf_acl_arn
-  cloudfront_allowed_methods    = var.cudl_viewer_allowed_methods
-  efs_use_existing_filesystem   = true
-  efs_file_system_id            = module.cudl-data-processing.efs_file_system_id
-  efs_security_group_id         = module.cudl-data-processing.efs_security_group_id
-  acm_create_certificate        = false
-  acm_certificate_arn           = var.acm_certificate_arn
-  acm_certificate_arn_us-east-1 = var.acm_certificate_arn_us-east-1
-  tags                          = local.default_tags
+  s3_task_buckets                        = [module.cudl-data-processing.destination_bucket]
+  vpc_id                                 = module.base_architecture.vpc_id
+  vpc_subnet_ids                         = module.base_architecture.vpc_private_subnet_ids
+  vpc_security_groups_extra              = [module.base_architecture.vpc_endpoint_security_group_id, aws_security_group.solr.id]
+  alb_arn                                = module.base_architecture.alb_arn
+  alb_dns_name                           = module.base_architecture.alb_dns_name
+  alb_listener_arn                       = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                        = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                        = module.base_architecture.route53_public_hosted_zone
+  asg_name                               = module.base_architecture.asg_name
+  asg_security_group_id                  = module.base_architecture.asg_security_group_id
+  alb_security_group_id                  = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn                 = aws_wafv2_web_acl.cudl_viewer.arn # custom WAF ACL for CUDL Viewer
+  cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
+  cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
+  efs_use_existing_filesystem            = true
+  efs_file_system_id                     = module.cudl-data-processing.efs_file_system_id
+  efs_security_group_id                  = module.cudl-data-processing.efs_security_group_id
+  acm_create_certificate                 = false
+  acm_certificate_arn                    = var.acm_certificate_arn
+  acm_certificate_arn_us-east-1          = var.acm_certificate_arn_us-east-1
+  tags                                   = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
