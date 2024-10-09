@@ -21,7 +21,7 @@ data "aws_ecr_image" "cudl_services" {
 data "aws_ecr_image" "cudl_viewer" {
   for_each        = toset(var.cudl_viewer_ecr_repository_names)
   repository_name = each.key
-  image_tag       = "bf08a89"
+  image_tag       = "3cc1224"
 }
 
 data "aws_ssm_parameter" "cudl_viewer_cloudfront_username" {

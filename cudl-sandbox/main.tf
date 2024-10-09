@@ -49,7 +49,7 @@ module "base_architecture" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -74,6 +74,7 @@ module "content_loader" {
     })
   }
   vpc_id                     = module.base_architecture.vpc_id
+  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
   alb_arn                    = module.base_architecture.alb_arn
   alb_dns_name               = module.base_architecture.alb_dns_name
   alb_listener_arn           = module.base_architecture.alb_https_listener_arn
@@ -85,6 +86,7 @@ module "content_loader" {
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods = var.content_loader_allowed_methods
+  efs_create_file_system     = true
   tags                       = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -92,7 +94,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -139,7 +141,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.2.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -174,7 +176,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/cloudfront-function"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -201,7 +203,7 @@ module "cudl_viewer" {
   s3_task_buckets                        = [module.cudl-data-processing.destination_bucket]
   vpc_id                                 = module.base_architecture.vpc_id
   vpc_subnet_ids                         = module.base_architecture.vpc_private_subnet_ids
-  vpc_security_groups_extra              = [aws_security_group.solr.id]
+  vpc_security_groups_extra              = [module.base_architecture.vpc_endpoint_security_group_id, aws_security_group.solr.id]
   alb_arn                                = module.base_architecture.alb_arn
   alb_dns_name                           = module.base_architecture.alb_dns_name
   alb_listener_arn                       = module.base_architecture.alb_https_listener_arn
