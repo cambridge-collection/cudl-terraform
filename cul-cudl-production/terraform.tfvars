@@ -68,37 +68,9 @@ transform-lambda-bucket-sqs-notifications = [
     "filter_prefix" = "ui/"
     "filter_suffix" = ""
     "bucket_name"   = "cul-cudl-data-releases"
-  },
-  {
-    "type"          = "SQS",
-    "queue_name"    = "CUDL_Transkribus_IngestQueue"
-    "filter_prefix" = "transkribus/curious-cures/"
-    "filter_suffix" = ".xml"
-    "bucket_name"   = "cul-cudl-data-enhancements"
   }
 ]
 transform-lambda-information = [
-  {
-    "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:29351327b1cca28d5a6e7a9e305775eb21772e694a60227ee40c701cc73e0aa2"
-    "queue_name"               = "CUDL_TEIProcessingQueue"
-    "vpc_name"                 = "production-cudl-ecs-vpc"
-    "subnet_names"             = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
-    "security_group_names"     = ["production-cudl-ecs-vpc-endpoints", "production-solr-external"]
-    "timeout"                  = 300
-    "memory"                   = 4096
-    "batch_window"             = 2
-    "batch_size"               = 1
-    "maximum_concurrency"      = 100
-    "use_datadog_variables"    = false
-    "use_additional_variables" = true
-    "environment_variables" = {
-      ANT_TARGET             = "full"
-      SEARCH_HOST            = "solr-api-cudl-ecs.production-solr"
-      SEARCH_PORT            = 8081
-      SEARCH_COLLECTION_PATH = "collections"
-    }
-  },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
     "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
@@ -153,30 +125,6 @@ transform-lambda-information = [
     "memory"                = 512
     "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
     "runtime"               = "java11"
-  },
-  {
-    "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
-    "image_uri"                  = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/transkribus-processing@sha256:03cf5047a7ddd72163edc8081e7cfad652c6072daa91d0ab941fc96b4d481a40"
-    "queue_name"                 = "CUDL_Transkribus_IngestQueue"
-    "vpc_name"                   = "production-cudl-ecs-vpc"
-    "subnet_names"               = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
-    "security_group_names"       = ["production-cudl-ecs-vpc-endpoints"]
-    "timeout"                    = 300
-    "memory"                     = 4096
-    "batch_window"               = 2
-    "batch_size"                 = 1
-    "maximum_concurrency"        = 100
-    "use_datadog_variables"      = false
-    "use_additional_variables"   = false
-    "use_enhancements_variables" = true
-    "environment_variables" = {
-      ANT_TARGET                = "full"
-      ANT_BUILDFILE             = "bin/build.xml"
-      XSLT_ENTRYPOINT           = "xslt/curious-cures.xsl"
-      OUTPUT_EXTENSION          = "xml"
-      EXPAND_DEFAULT_ATTRIBUTES = false
-      ALLOW_DELETE              = false
-    }
   }
 ]
 dst-efs-prefix    = "/mnt/cudl-data-releases"
@@ -212,7 +160,7 @@ solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
   "cudl/solr-api" = "sha256:00ebbe9c8644f13c6e134c966ca8bd2eccf8e168b34da2a149fd2ae297dd5964",
-  "cudl/solr"     = "sha256:44a4f1e0cfe92ac90c5e9905f2e2764e15edc8aff76bc51a3b5ded9a2c3eff59"
+  "cudl/solr"     = "sha256:d1cd962f31d983f89cc92657e97e943e844e99819840d3e0bcb1245b1549b28f"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
