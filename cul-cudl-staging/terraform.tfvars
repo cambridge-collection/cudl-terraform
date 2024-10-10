@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:29351327b1cca28d5a6e7a9e305775eb21772e694a60227ee40c701cc73e0aa2"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c8a4f4a1b9e3b9733c9d04e562d5077a015e8cf411aa1ad89fbd0b8d293647cf"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -324,7 +324,7 @@ solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
   "cudl/solr-api" = "sha256:00ebbe9c8644f13c6e134c966ca8bd2eccf8e168b34da2a149fd2ae297dd5964",
-  "cudl/solr"     = "sha256:44a4f1e0cfe92ac90c5e9905f2e2764e15edc8aff76bc51a3b5ded9a2c3eff59"
+  "cudl/solr"     = "sha256:d1cd962f31d983f89cc92657e97e943e844e99819840d3e0bcb1245b1549b28f"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
