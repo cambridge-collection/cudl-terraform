@@ -10,7 +10,7 @@ resource "aws_lambda_function" "stopped_tasks" {
   filename      = "lambda_function_payload.zip"
   function_name = local.lambda_function_name
   role          = aws_iam_role.stopped_tasks.arn
-  handler       = "lambda_handler"
+  handler       = "stopped_tasks.lambda_handler"
 
   source_code_hash = data.archive_file.lambda.output_base64sha256
 

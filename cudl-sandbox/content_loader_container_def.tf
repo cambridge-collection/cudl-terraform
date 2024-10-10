@@ -30,6 +30,10 @@ locals {
         {
           name  = "POSTGRES_DB",
           value = "dl-loading-ui"
+        },
+        {
+          name  = "TRIGGER_DEPLOYMENT"
+          value = "001"
         }
       ],
       environmentFiles = [

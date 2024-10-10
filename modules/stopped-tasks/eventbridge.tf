@@ -20,4 +20,3 @@ resource "aws_cloudwatch_event_target" "stopped_tasks" {
   rule      = aws_cloudwatch_event_rule.stopped_tasks.name
   arn       = aws_lambda_function.stopped_tasks.arn
 }
-

@@ -14,10 +14,19 @@ data "aws_iam_policy_document" "assume_role" {
 data "aws_iam_policy_document" "stopped_tasks" {
   statement {
     actions = [
-      "ecs:DescribeServices",
-      "ecs:UpdateService"
+      "ec2:TerminateInstances"
     ]
-    resources = [data.aws_ecs_service.this.arn]
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "ecs:DescribeContainerInstances",
+      "ecs:DescribeServices",
+      "ecs:DescribeTasks",
+      "ecs:ListTasks"
+    ]
+    resources = ["*"]
   }
 
   statement {
