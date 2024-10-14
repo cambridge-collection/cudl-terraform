@@ -33,20 +33,21 @@ module "cudl-data-processing" {
 module "base_architecture" {
   source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/container-insights"
 
-  name_prefix                    = local.base_name_prefix
-  ec2_instance_type              = var.ec2_instance_type
-  route53_zone_domain_name       = var.registered_domain_name
-  route53_zone_id_existing       = var.route53_zone_id_existing
-  route53_zone_force_destroy     = var.route53_zone_force_destroy
-  asg_desired_capacity           = var.asg_desired_capacity
-  asg_max_size                   = var.asg_max_size
-  alb_enable_deletion_protection = var.alb_enable_deletion_protection
-  vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
-  cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
-  vpc_endpoint_services          = var.vpc_endpoint_services
-  vpc_cidr_block                 = var.vpc_cidr_block
+  name_prefix                            = local.base_name_prefix
+  ec2_instance_type                      = var.ec2_instance_type
+  route53_zone_domain_name               = var.registered_domain_name
+  route53_zone_id_existing               = var.route53_zone_id_existing
+  route53_zone_force_destroy             = var.route53_zone_force_destroy
+  asg_desired_capacity                   = var.asg_desired_capacity
+  asg_max_size                           = var.asg_max_size
+  alb_enable_deletion_protection         = var.alb_enable_deletion_protection
+  vpc_public_subnet_public_ip            = var.vpc_public_subnet_public_ip
+  cloudwatch_log_group                   = var.cloudwatch_log_group # TODO create log group
+  vpc_endpoint_services                  = var.vpc_endpoint_services
+  vpc_cidr_block                         = var.vpc_cidr_block
   ecs_cluster_setting_container_insights = "enabled"
-  tags                           = local.default_tags
+  waf_use_ip_restrictions                = true
+  tags                                   = local.default_tags
 }
 
 module "content_loader" {
@@ -221,7 +222,7 @@ module "cudl_viewer" {
   asg_security_group_id                  = module.base_architecture.asg_security_group_id
   alb_security_group_id                  = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn                 = aws_wafv2_web_acl.cudl_viewer.arn # custom WAF ACL for CUDL Viewer
+  cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
   cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
   efs_use_existing_filesystem            = true

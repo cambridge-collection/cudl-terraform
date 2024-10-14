@@ -43,8 +43,14 @@ def lambda_handler(event, context):
 
         task_arns = ecs.list_tasks(
             cluster=ECS_CLUSTER_NAME,
-            serviceName=ECS_SERVICE_NAME
+            serviceName=ECS_SERVICE_NAME,
+            desiredStatus='STOPPED' # if running tasks is less than desired tasks, there must be a stopped task
         ).get('taskArns', [])
+
+        if len(task_arns) < 1:
+            msg = f"No stopped tasks found for {ECS_SERVICE_NAME} service"
+            log.error(msg)
+            return {'statusCode': 404, 'body': msg}
         tasks = ecs.describe_tasks(
             cluster=ECS_CLUSTER_NAME,
             tasks=task_arns
@@ -60,7 +66,11 @@ def lambda_handler(event, context):
             instance.get('ec2InstanceId') for instance in container_instances.get('containerInstances')
         ]
         log.info(f"Terminating container instances {instance_ids}")
-        ec2.terminate_instances(InstanceIds=instance_ids)
+        terminate_status = ec2.terminate_instances(InstanceIds=instance_ids)['ResponseMetadata']['HTTPStatusCode']
+        return {
+            'statusCode': terminate_status,
+            'body': f"HTTP Status {terminate_status} terminating {instance_ids}"
+        }
     
     default_msg = f"Desired count {desired_count} matches running count {running_count}"
     log.info(default_msg)
