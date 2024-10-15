@@ -306,7 +306,7 @@ content_loader_domain_name              = "contentloader"
 content_loader_application_port         = 8081
 content_loader_target_group_port        = 9009
 content_loader_ecr_repository_names     = ["dl-loader-db", "dl-loader-ui"]
-content_loader_ecs_task_def_volumes     = { "dl-loader-db" = "/var/lib/postgresql" }
+content_loader_ecs_task_def_volumes     = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui        = "dl-loader-ui"
 content_loader_container_name_db        = "dl-loader-db"
 content_loader_health_check_status_code = "401"
