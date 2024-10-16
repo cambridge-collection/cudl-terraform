@@ -3,10 +3,12 @@ locals {
   content_loader_container_name_ui = join("-", [var.content_loader_container_name_ui, var.cluster_name_suffix])
   content_loader_container_defs = [
     {
-      name           = local.content_loader_container_name_db,
-      systemControls = [],
-      image          = data.aws_ecr_image.content_loader["cudl/content-loader-db"].image_uri,
-      cpu            = 1024,
+      name              = local.content_loader_container_name_db,
+      systemControls    = [],
+      image             = data.aws_ecr_image.content_loader["cudl/content-loader-db"].image_uri,
+      cpu               = 128,
+      memory            = 512,
+      memoryReservation = 128,
       portMappings = [
         {
           containerPort = 5432,
@@ -68,9 +70,12 @@ locals {
       }
     },
     {
-      name           = local.content_loader_container_name_ui,
-      systemControls = [],
-      image          = data.aws_ecr_image.content_loader["cudl/content-loader-ui"].image_uri,
+      name              = local.content_loader_container_name_ui,
+      systemControls    = [],
+      image             = data.aws_ecr_image.content_loader["cudl/content-loader-ui"].image_uri,
+      cpu               = 1920,
+      memory            = 1024,
+      memoryReservation = 512,
       links = [
         local.content_loader_container_name_db
       ],

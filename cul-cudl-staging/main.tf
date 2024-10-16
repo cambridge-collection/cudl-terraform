@@ -80,6 +80,7 @@ module "content_loader" {
     })
   }
   vpc_id                     = module.base_architecture.vpc_id
+  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
   alb_arn                    = module.base_architecture.alb_arn
   alb_dns_name               = module.base_architecture.alb_dns_name
   alb_listener_arn           = module.base_architecture.alb_https_listener_arn
@@ -96,6 +97,7 @@ module "content_loader" {
     staging_source      = aws_iam_policy.staging_cudl_data_source.arn,
     production_releases = aws_iam_policy.production_cudl_data_releases.arn
   }
+  efs_create_file_system        = true
   acm_create_certificate        = false
   acm_certificate_arn           = var.acm_certificate_arn
   acm_certificate_arn_us-east-1 = var.acm_certificate_arn_us-east-1

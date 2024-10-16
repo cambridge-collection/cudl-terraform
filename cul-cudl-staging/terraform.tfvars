@@ -307,10 +307,10 @@ content_loader_domain_name       = "content-loader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "cudl/content-loader-db" = "sha256:85b64aaca30d105ff813756ce2d786e08f53513fd9a7f7bc820f4ff22959be4d",
-  "cudl/content-loader-ui" = "sha256:edcf7de223126dc56a56a4593ac4436ff39f9a00f70654fe89f8d0ed716cf7ff"
+  "cudl/content-loader-db" = "sha256:2f95f1e174623af80ddae2409771a07c0d1c71d7b83e4f42899b608810f70cab",
+  "cudl/content-loader-ui" = "sha256:293c28a8f0f09456afae9af23efa65ea4a820410c5e14aad761950cd8c4e43d5"
 }
-content_loader_ecs_task_def_volumes       = { "dl-loader-db" = "/var/lib/postgresql" }
+content_loader_ecs_task_def_volumes       = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui          = "dl-loader-ui"
 content_loader_container_name_db          = "dl-loader-db"
 content_loader_health_check_status_code   = "401"
