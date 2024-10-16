@@ -4,7 +4,7 @@ data "archive_file" "lambda" {
   output_path = "lambda_function_payload.zip"
 }
 
-resource "aws_lambda_function" "stopped_tasks" {
+resource "aws_lambda_function" "unhealthy_hosts" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
   filename      = "lambda_function_payload.zip"
@@ -25,8 +25,8 @@ resource "aws_lambda_function" "stopped_tasks" {
 }
 
 resource "aws_lambda_permission" "trigger" {
-  function_name = aws_lambda_function.stopped_tasks.function_name
+  function_name = aws_lambda_function.unhealthy_hosts.function_name
   action        = "lambda:InvokeFunction"
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.stopped_tasks.arn
+  source_arn    = aws_cloudwatch_event_rule.unhealthy_hosts.arn
 }

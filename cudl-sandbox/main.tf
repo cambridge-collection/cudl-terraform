@@ -31,7 +31,7 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/container-insights"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.7.2"
 
   name_prefix                            = local.base_name_prefix
   ec2_instance_type                      = var.ec2_instance_type
@@ -45,7 +45,6 @@ module "base_architecture" {
   cloudwatch_log_group                   = var.cloudwatch_log_group # TODO create log group
   vpc_endpoint_services                  = var.vpc_endpoint_services
   vpc_cidr_block                         = var.vpc_cidr_block
-  ecs_cluster_setting_container_insights = "enabled"
   waf_use_ip_restrictions                = true
   tags                                   = local.default_tags
 }
@@ -145,8 +144,10 @@ module "solr" {
 module "solr_stopped_tasks" {
   source = "../modules/stopped-tasks"
 
-  ecs_cluster_name = module.base_architecture.ecs_cluster_name
-  ecs_service_name = "${module.solr.name_prefix}-service"
+  ecs_cluster_name      = module.base_architecture.ecs_cluster_name
+  ecs_service_name      = join("-", [module.solr.name_prefix, "service"])
+  alb_name              = join("-", [module.base_architecture.ecs_cluster_name, "alb"])
+  alb_target_group_name = join("-", [module.solr.name_prefix, "alb", "tg"])
 }
 
 module "cudl_services" {
