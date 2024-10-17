@@ -161,6 +161,11 @@ variable "asg_desired_capacity" {
   description = "Desired number of instances in the Autoscaling Group"
 }
 
+variable "asg_allow_all_egress" {
+  type        = bool
+  description = "Whether to allow EC2 instances in ASG egress to all targets"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   description = "CIDR block for the base architecture VPC"
@@ -205,6 +210,11 @@ variable "route53_zone_force_destroy" {
 variable "alb_enable_deletion_protection" {
   type        = bool
   description = "Whether to enable deletion protection for the ALB"
+}
+
+variable "alb_idle_timeout" {
+  type        = string
+  description = "Time in seconds that the client connection is allowed to be idle"
 }
 
 variable "cloudwatch_log_group" {

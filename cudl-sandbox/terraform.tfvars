@@ -290,10 +290,12 @@ cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl-sandbox.net."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
+asg_allow_all_egress           = true
 route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
 route53_zone_force_destroy     = true
 alb_enable_deletion_protection = false
+alb_idle_timeout               = "900"
 vpc_cidr_block                 = "10.42.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 vpc_peering_vpc_ids            = ["vpc-057886e0bdd7c4e43"]
