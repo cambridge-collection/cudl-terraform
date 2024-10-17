@@ -10,6 +10,7 @@ module "base_architecture" {
   asg_max_size                   = var.asg_max_size
   asg_allow_all_egress           = var.asg_allow_all_egress
   alb_enable_deletion_protection = var.alb_enable_deletion_protection
+  alb_idle_timeout               = var.alb_idle_timeout
   vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
   vpc_endpoint_services          = var.vpc_endpoint_services

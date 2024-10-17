@@ -296,6 +296,7 @@ route53_zone_force_destroy     = true
 acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
 acm_certificate_arn_us-east-1  = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
 alb_enable_deletion_protection = false
+alb_idle_timeout               = "900"
 vpc_cidr_block                 = "10.88.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 cloudwatch_log_group           = "/ecs/CUDL"

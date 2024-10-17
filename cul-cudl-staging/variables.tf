@@ -216,6 +216,11 @@ variable "alb_enable_deletion_protection" {
   description = "Whether to enable deletion protection for the ALB"
 }
 
+variable "alb_idle_timeout" {
+  type        = string
+  description = "Time in seconds that the client connection is allowed to be idle"
+}
+
 variable "cloudwatch_log_group" {
   type        = string
   description = "Name of the cloudwatch log group"
