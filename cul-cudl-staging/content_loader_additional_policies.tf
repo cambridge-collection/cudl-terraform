@@ -96,7 +96,8 @@ data "aws_iam_policy_document" "production_cudl_data_releases" {
       "s3:ListBucketMultipartUploads",
       "s3:ListBucketVersions",
       "s3:ListMultipartUploadParts",
-      "s3:PutObject"
+      "s3:PutObject",
+      "s3:PutObjectTagging"
     ]
     resources = [
       format("arn:aws:s3:::%s", var.content_loader_releases_bucket_production),
