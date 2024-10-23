@@ -6,8 +6,8 @@ locals {
     {
       name              = local.cudl_viewer_container_name,
       image             = data.aws_ecr_image.cudl_viewer["cudl/viewer"].image_uri,
-      cpu               = 0,
-      memoryReservation = 512,
+      cpu               = 2048,
+      memoryReservation = 1024,
       portMappings = [
         {
           containerPort = var.cudl_viewer_container_port,
