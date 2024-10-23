@@ -184,7 +184,7 @@ module "cudl_viewer" {
   cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
-  cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
+  # cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
   efs_use_existing_filesystem            = true
   efs_file_system_id                     = module.cudl-data-processing.efs_file_system_id
   efs_security_group_id                  = module.cudl-data-processing.efs_security_group_id
