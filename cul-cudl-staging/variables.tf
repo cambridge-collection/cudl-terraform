@@ -437,3 +437,8 @@ variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
   type        = string
   description = "Pattern regex used in S3 to EFS task"
 }
+
+variable "cudl_viewer_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
+}

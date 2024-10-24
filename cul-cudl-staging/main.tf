@@ -208,6 +208,7 @@ module "cudl_viewer" {
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
   ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
+  ecs_task_def_memory                       = var.cudl_viewer_ecs_task_def_memory
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
@@ -225,7 +226,7 @@ module "cudl_viewer" {
       json_url             = format("%s/json/", module.cudl_viewer.link)
     })
   }
-  s3_task_buckets                        = [module.cudl-data-processing.destination_bucket]
+  s3_task_buckets                        = [module.base_architecture.s3_bucket]
   vpc_id                                 = module.base_architecture.vpc_id
   vpc_subnet_ids                         = module.base_architecture.vpc_private_subnet_ids
   vpc_security_groups_extra              = [module.base_architecture.vpc_egress_security_group_id, aws_security_group.solr.id]
