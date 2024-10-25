@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c8a4f4a1b9e3b9733c9d04e562d5077a015e8cf411aa1ad89fbd0b8d293647cf"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:8b19952be936adcb5018ed37fe4cebbe86c2be82ae5a43b586745b37214c54bc"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -198,7 +198,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -218,7 +218,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -324,8 +324,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:00ebbe9c8644f13c6e134c966ca8bd2eccf8e168b34da2a149fd2ae297dd5964",
-  "cudl/solr"     = "sha256:d1cd962f31d983f89cc92657e97e943e844e99819840d3e0bcb1245b1549b28f"
+  "cudl/solr-api" = "sha256:2892d0023e4014ad569121551b8b959cd32f5c6658e671973bcfc783836bf65f",
+  "cudl/solr"     = "sha256:8dfcce2322e381d92bc02d19710afa8ec15e5a8f6c1efa1edddf550527c51fdb"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
