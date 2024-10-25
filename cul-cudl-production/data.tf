@@ -18,12 +18,20 @@ data "aws_ecr_image" "cudl_viewer" {
   image_digest    = each.value
 }
 
+data "aws_ssm_parameter" "cudl_services_apikey" {
+  name = "/Environments/${title(var.environment)}/CUDL/Services/APIKey/Viewer"
+}
+
 data "aws_ssm_parameter" "cudl_viewer_smtp_username" {
   name = "/Environments/${title(var.environment)}/CUDL/Viewer/SMTP/Username"
 }
 
 data "aws_ssm_parameter" "cudl_viewer_smtp_password" {
   name = "/Environments/${title(var.environment)}/CUDL/Viewer/SMTP/Password"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_smtp_port" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/SMTP/Port"
 }
 
 data "aws_ssm_parameter" "cudl_viewer_cloudfront_username" {
