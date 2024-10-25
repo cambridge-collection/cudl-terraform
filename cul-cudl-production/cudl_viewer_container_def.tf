@@ -6,8 +6,9 @@ locals {
     {
       name              = local.cudl_viewer_container_name,
       image             = data.aws_ecr_image.cudl_viewer["cudl/viewer"].image_uri,
-      cpu               = 0,
-      memoryReservation = 512,
+      cpu               = 2048,
+      memoryReservation = 1024,
+      memory            = var.cudl_viewer_ecs_task_def_memory,
       portMappings = [
         {
           containerPort = var.cudl_viewer_container_port,
@@ -19,7 +20,7 @@ locals {
       environment = [
         {
           name  = "S3_URL",
-          value = "s3://${module.cudl-data-processing.destination_bucket}/${module.cudl_viewer.name_prefix}/cudl-global.properties"
+          value = "s3://${module.base_architecture.s3_bucket}/${module.cudl_viewer.name_prefix}/cudl-global.properties"
         }
       ],
       mountPoints = [for name, path in var.cudl_viewer_ecs_task_def_volumes :

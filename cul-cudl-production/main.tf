@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v1.7.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.0.0"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -8,11 +8,9 @@ module "base_architecture" {
   route53_zone_force_destroy     = var.route53_zone_force_destroy
   asg_desired_capacity           = var.asg_desired_capacity
   asg_max_size                   = var.asg_max_size
-  asg_allow_all_egress           = var.asg_allow_all_egress
   alb_enable_deletion_protection = var.alb_enable_deletion_protection
   vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
-  vpc_endpoint_services          = var.vpc_endpoint_services
   vpc_cidr_block                 = var.vpc_cidr_block
   acm_create_certificate         = false
   acm_certificate_arn            = var.acm_certificate_arn
@@ -157,6 +155,7 @@ module "cudl_viewer" {
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
   ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
+  ecs_task_def_memory                       = var.cudl_viewer_ecs_task_def_memory
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
@@ -169,10 +168,10 @@ module "cudl_viewer" {
       cudl_services_url = format("%s/", module.cudl_services.link)
     })
   }
-  s3_task_buckets                        = [module.cudl-data-processing.destination_bucket]
+  s3_task_buckets                        = [module.base_architecture.s3_bucket]
   vpc_id                                 = module.base_architecture.vpc_id
   vpc_subnet_ids                         = module.base_architecture.vpc_private_subnet_ids
-  vpc_security_groups_extra              = [module.base_architecture.vpc_endpoint_security_group_id, aws_security_group.solr.id]
+  vpc_security_groups_extra              = [module.base_architecture.vpc_egress_security_group_id, aws_security_group.solr.id]
   alb_arn                                = module.base_architecture.alb_arn
   alb_dns_name                           = module.base_architecture.alb_dns_name
   alb_listener_arn                       = module.base_architecture.alb_https_listener_arn

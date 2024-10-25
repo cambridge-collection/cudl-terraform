@@ -73,12 +73,12 @@ transform-lambda-bucket-sqs-notifications = [
 transform-lambda-information = [
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
     "queue_name"               = "CUDLIndexQueue"
     "queue_delay_seconds"      = 10
     "vpc_name"                 = "production-cudl-ecs-vpc"
     "subnet_names"             = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
-    "security_group_names"     = ["production-cudl-ecs-vpc-endpoints", "production-solr-external"]
+    "security_group_names"     = ["production-cudl-ecs-vpc-egress", "production-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -94,11 +94,11 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0415e384ed3d886469fbf4c79d111c46541662a8af6e6d807ffbff40da52069e"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "production-cudl-ecs-vpc"
     "subnet_names"             = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
-    "security_group_names"     = ["production-cudl-ecs-vpc-endpoints", "production-solr-external"]
+    "security_group_names"     = ["production-cudl-ecs-vpc-egress", "production-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -118,7 +118,7 @@ transform-lambda-information = [
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataCopyFileToEFSQueue"
     "subnet_names"          = ["production-cudl-ecs-subnet-private-a", "production-cudl-ecs-subnet-private-b"]
-    "security_group_names"  = ["production-cudl-ecs-vpc-endpoints", "production-cudl-data-releases-efs"]
+    "security_group_names"  = ["production-cudl-ecs-vpc-egress", "production-cudl-data-releases-efs"]
     "use_datadog_variables" = false
     "mount_fs"              = true
     "timeout"               = 900
@@ -151,7 +151,6 @@ alb_enable_deletion_protection = false
 vpc_cidr_block                 = "10.27.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 cloudwatch_log_group           = "/ecs/CUDL"
-vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # SOLR Worload
 solr_name_suffix       = "solr"
@@ -159,8 +158,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:00ebbe9c8644f13c6e134c966ca8bd2eccf8e168b34da2a149fd2ae297dd5964",
-  "cudl/solr"     = "sha256:d1cd962f31d983f89cc92657e97e943e844e99819840d3e0bcb1245b1549b28f"
+  "cudl/solr-api" = "sha256:2892d0023e4014ad569121551b8b959cd32f5c6658e671973bcfc783836bf65f",
+  "cudl/solr"     = "sha256:8dfcce2322e381d92bc02d19710afa8ec15e5a8f6c1efa1edddf550527c51fdb"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -186,10 +185,11 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:c8c8fa42efdcf3092e0fd9efeb7dcecc44d7db2a3002cddd50dbfa63ec0a1062"
+  "cudl/viewer" = "sha256:340c400291d9dbbca213009898eaf3a9568e9b4db974f86a265de6bff59506c6"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 cudl_viewer_alternative_domain_names        = ["cudl.lib.cam.ac.uk"]
+cudl_viewer_ecs_task_def_memory             = 1920

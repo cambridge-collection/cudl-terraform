@@ -175,11 +175,6 @@ variable "vpc_public_subnet_public_ip" {
   description = "Whether to automatically assign public IP addresses in the public subnets"
 }
 
-variable "vpc_endpoint_services" {
-  type        = list(string)
-  description = "List of services to create VPC Endpoints for"
-}
-
 variable "vpc_peering_vpc_ids" {
   type        = list(string)
   description = "List of VPC IDS for peering with the base architecture VPC"
@@ -381,4 +376,9 @@ variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
 variable "cudl_viewer_alternative_domain_names" {
   type        = list(string)
   description = "List of additional host headers for CUDL Viewer"
+}
+
+variable "cudl_viewer_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
 }
