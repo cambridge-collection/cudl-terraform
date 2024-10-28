@@ -9,49 +9,89 @@ data "aws_vpc" "existing_cudl_vpc" {
   id = var.vpc-id
 }
 
-data "aws_subnet" "cudl_subnet" {
-  id = var.subnet-id
-}
-
-data "aws_security_group" "default" {
-  id = var.security-group-id
-}
-
-/*
-resource "aws_vpc" "cudl_vpc" {
-  cidr_block = var.cidr-blocks[0]
+data "aws_vpc" "transform_lambda_vpc" {
+  count = length(var.transform-lambda-information)
 
   tags = {
-    Name = "${var.environment}-${var.vpc-name}"
+    Name = coalesce(var.transform-lambda-information[count.index].vpc_name, var.default-lambda-vpc)
   }
 }
 
-resource "aws_vpc_ipv4_cidr_block_association" "additional_cidr_blocks" {
-  for_each = local.other-cidr-blocks
+data "aws_subnets" "transform_lambda_subnets" {
+  count = length(var.transform-lambda-information)
 
-  vpc_id     = aws_vpc.cudl_vpc.id
-  cidr_block = each.value
-}
+  filter {
+    name   = "tag:Name"
+    values = coalescelist(var.transform-lambda-information[count.index].subnet_names, [var.default-lambda-subnet])
+  }
 
-resource "aws_vpc_dhcp_options" "dhcp_options_set" {
-  domain_name         = var.domain-name
-  domain_name_servers = ["AmazonProvidedDNS"]
-
-  tags = {
-    Name = "${var.environment}-${var.dchp-options-name}"
+  # NOTE Filter by VPC to make sure subnets exist in the VPC selected
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.transform_lambda_vpc[count.index].id]
   }
 }
 
-resource "aws_vpc_dhcp_options_association" "association" {
-  vpc_id          = aws_vpc.cudl_vpc.id
-  dhcp_options_id = aws_vpc_dhcp_options.dhcp_options_set.id
+# data "aws_subnets" "efs" {
+#   filter {
+#     name   = "subnet-id"
+#     values = var.efs_subnet_ids
+#   }
+
+#   # NOTE Filter by VPC to make sure subnets exist in the VPC selected
+#   filter {
+#     name   = "vpc-id"
+#     values = [data.aws_vpc.existing_cudl_vpc.id]
+#   }
+# }
+
+data "aws_subnet" "efs" {
+  for_each = var.efs_subnets
+  id       = each.value
 }
 
-resource "aws_subnet" "subnet_private" {
-  vpc_id                  = aws_vpc.cudl_vpc.id
-  cidr_block              = var.cidr-blocks
-  map_public_ip_on_launch = false
-  tags = {
-    Name = "${var.project}-subnet-private"
+data "aws_security_groups" "transform_lambda_security_groups" {
+  count = length(var.transform-lambda-information)
+
+  filter {
+    name   = "group-name"
+    values = coalescelist(var.transform-lambda-information[count.index].security_group_names, [var.default-lambda-security-group])
   }
-}*/
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.transform_lambda_vpc[count.index].id]
+  }
+}
+
+resource "aws_security_group" "efs" {
+  name        = "${var.environment}-${var.efs-name}"
+  description = "Allows access to EFS mount targets for ${var.efs-name}"
+  vpc_id      = data.aws_vpc.existing_cudl_vpc.id
+
+  tags = {
+    Name = "${var.environment}-${var.efs-name}"
+  }
+}
+
+resource "aws_security_group_rule" "efs_ingress_nfs_from_vpc" {
+  type              = "ingress"
+  protocol          = "tcp"
+  description       = "EFS Ingress on port ${var.efs_nfs_mount_port} for ${var.efs-name}"
+  security_group_id = aws_security_group.efs.id
+  cidr_blocks       = [data.aws_vpc.existing_cudl_vpc.cidr_block]
+  ipv6_cidr_blocks  = data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block != "" ? [data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block] : []
+  from_port         = var.efs_nfs_mount_port
+  to_port           = var.efs_nfs_mount_port
+}
+
+resource "aws_security_group_rule" "efs_egress_nfs_to_vpc" {
+  type              = "egress"
+  protocol          = "tcp"
+  description       = "EFS Egress on port ${var.efs_nfs_mount_port} for ${var.efs-name}"
+  security_group_id = aws_security_group.efs.id
+  cidr_blocks       = [data.aws_vpc.existing_cudl_vpc.cidr_block]
+  ipv6_cidr_blocks  = data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block != "" ? [data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block] : []
+  from_port         = var.efs_nfs_mount_port
+  to_port           = var.efs_nfs_mount_port
+}

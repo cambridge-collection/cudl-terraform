@@ -1,8 +1,7 @@
-resource "aws_sns_topic" "source_item_updated" {
+resource "aws_sns_topic" "transform_sns_topics" {
+  for_each = local.transform_bucket_sns_notifications
 
-  count = var.db-only-processing ? 0 : 1
-  name  = "${var.environment}-s3-source-item-event-notification-topic"
-
+  name   = "${var.environment}-${each.key}-event-notification-topic"
   policy = <<POLICY
 {
     "Version":"2012-10-17",
@@ -10,20 +9,23 @@ resource "aws_sns_topic" "source_item_updated" {
         "Effect": "Allow",
         "Principal": { "Service": "s3.amazonaws.com" },
         "Action": "SNS:Publish",
-        "Resource": "arn:aws:sns:*:*:${var.environment}-s3-source-item-event-notification-topic",
-        "Condition":{
-            "ArnLike":{"aws:SourceArn":"${aws_s3_bucket.source-bucket[0].arn}"}
+        "Resource": "arn:aws:sns:*:*:${var.environment}-${each.key}-event-notification-topic",
+        "Condition": {
+            "ArnLike": {
+                "aws:SourceArn": "${local.transform-lambda-buckets[each.value.bucket_name].arn}"
+            }
         }
     }]
 }
 POLICY
 }
 
-resource "aws_sns_topic_subscription" "item_update_subscriptions" {
-  count = length(var.source-bucket-sns-notifications) > 0 ? length(var.source-bucket-sns-notifications[0].subscriptions) : 0
+# NOTE need a separate local variable for the loop here as Terraform can't do resources with nested for_each blocks
+resource "aws_sns_topic_subscription" "transform_sns_event_subscriptions" {
+  count = length(local.transform_sns_subscriptions)
 
-  topic_arn            = aws_sns_topic.source_item_updated[0].arn
+  topic_arn            = aws_sns_topic.transform_sns_topics[local.transform_sns_subscriptions[count.index].topic_name].arn
   protocol             = "sqs"
-  raw_message_delivery = var.source-bucket-sns-notifications[0].subscriptions[count.index].raw
-  endpoint             = "arn:aws:sqs:${var.deployment-aws-region}:${var.aws-account-number}:${var.environment}-${var.source-bucket-sns-notifications[0].subscriptions[count.index].queue_name}"
+  raw_message_delivery = local.transform_sns_subscriptions[count.index].raw
+  endpoint             = aws_sqs_queue.transform-lambda-sqs-queue[local.transform_sns_subscriptions[count.index].queue_name].arn
 }
