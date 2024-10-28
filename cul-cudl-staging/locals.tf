@@ -19,4 +19,5 @@ locals {
     AWS_CUDL_DATA_SOURCE_BUCKET = lower("${var.environment}-${var.source-bucket-name}")
     AWS_OUTPUT_BUCKET           = lower("${var.environment}-${var.source-bucket-name}")
   }
+  smtp_port = tonumber(data.aws_ssm_parameter.cudl_viewer_smtp_port.value)
 }

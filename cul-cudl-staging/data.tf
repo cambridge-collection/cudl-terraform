@@ -47,3 +47,19 @@ data "aws_ssm_parameter" "cudl_viewer_cloudfront_username" {
 data "aws_ssm_parameter" "cudl_viewer_cloudfront_password" {
   name = "/Environments/${title(var.environment)}/CUDL/Viewer/CloudFront/Password"
 }
+
+data "aws_ssm_parameter" "cudl_viewer_recaptcha_sitekey" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/Recaptcha/Sitekey"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_recaptcha_secretkey" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/Recaptcha/Secretkey"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_google_analytics_id" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/Google/AnalyticsId"
+}
+
+data "aws_ssm_parameter" "cudl_viewer_ga4_google_analytics_id" {
+  name = "/Environments/${title(var.environment)}/CUDL/Viewer/Google/GA4AnalyticsId"
+}

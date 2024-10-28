@@ -214,22 +214,30 @@ module "cudl_viewer" {
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
-      smtp_host            = format("email-smtp.%s.amazonaws.com", var.deployment-aws-region)
-      smtp_username        = data.aws_ssm_parameter.cudl_viewer_smtp_username.value
-      smtp_password        = data.aws_ssm_parameter.cudl_viewer_smtp_password.value
-      smtp_port            = data.aws_ssm_parameter.cudl_viewer_smtp_port.value
-      mount_path           = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
-      search_url           = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
-      cudl_services_url    = module.cudl_services.link
-      cudl_services_apikey = data.aws_ssm_parameter.cudl_services_apikey.value
-      root_url             = module.cudl_viewer.link
-      json_url             = format("%s/json/", module.cudl_viewer.link)
+      smtp_host               = format("email-smtp.%s.amazonaws.com", var.deployment-aws-region)
+      smtp_username           = data.aws_ssm_parameter.cudl_viewer_smtp_username.value
+      smtp_password           = data.aws_ssm_parameter.cudl_viewer_smtp_password.value
+      smtp_port               = data.aws_ssm_parameter.cudl_viewer_smtp_port.value
+      recaptcha_sitekey       = data.aws_ssm_parameter.cudl_viewer_recaptcha_sitekey.value
+      recaptcha_secretkey     = data.aws_ssm_parameter.cudl_viewer_recaptcha_secretkey.value
+      google_analytics_id     = data.aws_ssm_parameter.cudl_viewer_google_analytics_id.value
+      ga4_google_analytics_id = data.aws_ssm_parameter.cudl_viewer_ga4_google_analytics_id.value
+      mount_path              = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
+      search_url              = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
+      cudl_services_url       = module.cudl_services.link
+      cudl_services_apikey    = data.aws_ssm_parameter.cudl_services_apikey.value
+      root_url                = module.cudl_viewer.link
+      json_url                = format("%s/json/", module.cudl_viewer.link)
     })
   }
-  s3_task_buckets                        = [module.base_architecture.s3_bucket]
-  vpc_id                                 = module.base_architecture.vpc_id
-  vpc_subnet_ids                         = module.base_architecture.vpc_private_subnet_ids
-  vpc_security_groups_extra              = [module.base_architecture.vpc_egress_security_group_id, aws_security_group.solr.id]
+  s3_task_buckets = [module.base_architecture.s3_bucket]
+  vpc_id          = module.base_architecture.vpc_id
+  vpc_subnet_ids  = module.base_architecture.vpc_private_subnet_ids
+  vpc_security_groups_extra = [
+    module.base_architecture.vpc_egress_security_group_id,
+    aws_security_group.solr.id,
+    aws_security_group.email.id,
+  ]
   alb_arn                                = module.base_architecture.alb_arn
   alb_dns_name                           = module.base_architecture.alb_dns_name
   alb_listener_arn                       = module.base_architecture.alb_https_listener_arn

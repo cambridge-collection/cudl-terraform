@@ -15,11 +15,8 @@ cudl-viewer-content.images.path=${mount_path}/data/pages/images
 enable.refresh=true
 caching.enabled=false
 
-# DEV Id.
-GoogleAnalyticsId=UA\
-  -10976633-2
-GA4GoogleAnalyticsId=G-2XDQTMVL9Y
-cudl.viewer.analytics.embedded.gaid=fooble
+GoogleAnalyticsId=${google_analytics_id}
+GA4GoogleAnalyticsId=${ga4_google_analytics_id}
 
 # Set URLs for retrieving data.
 rootURL=${root_url}
@@ -50,7 +47,7 @@ smtp_port=${smtp_port}
 
 #robots.txt (varies between live, dev etc).
 robots.useragent=User-agent: *
-robots.disallow=Disallow:
+robots.disallow=Disallow: /
 
 # UI Javascript/CSS configuration
 
@@ -62,8 +59,8 @@ cudl.ui.dev = false
 #cudl.ui.dev.baseUrl = https://local.cudl.lib.cam.ac.uk:8000/
 
 # ReCAPTCHA
-recaptcha.siteKey=example
-recaptcha.secretKey=example
+recaptcha.siteKey=${recaptcha_sitekey}
+recaptcha.secretKey=${recaptcha_secretkey}
 
 # PDF Setup
 pdf.header.text=CAMBRIDGE UNIVERSITY LIBRARY
