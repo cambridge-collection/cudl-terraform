@@ -188,7 +188,7 @@ cudl_viewer_ecr_repositories = {
   "cudl/viewer" = "sha256:19fdc50eb01e5c7e2baa70c21dca0ca410ac8c1f4335a68a2145e89dee1dfb86"
 }
 cudl_viewer_health_check_status_code        = "200"
-cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
+cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 cudl_viewer_alternative_domain_names        = ["cudl.lib.cam.ac.uk"]
