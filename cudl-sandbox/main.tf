@@ -31,10 +31,11 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.1.0"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
+  ec2_additional_userdata        = var.ec2_additional_userdata
   route53_zone_domain_name       = var.registered_domain_name
   route53_zone_id_existing       = var.route53_zone_id_existing
   route53_zone_force_destroy     = var.route53_zone_force_destroy
@@ -57,7 +58,7 @@ module "content_loader" {
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.content_loader_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = var.content_loader_target_group_port
   alb_target_group_health_check_status_code = var.content_loader_health_check_status_code
-  ecr_repository_names                      = var.content_loader_ecr_repository_names
+  ecr_repository_names                      = keys(var.content_loader_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_buckets                           = [module.cudl-data-processing.source_bucket]
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
@@ -105,7 +106,7 @@ module "solr" {
   alb_target_group_deregistration_delay          = 60
   alb_target_group_health_check_interval         = 30
   alb_target_group_health_check_timeout          = 10
-  ecr_repository_names                           = var.solr_ecr_repository_names
+  ecr_repository_names                           = keys(var.solr_ecr_repositories)
   ecr_repositories_exist                         = true
   s3_task_buckets                                = [module.cudl-data-processing.destination_bucket]
   s3_task_execution_bucket                       = module.base_architecture.s3_bucket
@@ -113,7 +114,7 @@ module "solr" {
   ecs_task_def_container_definitions             = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes                           = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                               = var.solr_ecs_task_def_cpu
-  ecs_task_def_memory                            = var.solr_ecs_task_def_memory
+  ecs_task_def_memory                            = local.solr_ecs_task_def_memory
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
@@ -158,7 +159,7 @@ module "cudl_services" {
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_services_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = var.cudl_services_target_group_port
   alb_target_group_health_check_status_code = var.cudl_services_health_check_status_code
-  ecr_repository_names                      = var.cudl_services_ecr_repository_names
+  ecr_repository_names                      = keys(var.cudl_services_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
@@ -193,7 +194,7 @@ module "cudl_viewer" {
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_viewer_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = var.cudl_viewer_container_port
   alb_target_group_health_check_status_code = var.cudl_viewer_health_check_status_code
-  ecr_repository_names                      = var.cudl_viewer_ecr_repository_names
+  ecr_repository_names                      = keys(var.cudl_viewer_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_network_mode                          = "awsvpc"
