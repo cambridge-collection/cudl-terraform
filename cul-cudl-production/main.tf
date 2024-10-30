@@ -173,7 +173,7 @@ module "cudl_viewer" {
       search_url              = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
       cudl_services_url       = module.cudl_services.link
       cudl_services_apikey    = data.aws_ssm_parameter.cudl_services_apikey.value
-      root_url                = module.cudl_viewer.link
+      root_url                = var.cudl_viewer_alternative_domain_names[0]
       json_url                = format("%s/json/", module.cudl_viewer.link)
     })
   }
