@@ -161,14 +161,17 @@ solr_ecr_repositories = {
   "cudl/solr-api" = "sha256:2892d0023e4014ad569121551b8b959cd32f5c6658e671973bcfc783836bf65f",
   "cudl/solr"     = "sha256:8dfcce2322e381d92bc02d19710afa8ec15e5a8f6c1efa1edddf550527c51fdb"
 }
-solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
-solr_container_name_api       = "solr-api"
-solr_container_name_solr      = "solr"
-solr_health_check_status_code = "404"
-solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu         = 1536
-solr_ecs_task_def_memory      = 1638
-solr_use_service_discovery    = true
+solr_ecs_task_def_volumes                     = { "solr-volume" = "/var/solr" }
+solr_container_name_api                       = "solr-api"
+solr_container_name_solr                      = "solr"
+solr_health_check_status_code                 = "404"
+solr_allowed_methods                          = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu                         = 2048
+solr_ecs_task_def_memory                      = 1942
+solr_api_ecs_container_def_cpu                = 256
+solr_api_ecs_container_def_memory             = 256
+solr_api_ecs_container_def_memory_reservation = 128
+solr_use_service_discovery                    = true
 
 cudl_services_name_suffix       = "cudl-services"
 cudl_services_domain_name       = "services"

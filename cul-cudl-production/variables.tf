@@ -276,6 +276,21 @@ variable "solr_ecs_task_def_memory" {
   description = "Amount (in MiB) of memory used by the SOLR tasks"
 }
 
+variable "solr_api_ecs_container_def_cpu" {
+  type        = number
+  description = "Amount of CPU reserved to the SOLR API container"
+}
+
+variable "solr_api_ecs_container_def_memory" {
+  type        = number
+  description = "Maximum amount (in MiB) of memory used by the SOLR API container"
+}
+
+variable "solr_api_ecs_container_def_memory_reservation" {
+  type        = number
+  description = "Amount (in MiB) of memory reserved by the SOLR API container"
+}
+
 variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"

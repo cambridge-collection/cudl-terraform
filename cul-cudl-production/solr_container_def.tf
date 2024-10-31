@@ -3,10 +3,12 @@ locals {
   solr_container_name_api  = join("-", [var.solr_container_name_api, var.cluster_name_suffix])
   solr_container_defs = [
     {
-      name           = local.solr_container_name_solr,
-      systemControls = [],
-      image          = data.aws_ecr_image.solr["cudl/solr"].image_uri,
-      cpu            = 0,
+      name              = local.solr_container_name_solr,
+      systemControls    = [],
+      image             = data.aws_ecr_image.solr["cudl/solr"].image_uri,
+      cpu               = var.solr_ecs_task_def_cpu - var.solr_api_ecs_container_def_cpu,
+      memory            = var.solr_ecs_task_def_memory - var.solr_api_ecs_container_def_memory_reservation
+      memoryReservation = var.solr_ecs_task_def_memory - var.solr_api_ecs_container_def_memory
       portMappings = [
         {
           containerPort = var.solr_application_port,
@@ -22,6 +24,10 @@ locals {
         {
           name  = "SOLR_JAVA_MEM",
           value = "-Xms1g -Xmx1g"
+        },
+        {
+          name  = "SOLR_HEAP",
+          value = "1024m"
         }
       ],
       environmentFiles = [],
@@ -59,9 +65,9 @@ locals {
       name              = local.solr_container_name_api,
       systemControls    = [],
       image             = data.aws_ecr_image.solr["cudl/solr-api"].image_uri,
-      cpu               = 1024,
-      memory            = 1024,
-      memoryReservation = 1024,
+      cpu               = var.solr_api_ecs_container_def_cpu,
+      memory            = var.solr_api_ecs_container_def_memory,
+      memoryReservation = var.solr_api_ecs_container_def_memory_reservation,
       portMappings = [
         {
           containerPort = var.solr_target_group_port,
