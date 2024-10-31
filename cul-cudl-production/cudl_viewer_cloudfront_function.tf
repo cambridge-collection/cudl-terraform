@@ -29,5 +29,22 @@ resource "aws_cloudfront_function" "viewer-cors-header" {
   name    = "${local.environment}-cudl-viewer-cors-header"
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file("${path.module}/templates/viewer/cloudfront-function-cors-header.ttfpl")
+  code    = <<-EOT
+
+  async function handler(event)  {
+      const request = event.request;
+      const response  = event.response;
+
+      // If Access-Control-Allow-Origin CORS header is missing, add it.
+      // Since JavaScript doesn't allow for hyphens in variable names, we use the dict["key"] notation.
+      // This function is required for IIIF Manifests to be allowed to be loaded by external IIIF viewers.
+      // Also possibly required for some embedded viewer content - requires investigation.
+      if (!response.headers['access-control-allow-origin'] && request.headers['origin']) {
+          response.headers['access-control-allow-origin'] = {value: "*"};
+      }
+
+      return response;
+  }
+EOT
+
 }
