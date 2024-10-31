@@ -53,7 +53,7 @@ module "cudl-data-processing" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -103,7 +103,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -141,7 +141,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -173,7 +173,7 @@ module "cudl_viewer" {
       search_url              = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
       cudl_services_url       = module.cudl_services.link
       cudl_services_apikey    = data.aws_ssm_parameter.cudl_services_apikey.value
-      root_url                = format("https://%s",var.cudl_viewer_alternative_domain_names[0])
+      root_url                = format("https://%s", var.cudl_viewer_alternative_domain_names[0])
       json_url                = format("%s/json/", module.cudl_viewer.link)
     })
   }
@@ -185,17 +185,18 @@ module "cudl_viewer" {
     aws_security_group.solr.id,
     aws_security_group.email.id,
   ]
-  alb_arn                    = module.base_architecture.alb_arn
-  alb_dns_name               = module.base_architecture.alb_dns_name
-  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
-  asg_name                   = module.base_architecture.asg_name
-  asg_security_group_id      = module.base_architecture.asg_security_group_id
-  alb_security_group_id      = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
-  cloudfront_allowed_methods = var.cudl_viewer_allowed_methods
+  alb_arn                                 = module.base_architecture.alb_arn
+  alb_dns_name                            = module.base_architecture.alb_dns_name
+  alb_listener_arn                        = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                         = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                         = module.base_architecture.route53_public_hosted_zone
+  asg_name                                = module.base_architecture.asg_name
+  asg_security_group_id                   = module.base_architecture.asg_security_group_id
+  alb_security_group_id                   = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn                = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn                  = module.base_architecture.waf_acl_arn
+  cloudfront_allowed_methods              = var.cudl_viewer_allowed_methods
+  cloudfront_viewer_response_function_arn = aws_cloudfront_function.viewer-cors-header.arn
   # cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
   efs_use_existing_filesystem   = true
   efs_file_system_id            = module.cudl-data-processing.efs_file_system_id

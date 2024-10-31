@@ -24,3 +24,10 @@ resource "aws_cloudfrontkeyvaluestore_key" "password" {
   key                 = "password"
   value               = data.aws_ssm_parameter.cudl_viewer_cloudfront_password.value
 }
+
+resource "aws_cloudfront_function" "viewer-cors-header" {
+  name    = "${local.environment}-cudl-viewer-cors-header"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = file("${path.module}/templates/viewer/cloudfront-function-cors-header.ttfpl")
+}
