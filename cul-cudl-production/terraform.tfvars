@@ -143,6 +143,7 @@ registered_domain_name         = "cudl.lib.cam.ac.uk."
 asg_desired_capacity           = 3 # n = number of tasks
 asg_max_size                   = 4 # n + 1
 asg_allow_all_egress           = true
+ec2_instance_type              = "t3.large"
 route53_zone_id_existing       = "Z03809063VDGJ8MKPHFRV"
 route53_zone_force_destroy     = true
 acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
@@ -167,7 +168,6 @@ solr_container_name_solr      = "solr"
 solr_health_check_status_code = "404"
 solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 solr_ecs_task_def_cpu         = 1536
-solr_ecs_task_def_memory      = 1638
 solr_use_service_discovery    = true
 
 cudl_services_name_suffix       = "cudl-services"
@@ -192,4 +192,3 @@ cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", 
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 cudl_viewer_alternative_domain_names        = ["cudl.lib.cam.ac.uk"]
-cudl_viewer_ecs_task_def_memory             = 1920

@@ -5,7 +5,7 @@ locals {
       name              = local.cudl_services_container_name,
       image             = data.aws_ecr_image.cudl_services["cudl/services"].image_uri,
       cpu               = 0,
-      memoryReservation = 512,
+      memoryReservation = data.aws_ec2_instance_type.asg.memory_size - 512,
       portMappings = [
         {
           containerPort = var.cudl_services_container_port,

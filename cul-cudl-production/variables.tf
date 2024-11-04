@@ -147,7 +147,6 @@ variable "cluster_name_suffix" {
 variable "ec2_instance_type" {
   type        = string
   description = "EC2 Instance type used by EC2 Instances"
-  default     = "t3.small"
 }
 
 variable "asg_max_size" {
@@ -271,11 +270,6 @@ variable "solr_ecs_task_def_cpu" {
   description = "Number of cpu units used by the SOLR tasks"
 }
 
-variable "solr_ecs_task_def_memory" {
-  type        = number
-  description = "Amount (in MiB) of memory used by the SOLR tasks"
-}
-
 variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"
@@ -376,9 +370,4 @@ variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
 variable "cudl_viewer_alternative_domain_names" {
   type        = list(string)
   description = "List of additional host headers for CUDL Viewer"
-}
-
-variable "cudl_viewer_ecs_task_def_memory" {
-  type        = number
-  description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
 }
