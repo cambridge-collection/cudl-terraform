@@ -311,12 +311,13 @@ content_loader_ecr_repositories = {
   "cudl/content-loader-db" = "sha256:2f95f1e174623af80ddae2409771a07c0d1c71d7b83e4f42899b608810f70cab",
   "cudl/content-loader-ui" = "sha256:293c28a8f0f09456afae9af23efa65ea4a820410c5e14aad761950cd8c4e43d5"
 }
-content_loader_ecs_task_def_volumes       = { "dl-loader-db" = "/var/lib/postgresql/data" }
-content_loader_container_name_ui          = "dl-loader-ui"
-content_loader_container_name_db          = "dl-loader-db"
-content_loader_health_check_status_code   = "401"
-content_loader_allowed_methods            = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
-content_loader_releases_bucket_production = "production-cul-cudl-data-releases"
+content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
+content_loader_container_name_ui                   = "dl-loader-ui"
+content_loader_container_name_db                   = "dl-loader-db"
+content_loader_health_check_status_code            = "401"
+content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
+content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
 
 # SOLR Worload
 solr_name_suffix       = "solr"
