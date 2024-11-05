@@ -318,6 +318,7 @@ content_loader_health_check_status_code            = "401"
 content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
+content_loader_cloudfront_origin_read_timeout      = 180
 
 # SOLR Worload
 solr_name_suffix       = "solr"
