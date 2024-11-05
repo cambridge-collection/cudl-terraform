@@ -89,7 +89,7 @@ module "content_loader" {
   asg_security_group_id      = module.base_architecture.asg_security_group_id
   alb_security_group_id      = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
+  cloudfront_waf_acl_arn     = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
   cloudfront_allowed_methods = var.content_loader_allowed_methods
   iam_task_additional_policies = {
     staging_releases    = aws_iam_policy.staging_cudl_data_releases.arn,

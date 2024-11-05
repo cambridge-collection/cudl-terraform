@@ -281,6 +281,11 @@ variable "content_loader_releases_bucket_production" {
   description = "Name of the production releases bucket for content loader deployments"
 }
 
+variable "content_loader_waf_common_ruleset_override_actions" {
+  type        = list(string)
+  description = "List of rules in the AWS WAF Core rule set (CRS) managed rule group to override"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"
