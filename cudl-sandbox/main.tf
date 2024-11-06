@@ -50,7 +50,7 @@ module "base_architecture" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -72,6 +72,7 @@ module "content_loader" {
       region          = var.deployment-aws-region
       source_bucket   = module.cudl-data-processing.source_bucket
       releases_bucket = module.cudl-data-processing.destination_bucket
+      releases_bucket_production = var.content_loader_releases_bucket_production
     })
   }
   vpc_id                     = module.base_architecture.vpc_id
@@ -85,17 +86,22 @@ module "content_loader" {
   asg_security_group_id      = module.base_architecture.asg_security_group_id
   alb_security_group_id      = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = module.base_architecture.waf_acl_arn
+  cloudfront_waf_acl_arn     = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
   cloudfront_allowed_methods = var.content_loader_allowed_methods
-  efs_create_file_system     = true
-  tags                       = local.default_tags
+  iam_task_additional_policies = {
+    staging_releases    = aws_iam_policy.staging_cudl_data_releases.arn,
+    staging_source      = aws_iam_policy.staging_cudl_data_source.arn,
+    production_releases = aws_iam_policy.production_cudl_data_releases.arn
+  }
+  efs_create_file_system        = true
+  tags                          = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -141,17 +147,17 @@ module "solr" {
   }
 }
 
-module "solr_stopped_tasks" {
-  source = "../modules/stopped-tasks"
-
-  ecs_cluster_name      = module.base_architecture.ecs_cluster_name
-  ecs_service_name      = join("-", [module.solr.name_prefix, "service"])
-  alb_name              = join("-", [module.base_architecture.ecs_cluster_name, "alb"])
-  alb_target_group_name = join("-", [module.solr.name_prefix, "alb", "tg"])
-}
+# module "solr_stopped_tasks" {
+#   source = "../modules/stopped-tasks"
+#
+#   ecs_cluster_name      = module.base_architecture.ecs_cluster_name
+#   ecs_service_name      = join("-", [module.solr.name_prefix, "service"])
+#   alb_name              = join("-", [module.base_architecture.ecs_cluster_name, "alb"])
+#   alb_target_group_name = join("-", [module.solr.name_prefix, "alb", "tg"])
+# }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -186,7 +192,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id

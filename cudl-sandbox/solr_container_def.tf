@@ -46,11 +46,13 @@ locals {
       },
       privileged = true,
       logConfiguration = {
-        logDriver = "syslog",
+        logDriver = "awslogs"
         options = {
-          syslog-address = "tcp://fluentd.sandbox-fluentd:5140"
-          tag            = local.solr_container_name_solr
-        }
+          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
+          awslogs-region        = var.deployment-aws-region,
+          awslogs-stream-prefix = local.solr_container_name_solr
+        },
+        secretOptions = []
       }
     },
     {
@@ -87,17 +89,23 @@ locals {
         {
           name  = "EXTRA_VAR"
           value = "25"
-        }
+        },
+        {
+          name  = "NUM_WORKERS"
+          value = "5"
+        },
       ],
       environmentFiles = [],
       mountPoints      = [],
       volumesFrom      = [],
       logConfiguration = {
-        logDriver = "syslog",
+        logDriver = "awslogs"
         options = {
-          syslog-address = "tcp://fluentd.sandbox-fluentd:5140"
-          tag            = local.solr_container_name_api
-        }
+          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
+          awslogs-region        = var.deployment-aws-region,
+          awslogs-stream-prefix = local.solr_container_name_solr
+        },
+        secretOptions = []
       }
     },
 

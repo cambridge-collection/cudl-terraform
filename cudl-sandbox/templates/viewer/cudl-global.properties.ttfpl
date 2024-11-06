@@ -6,9 +6,9 @@
 # URLS should be relative and start with /
 # NB: DO NOT INCLUDE / AT THE END.
 cudl-viewer-content.html.url=/html
-cudl-viewer-content.html.path=${mount_path}/pages/html
+cudl-viewer-content.html.path=${mount_path}/data/pages/html
 cudl-viewer-content.images.url=/images
-cudl-viewer-content.images.path=${mount_path}/pages/images
+cudl-viewer-content.images.path=${mount_path}/data/pages/images
 
 # enable.refresh enables a URL on /refresh to allow you to refresh the items/collections in the cache.
 # caching.enabled prevents items from being cached and regularly refreshed the db.
@@ -25,13 +25,13 @@ cudl.viewer.analytics.embedded.gaid=fooble
 rootURL=http://cudl-viewer:8888
 
 jsonURL=http://localhost:1112/v1/metadata/json/
-itemJSONDirectory=${mount_path}/json/
-dataUIFile=${mount_path}/cudl.ui.json5
-datasetFile=${mount_path}/cudl.dl-dataset.json
+itemJSONDirectory=${mount_path}/data/json/
+dataUIFile=${mount_path}/data/cudl.ui.json5
+datasetFile=${mount_path}/data/cudl.dl-dataset.json
 searchURL=${search_url}
 
 # This whole directory is available under path /themeui/**
-dataUIThemeResources=${mount_path}/ui/
+dataUIThemeResources=${mount_path}/data/ui/
 
 # URLs for image and services servers.
 # Note after switch to IIIF (thumbnail data) we can remove IIIFImageServer
