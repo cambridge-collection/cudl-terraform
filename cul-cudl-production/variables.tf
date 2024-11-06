@@ -149,6 +149,11 @@ variable "ec2_instance_type" {
   description = "EC2 Instance type used by EC2 Instances"
 }
 
+variable "ec2_additional_userdata" {
+  type        = string
+  description = "Additional userdata to append to EC2 instances"
+}
+
 variable "asg_max_size" {
   type        = number
   description = "Maximum number of instances in the Autoscaling Group"
