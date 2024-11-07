@@ -72,7 +72,7 @@ module "solr" {
   ecs_task_def_container_definitions             = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes                           = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                               = var.solr_ecs_task_def_cpu
-  ecs_task_def_memory                            = data.aws_ec2_instance_type.asg.memory_size - 512
+  ecs_task_def_memory                            = local.solr_ecs_task_def_memory
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name

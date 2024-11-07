@@ -20,5 +20,5 @@ locals {
     AWS_OUTPUT_BUCKET           = "${local.environment}-cudl-data-source"
   }
   smtp_port                = tonumber(data.aws_ssm_parameter.cudl_viewer_smtp_port.value)
-  solr_ecs_task_def_memory = data.aws_ec2_instance_type.asg.memory_size - 512
+  solr_ecs_task_def_memory = data.aws_ec2_instance_type.asg.memory_size - 768
 }
