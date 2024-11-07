@@ -1,27 +1,27 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_ecr_image" "content_loader" {
-  for_each        = toset(var.content_loader_ecr_repository_names)
+  for_each        = var.content_loader_ecr_repositories
   repository_name = each.key
-  image_tag       = "latest"
+  image_digest    = each.value
 }
 
 data "aws_ecr_image" "solr" {
-  for_each        = toset(var.solr_ecr_repository_names)
+  for_each        = var.solr_ecr_repositories
   repository_name = each.key
-  image_tag       = "latest"
+  image_digest    = each.value
 }
 
 data "aws_ecr_image" "cudl_services" {
-  for_each        = toset(var.cudl_services_ecr_repository_names)
+  for_each        = var.cudl_services_ecr_repositories
   repository_name = each.key
-  image_tag       = "ae4e"
+  image_digest    = each.value
 }
 
 data "aws_ecr_image" "cudl_viewer" {
-  for_each        = toset(var.cudl_viewer_ecr_repository_names)
+  for_each        = var.cudl_viewer_ecr_repositories
   repository_name = each.key
-  image_tag       = "3cc1224"
+  image_digest    = each.value
 }
 
 data "aws_ssm_parameter" "cudl_viewer_cloudfront_username" {

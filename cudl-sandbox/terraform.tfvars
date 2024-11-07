@@ -227,7 +227,7 @@ transform-lambda-information = [
     "memory"                   = 1024
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 100
+    "maximum_concurrency"      = 5
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
@@ -303,26 +303,32 @@ cloudwatch_log_group           = "/ecs/CUDLContent"
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload
-content_loader_name_suffix              = "cl"
-content_loader_domain_name              = "contentloader"
-content_loader_application_port         = 8081
-content_loader_target_group_port        = 9009
-content_loader_ecr_repository_names     = ["dl-loader-db", "dl-loader-ui"]
-content_loader_ecs_task_def_volumes     = { "dl-loader-db" = "/var/lib/postgresql/data" }
-content_loader_container_name_ui        = "dl-loader-ui"
-content_loader_container_name_db        = "dl-loader-db"
-content_loader_health_check_status_code = "401"
-content_loader_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+content_loader_name_suffix       = "cl"
+content_loader_domain_name       = "content-loader"
+content_loader_application_port  = 8081
+content_loader_target_group_port = 9009
+content_loader_ecr_repositories = {
+  "dl-loader-db" = "sha256:2f95f1e174623af80ddae2409771a07c0d1c71d7b83e4f42899b608810f70cab",
+  "dl-loader-ui" = "sha256:293c28a8f0f09456afae9af23efa65ea4a820410c5e14aad761950cd8c4e43d5"
+}
+content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
+content_loader_container_name_ui                   = "dl-loader-ui"
+content_loader_container_name_db                   = "dl-loader-db"
+content_loader_health_check_status_code            = "401"
+content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
-content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
+content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY", "NoUserAgent_HEADER"]
 
 # SOLR Worload
-solr_name_suffix               = "solr"
-solr_domain_name               = "solr"
-solr_api_port                  = 80
-solr_application_port          = 8983
-solr_target_group_port         = 8081
-solr_ecr_repository_names      = ["cudl-solr-api", "cudl-solr"]
+solr_name_suffix       = "solr"
+solr_domain_name       = "solr"
+solr_api_port          = 80
+solr_application_port  = 8983
+solr_target_group_port = 8081
+solr_ecr_repositories = {
+  "cudl-solr-api" = "sha256:2892d0023e4014ad569121551b8b959cd32f5c6658e671973bcfc783836bf65f",
+  "cudl-solr"     = "sha256:8dfcce2322e381d92bc02d19710afa8ec15e5a8f6c1efa1edddf550527c51fdb"
+}
 solr_ecs_task_def_volumes      = { "solr-volume" = "/var/solr" }
 solr_container_name_api        = "solr-api"
 solr_container_name_solr       = "solr"
@@ -333,20 +339,25 @@ solr_ecs_task_def_memory       = 1638
 solr_use_service_discovery     = true
 solr_ingress_security_group_id = "sg-032f9f202ea602d21"
 
-cudl_services_name_suffix              = "cudl-services"
-cudl_services_domain_name              = "services"
-cudl_services_target_group_port        = 8085
-cudl_services_container_port           = 3000
-cudl_services_ecr_repository_names     = ["cudl-services"]
+cudl_services_name_suffix       = "cudl-services"
+cudl_services_domain_name       = "services"
+cudl_services_target_group_port = 8085
+cudl_services_container_port    = 3000
+cudl_services_ecr_repositories = {
+  "cudl-services" = "sha256:98b7ee01cca8c1093d3d719d13640db9f9d7e2439933d847a63e733d96f4660e"
+}
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
-cudl_viewer_name_suffix                     = "cudl-viewer"
-cudl_viewer_domain_name                     = "cudl-viewer"
-cudl_viewer_target_group_port               = 5008
-cudl_viewer_container_port                  = 8080
-cudl_viewer_ecr_repository_names            = ["sandbox-cudl-viewer"]
+cudl_viewer_name_suffix       = "cudl-viewer"
+cudl_viewer_domain_name       = "cudl-viewer"
+cudl_viewer_target_group_port = 5008
+cudl_viewer_container_port    = 8080
+cudl_viewer_ecr_repositories = {
+  "sandbox-cudl-viewer" = "sha256:e8ab599cc3233d59085b8c1652662204dac6aed21209443e8cf7741f71fde6d6"
+}
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
+cudl_viewer_ecs_task_def_memory             = 1920

@@ -22,9 +22,9 @@ GA4GoogleAnalyticsId=G-2XDQTMVL9Y
 cudl.viewer.analytics.embedded.gaid=fooble
 
 # Set URLs for retrieving data.
-rootURL=http://cudl-viewer:8888
+rootURL=https://newcastle-cudl-ecs-cudl-viewer.cudl-sandbox.net
 
-jsonURL=http://localhost:1112/v1/metadata/json/
+jsonURL=https://newcastle-cudl-ecs-services.cudl-sandbox.net/v1/metadata/json/
 itemJSONDirectory=${mount_path}/data/json/
 dataUIFile=${mount_path}/data/cudl.ui.json5
 datasetFile=${mount_path}/data/cudl.dl-dataset.json
@@ -36,7 +36,7 @@ dataUIThemeResources=${mount_path}/data/ui/
 # URLs for image and services servers.
 # Note after switch to IIIF (thumbnail data) we can remove IIIFImageServer
 imageServer=https://images.lib.cam.ac.uk/
-services=http://cudl-services/
+services=https://newcastle-cudl-ecs-services.cudl-sandbox.net/
 IIIFImageServer=https://images.lib.cam.ac.uk/iiif/
 
 # Email address to send the feedback form to.

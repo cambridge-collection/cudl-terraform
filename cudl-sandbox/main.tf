@@ -57,7 +57,7 @@ module "content_loader" {
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.content_loader_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = var.content_loader_target_group_port
   alb_target_group_health_check_status_code = var.content_loader_health_check_status_code
-  ecr_repository_names                      = var.content_loader_ecr_repository_names
+  ecr_repository_names                      = keys(var.content_loader_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_buckets                           = [module.cudl-data-processing.source_bucket]
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
@@ -69,9 +69,9 @@ module "content_loader" {
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_execution_bucket_objects = {
     "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/cudl-loader-ui.env.ttfpl", {
-      region          = var.deployment-aws-region
-      source_bucket   = module.cudl-data-processing.source_bucket
-      releases_bucket = module.cudl-data-processing.destination_bucket
+      region                     = var.deployment-aws-region
+      source_bucket              = module.cudl-data-processing.source_bucket
+      releases_bucket            = module.cudl-data-processing.destination_bucket
       releases_bucket_production = var.content_loader_releases_bucket_production
     })
   }
@@ -93,8 +93,8 @@ module "content_loader" {
     staging_source      = aws_iam_policy.staging_cudl_data_source.arn,
     production_releases = aws_iam_policy.production_cudl_data_releases.arn
   }
-  efs_create_file_system        = true
-  tags                          = local.default_tags
+  efs_create_file_system = true
+  tags                   = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
@@ -111,7 +111,7 @@ module "solr" {
   alb_target_group_deregistration_delay          = 60
   alb_target_group_health_check_interval         = 30
   alb_target_group_health_check_timeout          = 10
-  ecr_repository_names                           = var.solr_ecr_repository_names
+  ecr_repository_names                           = keys(var.solr_ecr_repositories)
   ecr_repositories_exist                         = true
   s3_task_buckets                                = [module.cudl-data-processing.destination_bucket]
   s3_task_execution_bucket                       = module.base_architecture.s3_bucket
@@ -123,7 +123,7 @@ module "solr" {
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
-  ecs_service_deployment_minimum_healthy_percent = 0
+  ecs_service_deployment_minimum_healthy_percent = 0 # setting to 100 prevents deployments but keeps services running
   ecs_service_deployment_maximum_percent         = 100
   vpc_id                                         = module.base_architecture.vpc_id
   vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
@@ -164,7 +164,7 @@ module "cudl_services" {
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_services_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = var.cudl_services_target_group_port
   alb_target_group_health_check_status_code = var.cudl_services_health_check_status_code
-  ecr_repository_names                      = var.cudl_services_ecr_repository_names
+  ecr_repository_names                      = keys(var.cudl_services_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
@@ -199,12 +199,13 @@ module "cudl_viewer" {
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_viewer_domain_name])), var.registered_domain_name])
   alb_target_group_port                     = var.cudl_viewer_container_port
   alb_target_group_health_check_status_code = var.cudl_viewer_health_check_status_code
-  ecr_repository_names                      = var.cudl_viewer_ecr_repository_names
+  ecr_repository_names                      = keys(var.cudl_viewer_ecr_repositories)
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
   ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
+  ecs_task_def_memory                       = var.cudl_viewer_ecs_task_def_memory
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
@@ -229,7 +230,7 @@ module "cudl_viewer" {
   asg_security_group_id                  = module.base_architecture.asg_security_group_id
   alb_security_group_id                  = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
+  cloudfront_waf_acl_arn                 = aws_wafv2_web_acl.cudl_viewer.arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
   cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
   efs_use_existing_filesystem            = true

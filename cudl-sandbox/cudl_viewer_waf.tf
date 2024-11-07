@@ -1,5 +1,5 @@
-resource "aws_wafv2_web_acl" "content_loader" {
-  name        = "${module.content_loader.name_prefix}-waf-web-acl"
+resource "aws_wafv2_web_acl" "cudl_viewer" {
+  name        = "${module.cudl_viewer.name_prefix}-waf-web-acl"
   provider    = aws.us-east-1
   description = "Managed by Terraform"
   scope       = "CLOUDFRONT"
@@ -10,7 +10,7 @@ resource "aws_wafv2_web_acl" "content_loader" {
 
   visibility_config {
     cloudwatch_metrics_enabled = true
-    metric_name                = "${module.content_loader.name_prefix}-waf-web-acl-no-rule"
+    metric_name                = "${module.cudl_viewer.name_prefix}-waf-web-acl-no-rule"
     sampled_requests_enabled   = true
   }
 
@@ -18,15 +18,15 @@ resource "aws_wafv2_web_acl" "content_loader" {
     name     = "AWS-AWSManagedRulesAmazonIpReputationList"
     priority = 0
 
-    override_action {
-      none {}
-    }
-
     statement {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAmazonIpReputationList"
         vendor_name = "AWS"
       }
+    }
+
+    override_action {
+      none {}
     }
 
     visibility_config {
@@ -45,13 +45,17 @@ resource "aws_wafv2_web_acl" "content_loader" {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
 
-        dynamic "rule_action_override" {
-          for_each = toset(var.content_loader_waf_common_ruleset_override_actions)
-          content {
-            name = rule_action_override.key
-            action_to_use {
-              allow {}
-            }
+        rule_action_override {
+          name = "SizeRestrictions_QUERYSTRING"
+          action_to_use {
+            allow {}
+          }
+        }
+
+        rule_action_override {
+          name = "SizeRestrictions_BODY"
+          action_to_use {
+            allow {}
           }
         }
       }
