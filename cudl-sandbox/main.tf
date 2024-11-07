@@ -183,7 +183,7 @@ module "cudl_services" {
   asg_security_group_id                     = module.base_architecture.asg_security_group_id
   alb_security_group_id                     = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn                  = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn                    = module.base_architecture.waf_acl_arn
+  cloudfront_waf_acl_arn                    = aws_wafv2_web_acl.cudl_viewer.arn # NOTE using viewer WAF
   cloudfront_allowed_methods                = var.cudl_services_allowed_methods
   tags                                      = local.default_tags
   providers = {
