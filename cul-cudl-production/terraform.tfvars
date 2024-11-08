@@ -144,6 +144,10 @@ asg_desired_capacity           = 3 # n = number of tasks
 asg_max_size                   = 4 # n + 1
 asg_allow_all_egress           = true
 ec2_instance_type              = "t3.large"
+ec2_additional_userdata        = <<-EOF
+echo 1 > /proc/sys/vm/swappiness
+echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
+EOF
 route53_zone_id_existing       = "Z03809063VDGJ8MKPHFRV"
 route53_zone_force_destroy     = true
 acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
@@ -159,7 +163,7 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:2892d0023e4014ad569121551b8b959cd32f5c6658e671973bcfc783836bf65f",
+  "cudl/solr-api" = "sha256:f5663ef09aa01c90a92057d161c4a3c83bb851137eb8b6dc1228d2727a130810",
   "cudl/solr"     = "sha256:8dfcce2322e381d92bc02d19710afa8ec15e5a8f6c1efa1edddf550527c51fdb"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
@@ -167,7 +171,7 @@ solr_container_name_api       = "solr-api"
 solr_container_name_solr      = "solr"
 solr_health_check_status_code = "404"
 solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu         = 1536
+solr_ecs_task_def_cpu         = 2048
 solr_use_service_discovery    = true
 
 cudl_services_name_suffix       = "cudl-services"

@@ -3,10 +3,12 @@ locals {
   solr_container_name_api  = join("-", [var.solr_container_name_api, var.cluster_name_suffix])
   solr_container_defs = [
     {
-      name           = local.solr_container_name_solr,
-      systemControls = [],
-      image          = data.aws_ecr_image.solr["cudl/solr"].image_uri,
-      cpu            = 0,
+      name              = local.solr_container_name_solr,
+      systemControls    = [],
+      image             = data.aws_ecr_image.solr["cudl/solr"].image_uri,
+      cpu               = floor((var.solr_ecs_task_def_cpu / 3) * 2),
+      memory            = local.solr_ecs_task_def_memory - 512
+      memoryReservation = local.solr_ecs_task_def_memory - 1024
       portMappings = [
         {
           containerPort = var.solr_application_port,
@@ -20,8 +22,8 @@ locals {
       entryPoint = [],
       environment = [
         {
-          name  = "SOLR_JAVA_MEM",
-          value = "-Xms1g -Xmx1g"
+          name  = "SOLR_HEAP",
+          value = format("%sm", floor(local.solr_ecs_task_def_memory / 2))
         }
       ],
       environmentFiles = [],
@@ -59,9 +61,9 @@ locals {
       name              = local.solr_container_name_api,
       systemControls    = [],
       image             = data.aws_ecr_image.solr["cudl/solr-api"].image_uri,
-      cpu               = 1024,
+      cpu               = floor(var.solr_ecs_task_def_cpu / 3),
       memory            = 1024,
-      memoryReservation = 1024,
+      memoryReservation = 512,
       portMappings = [
         {
           containerPort = var.solr_target_group_port,
@@ -87,9 +89,9 @@ locals {
           value = tostring(var.solr_target_group_port)
         },
         {
-          name  = "EXTRA_VAR"
-          value = "25"
-        }
+          name  = "NUM_WORKERS"
+          value = "3"
+        },
       ],
       environmentFiles = [],
       mountPoints      = [],

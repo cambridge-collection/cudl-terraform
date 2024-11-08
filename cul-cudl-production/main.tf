@@ -1,8 +1,9 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.1.0"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
+  ec2_additional_userdata        = var.ec2_additional_userdata
   route53_zone_domain_name       = var.registered_domain_name
   route53_zone_id_existing       = var.route53_zone_id_existing
   route53_zone_force_destroy     = var.route53_zone_force_destroy
@@ -71,7 +72,7 @@ module "solr" {
   ecs_task_def_container_definitions             = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes                           = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                               = var.solr_ecs_task_def_cpu
-  ecs_task_def_memory                            = data.aws_ec2_instance_type.asg.memory_size - 512
+  ecs_task_def_memory                            = local.solr_ecs_task_def_memory
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
