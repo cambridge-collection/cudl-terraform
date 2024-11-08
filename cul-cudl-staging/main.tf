@@ -78,19 +78,20 @@ module "content_loader" {
       releases_bucket_production = var.content_loader_releases_bucket_production
     })
   }
-  vpc_id                     = module.base_architecture.vpc_id
-  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
-  alb_arn                    = module.base_architecture.alb_arn
-  alb_dns_name               = module.base_architecture.alb_dns_name
-  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
-  asg_name                   = module.base_architecture.asg_name
-  asg_security_group_id      = module.base_architecture.asg_security_group_id
-  alb_security_group_id      = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
-  cloudfront_allowed_methods = var.content_loader_allowed_methods
+  vpc_id                         = module.base_architecture.vpc_id
+  vpc_subnet_ids                 = module.base_architecture.vpc_private_subnet_ids
+  alb_arn                        = module.base_architecture.alb_arn
+  alb_dns_name                   = module.base_architecture.alb_dns_name
+  alb_listener_arn               = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                = module.base_architecture.route53_public_hosted_zone
+  asg_name                       = module.base_architecture.asg_name
+  asg_security_group_id          = module.base_architecture.asg_security_group_id
+  alb_security_group_id          = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn       = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn         = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
+  cloudfront_origin_read_timeout = var.content_loader_cloudfront_origin_read_timeout
+  cloudfront_allowed_methods     = var.content_loader_allowed_methods
   iam_task_additional_policies = {
     staging_releases    = aws_iam_policy.staging_cudl_data_releases.arn,
     staging_source      = aws_iam_policy.staging_cudl_data_source.arn,
