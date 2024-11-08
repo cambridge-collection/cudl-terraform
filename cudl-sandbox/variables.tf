@@ -148,7 +148,11 @@ variable "cluster_name_suffix" {
 variable "ec2_instance_type" {
   type        = string
   description = "EC2 Instance type used by EC2 Instances"
-  default     = "t3.small"
+}
+
+variable "ec2_additional_userdata" {
+  type        = string
+  description = "Additional userdata to append to EC2 instances"
 }
 
 variable "asg_max_size" {
@@ -174,11 +178,6 @@ variable "vpc_cidr_block" {
 variable "vpc_public_subnet_public_ip" {
   type        = bool
   description = "Whether to automatically assign public IP addresses in the public subnets"
-}
-
-variable "vpc_endpoint_services" {
-  type        = list(string)
-  description = "List of services to create VPC Endpoints for"
 }
 
 variable "vpc_peering_vpc_ids" {
@@ -242,9 +241,9 @@ variable "content_loader_target_group_port" {
   description = "Port number to be used for the Content Loader Target Group"
 }
 
-variable "content_loader_ecr_repository_names" {
-  type        = list(string)
-  description = "List of ECR Repository names for Content Loader"
+variable "content_loader_ecr_repositories" {
+  type        = map(string)
+  description = "Map of ECR Repository name and digest values for Content Loader"
 }
 
 variable "content_loader_ecs_task_def_volumes" {
@@ -297,9 +296,9 @@ variable "solr_target_group_port" {
   description = "Port number to be used for the SOLR Target Group"
 }
 
-variable "solr_ecr_repository_names" {
-  type        = list(string)
-  description = "List of ECR Repository names for SOLR"
+variable "solr_ecr_repositories" {
+  type        = map(string)
+  description = "Map of ECR Repository name and digest values for SOLR"
 }
 
 variable "solr_ecs_task_def_volumes" {
@@ -332,11 +331,6 @@ variable "solr_ecs_task_def_cpu" {
   description = "Number of cpu units used by the SOLR tasks"
 }
 
-variable "solr_ecs_task_def_memory" {
-  type        = number
-  description = "Amount (in MiB) of memory used by the SOLR tasks"
-}
-
 variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"
@@ -367,9 +361,9 @@ variable "cudl_services_container_port" {
   description = "Port number to be used for the CUDL services Container"
 }
 
-variable "cudl_services_ecr_repository_names" {
-  type        = list(string)
-  description = "List of ECR Repository names for CUDL Services"
+variable "cudl_services_ecr_repositories" {
+  type        = map(string)
+  description = "Map of ECR Repository name and digest values for CUDL Services"
 }
 
 
@@ -408,9 +402,9 @@ variable "cudl_viewer_container_port" {
   description = "Port number to be used for the CUDL viewer Container"
 }
 
-variable "cudl_viewer_ecr_repository_names" {
-  type        = list(string)
-  description = "List of ECR Repository names for CUDL viewer"
+variable "cudl_viewer_ecr_repositories" {
+  type        = map(string)
+  description = "Map of ECR Repository name and digest values for CUDL viewer"
 }
 
 
