@@ -63,3 +63,19 @@ data "aws_ssm_parameter" "cudl_viewer_google_analytics_id" {
 data "aws_ssm_parameter" "cudl_viewer_ga4_google_analytics_id" {
   name = "/Environments/${title(var.environment)}/CUDL/Viewer/Google/GA4AnalyticsId"
 }
+
+data "aws_secretsmanager_secret" "logs_access_key_id" {
+  name = "${local.environment}/logs-access-key-id"
+}
+
+data "aws_secretsmanager_secret_version" "logs_access_key_id" {
+  secret_id = data.aws_secretsmanager_secret.logs_access_key_id.id
+}
+
+data "aws_secretsmanager_secret" "logs_secret_access_key" {
+  name = "${local.environment}/logs-secret-access-key"
+}
+
+data "aws_secretsmanager_secret_version" "logs_secret_access_key" {
+  secret_id = data.aws_secretsmanager_secret.logs_secret_access_key.id
+}

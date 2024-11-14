@@ -291,6 +291,20 @@ registered_domain_name         = "cudl.lib.cam.ac.uk."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
+ec2_additional_userdata        = <<-EOF
+yum -y install unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+unzip /tmp/awscliv2.zip -d /tmp
+/tmp/aws/install
+ln -s /usr/local/bin/aws /usr/bin/aws
+export AWS_REGION=eu-west-1
+printf "awslogs_aws_access_key_id=$(aws secretsmanager get-secret-value --secret-id staging/logs-access-key-id --query 'SecretString' --output text)\n" > /etc/default/docker-awslogs
+printf "aws_secret_access_key=$(aws secretsmanager get-secret-value --secret-id staging/logs-secret-access-key --query 'SecretString' --output text)\n" >> /etc/default/docker-awslogs
+mkdir -p /etc/systemd/system/docker.service.d/
+printf "[Service]\nEnvironmentFile=/etc/default/docker-awslogs\n" > /etc/systemd/system/docker.service.d/awslogs.conf
+systemctl daemon-reload
+systemctl restart docker
+EOF
 route53_zone_id_existing       = "Z03809063VDGJ8MKPHFRV"
 route53_zone_force_destroy     = true
 acm_certificate_arn            = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
@@ -300,6 +314,7 @@ alb_idle_timeout               = "900"
 vpc_cidr_block                 = "10.88.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 cloudwatch_log_group           = "/ecs/CUDL"
+cloudwatch_external_log_group  = "/cul/cudl/staging"
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload

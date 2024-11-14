@@ -1,8 +1,9 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.0.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/iam-instance-policies"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
+  ec2_additional_userdata        = var.ec2_additional_userdata
   route53_zone_domain_name       = var.registered_domain_name
   route53_zone_id_existing       = var.route53_zone_id_existing
   route53_zone_force_destroy     = var.route53_zone_force_destroy
@@ -15,7 +16,10 @@ module "base_architecture" {
   vpc_cidr_block                 = var.vpc_cidr_block
   acm_create_certificate         = false
   acm_certificate_arn            = var.acm_certificate_arn
-  tags                           = local.default_tags
+  iam_instance_additional_policies = {
+    logging = aws_iam_policy.logging.arn
+  }
+  tags = local.default_tags
 }
 
 module "cudl-data-processing" {
@@ -53,7 +57,7 @@ module "cudl-data-processing" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -108,7 +112,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -158,7 +162,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -196,7 +200,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/iam-task-execution-extra"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -213,6 +217,9 @@ module "cudl_viewer" {
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
+  iam_task_execution_additional_policies = {
+    logging = aws_iam_policy.logging.arn
+  }
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
       smtp_host               = format("email-smtp.%s.amazonaws.com", var.deployment-aws-region)

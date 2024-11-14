@@ -150,6 +150,11 @@ variable "ec2_instance_type" {
   default     = "t3.small"
 }
 
+variable "ec2_additional_userdata" {
+  type        = string
+  description = "Additional userdata to append to EC2 instances"
+}
+
 variable "asg_max_size" {
   type        = number
   description = "Maximum number of instances in the Autoscaling Group"
@@ -224,6 +229,11 @@ variable "alb_idle_timeout" {
 variable "cloudwatch_log_group" {
   type        = string
   description = "Name of the cloudwatch log group"
+}
+
+variable "cloudwatch_external_log_group" {
+  type        = string
+  description = "Name of the external cloudwatch log group"
 }
 
 variable "content_loader_name_suffix" {

@@ -33,11 +33,10 @@ locals {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
+          awslogs-group         = var.cloudwatch_external_log_group,
           awslogs-region        = var.deployment-aws-region,
           awslogs-stream-prefix = "ecs/${local.cudl_viewer_container_name}"
-        },
-        secretOptions = []
+        }
       }
     }
   ]
