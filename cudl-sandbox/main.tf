@@ -31,7 +31,7 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.1.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=feature/additional-outputs"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -51,7 +51,7 @@ module "base_architecture" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/outputs-additional"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -96,7 +96,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/outputs-additional"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -152,7 +152,7 @@ module "solr_stopped_tasks" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/outputs-additional"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -187,7 +187,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=feature/outputs-additional"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -223,7 +223,7 @@ module "cudl_viewer" {
   asg_name                               = module.base_architecture.asg_name
   asg_security_group_id                  = module.base_architecture.asg_security_group_id
   alb_security_group_id                  = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
+  cloudwatch_log_group_arn               = aws_cloudwatch_log_group.cudl_viewer.arn
   cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
   cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
@@ -234,4 +234,11 @@ module "cudl_viewer" {
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
+}
+
+module "logs" {
+  source = "../modules/logging"
+
+  name_prefix              = local.base_name_prefix
+  cloudwatch_log_group_name = aws_cloudwatch_log_group.cudl_viewer.name
 }

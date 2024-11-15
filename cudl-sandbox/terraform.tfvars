@@ -291,10 +291,10 @@ registered_domain_name         = "cudl-sandbox.net."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
-ec2_instance_type              = "t3.large"
+ec2_instance_type              = "t3.small"
 ec2_additional_userdata        = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
-echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
+echo ECS_RESERVED_MEMORY=128 >> /etc/ecs/ecs.config
 EOF
 route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"

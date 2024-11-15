@@ -20,5 +20,5 @@ locals {
     AWS_CUDL_DATA_SOURCE_BUCKET = "${local.environment}-cudl-data-source"
     AWS_OUTPUT_BUCKET           = "${local.environment}-cudl-data-source"
   }
-  solr_ecs_task_def_memory = data.aws_ec2_instance_type.asg.memory_size - 768
+  solr_ecs_task_def_memory = data.aws_ec2_instance_type.asg.memory_size - 512
 }
