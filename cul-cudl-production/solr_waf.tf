@@ -134,7 +134,7 @@ resource "aws_wafv2_web_acl" "solr" {
     statement {
       byte_match_statement {
         positional_constraint = "STARTS_WITH"
-        search_string         = "/collections"
+        search_string         = "/pages"
         field_to_match {
           uri_path {}
         }

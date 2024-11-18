@@ -195,16 +195,6 @@ variable "route53_zone_id_existing" {
   description = "ID of an existing Route 53 Hosted zone as an alternative to creating a hosted zone"
 }
 
-variable "acm_certificate_arn" {
-  type        = string
-  description = "ARN of an existing ACM certificate suitable for the Route 53 domain"
-}
-
-variable "acm_certificate_arn_us-east-1" {
-  type        = string
-  description = "ARN of an existing ACM certificate in us-east-1 region suitable for the Route 53 domain"
-}
-
 variable "route53_zone_force_destroy" {
   type        = bool
   description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone"
@@ -278,101 +268,4 @@ variable "solr_ecs_task_def_cpu" {
 variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"
-}
-
-variable "cudl_services_name_suffix" {
-  type        = string
-  description = "Suffix to add to CUDL services resource names"
-}
-
-variable "cudl_services_domain_name" {
-  type        = string
-  description = "Domain Name for the CUDL services service"
-}
-
-variable "cudl_services_target_group_port" {
-  type        = number
-  description = "Port number to be used for the CUDL services Target Group"
-}
-
-variable "cudl_services_container_port" {
-  type        = number
-  description = "Port number to be used for the CUDL services Container"
-}
-
-variable "cudl_services_ecr_repositories" {
-  type        = map(string)
-  description = "Map of ECR Repository name and digest values for CUDL Services"
-}
-
-
-variable "cudl_services_health_check_status_code" {
-  type        = string
-  description = "HTTP Status Code to use in target group health check"
-}
-
-# variable "cudl_services_ecs_task_def_volumes" {
-#   type        = map(string)
-#   description = "Map of volume names and container paths to attach to the CUDL Services ECS Task Definition"
-# }
-
-variable "cudl_services_allowed_methods" {
-  type        = list(string)
-  description = "List of methods allowed by the CloudFront Distribution"
-}
-
-variable "cudl_viewer_name_suffix" {
-  type        = string
-  description = "Suffix to add to CUDL viewer resource names"
-}
-
-variable "cudl_viewer_domain_name" {
-  type        = string
-  description = "Domain Name for the CUDL viewer service"
-}
-
-variable "cudl_viewer_target_group_port" {
-  type        = number
-  description = "Port number to be used for the CUDL viewer Target Group"
-}
-
-variable "cudl_viewer_container_port" {
-  type        = number
-  description = "Port number to be used for the CUDL viewer Container"
-}
-
-variable "cudl_viewer_ecr_repositories" {
-  type        = map(string)
-  description = "Map of ECR Repository name and digest values for CUDL viewer"
-}
-
-
-variable "cudl_viewer_health_check_status_code" {
-  type        = string
-  description = "HTTP Status Code to use in target group health check"
-}
-
-# variable "cudl_viewer_ecs_task_def_volumes" {
-#   type        = map(string)
-#   description = "Map of volume names and container paths to attach to the CUDL viewer ECS Task Definition"
-# }
-
-variable "cudl_viewer_allowed_methods" {
-  type        = list(string)
-  description = "List of methods allowed by the CloudFront Distribution"
-}
-
-variable "cudl_viewer_ecs_task_def_volumes" {
-  type        = map(string)
-  description = "Map of volume names and container paths to attach to the Cudl Viewer ECS Task Definition"
-}
-
-variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
-  type        = string
-  description = "Pattern regex used in S3 to EFS task"
-}
-
-variable "cudl_viewer_alternative_domain_names" {
-  type        = list(string)
-  description = "List of additional host headers for CUDL Viewer"
 }

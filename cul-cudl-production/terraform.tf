@@ -15,9 +15,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "cul-cudl-terraform-state"
-    key            = "cul-cudl-infra-prod.tfstate"
-    dynamodb_table = "terraform-state-lock-cudl" # LockID
+    bucket         = "sandbox-cudl-terraform-state"
+    key            = "sandbox-mjh39-darwin-infra.tfstate"
+    dynamodb_table = "terraform-state-lock-cudl"
     region         = "eu-west-1"
   }
 
