@@ -1,5 +1,7 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "current" {}
+
 data "aws_ec2_instance_type" "asg" {
   instance_type = var.ec2_instance_type
 }
