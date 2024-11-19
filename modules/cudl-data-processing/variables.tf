@@ -191,6 +191,12 @@ variable "cloudfront_route53_zone_id" {
   default     = null
 }
 
+variable "cloudfront_distribution_name" {
+  description = "Name of the CloudFront Distribution and associated resources"
+  type        = string
+  default     = "transcriptions"
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
