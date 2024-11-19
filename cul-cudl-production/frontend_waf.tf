@@ -1,7 +1,7 @@
 resource "aws_wafv2_web_acl" "web_frontend" {
-  name        = "${local.base_name_prefix}-waf-web-acl"
+  name        = "${local.base_name_prefix}-frontend-waf-web-acl"
   provider    = aws.us-east-1
-  description = "Managed by Terraform"
+  description = "Darwin Frontend Managed by Terraform"
   scope       = "CLOUDFRONT"
 
   default_action {

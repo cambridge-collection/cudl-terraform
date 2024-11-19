@@ -130,7 +130,7 @@ variable "transform-lambda-bucket-sqs-notifications" {
 variable "create_cloudfront_distribution" {
   description = "Whether to create a CloudFront distribution for access to the dest-bucket"
   type        = string
-  default     = true
+  default     = false
 }
 
 variable "cloudfront_route53_zone_id" {

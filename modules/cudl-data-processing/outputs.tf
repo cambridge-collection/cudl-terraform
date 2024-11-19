@@ -30,6 +30,10 @@ output "destination_bucket" {
   value = aws_s3_bucket.dest-bucket.id
 }
 
+output "destination_bucket_arn" {
+  value = aws_s3_bucket.dest-bucket.arn
+}
+
 output "destination_regional_domain_name" {
   value = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
 }
