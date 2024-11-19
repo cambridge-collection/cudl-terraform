@@ -3,6 +3,7 @@ project                      = "Darwin"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
 destination-bucket-name      = "releases"
+web_frontend_domain_name     = "darwin.cudl-sandbox.net"
 transcriptions-bucket-name   = "unused-cul-cudl-transcriptions"
 enhancements-bucket-name     = "unused-cul-cudl-data-enhancements"
 source-bucket-name           = "unused-cul-cudl-data-source"
@@ -70,7 +71,7 @@ transform-lambda-information = [
       API_PATH = "page"
     }
   }
-  ]
+]
 dst-efs-prefix    = "/mnt/cudl-data-releases"
 dst-prefix        = "html/"
 dst-s3-prefix     = ""
@@ -84,8 +85,8 @@ cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
 # Base Architecture
 cluster_name_suffix            = "darwin-ecs"
 registered_domain_name         = "cudl-sandbox.net."
-asg_desired_capacity           = 3 # n = number of tasks
-asg_max_size                   = 4 # n + 1
+asg_desired_capacity           = 1 # n = number of tasks
+asg_max_size                   = 1 # n + 1
 asg_allow_all_egress           = true
 ec2_instance_type              = "t3.large"
 ec2_additional_userdata        = <<-EOF

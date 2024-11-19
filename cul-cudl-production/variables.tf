@@ -269,3 +269,8 @@ variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"
 }
+
+variable "web_frontend_domain_name" {
+  type        = string
+  description = "Domain name for cloudfront web frontend"
+}
