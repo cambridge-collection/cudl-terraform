@@ -197,6 +197,18 @@ variable "cloudfront_distribution_name" {
   default     = "transcriptions"
 }
 
+variable "cloudfront_origin_path" {
+  description = "Origin path in an S3 Bucket or custom origin"
+  type        = string
+  default     = null
+}
+
+variable "cloudfront_viewer_request_function_arn" {
+  type        = string
+  description = "ARN of a CloudFront Function to add to CloudFront Distribution to handle Viewer Requests"
+  default     = null
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
