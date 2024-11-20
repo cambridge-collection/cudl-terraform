@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "assume_role" {
+data "aws_iam_policy_document" "assume_role_logs" {
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -35,11 +35,29 @@ resource "aws_iam_role" "cloudwatch" {
   path                 = "/"
   description          = "IAM role for CloudWatch"
   name                 = format("%s-cloudwatch", module.cudl_viewer.name_prefix)
-  assume_role_policy   = data.aws_iam_policy_document.assume_role.json
+  assume_role_policy   = data.aws_iam_policy_document.assume_role_logs.json
   max_session_duration = 3600
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch" {
   role       = aws_iam_role.cloudwatch.name
   policy_arn = aws_iam_policy.cloudwatch.arn
+}
+
+data "aws_iam_policy_document" "assume_role_firehose" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["firehose.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "firehose" {
+  name               = format("%s-firehose", module.cudl_viewer.name_prefix)
+  assume_role_policy = data.aws_iam_policy_document.assume_role_firehose.json
 }
