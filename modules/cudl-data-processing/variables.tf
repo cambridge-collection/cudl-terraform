@@ -209,6 +209,12 @@ variable "cloudfront_viewer_request_function_arn" {
   default     = null
 }
 
+variable "cloudfront_default_root_object" {
+  type        = string
+  description = "Object that you want CloudFront to return (for example, index.html) when an end user requests the root URL"
+  default     = null
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
