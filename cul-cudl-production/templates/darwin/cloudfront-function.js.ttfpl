@@ -2,10 +2,30 @@
 function handler(event) {
     var request = event.request;
     var uri = request.uri;
-    var docId = event.request.querystring['docId'].value.replace(/(^(\.\.\/+)+|^\/|\.xml.*$)/,'')
+    var docId = (event.request.querystring['docId']) ? event.request.querystring['docId'].value.replace(/(^(\.\.\/+)+|^\/|\.xml.*$)/,'') : ''
 
     if (uri.match('^/letter(/|$)') && docId.match('(bibliographies|documentation|letters|nameregs|repo)/')) {
         request.uri ="/view/"+docId+'.html'
+    }
+    else if (uri.match('^/(entry-[0-9]|letter/DCP-LETT-[0-9])')) {
+        let letter_file = uri.replace(/^\/(entry|letter\/DCP-LETT)/i, 'letters/DCP-LETT')
+        let response = {
+                statusCode: 301,
+                statusDescription: 'Moved Permanently',
+                headers:
+                    { "location": { "value": "/letter/?docId="+letter_file.replace(/\.xml$/,'')+'.xml' } }
+                }
+                return response
+    }
+    else if (uri.match('^/namedef-[0-9]')) {
+        let letter_file = uri.replace(/^\/namedef-/i, 'nameregs/nameregs_')
+        let response = {
+                statusCode: 301,
+                statusDescription: 'Moved Permanently',
+                headers:
+                    { "location": { "value": "/letter/?docId="+letter_file+'.xml' } }
+                }
+                return response
     }
     else if (uri.endsWith('/')) {
         request.uri += 'index.html';
