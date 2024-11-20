@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "dest-bucket" {
     condition {
       test     = "StringEquals"
       variable = "AWS:SourceArn"
-      values   = [aws_cloudfront_distribution.transcriptions.0.arn]
+      values   = [aws_cloudfront_distribution.this.0.arn]
     }
   }
 }

@@ -37,7 +37,7 @@ locals {
         },
         {
           name  = "CUDL_SERVICES_TEI_HTML_URL",
-          value = "https://${module.cudl-data-processing.transcriptions_domain_name}/"
+          value = "https://${module.cudl-data-processing.cloudfront_distribution_domain_name}/"
         },
         {
           name  = "CUDL_SERVICES_XTF_INDEX_PATH",

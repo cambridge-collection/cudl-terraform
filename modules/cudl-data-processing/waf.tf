@@ -1,9 +1,9 @@
-resource "aws_wafv2_web_acl" "transcriptions" {
+resource "aws_wafv2_web_acl" "this" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
-  name        = "${var.environment}-transcriptions-waf-web-acl"
+  name        = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl"])
   provider    = aws.us-east-1
-  description = "Managed by Terraform for ${var.environment}"
+  description = "Managed by Terraform for ${var.environment} ${var.cloudfront_distribution_name}"
   scope       = "CLOUDFRONT"
 
   default_action {
@@ -86,7 +86,7 @@ resource "aws_wafv2_web_acl" "transcriptions" {
 
   visibility_config {
     cloudwatch_metrics_enabled = true
-    metric_name                = "transcriptions-waf-web-acl-no-rule"
+    metric_name                = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-no-rule"])
     sampled_requests_enabled   = true
   }
 }

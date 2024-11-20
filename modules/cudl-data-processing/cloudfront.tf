@@ -3,7 +3,7 @@ data "aws_cloudfront_cache_policy" "managed_caching_disabled" {
   name     = "Managed-CachingDisabled"
 }
 
-resource "aws_cloudfront_origin_access_control" "transcriptions" {
+resource "aws_cloudfront_origin_access_control" "this" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
   name                              = aws_s3_bucket.dest-bucket.id
@@ -13,25 +13,26 @@ resource "aws_cloudfront_origin_access_control" "transcriptions" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_distribution" "transcriptions" {
+resource "aws_cloudfront_distribution" "this" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
   provider = aws.us-east-1
 
-  comment      = "${local.transcriptions_domain_name} CloudFront Distribution"
+  comment      = "${local.cloudfront_distribution_domain_name} CloudFront Distribution"
   price_class  = "PriceClass_100"
   enabled      = true
   http_version = "http2"
-  web_acl_id   = aws_wafv2_web_acl.transcriptions.0.arn
+  web_acl_id   = aws_wafv2_web_acl.this.0.arn
 
   aliases = [
-    local.transcriptions_domain_name
+    local.cloudfront_distribution_domain_name
   ]
 
   origin {
     domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
-    origin_id                = local.transcriptions_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.transcriptions.0.id
+    origin_id                = local.cloudfront_distribution_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.this.0.id
+    origin_path              = var.cloudfront_origin_path
   }
 
   default_cache_behavior {
@@ -39,13 +40,21 @@ resource "aws_cloudfront_distribution" "transcriptions" {
     cached_methods         = ["GET", "HEAD"]
     compress               = true
     smooth_streaming       = false
-    target_origin_id       = local.transcriptions_domain_name
+    target_origin_id       = local.cloudfront_distribution_domain_name
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = data.aws_cloudfront_cache_policy.managed_caching_disabled.id
+
+    dynamic "function_association" {
+      for_each = var.cloudfront_viewer_request_function_arn != null ? [1] : []
+      content {
+        event_type   = "viewer-request"
+        function_arn = var.cloudfront_viewer_request_function_arn
+      }
+    }
   }
 
   viewer_certificate {
-    acm_certificate_arn            = var.acm_create_certificate ? aws_acm_certificate.transcriptions_us-east-1.0.arn : var.acm_certificate_arn
+    acm_certificate_arn            = var.acm_create_certificate ? aws_acm_certificate.this_us-east-1.0.arn : var.acm_certificate_arn
     cloudfront_default_certificate = false
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
