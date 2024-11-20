@@ -2,7 +2,12 @@
 function handler(event) {
     var request = event.request;
     var uri = request.uri;
-    if (uri.endsWith('/')) {
+    var docId = event.request.querystring['docId'].value.replace(/(^(\.\.\/+)+|^\/|\.xml.*$)/,'')
+
+    if (uri.match('^/letter(/|$)') && docId.match('(bibliographies|documentation|letters|nameregs|repo)/')) {
+        request.uri ="/view/"+docId+'.html'
+    }
+    else if (uri.endsWith('/')) {
         request.uri += 'index.html';
     }
     else if (!uri.includes('.')) {
