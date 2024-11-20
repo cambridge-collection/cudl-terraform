@@ -61,3 +61,42 @@ resource "aws_iam_role" "firehose" {
   name               = format("%s-firehose", module.cudl_viewer.name_prefix)
   assume_role_policy = data.aws_iam_policy_document.assume_role_firehose.json
 }
+
+data "aws_iam_policy_document" "firehose" {
+  statement {
+    actions = [
+      "s3:AbortMultipartUpload",
+      "s3:GetBucketLocation",
+      "s3:GetObject",
+      "s3:ListBucket",
+      "s3:ListBucketMultipartUploads",
+      "s3:PutObject"
+    ]
+    resources = [
+      module.logs.s3_bucket_arn,
+      format("%s/*", module.logs.s3_bucket_arn)
+    ]
+  }
+
+  statement {
+    actions   = [
+      "kinesis:DescribeStream",
+      "kinesis:GetShardIterator",
+      "kinesis:GetRecords",
+      "kinesis:ListShards"
+    ]
+    resources = [aws_kinesis_stream.cloudwatch.arn]
+  }
+}
+
+resource "aws_iam_policy" "firehose" {
+  name        = format("%s-firehose", module.cudl_viewer.name_prefix)
+  path        = "/"
+  description = "Policy granting permission for Firehose to get events from a Kinesis Stream"
+  policy      = data.aws_iam_policy_document.firehose.json
+}
+
+resource "aws_iam_role_policy_attachment" "firehose" {
+  role       = aws_iam_role.firehose.name
+  policy_arn = aws_iam_policy.firehose.arn
+}
