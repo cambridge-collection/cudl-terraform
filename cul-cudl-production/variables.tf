@@ -130,13 +130,28 @@ variable "transform-lambda-bucket-sqs-notifications" {
 variable "create_cloudfront_distribution" {
   description = "Whether to create a CloudFront distribution for access to the dest-bucket"
   type        = string
-  default     = false
+  default     = true
 }
 
 variable "cloudfront_route53_zone_id" {
   description = "Route 53 Zone ID for CloudFront distribution"
   type        = string
   default     = null
+}
+
+variable "cloudfront_distribution_name" {
+  description = "Name of the CloudFront Distribution and associated resources"
+  type        = string
+}
+
+variable "cloudfront_origin_path" {
+  description = "CloudFront origin path in an S3 Bucket or custom origin"
+  type        = string
+}
+
+variable "cloudfront_default_root_object" {
+  type        = string
+  description = "Object that you want CloudFront to return (for example, index.html) when an end user requests the root URL"
 }
 
 variable "cluster_name_suffix" {
