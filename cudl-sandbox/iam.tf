@@ -62,6 +62,7 @@ resource "aws_iam_role" "firehose" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_firehose.json
 }
 
+# https://docs.aws.amazon.com/firehose/latest/dev/controlling-access.html#using-iam-s3
 data "aws_iam_policy_document" "firehose" {
   statement {
     actions = [
@@ -79,13 +80,20 @@ data "aws_iam_policy_document" "firehose" {
   }
 
   statement {
-    actions   = [
+    actions = [
       "kinesis:DescribeStream",
       "kinesis:GetShardIterator",
       "kinesis:GetRecords",
       "kinesis:ListShards"
     ]
     resources = [aws_kinesis_stream.cloudwatch.arn]
+  }
+
+  statement {
+    actions = [
+      "logs:PutLogEvents"
+    ]
+    resources = [aws_cloudwatch_log_group.firehose.arn]
   }
 }
 

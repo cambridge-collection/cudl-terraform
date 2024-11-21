@@ -41,7 +41,7 @@ resource "aws_cloudwatch_dashboard" "cudl" {
           metrics = [
             ["AWS/CloudFront", "Requests", "Region", "Global", "DistributionId", module.cudl_viewer.cloudfront_distribution_id, { "color" : "#2ca02c" }],
             ["AWS/CloudFront", "TotalErrorRate", "Region", "Global", "DistributionId", module.cudl_viewer.cloudfront_distribution_id, { "color" : "#ff7f0e" }],
-            ["AWS/CloudFront", "BytesDownloaded", "Region", "Global", "DistributionId", module.cudl_viewer.cloudfront_distribution_id, { "yAxis" : "right", "color": "#1f77b4" }]
+            ["AWS/CloudFront", "BytesDownloaded", "Region", "Global", "DistributionId", module.cudl_viewer.cloudfront_distribution_id, { "yAxis" : "right", "color" : "#1f77b4" }]
           ],
           view    = "timeSeries"
           period  = 60
@@ -72,11 +72,11 @@ resource "aws_cloudwatch_dashboard" "cudl" {
 
         properties = {
           metrics = [
-            [ "AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#ff7f0e" } ],
-            [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#d62728" } ],
-            [ "AWS/ApplicationELB", "HTTPCode_Target_2XX_Count", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#2ca02c" } ],
-            [ "AWS/ApplicationELB", "TargetConnectionErrorCount", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#9467bd" } ],
-            [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "yAxis": "right", "stat": "Average", "color": "#1f77b4" } ],
+            ["AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#ff7f0e" }],
+            ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#d62728" }],
+            ["AWS/ApplicationELB", "HTTPCode_Target_2XX_Count", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#2ca02c" }],
+            ["AWS/ApplicationELB", "TargetConnectionErrorCount", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#9467bd" }],
+            ["AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", module.cudl_viewer.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "yAxis" : "right", "stat" : "Average", "color" : "#1f77b4" }],
           ],
           view    = "timeSeries"
           period  = 60
@@ -107,11 +107,11 @@ resource "aws_cloudwatch_dashboard" "cudl" {
 
         properties = {
           metrics = [
-            [ "AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#ff7f0e" } ],
-            [ "AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#d62728" } ],
-            [ "AWS/ApplicationELB", "HTTPCode_Target_2XX_Count", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#2ca02c" } ],
-            [ "AWS/ApplicationELB", "TargetConnectionErrorCount", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color": "#9467bd" } ],
-            [ "AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "yAxis": "right", "stat": "Average", "color": "#1f77b4" } ],
+            ["AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#ff7f0e" }],
+            ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#d62728" }],
+            ["AWS/ApplicationELB", "HTTPCode_Target_2XX_Count", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#2ca02c" }],
+            ["AWS/ApplicationELB", "TargetConnectionErrorCount", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "color" : "#9467bd" }],
+            ["AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", module.solr.alb_target_group_arn_suffix, "LoadBalancer", module.base_architecture.alb_arn_suffix, { "yAxis" : "right", "stat" : "Average", "color" : "#1f77b4" }],
           ],
           view    = "timeSeries"
           period  = 60
@@ -142,12 +142,12 @@ resource "aws_cloudwatch_dashboard" "cudl" {
 
         properties = {
           metrics = [
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#e377c2", "label": "CUDL-Viewer Average" }],
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#ff7f0e", "label": "CUDL-Services Average" }],
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#2ca02c", "label": "SOLR Average" }],
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#f7b6d2", "label": "CUDL-Viewer Max"  }],
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#ffbb78", "label": "CUDL-Services Max" }],
-            ["AWS/ECS", "CPUUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#98df8a", "label": "SOLR Max" }]
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#e377c2", "label" : "CUDL-Viewer Average" }],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#ff7f0e", "label" : "CUDL-Services Average" }],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#2ca02c", "label" : "SOLR Average" }],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#f7b6d2", "label" : "CUDL-Viewer Max" }],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#ffbb78", "label" : "CUDL-Services Max" }],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#98df8a", "label" : "SOLR Max" }]
           ],
           view    = "timeSeries"
           period  = 60
@@ -171,12 +171,12 @@ resource "aws_cloudwatch_dashboard" "cudl" {
 
         properties = {
           metrics = [
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#e377c2", "label": "CUDL-Viewer Average" }],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#ff7f0e", "label": "CUDL-Services Average" }],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#2ca02c", "label": "SOLR Average" }],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#f7b6d2", "label": "CUDL-Viewer Max" }],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#ffbb78", "label": "CUDL-Services Max" }],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#98df8a", "label": "SOLR Max" }]
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#e377c2", "label" : "CUDL-Viewer Average" }],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#ff7f0e", "label" : "CUDL-Services Average" }],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Average", "color" : "#2ca02c", "label" : "SOLR Average" }],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_viewer.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#f7b6d2", "label" : "CUDL-Viewer Max" }],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.cudl_services.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#ffbb78", "label" : "CUDL-Services Max" }],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", module.solr.ecs_service_name, "ClusterName", module.base_architecture.ecs_cluster_name, { "stat" : "Maximum", "color" : "#98df8a", "label" : "SOLR Max" }]
           ],
           view    = "timeSeries"
           period  = 300

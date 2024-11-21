@@ -239,6 +239,6 @@ module "cudl_viewer" {
 module "logs" {
   source = "../modules/logging"
 
-  name_prefix              = local.base_name_prefix
+  name_prefix               = local.base_name_prefix
   cloudwatch_log_group_name = aws_cloudwatch_log_group.cudl_viewer.name
 }
