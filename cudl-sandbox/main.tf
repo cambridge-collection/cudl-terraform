@@ -223,7 +223,7 @@ module "cudl_viewer" {
   asg_name                               = module.base_architecture.asg_name
   asg_security_group_id                  = module.base_architecture.asg_security_group_id
   alb_security_group_id                  = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn               = aws_cloudwatch_log_group.cudl_viewer.arn
+  cloudwatch_log_group_arn               = module.kinesis.source_log_group_arn
   cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
   cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
@@ -236,9 +236,16 @@ module "cudl_viewer" {
   }
 }
 
-module "logs" {
-  source = "../modules/logging"
+# module "logs" {
+#   source = "../modules/logging"
 
-  name_prefix               = local.base_name_prefix
-  cloudwatch_log_group_name = aws_cloudwatch_log_group.cudl_viewer.name
+#   name_prefix               = local.base_name_prefix
+#   cloudwatch_log_group_name = aws_cloudwatch_log_group.cudl_viewer.name
+# }
+
+module "kinesis" {
+  source = "../modules/kinesis"
+
+  name_prefix    = module.cudl_viewer.name_prefix
+  s3_name_prefix = local.base_name_prefix
 }

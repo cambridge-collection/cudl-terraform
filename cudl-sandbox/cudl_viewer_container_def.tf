@@ -32,7 +32,7 @@ locals {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.cudl_viewer.name,
+          awslogs-group         = module.kinesis.source_log_group_name,
           awslogs-region        = var.deployment-aws-region,
           awslogs-stream-prefix = "cudl-viewer-log"
         },

@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "cloudwatch" {
 }
 
 resource "aws_iam_policy" "cloudwatch" {
-  name        = format("%s-cloudwatch", module.cudl_viewer.name_prefix)
+  name        = format("%s-cloudwatch", var.name_prefix)
   path        = "/"
   description = "Policy granting permission for CloudWatch to put events in a Kinesis Stream"
   policy      = data.aws_iam_policy_document.cloudwatch.json
@@ -33,8 +33,8 @@ resource "aws_iam_policy" "cloudwatch" {
 
 resource "aws_iam_role" "cloudwatch" {
   path                 = "/"
-  description          = "IAM role for CloudWatch"
-  name                 = format("%s-cloudwatch", module.cudl_viewer.name_prefix)
+  description          = "IAM role for CloudWatch Log Destination"
+  name                 = format("%s-cloudwatch", var.name_prefix)
   assume_role_policy   = data.aws_iam_policy_document.assume_role_logs.json
   max_session_duration = 3600
 }
@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "assume_role_firehose" {
 }
 
 resource "aws_iam_role" "firehose" {
-  name               = format("%s-firehose", module.cudl_viewer.name_prefix)
+  name               = format("%s-firehose", var.name_prefix)
   assume_role_policy = data.aws_iam_policy_document.assume_role_firehose.json
 }
 
@@ -74,8 +74,8 @@ data "aws_iam_policy_document" "firehose" {
       "s3:PutObject"
     ]
     resources = [
-      module.logs.s3_bucket_arn,
-      format("%s/*", module.logs.s3_bucket_arn)
+      aws_s3_bucket.this.arn,
+      format("%s/*", aws_s3_bucket.this.arn)
     ]
   }
 
@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "firehose" {
 }
 
 resource "aws_iam_policy" "firehose" {
-  name        = format("%s-firehose", module.cudl_viewer.name_prefix)
+  name        = format("%s-firehose", var.name_prefix)
   path        = "/"
   description = "Policy granting permission for Firehose to get events from a Kinesis Stream"
   policy      = data.aws_iam_policy_document.firehose.json
