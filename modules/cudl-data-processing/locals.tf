@@ -40,5 +40,5 @@ locals {
     replace(bucket.id, lower("${var.environment}-"), "") => bucket
   }
 
-  transcriptions_domain_name = var.create_cloudfront_distribution ? var.production_deployment ? "transcriptions.${data.aws_route53_zone.domain.0.name}" : "${var.environment}-transcriptions.${data.aws_route53_zone.domain.0.name}" : ""
+  cloudfront_distribution_domain_name = var.create_cloudfront_distribution ? var.production_deployment ? join(".", [var.cloudfront_distribution_name, data.aws_route53_zone.domain.0.name]) : join(".", [join("-", [var.environment, var.cloudfront_distribution_name]), data.aws_route53_zone.domain.0.name]) : ""
 }

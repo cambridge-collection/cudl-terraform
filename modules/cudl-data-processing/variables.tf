@@ -191,6 +191,30 @@ variable "cloudfront_route53_zone_id" {
   default     = null
 }
 
+variable "cloudfront_distribution_name" {
+  description = "Name of the CloudFront Distribution and associated resources"
+  type        = string
+  default     = "transcriptions"
+}
+
+variable "cloudfront_origin_path" {
+  description = "Origin path in an S3 Bucket or custom origin"
+  type        = string
+  default     = null
+}
+
+variable "cloudfront_viewer_request_function_arn" {
+  type        = string
+  description = "ARN of a CloudFront Function to add to CloudFront Distribution to handle Viewer Requests"
+  default     = null
+}
+
+variable "cloudfront_default_root_object" {
+  type        = string
+  description = "Object that you want CloudFront to return (for example, index.html) when an end user requests the root URL"
+  default     = null
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"

@@ -27,6 +27,10 @@ module "cudl-data-processing" {
   enhancements-bucket-name                  = var.enhancements-bucket-name
   cloudfront_route53_zone_id                = var.cloudfront_route53_zone_id
   create_cloudfront_distribution            = var.create_cloudfront_distribution
+  cloudfront_distribution_name              = var.cloudfront_distribution_name
+  cloudfront_default_root_object            = var.cloudfront_default_root_object
+  cloudfront_origin_path                    = var.cloudfront_origin_path
+  cloudfront_viewer_request_function_arn    = aws_cloudfront_function.darwin.arn
   providers = {
     aws.us-east-1 = aws.us-east-1
   }

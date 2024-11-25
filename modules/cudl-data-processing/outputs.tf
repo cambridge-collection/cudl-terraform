@@ -46,6 +46,6 @@ output "efs_security_group_id" {
   value = aws_security_group.efs.id
 }
 
-output "transcriptions_domain_name" {
-  value = local.transcriptions_domain_name
+output "cloudfront_distribution_domain_name" {
+  value = local.cloudfront_distribution_domain_name
 }

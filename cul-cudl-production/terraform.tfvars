@@ -78,9 +78,12 @@ dst-s3-prefix     = ""
 tmp-dir           = "/tmp/dest/"
 lambda-alias-name = "LIVE"
 
-releases-root-directory-path = "/data"
-efs-name                     = "cudl-data-releases-efs"
-cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
+releases-root-directory-path   = "/data"
+efs-name                       = "cudl-data-releases-efs"
+cloudfront_route53_zone_id     = "Z035173135AOVWW8L57UJ"
+cloudfront_distribution_name   = "darwin"
+cloudfront_origin_path         = "/www"
+cloudfront_default_root_object = "index.html"
 
 # Base Architecture
 cluster_name_suffix            = "darwin-ecs"
