@@ -1,4 +1,4 @@
-environment                  = "mjh39-darwin-test"
+environment                  = "mjh39-cul-darwinproject-production"
 project                      = "Darwin"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
@@ -35,9 +35,9 @@ transform-lambda-information = [
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
     "queue_name"               = "DarwinIndexTEIQueue"
     "queue_delay_seconds"      = 10
-    "vpc_name"                 = "mjh39-darwin-test-darwin-ecs-vpc"
-    "subnet_names"             = ["mjh39-darwin-test-darwin-ecs-subnet-private-a", "mjh39-darwin-test-darwin-ecs-subnet-private-b"]
-    "security_group_names"     = ["mjh39-darwin-test-darwin-ecs-vpc-egress", "mjh39-darwin-test-solr-external"]
+    "vpc_name"                 = "mjh39-cul-darwinproject-production-darwin-ecs-vpc"
+    "subnet_names"             = ["mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-a", "mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-b"]
+    "security_group_names"     = ["mjh39-cul-darwinproject-production-darwin-ecs-vpc-egress", "mjh39-cul-darwinproject-production-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -46,7 +46,7 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-darwin-ecs.mjh39-darwin-test-solr"
+      API_HOST = "solr-api-darwin-ecs.mjh39-cul-darwinproject-production-solr"
       API_PORT = "8081"
       API_PATH = "item"
     }
@@ -55,9 +55,9 @@ transform-lambda-information = [
     "name"                     = "AWSLambda_Pages_SOLR_Listener"
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
     "queue_name"               = "DarwinIndexPagesQueue"
-    "vpc_name"                 = "mjh39-darwin-test-darwin-ecs-vpc"
-    "subnet_names"             = ["mjh39-darwin-test-darwin-ecs-subnet-private-a", "mjh39-darwin-test-darwin-ecs-subnet-private-b"]
-    "security_group_names"     = ["mjh39-darwin-test-darwin-ecs-vpc-egress", "mjh39-darwin-test-solr-external"]
+    "vpc_name"                 = "mjh39-cul-darwinproject-production-darwin-ecs-vpc"
+    "subnet_names"             = ["mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-a", "mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-b"]
+    "security_group_names"     = ["mjh39-cul-darwinproject-production-darwin-ecs-vpc-egress", "mjh39-cul-darwinproject-production-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -66,7 +66,7 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-darwin-ecs.mjh39-darwin-test-solr"
+      API_HOST = "solr-api-darwin-ecs.mjh39-cul-darwinproject-production-solr"
       API_PORT = "8081"
       API_PATH = "page"
     }
@@ -80,14 +80,14 @@ lambda-alias-name = "LIVE"
 
 releases-root-directory-path   = "/data"
 efs-name                       = "cudl-data-releases-efs"
-cloudfront_route53_zone_id     = "Z035173135AOVWW8L57UJ"
+cloudfront_route53_zone_id     = "Z028489118FY8DBPA2P7Q"
 cloudfront_distribution_name   = "darwin"
 cloudfront_origin_path         = "/www"
 cloudfront_default_root_object = "index.html"
 
 # Base Architecture
 cluster_name_suffix            = "darwin-ecs"
-registered_domain_name         = "cudl-sandbox.net."
+registered_domain_name         = "darwinproject.link."
 asg_desired_capacity           = 1 # n = number of tasks
 asg_max_size                   = 1 # n + 1
 asg_allow_all_egress           = true
@@ -96,8 +96,8 @@ ec2_additional_userdata        = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
 echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
 EOF
-route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
-route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
+#route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
+route53_zone_id_existing       = "Z028489118FY8DBPA2P7Q"
 route53_zone_force_destroy     = true
 alb_enable_deletion_protection = false
 alb_idle_timeout               = "900"

@@ -5,7 +5,7 @@ locals {
     {
       name              = local.solr_container_name_solr,
       systemControls    = [],
-      image             = data.aws_ecr_image.solr["darwin-solr"].image_uri,
+      image             = data.aws_ecr_image.solr["darwin/solr"].image_uri,
       cpu               = floor((var.solr_ecs_task_def_cpu / 3) * 2),
       memory            = local.solr_ecs_task_def_memory - 512
       memoryReservation = local.solr_ecs_task_def_memory - 1024
@@ -60,7 +60,7 @@ locals {
     {
       name              = local.solr_container_name_api,
       systemControls    = [],
-      image             = data.aws_ecr_image.solr["darwin-solr-api"].image_uri,
+      image             = data.aws_ecr_image.solr["darwin/solr-api"].image_uri,
       cpu               = floor(var.solr_ecs_task_def_cpu / 3),
       memory            = 1024,
       memoryReservation = 512,
