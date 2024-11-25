@@ -51,6 +51,10 @@ function handler(event) {
         request.uri = "/sites/all/modules/darwin_letter_timeline/timeline-events-json.json"
 
     }
+    else if (event.request.querystring['page'] && !uri.match('^/search([/\?]+|$)') ) {
+        request.uri += '?page=' + event.request.querystring['page'].value + '.html'
+
+    }
     else if (uri.match('^/namedef-[0-9]')) {
         let letter_file = uri.replace(/^\/namedef-/i, 'nameregs/nameregs_')
         let response = {
