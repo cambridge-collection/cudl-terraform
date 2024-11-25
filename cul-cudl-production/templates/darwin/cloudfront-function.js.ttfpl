@@ -33,15 +33,15 @@ function handler(event) {
     else if (uri.match('^/letter(/|$)') && docId.match('(bibliographies|documentation|letters|nameregs|repo)/')) {
         request.uri ="/view/"+docId+'.html'
     }
-    else if (uri.match('^/((entry|DCP-LETT)-[0-9]|letter/DCP-LETT-[0-9])')) {
-        let letter_file = uri.replace(/^\/((entry|DCP-LETT)|letter\/DCP-LETT)/i, 'letters/DCP-LETT')
+    else if (uri.match('^/(((darwinletters/calendar/)*entry-*|DCP-LETT-)[0-9]|letter/DCP-LETT-[0-9])')) {
+        let letter_file = uri.replace(/^\/(((darwinletters\/calendar\/)*entry-*|DCP-LETT-)|letter\/DCP-LETT)/i, 'letters/DCP-LETT-')
         let response = {
-                statusCode: 301,
-                statusDescription: 'Moved Permanently',
-                headers:
-                    { "location": { "value": "/letter/?docId="+letter_file.replace(/\.xml$/,'')+'.xml' } }
-                }
-                return response
+            statusCode: 301,
+            statusDescription: 'Moved Permanently',
+            headers:
+                { "location": { "value": "/letter/?docId="+letter_file.replace(/\.xml$/,'')+'.xml' } }
+        }
+        return response
     }
     else if (uri == '/letters-timeline-json') {
         request.uri = "/sites/all/modules/darwin_letter_timeline/letters.json"
