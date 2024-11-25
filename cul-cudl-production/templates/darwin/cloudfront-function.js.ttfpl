@@ -54,12 +54,12 @@ function handler(event) {
     else if (uri.match('^/namedef-[0-9]')) {
         let letter_file = uri.replace(/^\/namedef-/i, 'nameregs/nameregs_')
         let response = {
-                statusCode: 301,
-                statusDescription: 'Moved Permanently',
-                headers:
-                    { "location": { "value": "/letter/?docId="+letter_file+'.xml' } }
-                }
-                return response
+            statusCode: 301,
+            statusDescription: 'Moved Permanently',
+            headers:
+                { "location": { "value": "/letter/?docId="+letter_file+'.xml' } }
+        }
+        return response
     }
     else if (uri.endsWith('/')) {
         request.uri += 'index.html';
