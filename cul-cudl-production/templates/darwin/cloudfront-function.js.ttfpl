@@ -65,7 +65,8 @@ function handler(event) {
         request.uri += 'index.html';
     }
     else if (!uri.includes('.')) {
-        request.uri += '.html';
+        let new_uri = uri.replace(/ /g, '_')
+        request.uri = new_uri + '.html';
     }
     return request;
 }
