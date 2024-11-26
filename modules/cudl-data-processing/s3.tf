@@ -1,13 +1,13 @@
 resource "aws_s3_bucket" "dest-bucket" {
-  bucket = lower("${var.environment}-${var.destination-bucket-name}")
+  bucket = trimsuffix(substr(lower("${var.environment}-${var.destination-bucket-name}"), 0, 63), "-")
 }
 
 resource "aws_s3_bucket" "source-bucket" {
-  bucket = lower("${var.environment}-${var.source-bucket-name}")
+  bucket = trimsuffix(substr(lower("${var.environment}-${var.source-bucket-name}"), 0, 63), "-")
 }
 
 resource "aws_s3_bucket" "enhancements-bucket" {
-  bucket = lower("${var.environment}-${var.enhancements-bucket-name}")
+  bucket = trimsuffix(substr(lower("${var.environment}-${var.enhancements-bucket-name}"), 0, 63), "-")
 }
 
 data "aws_iam_policy_document" "dest-bucket" {
