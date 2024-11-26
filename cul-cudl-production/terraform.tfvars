@@ -32,7 +32,7 @@ transform-lambda-bucket-sqs-notifications = [
 transform-lambda-information = [
   {
     "name"                     = "AWSLambda_TEI_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
+    "image_uri"                = "330100528433.dkr.ecr.eu-west-1.amazonaws.com/darwin/solr-listener@sha256:c77859f95ee2646ebf53a92f75c4eee823d55a111f443b29a2a34c83d863684d"
     "queue_name"               = "DarwinIndexTEIQueue"
     "queue_delay_seconds"      = 10
     "vpc_name"                 = "mjh39-cul-darwinproject-production-darwin-ecs-vpc"
@@ -53,7 +53,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_Pages_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:88795e469457966c06f62e55c1c217bef3b5fb92c35589bac4a5be735c631689"
+    "image_uri"                = "330100528433.dkr.ecr.eu-west-1.amazonaws.com/darwin/solr-listener@sha256:c77859f95ee2646ebf53a92f75c4eee823d55a111f443b29a2a34c83d863684d"
     "queue_name"               = "DarwinIndexPagesQueue"
     "vpc_name"                 = "mjh39-cul-darwinproject-production-darwin-ecs-vpc"
     "subnet_names"             = ["mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-a", "mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-b"]
