@@ -1,6 +1,10 @@
 locals {
 
-  transform-lambda-bucket-names = toset([var.source-bucket-name, var.destination-bucket-name, var.enhancements-bucket-name])
+  transform-lambda-bucket-names = toset([for bucket in [
+    aws_s3_bucket.source-bucket.id,
+    aws_s3_bucket.dest-bucket.id,
+    aws_s3_bucket.enhancements-bucket.id
+  ] : replace(bucket, lower(format("%s-", var.environment)), "")])
 
   transform_sns_subscriptions = flatten([
     for index, notification in var.transform-lambda-bucket-sns-notifications : [
