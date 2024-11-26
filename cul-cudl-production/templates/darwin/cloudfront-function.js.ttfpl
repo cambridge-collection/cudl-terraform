@@ -1,11 +1,30 @@
 'use-strict';
 
-function handler(event) {
-    var request = event.request;
-    var uri = request.uri;
-    var docId = (event.request.querystring['docId']) ? event.request.querystring['docId'].value.replace(/(^(\.\.\/+)+|^\/|\.xml.*$)/,'') : ''
+function getLocation(href) {
+    var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+    return match && {
+        href: href,
+        protocol: match[1],
+        host: match[2],
+        hostname: match[3],
+        port: match[4],
+        pathname: match[5],
+        search: match[6],
+        hash: match[7]
+    }
+}
 
-    if (uri.match('^/search([/\?]+|$)')) {
+function handler(event) {
+    let request = event.request;
+    const url = getLocation('https://www.darwinproject.ac.uk'+ request.uri)
+    const uri = url.pathname;
+    const anchor = url.hash
+    const is_search = /^\/search([/?]+|$)/ig.test(uri)
+    const docId = (event.request.querystring['docId']) ? event.request.querystring['docId'].value.replace(/(^(\.\.\/+)+|^\/|\.xml.*$)/,'') : ''
+
+    let response = {}
+
+    if (is_search) {
         if (Object.values(event.request.querystring).some(s => /;([-_a-zA-Z0-9]+=)/ig.test(s.value))) {
             let final = []
             Object.keys(event.request.querystring).forEach(key => {
@@ -15,33 +34,30 @@ function handler(event) {
                 final.push(key+'='+raw)
             })
             let param_string = final.join('&')
-            // replace ="" with =
             param_string = param_string.replace(/=%22%22/g, '=')
 
-
-            let response = {
+            response = {
                 statusCode: 301,
                 statusDescription: 'Moved Permanently',
                 headers:
                     { "location": { "value": "/search/?"+ param_string } }
             }
-            return response
         } else {
             request.uri = '/search.html'
         }
     }
     else if (uri.match('^/letter(/|$)') && docId.match('(bibliographies|documentation|letters|nameregs|repo)/')) {
-        request.uri ="/view/"+docId+'.html'
+        let param_string_anchor = event.request.querystring['docId'].value.replace(/^[^#]+/, '')
+        request.uri ="/view/"+docId+'.html' + param_string_anchor
     }
     else if (uri.match('^/(((darwinletters/calendar/)*entry-*|DCP-LETT-)[0-9]|letter/DCP-LETT-[0-9])')) {
         let letter_file = uri.replace(/^\/(((darwinletters\/calendar\/)*entry-*|DCP-LETT-)|letter\/DCP-LETT)/i, 'letters/DCP-LETT-')
-        let response = {
+        response = {
             statusCode: 301,
             statusDescription: 'Moved Permanently',
             headers:
-                { "location": { "value": "/letter/?docId="+letter_file.replace(/\.xml$/,'')+'.xml' } }
+                { "location": { "value": "/letter/?docId="+letter_file.replace(/\.xml$/,'')+'.xml' + anchor } }
         }
-        return response
     }
     else if (uri == '/letters-timeline-json') {
         request.uri = "/sites/all/modules/darwin_letter_timeline/letters.json"
@@ -51,28 +67,30 @@ function handler(event) {
         request.uri = "/sites/all/modules/darwin_letter_timeline/timeline-events-json.json"
 
     }
-    else if (event.request.querystring['page'] && !uri.match('^/search([/\?]+|$)') ) {
-        request.uri += '?page=' + event.request.querystring['page'].value + '.html'
+    else if (event.request.querystring['page'] && !is_search ) {
+        request.uri += '%3Fpage=' + event.request.querystring['page'].value + '.html' +anchor
 
     }
     else if (uri.match('^/namedef-[0-9]')) {
         let letter_file = uri.replace(/^\/namedef-/i, 'nameregs/nameregs_')
-        let response = {
+        response = {
             statusCode: 301,
             statusDescription: 'Moved Permanently',
             headers:
-                { "location": { "value": "/letter/?docId="+letter_file+'.xml' } }
+                { "location": { "value": "/letter/?docId="+letter_file+'.xml' + anchor } }
         }
-        return response
     }
     else if (uri.endsWith('/')) {
         request.uri += 'index.html';
     }
     else if (!uri.includes('.')) {
         let new_uri = uri.replace(/ /g, '_')
-        let anchor = new_uri.replace(/^[^#]+/, '')
         new_uri = new_uri.replace(/#.+$/,'')
         request.uri = new_uri + '.html' + anchor;
     }
-    return request;
+    if ('statusCode' in response) {
+        return response
+    } else {
+        return request;
+    }
 }
