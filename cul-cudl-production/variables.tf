@@ -149,6 +149,11 @@ variable "cloudfront_origin_path" {
   type        = string
 }
 
+variable "cloudfront_origin_errors_path" {
+  description = "Origin path for errors in an S3 Bucket or custom origin"
+  type        = string
+}
+
 variable "cloudfront_default_root_object" {
   type        = string
   description = "Object that you want CloudFront to return (for example, index.html) when an end user requests the root URL"

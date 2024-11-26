@@ -203,6 +203,12 @@ variable "cloudfront_origin_path" {
   default     = null
 }
 
+variable "cloudfront_origin_errors_path" {
+  description = "Origin path for errors in an S3 Bucket or custom origin"
+  type        = string
+  default     = null
+}
+
 variable "cloudfront_viewer_request_function_arn" {
   type        = string
   description = "ARN of a CloudFront Function to add to CloudFront Distribution to handle Viewer Requests"

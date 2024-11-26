@@ -29,11 +29,41 @@ resource "aws_cloudfront_distribution" "this" {
     local.cloudfront_distribution_domain_name
   ]
 
+  dynamic "origin_group" {
+    for_each = var.cloudfront_origin_errors_path != null ? [1] : []
+    content {
+      origin_id = local.cloudfront_distribution_domain_name
+
+      failover_criteria {
+        status_codes = [403]
+      }
+
+      member {
+        origin_id = "main"
+      }
+
+      member {
+        origin_id = "errors"
+      }
+    }
+  }
+
   origin {
     domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
-    origin_id                = local.cloudfront_distribution_domain_name
+    origin_id                = "main"
     origin_access_control_id = aws_cloudfront_origin_access_control.this.0.id
     origin_path              = var.cloudfront_origin_path
+  }
+
+  dynamic "origin" {
+    for_each = var.cloudfront_origin_errors_path != null ? [1] : []
+
+    content {
+      domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
+      origin_id                = "errors"
+      origin_access_control_id = aws_cloudfront_origin_access_control.this.0.id
+      origin_path              = var.cloudfront_origin_errors_path
+    }
   }
 
   default_cache_behavior {
