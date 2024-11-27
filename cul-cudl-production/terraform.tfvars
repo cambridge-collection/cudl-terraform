@@ -78,22 +78,22 @@ dst-s3-prefix     = ""
 tmp-dir           = "/tmp/dest/"
 lambda-alias-name = "LIVE"
 
-releases-root-directory-path   = "/data"
-efs-name                       = "cudl-data-releases-efs"
-cloudfront_route53_zone_id     = "Z028489118FY8DBPA2P7Q"
-cloudfront_distribution_name   = "darwin"
-cloudfront_origin_path         = "/www"
-cloudfront_origin_errors_path  = "/errors"
-cloudfront_default_root_object = "index.html"
+releases-root-directory-path        = "/data"
+efs-name                            = "cudl-data-releases-efs"
+cloudfront_route53_zone_id          = "Z028489118FY8DBPA2P7Q"
+cloudfront_distribution_name        = "darwin"
+cloudfront_origin_path              = "/www"
+cloudfront_error_response_page_path = "/404.html"
+cloudfront_default_root_object      = "index.html"
 
 # Base Architecture
-cluster_name_suffix            = "darwin-ecs"
-registered_domain_name         = "darwinproject.link."
-asg_desired_capacity           = 1 # n = number of tasks
-asg_max_size                   = 1 # n + 1
-asg_allow_all_egress           = true
-ec2_instance_type              = "t3.large"
-ec2_additional_userdata        = <<-EOF
+cluster_name_suffix     = "darwin-ecs"
+registered_domain_name  = "darwinproject.link."
+asg_desired_capacity    = 1 # n = number of tasks
+asg_max_size            = 1 # n + 1
+asg_allow_all_egress    = true
+ec2_instance_type       = "t3.large"
+ec2_additional_userdata = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
 echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
 EOF

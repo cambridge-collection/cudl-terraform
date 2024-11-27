@@ -203,10 +203,28 @@ variable "cloudfront_origin_path" {
   default     = null
 }
 
-variable "cloudfront_origin_errors_path" {
-  description = "Origin path for errors in an S3 Bucket or custom origin"
+variable "cloudfront_error_response_page_path" {
+  description = "S3 Bucket path with a custom error page html"
   type        = string
   default     = null
+}
+
+variable "cloudfront_error_code_to_catch" {
+  description = "CloudFront error code to catch in custom error handling"
+  type        = number
+  default     = 403
+}
+
+variable "cloudfront_error_response_code" {
+  description = "CloudFront error code to use in custom error handling"
+  type        = number
+  default     = 404
+}
+
+variable "cloudfront_error_caching_min_ttl" {
+  description = "Minimum amount of time you want HTTP error codes to stay in CloudFront caches before CloudFront queries your origin to see whether the object has been updated"
+  type        = number
+  default     = 60
 }
 
 variable "cloudfront_viewer_request_function_arn" {

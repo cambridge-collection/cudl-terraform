@@ -149,7 +149,7 @@ variable "cloudfront_origin_path" {
   type        = string
 }
 
-variable "cloudfront_origin_errors_path" {
+variable "cloudfront_error_response_page_path" {
   description = "Origin path for errors in an S3 Bucket or custom origin"
   type        = string
 }
