@@ -83,7 +83,7 @@ efs-name                       = "cudl-data-releases-efs"
 cloudfront_route53_zone_id     = "Z028489118FY8DBPA2P7Q"
 cloudfront_distribution_name   = "darwin"
 cloudfront_origin_path         = "/www"
-cloudfront_origin_errors_path  = "errors/notfound"
+cloudfront_origin_errors_path  = "/errors"
 cloudfront_default_root_object = "index.html"
 
 # Base Architecture

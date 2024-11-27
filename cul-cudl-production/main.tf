@@ -30,7 +30,7 @@ module "cudl-data-processing" {
   cloudfront_distribution_name              = var.cloudfront_distribution_name
   cloudfront_default_root_object            = var.cloudfront_default_root_object
   cloudfront_origin_path                    = var.cloudfront_origin_path
-  cloudfront_origin_errors_path             = format("/%s.html", var.cloudfront_origin_errors_path)
+  cloudfront_origin_errors_path             = var.cloudfront_origin_errors_path
   cloudfront_viewer_request_function_arn    = aws_cloudfront_function.darwin.arn
   providers = {
     aws.us-east-1 = aws.us-east-1
