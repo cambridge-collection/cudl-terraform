@@ -299,7 +299,8 @@ alb_enable_deletion_protection = false
 alb_idle_timeout               = "900"
 vpc_cidr_block                 = "10.88.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
-cloudwatch_log_group           = "/ecs/CUDL"
+cloudwatch_log_group           = "/ecs/CUDL-Staging"
+cloudwatch_log_destination_arn = "arn:aws:logs:eu-west-1:874581676011:destination:cul-logs-cloudwatch-log-destination"
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload

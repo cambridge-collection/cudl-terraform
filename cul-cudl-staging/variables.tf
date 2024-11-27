@@ -226,6 +226,11 @@ variable "cloudwatch_log_group" {
   description = "Name of the cloudwatch log group"
 }
 
+variable "cloudwatch_log_destination_arn" {
+  type        = string
+  description = "ARN of a CloudWatch Log Destination"
+}
+
 variable "content_loader_name_suffix" {
   type        = string
   description = "Suffix to add to Content Loader resource names"
