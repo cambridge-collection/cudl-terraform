@@ -68,7 +68,8 @@ function handler(event) {
 
     }
     else if (event.request.querystring['page'] && !is_search ) {
-        request.uri += '%3Fpage=' + event.request.querystring['page'].value + '.html' +anchor
+        let final_uri = (uri == '/' || uri == '') ? '/index' : uri
+        request.uri = final_uri + '%3Fpage=' + event.request.querystring['page'].value + '.html' +anchor
 
     }
     else if (uri.match('^/namedef-[0-9]')) {
