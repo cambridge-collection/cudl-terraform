@@ -29,41 +29,11 @@ resource "aws_cloudfront_distribution" "this" {
     local.cloudfront_distribution_domain_name
   ]
 
-  dynamic "origin_group" {
-    for_each = var.cloudfront_origin_errors_path != null ? [1] : []
-    content {
-      origin_id = local.cloudfront_distribution_domain_name
-
-      failover_criteria {
-        status_codes = [403]
-      }
-
-      member {
-        origin_id = "main"
-      }
-
-      member {
-        origin_id = "errors"
-      }
-    }
-  }
-
   origin {
     domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
-    origin_id                = "main"
+    origin_id                = local.cloudfront_distribution_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.this.0.id
     origin_path              = var.cloudfront_origin_path
-  }
-
-  dynamic "origin" {
-    for_each = var.cloudfront_origin_errors_path != null ? [1] : []
-
-    content {
-      domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
-      origin_id                = "errors"
-      origin_access_control_id = aws_cloudfront_origin_access_control.this.0.id
-      origin_path              = var.cloudfront_origin_errors_path
-    }
   }
 
   default_cache_behavior {
@@ -81,6 +51,17 @@ resource "aws_cloudfront_distribution" "this" {
         event_type   = "viewer-request"
         function_arn = var.cloudfront_viewer_request_function_arn
       }
+    }
+  }
+
+  dynamic "custom_error_response" {
+    for_each = var.cloudfront_error_response_page_path != null ? [1] : []
+
+    content {
+      error_code            = var.cloudfront_error_code_to_catch
+      response_code         = var.cloudfront_error_response_code
+      response_page_path    = var.cloudfront_error_response_page_path
+      error_caching_min_ttl = var.cloudfront_error_caching_min_ttl
     }
   }
 
