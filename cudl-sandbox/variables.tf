@@ -341,6 +341,12 @@ variable "solr_ingress_security_group_id" {
   description = "ID of the Security Group to allow access to SOLR service"
 }
 
+variable "solr_waf_ip_set_addresses" {
+  type        = list(string)
+  description = "List of CIDR blocks to add to SOLR WAF safelist"
+  default     = []
+}
+
 variable "cudl_services_name_suffix" {
   type        = string
   description = "Suffix to add to CUDL services resource names"
