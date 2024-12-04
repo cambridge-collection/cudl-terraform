@@ -3,18 +3,18 @@ locals {
   solr_container_name_api  = join("-", [var.solr_container_name_api, var.cluster_name_suffix])
   solr_container_defs = [
     {
-      name              = local.solr_container_name_solr,
+      name              = local.solr_container_name_api,
       systemControls    = [],
-      image             = data.aws_ecr_image.solr["cudl-solr"].image_uri,
+      image             = data.aws_ecr_image.solr["cudl/solr/nginx"].image_uri,
       cpu               = floor((var.solr_ecs_task_def_cpu / 3) * 2),
       memory            = local.solr_ecs_task_def_memory - 512
       memoryReservation = local.solr_ecs_task_def_memory - 1024
       portMappings = [
         {
-          containerPort = var.solr_application_port,
-          hostPort      = var.solr_application_port,
+          containerPort = var.solr_target_group_port,
+          hostPort      = var.solr_target_group_port,
           protocol      = "tcp"
-          name          = tostring(var.solr_application_port)
+          name          = tostring(var.solr_target_group_port)
           appProtocol   = "http"
         }
       ],
@@ -56,56 +56,55 @@ locals {
         },
         secretOptions = []
       }
-    },
-    {
-      name              = local.solr_container_name_api,
-      systemControls    = [],
-      image             = data.aws_ecr_image.solr["cudl-solr-api"].image_uri,
-      cpu               = floor(var.solr_ecs_task_def_cpu / 3),
-      memory            = 1024,
-      memoryReservation = 512,
-      portMappings = [
-        {
-          containerPort = var.solr_target_group_port,
-          hostPort      = var.solr_target_group_port
-          protocol      = "tcp"
-          name          = tostring(var.solr_target_group_port)
-          appProtocol   = "http"
-        }
-      ],
-      essential = true,
-      command   = [],
-      environment = [
-        {
-          name  = "SOLR_HOST",
-          value = "localhost"
-        },
-        {
-          name  = "SOLR_PORT",
-          value = tostring(var.solr_application_port)
-        },
-        {
-          name  = "API_PORT",
-          value = tostring(var.solr_target_group_port)
-        },
-        {
-          name  = "NUM_WORKERS"
-          value = "3"
-        }
-      ],
-      environmentFiles = [],
-      mountPoints      = [],
-      volumesFrom      = [],
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
-          awslogs-region        = var.deployment-aws-region,
-          awslogs-stream-prefix = "solr-api-log"
-        },
-        secretOptions = []
-      }
-    },
-
+    }
+  #   {
+  #     name              = local.solr_container_name_api,
+  #     systemControls    = [],
+  #     image             = data.aws_ecr_image.solr["cudl-solr-api"].image_uri,
+  #     cpu               = floor(var.solr_ecs_task_def_cpu / 3),
+  #     memory            = 1024,
+  #     memoryReservation = 512,
+  #     portMappings = [
+  #       {
+  #         containerPort = var.solr_target_group_port,
+  #         hostPort      = var.solr_target_group_port
+  #         protocol      = "tcp"
+  #         name          = tostring(var.solr_target_group_port)
+  #         appProtocol   = "http"
+  #       }
+  #     ],
+  #     essential = true,
+  #     command   = [],
+  #     environment = [
+  #       {
+  #         name  = "SOLR_HOST",
+  #         value = "localhost"
+  #       },
+  #       {
+  #         name  = "SOLR_PORT",
+  #         value = tostring(var.solr_application_port)
+  #       },
+  #       {
+  #         name  = "API_PORT",
+  #         value = tostring(var.solr_target_group_port)
+  #       },
+  #       {
+  #         name  = "NUM_WORKERS"
+  #         value = "3"
+  #       }
+  #     ],
+  #     environmentFiles = [],
+  #     mountPoints      = [],
+  #     volumesFrom      = [],
+  #     logConfiguration = {
+  #       logDriver = "awslogs"
+  #       options = {
+  #         awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
+  #         awslogs-region        = var.deployment-aws-region,
+  #         awslogs-stream-prefix = "solr-api-log"
+  #       },
+  #       secretOptions = []
+  #     }
+  #   },
   ]
 }

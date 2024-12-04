@@ -328,13 +328,12 @@ solr_api_port          = 80
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:f5663ef09aa01c90a92057d161c4a3c83bb851137eb8b6dc1228d2727a130810",
-  "cudl-solr"     = "sha256:8dfcce2322e381d92bc02d19710afa8ec15e5a8f6c1efa1edddf550527c51fdb"
+  "cudl/solr/nginx" = "sha256:ea6d25084303834c700c3eeddf289435d1e7643779ae5dcfa07578347c52e1f5"
 }
 solr_ecs_task_def_volumes      = { "solr-volume" = "/var/solr" }
 solr_container_name_api        = "solr-api"
 solr_container_name_solr       = "solr"
-solr_health_check_status_code  = "404"
+solr_health_check_status_code  = "200"
 solr_allowed_methods           = ["HEAD", "GET", "OPTIONS"]
 solr_ecs_task_def_cpu          = 2048
 solr_use_service_discovery     = true
