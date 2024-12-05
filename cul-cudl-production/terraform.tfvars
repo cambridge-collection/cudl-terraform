@@ -32,7 +32,7 @@ transform-lambda-bucket-sqs-notifications = [
 transform-lambda-information = [
   {
     "name"                     = "AWSLambda_TEI_SOLR_Listener"
-    "image_uri"                = "330100528433.dkr.ecr.eu-west-1.amazonaws.com/darwin/solr-listener@sha256:c77859f95ee2646ebf53a92f75c4eee823d55a111f443b29a2a34c83d863684d"
+    "image_uri"                = "330100528433.dkr.ecr.eu-west-1.amazonaws.com/darwin/solr-listener@sha256:1f24f140f9deb8c2995ec07dedc6da7bfd6cc8e7c34c4723543a8904ebb5d844"
     "queue_name"               = "DarwinIndexTEIQueue"
     "queue_delay_seconds"      = 10
     "vpc_name"                 = "mjh39-cul-darwinproject-production-darwin-ecs-vpc"
@@ -53,7 +53,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_Pages_SOLR_Listener"
-    "image_uri"                = "330100528433.dkr.ecr.eu-west-1.amazonaws.com/darwin/solr-listener@sha256:c77859f95ee2646ebf53a92f75c4eee823d55a111f443b29a2a34c83d863684d"
+    "image_uri"                = "330100528433.dkr.ecr.eu-west-1.amazonaws.com/darwin/solr-listener@sha256:1f24f140f9deb8c2995ec07dedc6da7bfd6cc8e7c34c4723543a8904ebb5d844"
     "queue_name"               = "DarwinIndexPagesQueue"
     "vpc_name"                 = "mjh39-cul-darwinproject-production-darwin-ecs-vpc"
     "subnet_names"             = ["mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-a", "mjh39-cul-darwinproject-production-darwin-ecs-subnet-private-b"]
@@ -113,8 +113,8 @@ solr_domain_name       = "darwin-search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "darwin/solr-api" = "sha256:2c2c1695c1323d09a53f0eb691b1443206a5ade67defe5202ef812e067204a13",
-  "darwin/solr"     = "sha256:008b4b6e4af8264351e2a0f63c8866f2aefa30b6cf047840c098cf4eaf3f4068"
+  "darwin/solr-api" = "sha256:e6bb816b883f051edac6d32633d764a247cef7238b14d983b3a7851a118485c6",
+  "darwin/solr"     = "sha256:a7f69cfaa67e5c7af69e01e8d0b32d6b6e3e53e14fb28e584212f1ceace5e5b4"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
