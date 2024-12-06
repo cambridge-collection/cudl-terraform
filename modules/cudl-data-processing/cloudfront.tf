@@ -54,6 +54,17 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  dynamic "custom_error_response" {
+    for_each = var.cloudfront_error_response_page_path != null ? [1] : []
+
+    content {
+      error_code            = var.cloudfront_error_code_to_catch
+      response_code         = var.cloudfront_error_response_code
+      response_page_path    = var.cloudfront_error_response_page_path
+      error_caching_min_ttl = var.cloudfront_error_caching_min_ttl
+    }
+  }
+
   viewer_certificate {
     acm_certificate_arn            = var.acm_create_certificate ? aws_acm_certificate.this_us-east-1.0.arn : var.acm_certificate_arn
     cloudfront_default_certificate = false
