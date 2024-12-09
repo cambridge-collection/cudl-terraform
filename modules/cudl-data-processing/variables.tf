@@ -239,6 +239,12 @@ variable "cloudfront_default_root_object" {
   default     = null
 }
 
+variable "cloudfront_alternative_domain_names" {
+  type        = list(string)
+  description = "List of additional domain names to add to the CloudFront distribution"
+  default     = []
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"

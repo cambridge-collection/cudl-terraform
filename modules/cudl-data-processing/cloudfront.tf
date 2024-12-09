@@ -25,9 +25,9 @@ resource "aws_cloudfront_distribution" "this" {
   web_acl_id          = aws_wafv2_web_acl.this.0.arn
   default_root_object = var.cloudfront_default_root_object
 
-  aliases = [
+  aliases = concat([
     local.cloudfront_distribution_domain_name
-  ]
+  ], var.cloudfront_alternative_domain_names)
 
   origin {
     domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
