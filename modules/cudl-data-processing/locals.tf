@@ -1,7 +1,7 @@
 locals {
   destination_bucket_name = trimsuffix(substr(lower("${var.environment}-${var.destination-bucket-name}"), 0, 63), "-")
   enhacements_bucket_name = trimsuffix(substr(lower("${var.environment}-${var.enhancements-bucket-name}"), 0, 63), "-")
-  source_bucket_name = trimsuffix(substr(lower("${var.environment}-${var.source-bucket-name}"), 0, 63), "-")
+  source_bucket_name      = trimsuffix(substr(lower("${var.environment}-${var.source-bucket-name}"), 0, 63), "-")
   transform-lambda-bucket-names = toset([for bucket in [
     local.destination_bucket_name,
     local.enhacements_bucket_name,
