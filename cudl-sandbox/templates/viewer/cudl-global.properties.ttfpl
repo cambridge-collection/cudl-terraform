@@ -15,6 +15,10 @@ cudl-viewer-content.images.path=${mount_path}/pages/images
 enable.refresh=true
 caching.enabled=false
 
+# Value to append to image server URL
+appendToThumbnail=.jp2/full/,180/0/default.jpg
+appendToImage=.jp2
+
 # DEV Id.
 GoogleAnalyticsId=UA\
   -10976633-2
