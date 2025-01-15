@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.1.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.2.0"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -15,6 +15,7 @@ module "base_architecture" {
   vpc_cidr_block                 = var.vpc_cidr_block
   acm_create_certificate         = false
   acm_certificate_arn            = var.acm_certificate_arn
+  waf_use_rate_limiting          = true
   tags                           = local.default_tags
 }
 
