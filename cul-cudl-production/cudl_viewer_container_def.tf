@@ -7,8 +7,8 @@ locals {
       name              = local.cudl_viewer_container_name,
       image             = data.aws_ecr_image.cudl_viewer["cudl/viewer"].image_uri,
       cpu               = 2048,
-      memoryReservation = data.aws_ec2_instance_type.asg.memory_size - 1024,
-      memory            = data.aws_ec2_instance_type.asg.memory_size - 512,
+      memoryReservation = data.aws_ec2_instance_type.asg.memory_size - 1104,
+      memory            = data.aws_ec2_instance_type.asg.memory_size - 592,
       portMappings = [
         {
           containerPort = var.cudl_viewer_container_port,
@@ -36,8 +36,7 @@ locals {
           awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
           awslogs-region        = var.deployment-aws-region,
           awslogs-stream-prefix = "ecs/${local.cudl_viewer_container_name}"
-        },
-        secretOptions = []
+        }
       }
     }
   ]

@@ -158,7 +158,7 @@ module "cudl_viewer" {
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
   ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
-  ecs_task_def_memory                       = data.aws_ec2_instance_type.asg.memory_size - 512
+  ecs_task_def_memory                       = data.aws_ec2_instance_type.asg.memory_size - 592
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
