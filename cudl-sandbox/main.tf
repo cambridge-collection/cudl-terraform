@@ -210,6 +210,7 @@ module "cudl_viewer" {
       smtp_password = var.cudl_viewer_smtp_password
       mount_path    = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
       search_url    = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
+      services_url  = module.cudl_services.link
     })
   }
   s3_task_buckets                        = [module.base_architecture.s3_bucket]
