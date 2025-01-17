@@ -291,7 +291,7 @@ registered_domain_name         = "cudl-sandbox.net."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
-ec2_instance_type              = "t3.large"
+ec2_instance_type              = "t3.small"
 ec2_additional_userdata        = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
 echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
@@ -355,7 +355,7 @@ cudl_viewer_domain_name       = "cudl-viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "sandbox-cudl-viewer" = "sha256:f05defe0682488c44d32aff6eed99d64091aef31700d9a724753b954cdc719f5"
+  "sandbox-cudl-viewer" = "sha256:8af91b68471dcd20ebed2a116f26c91c0796529194982fab784f1ebfa1944369"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
