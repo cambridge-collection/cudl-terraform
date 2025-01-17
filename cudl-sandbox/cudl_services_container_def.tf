@@ -37,7 +37,7 @@ locals {
         },
         {
           name  = "CUDL_SERVICES_TEI_HTML_URL",
-          value = "https://dev-transcriptions.cudl.link/"
+          value = "https://${module.cudl-data-processing.cloudfront_distribution_domain_name}/"
         },
         {
           name  = "CUDL_SERVICES_XTF_INDEX_PATH",
@@ -53,7 +53,7 @@ locals {
         },
         {
           name  = "CUDL_SERVICES_ZACYNTHIUS_HTML_URL",
-          value = "http://staging.codex-zacynthius-transcription.cudl.lib.cam.ac.uk/"
+          value = "http://cul-cudl-codex-zacynthius-transcription.s3-website.eu-west-1.amazonaws.com/"
         },
         {
           name  = "CUDL_SERVICES_DATA_LOCATION",
