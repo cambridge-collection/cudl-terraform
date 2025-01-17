@@ -40,7 +40,7 @@ dataUIThemeResources=${mount_path}/ui/
 # URLs for image and services servers.
 # Note after switch to IIIF (thumbnail data) we can remove IIIFImageServer
 imageServer=https://images.lib.cam.ac.uk/
-services=${services_url}
+services=${services_url}/
 IIIFImageServer=https://images.lib.cam.ac.uk/iiif/
 
 # Email address to send the feedback form to.
