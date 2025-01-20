@@ -257,6 +257,18 @@ variable "efs_subnets" {
   default     = {}
 }
 
+variable "efs_file_system_throughput_mode" {
+  type        = string
+  description = "Throughput mode for the file system. Valid values: bursting, provisioned, or elastic"
+  default     = "bursting"
+}
+
+variable "efs_file_system_provisioned_throughput" {
+  type        = number
+  description = "The throughput, measured in MiB/s, that you want to provision for the file system"
+  default     = null
+}
+
 variable "datasync_task_s3_to_efs_pattern" {
   type        = string
   description = "Pattern regex used in S3 to EFS task"
