@@ -281,9 +281,12 @@ dst-s3-prefix     = ""
 tmp-dir           = "/tmp/dest/"
 lambda-alias-name = "LIVE"
 
-releases-root-directory-path = "/data"
-efs-name                     = "cudl-data-releases-efs"
-cloudfront_route53_zone_id   = "Z03809063VDGJ8MKPHFRV"
+releases-root-directory-path               = "/data"
+efs-name                                   = "cudl-data-releases-efs"
+cloudfront_route53_zone_id                 = "Z03809063VDGJ8MKPHFRV"
+data_processing_efs_throughput_mode        = "provisioned"
+data_processing_efs_provisioned_throughput = 3
+
 
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
@@ -344,7 +347,7 @@ cudl_services_domain_name       = "services"
 cudl_services_target_group_port = 8085
 cudl_services_container_port    = 3000
 cudl_services_ecr_repositories = {
-  "cudl/services" = "sha256:98b7ee01cca8c1093d3d719d13640db9f9d7e2439933d847a63e733d96f4660e"
+  "cudl/services" = "sha256:40bbe5f4238ab768b2ccdf7e860791d8d821aa5a2d8744f93ea59ed972efbbbc"
 }
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
@@ -354,7 +357,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:e8ab599cc3233d59085b8c1652662204dac6aed21209443e8cf7741f71fde6d6"
+  "cudl/viewer" = "sha256:8af91b68471dcd20ebed2a116f26c91c0796529194982fab784f1ebfa1944369"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
