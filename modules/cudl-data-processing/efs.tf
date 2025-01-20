@@ -1,5 +1,7 @@
 resource "aws_efs_file_system" "efs-volume" {
-  encrypted = true
+  encrypted                       = true
+  throughput_mode                 = var.efs_file_system_throughput_mode
+  provisioned_throughput_in_mibps = var.efs_file_system_provisioned_throughput
 
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"

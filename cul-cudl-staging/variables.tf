@@ -127,6 +127,16 @@ variable "transform-lambda-bucket-sqs-notifications" {
   type        = list(any)
 }
 
+variable "data_processing_efs_throughput_mode" {
+  type        = string
+  description = "Throughput mode for the file system. Valid values: bursting, provisioned, or elastic"
+}
+
+variable "data_processing_efs_provisioned_throughput" {
+  type        = number
+  description = "The throughput, measured in MiB/s, that you want to provision for the file system"
+}
+
 variable "create_cloudfront_distribution" {
   description = "Whether to create a CloudFront distribution for access to the dest-bucket"
   type        = string
