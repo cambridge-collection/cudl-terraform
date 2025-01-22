@@ -36,6 +36,10 @@ imageServer=https://images.lib.cam.ac.uk/
 services=${cudl_services_url}
 IIIFImageServer=https://images.lib.cam.ac.uk/iiif/
 
+# Value to append to image server URL
+appendToThumbnail=.jp2/full/,180/0/default.jpg
+appendToImage=.jp2
+
 # Email address to send the feedback form to.
 # Note this may not work locally as port 25 is blocked.
 feedbackEmail=dl-feedback@lib.cam.ac.uk
