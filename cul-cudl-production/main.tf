@@ -1,22 +1,25 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.3.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.4.0"
 
-  name_prefix                    = local.base_name_prefix
-  ec2_instance_type              = var.ec2_instance_type
-  ec2_additional_userdata        = var.ec2_additional_userdata
-  route53_zone_domain_name       = var.registered_domain_name
-  route53_zone_id_existing       = var.route53_zone_id_existing
-  route53_zone_force_destroy     = var.route53_zone_force_destroy
-  asg_desired_capacity           = var.asg_desired_capacity
-  asg_max_size                   = var.asg_max_size
-  alb_enable_deletion_protection = var.alb_enable_deletion_protection
-  vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
-  cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
-  vpc_cidr_block                 = var.vpc_cidr_block
-  acm_create_certificate         = false
-  acm_certificate_arn            = var.acm_certificate_arn
-  waf_use_rate_limiting          = true
-  tags                           = local.default_tags
+  name_prefix                             = local.base_name_prefix
+  ec2_instance_type                       = var.ec2_instance_type
+  ec2_additional_userdata                 = var.ec2_additional_userdata
+  route53_zone_domain_name                = var.registered_domain_name
+  route53_zone_id_existing                = var.route53_zone_id_existing
+  route53_zone_force_destroy              = var.route53_zone_force_destroy
+  asg_desired_capacity                    = var.asg_desired_capacity
+  asg_max_size                            = var.asg_max_size
+  alb_enable_deletion_protection          = var.alb_enable_deletion_protection
+  vpc_public_subnet_public_ip             = var.vpc_public_subnet_public_ip
+  cloudwatch_log_group                    = var.cloudwatch_log_group # TODO create log group
+  vpc_cidr_block                          = var.vpc_cidr_block
+  acm_create_certificate                  = false
+  acm_certificate_arn                     = var.acm_certificate_arn
+  waf_use_rate_limiting                   = true
+  waf_use_bot_control                     = true
+  waf_bot_control_enable_machine_learning = true
+  waf_bot_control_inspection_level        = var.waf_bot_control_inspection_level
+  tags                                    = local.default_tags
 }
 
 module "cudl-data-processing" {
@@ -55,7 +58,7 @@ module "cudl-data-processing" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.6.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -105,7 +108,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.6.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -144,7 +147,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.6.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -199,6 +202,8 @@ module "cudl_viewer" {
   cloudwatch_log_group_arn                = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn                  = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods              = var.cudl_viewer_allowed_methods
+  cloudfront_access_logging               = true
+  cloudfront_access_logging_bucket        = aws_s3_bucket.cloudfront_access_logging.bucket_domain_name
   cloudfront_viewer_response_function_arn = aws_cloudfront_function.viewer-cors-header.arn
   # cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
   efs_use_existing_filesystem   = true
