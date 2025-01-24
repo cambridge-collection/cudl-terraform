@@ -220,6 +220,21 @@ variable "cloudwatch_log_group" {
   description = "Name of the cloudwatch log group"
 }
 
+variable "waf_bot_control_inspection_level" {
+  type        = string
+  description = "The inspection level to use for the Base Architecture WAF Bot Control rule group"
+}
+
+variable "waf_bot_control_exclusion_header" {
+  type        = string
+  description = "Name of header to exclude from WAF bot control"
+}
+
+variable "waf_bot_control_exclusion_header_value" {
+  type        = string
+  description = "Value of header to exclude from WAF bot control"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"
