@@ -74,6 +74,7 @@ variable "transform-lambda-information" {
     command                    = optional(string)
     entry_point                = optional(string)
     working_directory          = optional(string)
+    sqs_max_tries_before_deadqueue = optional(number)
     queue_delay_seconds        = optional(number, 0)
     use_datadog_variables      = optional(bool, true)
     use_additional_variables   = optional(bool, false)

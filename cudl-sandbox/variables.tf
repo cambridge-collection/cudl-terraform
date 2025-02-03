@@ -74,6 +74,7 @@ variable "transform-lambda-information" {
     environment_variables      = optional(map(string))
     image_uri                  = optional(string)
     batch_size                 = optional(number)
+    sqs_max_tries_before_deadqueue = optional(number)
     batch_window               = optional(number)
     maximum_concurrency        = optional(number)
     use_datadog_variables      = optional(bool, true)

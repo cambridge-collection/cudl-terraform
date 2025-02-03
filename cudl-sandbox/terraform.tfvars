@@ -247,6 +247,7 @@ transform-lambda-information = [
     "mount_fs"              = true
     "timeout"               = 900
     "memory"                = 512
+    "sqs_max_tries_before_deadqueue" = 1
     "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
     "runtime"               = "java11"
   },
