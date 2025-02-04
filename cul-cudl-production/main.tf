@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.5.2"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v3.0.0"
 
   name_prefix                             = local.base_name_prefix
   ec2_instance_type                       = var.ec2_instance_type
