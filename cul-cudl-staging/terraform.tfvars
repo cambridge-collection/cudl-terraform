@@ -237,19 +237,19 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
-    "description"           = "Copies file from S3 to EFS"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"          = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
-    "security_group_names"  = ["staging-cudl-ecs-vpc-egress", "staging-cudl-data-releases-efs"]
-    "use_datadog_variables" = false
-    "mount_fs"              = true
+    "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
+    "description"                    = "Copies file from S3 to EFS"
+    "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
+    "subnet_names"                   = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
+    "security_group_names"           = ["staging-cudl-ecs-vpc-egress", "staging-cudl-data-releases-efs"]
+    "use_datadog_variables"          = false
+    "mount_fs"                       = true
     "sqs_max_tries_before_deadqueue" = 1
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
-    "runtime"               = "java11"
+    "timeout"                        = 900
+    "memory"                         = 512
+    "handler"                        = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
+    "runtime"                        = "java11"
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
