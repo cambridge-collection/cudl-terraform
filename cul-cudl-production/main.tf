@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.5.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.5.2"
 
   name_prefix                             = local.base_name_prefix
   ec2_instance_type                       = var.ec2_instance_type
@@ -19,8 +19,7 @@ module "base_architecture" {
   waf_use_bot_control                     = true
   waf_bot_control_enable_machine_learning = true
   waf_bot_control_inspection_level        = var.waf_bot_control_inspection_level
-  waf_bot_control_exclusion_header        = var.waf_bot_control_exclusion_header
-  waf_bot_control_exclusion_header_value  = var.waf_bot_control_exclusion_header_value
+  waf_bot_control_exclusions              = var.waf_bot_control_exclusions
   tags                                    = local.default_tags
 }
 

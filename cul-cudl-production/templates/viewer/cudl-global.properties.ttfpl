@@ -51,7 +51,7 @@ smtp_port=${smtp_port}
 
 #robots.txt (varies between live, dev etc).
 robots.useragent=User-agent: *
-robots.disallow=Disallow:
+robots.disallow=Disallow: /search
 
 # UI Javascript/CSS configuration
 

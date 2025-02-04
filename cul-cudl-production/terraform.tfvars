@@ -138,28 +138,37 @@ efs-name                     = "cudl-data-releases-efs"
 cloudfront_route53_zone_id   = "Z03809063VDGJ8MKPHFRV"
 
 # Base Architecture
-cluster_name_suffix                    = "cudl-ecs"
-registered_domain_name                 = "cudl.lib.cam.ac.uk."
-asg_desired_capacity                   = 3 # n = number of tasks
-asg_max_size                           = 4 # n + 1
-asg_allow_all_egress                   = true
-ec2_instance_type                      = "t3.large"
-ec2_additional_userdata                = <<-EOF
+cluster_name_suffix              = "cudl-ecs"
+registered_domain_name           = "cudl.lib.cam.ac.uk."
+asg_desired_capacity             = 3 # n = number of tasks
+asg_max_size                     = 4 # n + 1
+asg_allow_all_egress             = true
+ec2_instance_type                = "t3.large"
+ec2_additional_userdata          = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
 echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
 EOF
-route53_zone_id_existing               = "Z03809063VDGJ8MKPHFRV"
-route53_zone_force_destroy             = true
-acm_certificate_arn                    = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
-acm_certificate_arn_us-east-1          = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
-alb_enable_deletion_protection         = false
-vpc_cidr_block                         = "10.27.0.0/22" #1024 adresses
-vpc_public_subnet_public_ip            = false
-cloudwatch_log_group                   = "/ecs/CUDL"
-waf_bot_control_inspection_level       = "TARGETED"
-waf_bot_control_exclusion_header       = "user-agent"
-waf_bot_control_exclusion_header_value = "StatusCake"
-
+route53_zone_id_existing         = "Z03809063VDGJ8MKPHFRV"
+route53_zone_force_destroy       = true
+acm_certificate_arn              = "arn:aws:acm:eu-west-1:438117829123:certificate/fec4f8c7-8c2d-4274-abc4-a6fa3f65583f"
+acm_certificate_arn_us-east-1    = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
+alb_enable_deletion_protection   = false
+vpc_cidr_block                   = "10.27.0.0/22" #1024 adresses
+vpc_public_subnet_public_ip      = false
+cloudwatch_log_group             = "/ecs/CUDL"
+waf_bot_control_inspection_level = "TARGETED"
+waf_bot_control_exclusions = [
+  {
+    "waf_bot_control_exclusion_header"       = "user-agent",
+    "waf_bot_control_exclusion_header_value" = "StatusCake"
+  },
+  {
+    "waf_bot_control_exclusion_uri" = "/iiif/"
+  },
+  {
+    "waf_bot_control_exclusion_uri" = "/v1/"
+  }
+]
 # SOLR Worload
 solr_name_suffix       = "solr"
 solr_domain_name       = "search"
