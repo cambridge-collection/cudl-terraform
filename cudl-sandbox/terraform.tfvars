@@ -312,14 +312,16 @@ content_loader_domain_name       = "contentloader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "dl-loader-db" = "sha256:2f95f1e174623af80ddae2409771a07c0d1c71d7b83e4f42899b608810f70cab",
-  "dl-loader-ui" = "sha256:293c28a8f0f09456afae9af23efa65ea4a820410c5e14aad761950cd8c4e43d5"
+  "dl-loader-db" = "sha256:48bebee92c94f2cb8f5f41d079dfd3a68d400def1c79a36619cde8beb3c257ea",
+  "dl-loader-ui" = "sha256:151acb4474adbb20982d06aea40c8ec0ae3237e44eb550d382ee84050d68ae08"
 }
 content_loader_ecs_task_def_volumes     = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui        = "dl-loader-ui"
 content_loader_container_name_db        = "dl-loader-db"
 content_loader_health_check_status_code = "401"
 content_loader_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
+content_loader_cloudfront_origin_read_timeout      = 180
 
 # SOLR Worload
 solr_name_suffix       = "solr"
@@ -355,7 +357,7 @@ cudl_viewer_domain_name       = "cudl-viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "sandbox-cudl-viewer" = "sha256:8af91b68471dcd20ebed2a116f26c91c0796529194982fab784f1ebfa1944369"
+  "sandbox-cudl-viewer" = "sha256:704146042003803edf7cda544f2a5485d2f3bf33a4f94c7b414a09547c01b26b"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]

@@ -271,6 +271,16 @@ variable "content_loader_allowed_methods" {
   description = "List of methods allowed by the CloudFront Distribution"
 }
 
+variable "content_loader_waf_common_ruleset_override_actions" {
+  type        = list(string)
+  description = "List of rules in the AWS WAF Core rule set (CRS) managed rule group to override"
+}
+
+variable "content_loader_cloudfront_origin_read_timeout" {
+  type        = number
+  description = "CloudFront origin response timeout for Content Loader"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"
