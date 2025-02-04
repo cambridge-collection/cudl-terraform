@@ -37,7 +37,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
   })
   redrive_policy = jsonencode({
     "deadLetterTargetArn" = aws_sqs_queue.transform-lambda-dead-letter-queue[each.key].arn,
-    "maxReceiveCount"     = 3
+    "maxReceiveCount"     = each.value.sqs_max_tries_before_deadqueue
   })
 }
 

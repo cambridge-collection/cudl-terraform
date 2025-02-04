@@ -237,18 +237,19 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
-    "description"           = "Copies file from S3 to EFS"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"          = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
-    "security_group_names"  = ["staging-cudl-ecs-vpc-egress", "staging-cudl-data-releases-efs"]
-    "use_datadog_variables" = false
-    "mount_fs"              = true
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
+    "description"                    = "Copies file from S3 to EFS"
+    "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
+    "subnet_names"                   = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
+    "security_group_names"           = ["staging-cudl-ecs-vpc-egress", "staging-cudl-data-releases-efs"]
+    "use_datadog_variables"          = false
+    "mount_fs"                       = true
+    "sqs_max_tries_before_deadqueue" = 1
+    "timeout"                        = 900
+    "memory"                         = 512
+    "handler"                        = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
+    "runtime"                        = "java11"
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
@@ -312,8 +313,8 @@ content_loader_domain_name       = "content-loader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "cudl/content-loader-db" = "sha256:2f95f1e174623af80ddae2409771a07c0d1c71d7b83e4f42899b608810f70cab",
-  "cudl/content-loader-ui" = "sha256:293c28a8f0f09456afae9af23efa65ea4a820410c5e14aad761950cd8c4e43d5"
+  "cudl/content-loader-db" = "sha256:48bebee92c94f2cb8f5f41d079dfd3a68d400def1c79a36619cde8beb3c257ea",
+  "cudl/content-loader-ui" = "sha256:151acb4474adbb20982d06aea40c8ec0ae3237e44eb550d382ee84050d68ae08"
 }
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui                   = "dl-loader-ui"

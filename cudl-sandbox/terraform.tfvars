@@ -237,18 +237,19 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
-    "description"           = "Copies file from S3 to EFS"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"          = ["rmm98-sandbox-cudl-ecs-subnet-private-a", "rmm98-sandbox-cudl-ecs-subnet-private-b"]
-    "security_group_names"  = ["rmm98-sandbox-cudl-ecs-vpc-egress", "rmm98-sandbox-cudl-data-releases-efs"]
-    "use_datadog_variables" = false
-    "mount_fs"              = true
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
+    "description"                    = "Copies file from S3 to EFS"
+    "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
+    "subnet_names"                   = ["rmm98-sandbox-cudl-ecs-subnet-private-a", "rmm98-sandbox-cudl-ecs-subnet-private-b"]
+    "security_group_names"           = ["rmm98-sandbox-cudl-ecs-vpc-egress", "rmm98-sandbox-cudl-data-releases-efs"]
+    "use_datadog_variables"          = false
+    "mount_fs"                       = true
+    "timeout"                        = 900
+    "memory"                         = 512
+    "sqs_max_tries_before_deadqueue" = 1
+    "handler"                        = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
+    "runtime"                        = "java11"
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"

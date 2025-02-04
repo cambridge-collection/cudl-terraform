@@ -38,7 +38,8 @@ locals {
     ]
   }
   transform_lambda_queues = { for lambda in var.transform-lambda-information : lambda.queue_name => {
-    queue_delay_seconds = lambda.queue_delay_seconds
+    queue_delay_seconds            = lambda.queue_delay_seconds
+    sqs_max_tries_before_deadqueue = lambda.sqs_max_tries_before_deadqueue
   } }
 
   transform-lambda-buckets = {
