@@ -225,14 +225,15 @@ variable "waf_bot_control_inspection_level" {
   description = "The inspection level to use for the Base Architecture WAF Bot Control rule group"
 }
 
-variable "waf_bot_control_exclusion_header" {
-  type        = string
-  description = "Name of header to exclude from WAF bot control"
-}
-
-variable "waf_bot_control_exclusion_header_value" {
-  type        = string
-  description = "Value of header to exclude from WAF bot control"
+variable "waf_bot_control_exclusions" {
+  description = "A list of objects containing information about the WAF exclusions"
+  type = list(object({
+    waf_bot_control_exclusion_header         = optional(string)             // Name of header to exclude from WAF bot control
+    waf_bot_control_exclusion_header_value   = optional(string)             // Value of header to exclude from WAF bot control
+    waf_bot_control_exclusion_match_type     = optional(string, "CONTAINS") // Match type for the bot control exclusion header
+    waf_bot_control_exclusion_text_transform = optional(string, "NONE")     // Text transformation to apply before matching the exclusion header for WAF bot control
+    waf_bot_control_exclusion_uri            = optional(string)             // URI pattern to exclude from waf
+  }))
 }
 
 variable "solr_name_suffix" {
