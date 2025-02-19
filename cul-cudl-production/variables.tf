@@ -225,6 +225,12 @@ variable "waf_bot_control_inspection_level" {
   description = "The inspection level to use for the Base Architecture WAF Bot Control rule group"
 }
 
+variable "waf_bot_control_rule_action_overrides" {
+  description = "This will prevent the actions that normally cause a capcha response and instead set the level to challenge."
+  type        = list(string)
+  default     = []
+}
+
 variable "waf_bot_control_exclusions" {
   description = "A list of objects containing information about the WAF exclusions"
   type = list(object({
