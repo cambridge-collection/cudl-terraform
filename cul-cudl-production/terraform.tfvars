@@ -157,6 +157,11 @@ vpc_cidr_block                   = "10.27.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip      = false
 cloudwatch_log_group             = "/ecs/CUDL"
 waf_bot_control_inspection_level = "TARGETED"
+waf_bot_control_rule_action_overrides = {
+  TGT_SignalAutomatedBrowser    = "challenge"
+  TGT_VolumetricSession         = "challenge"
+  GT_SignalBrowserInconsistency = "challenge"
+}
 waf_bot_control_exclusions = [
   {
     "waf_bot_control_exclusion_header"       = "user-agent",
