@@ -157,11 +157,11 @@ vpc_cidr_block                   = "10.27.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip      = false
 cloudwatch_log_group             = "/ecs/CUDL"
 waf_bot_control_inspection_level = "TARGETED"
-waf_bot_control_rule_action_overrides = {
-  TGT_SignalAutomatedBrowser    = "challenge"
-  TGT_VolumetricSession         = "challenge"
-  GT_SignalBrowserInconsistency = "challenge"
-}
+waf_bot_control_rule_action_overrides = [
+  "TGT_SignalAutomatedBrowser",
+  "TGT_VolumetricSession",
+  "GT_SignalBrowserInconsistency"
+]
 waf_bot_control_exclusions = [
   {
     "waf_bot_control_exclusion_header"       = "user-agent",
@@ -206,7 +206,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:f9476dbe527ca0074e79b79c7f331f8280b4ffb8bb0c37d5eff42a0787dd0b30"
+  "cudl/viewer" = "sha256:e28ec05537e34fc31cb359f9bddb711b9ebe96a446945f9730a17d0bacdded45"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
