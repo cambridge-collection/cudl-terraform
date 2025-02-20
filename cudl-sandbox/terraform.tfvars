@@ -358,7 +358,7 @@ cudl_viewer_domain_name       = "cudl-viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "sandbox-cudl-viewer" = "sha256:f9476dbe527ca0074e79b79c7f331f8280b4ffb8bb0c37d5eff42a0787dd0b30"
+  "sandbox-cudl-viewer" = "sha256:e28ec05537e34fc31cb359f9bddb711b9ebe96a446945f9730a17d0bacdded45"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
