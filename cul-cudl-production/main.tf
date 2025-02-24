@@ -15,9 +15,9 @@ module "base_architecture" {
   vpc_cidr_block                          = var.vpc_cidr_block
   acm_create_certificate                  = false
   acm_certificate_arn                     = var.acm_certificate_arn
-  waf_use_rate_limiting                   = true
-  waf_use_bot_control                     = true
-  waf_bot_control_enable_machine_learning = true
+  waf_use_rate_limiting                   = false
+  waf_use_bot_control                     = false
+  waf_bot_control_enable_machine_learning = false
   waf_bot_control_inspection_level        = var.waf_bot_control_inspection_level
   waf_bot_control_rule_action_overrides   = var.waf_bot_control_rule_action_overrides
   waf_bot_control_exclusions              = var.waf_bot_control_exclusions
