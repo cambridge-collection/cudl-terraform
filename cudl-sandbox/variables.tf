@@ -74,9 +74,13 @@ variable "transform-lambda-information" {
     environment_variables          = optional(map(string))
     image_uri                      = optional(string)
     batch_size                     = optional(number)
-    sqs_max_tries_before_deadqueue = optional(number)
     batch_window                   = optional(number)
     maximum_concurrency            = optional(number)
+    command                        = optional(string)
+    entry_point                    = optional(string)
+    working_directory              = optional(string)
+    sqs_max_tries_before_deadqueue = optional(number)
+    queue_delay_seconds            = optional(number, 0)
     use_datadog_variables          = optional(bool, true)
     use_additional_variables       = optional(bool, false)
     use_enhancements_variables     = optional(bool, false)
@@ -149,6 +153,7 @@ variable "cluster_name_suffix" {
 variable "ec2_instance_type" {
   type        = string
   description = "EC2 Instance type used by EC2 Instances"
+  default     = "t3.small"
 }
 
 variable "ec2_additional_userdata" {

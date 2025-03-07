@@ -76,33 +76,33 @@ module "content_loader" {
       releases_bucket = module.cudl-data-processing.destination_bucket
     })
   }
-  vpc_id                     = module.base_architecture.vpc_id
-  vpc_subnet_ids             = module.base_architecture.vpc_private_subnet_ids
-  alb_arn                    = module.base_architecture.alb_arn
-  alb_dns_name               = module.base_architecture.alb_dns_name
-  alb_listener_arn           = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn            = module.base_architecture.ecs_cluster_arn
-  route53_zone_id            = module.base_architecture.route53_public_hosted_zone
-  asg_name                   = module.base_architecture.asg_name
-  asg_security_group_id      = module.base_architecture.asg_security_group_id
-  alb_security_group_id      = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn   = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn     = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
+  vpc_id                         = module.base_architecture.vpc_id
+  vpc_subnet_ids                 = module.base_architecture.vpc_private_subnet_ids
+  alb_arn                        = module.base_architecture.alb_arn
+  alb_dns_name                   = module.base_architecture.alb_dns_name
+  alb_listener_arn               = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn                = module.base_architecture.ecs_cluster_arn
+  route53_zone_id                = module.base_architecture.route53_public_hosted_zone
+  asg_name                       = module.base_architecture.asg_name
+  asg_security_group_id          = module.base_architecture.asg_security_group_id
+  alb_security_group_id          = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn       = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn         = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
   cloudfront_origin_read_timeout = var.content_loader_cloudfront_origin_read_timeout
-  cloudfront_allowed_methods = var.content_loader_allowed_methods
+  cloudfront_allowed_methods     = var.content_loader_allowed_methods
   iam_task_additional_policies = {
-    staging_releases    = aws_iam_policy.sandbox_cudl_data_releases.arn,
-    staging_source      = aws_iam_policy.sandbox_cudl_data_source.arn
+    staging_releases = aws_iam_policy.sandbox_cudl_data_releases.arn,
+    staging_source   = aws_iam_policy.sandbox_cudl_data_source.arn
   }
-  efs_create_file_system     = true
-  tags                       = local.default_tags
+  efs_create_file_system = true
+  tags                   = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -148,14 +148,14 @@ module "solr" {
   }
 }
 
-module "solr_stopped_tasks" {
-  source = "../modules/stopped-tasks"
-
-  ecs_cluster_name      = module.base_architecture.ecs_cluster_name
-  ecs_service_name      = join("-", [module.solr.name_prefix, "service"])
-  alb_name              = join("-", [module.base_architecture.ecs_cluster_name, "alb"])
-  alb_target_group_name = join("-", [module.solr.name_prefix, "alb", "tg"])
-}
+# module "solr_stopped_tasks" {
+#   source = "../modules/stopped-tasks"
+#
+#   ecs_cluster_name      = module.base_architecture.ecs_cluster_name
+#   ecs_service_name      = join("-", [module.solr.name_prefix, "service"])
+#   alb_name              = join("-", [module.base_architecture.ecs_cluster_name, "alb"])
+#   alb_target_group_name = join("-", [module.solr.name_prefix, "alb", "tg"])
+# }
 
 module "cudl_services" {
   source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
@@ -193,7 +193,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -211,11 +211,13 @@ module "cudl_viewer" {
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
-      smtp_username = var.cudl_viewer_smtp_username
-      smtp_password = var.cudl_viewer_smtp_password
-      mount_path    = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
-      search_url    = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
-      services_url  = module.cudl_services.link
+      smtp_username     = var.cudl_viewer_smtp_username
+      smtp_password     = var.cudl_viewer_smtp_password
+      mount_path        = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
+      search_url        = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
+      cudl_services_url = module.cudl_services.link
+      root_url          = module.cudl_viewer.link
+      json_url          = format("%s/json/", module.cudl_viewer.link)
     })
   }
   s3_task_buckets                        = [module.base_architecture.s3_bucket]
