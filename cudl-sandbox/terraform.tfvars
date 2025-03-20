@@ -313,8 +313,8 @@ content_loader_domain_name       = "contentloader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "dl-loader-db" = "sha256:48bebee92c94f2cb8f5f41d079dfd3a68d400def1c79a36619cde8beb3c257ea",
-  "dl-loader-ui" = "sha256:151acb4474adbb20982d06aea40c8ec0ae3237e44eb550d382ee84050d68ae08"
+  "dl-loader-db" = "sha256:49a8074c30f12800d1c36813d85fb4e3e69952d67990f20c6ff05b1e97e19568",
+  "dl-loader-ui" = "sha256:092d9134da0c04855e61d14ddb812df9e564b8a33af4931609b5f5feb4861502"
 }
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui                   = "dl-loader-ui"
@@ -358,7 +358,7 @@ cudl_viewer_domain_name       = "cudl-viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "sandbox-cudl-viewer" = "sha256:e28ec05537e34fc31cb359f9bddb711b9ebe96a446945f9730a17d0bacdded45"
+  "sandbox-cudl-viewer" = "sha256:d4ee6bc825abfd65ee03cb1ea185abc74116be734f3db12916647e171be3fe88"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]

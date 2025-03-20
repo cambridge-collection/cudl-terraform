@@ -313,8 +313,8 @@ content_loader_domain_name       = "content-loader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "cudl/content-loader-db" = "sha256:48bebee92c94f2cb8f5f41d079dfd3a68d400def1c79a36619cde8beb3c257ea",
-  "cudl/content-loader-ui" = "sha256:151acb4474adbb20982d06aea40c8ec0ae3237e44eb550d382ee84050d68ae08"
+  "cudl/content-loader-db" = "sha256:26092924ee4c2e086f8ca116a7f9de2350233658107aa5e76e75b07f2d31f5b4",
+  "cudl/content-loader-ui" = "sha256:a18d59026ad480ee99d78c1755cdeb9fbf60fa5bf0138854063383226bd888a0"
 }
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui                   = "dl-loader-ui"
@@ -358,7 +358,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:e28ec05537e34fc31cb359f9bddb711b9ebe96a446945f9730a17d0bacdded45"
+  "cudl/viewer" = "sha256:d4ee6bc825abfd65ee03cb1ea185abc74116be734f3db12916647e171be3fe88"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
