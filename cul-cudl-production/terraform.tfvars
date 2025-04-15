@@ -156,6 +156,7 @@ alb_enable_deletion_protection   = false
 vpc_cidr_block                   = "10.27.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip      = false
 cloudwatch_log_group             = "/ecs/CUDL"
+cloudwatch_log_destination_arn   = "arn:aws:logs:eu-west-1:874581676011:destination:cul-logs-cloudwatch-log-destination"
 waf_bot_control_inspection_level = "TARGETED"
 waf_bot_control_rule_action_overrides = [
   "TGT_SignalAutomatedBrowser",
