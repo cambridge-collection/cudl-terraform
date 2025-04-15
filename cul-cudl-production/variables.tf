@@ -220,6 +220,11 @@ variable "cloudwatch_log_group" {
   description = "Name of the cloudwatch log group"
 }
 
+variable "cloudwatch_log_destination_arn" {
+  type        = string
+  description = "ARN of a CloudWatch Log Destination"
+}
+
 variable "waf_bot_control_inspection_level" {
   type        = string
   description = "The inspection level to use for the Base Architecture WAF Bot Control rule group"
