@@ -348,7 +348,7 @@ cudl_services_domain_name       = "services"
 cudl_services_target_group_port = 8085
 cudl_services_container_port    = 3000
 cudl_services_ecr_repositories = {
-  "cudl-services" = "sha256:40bbe5f4238ab768b2ccdf7e860791d8d821aa5a2d8744f93ea59ed972efbbbc"
+  "cudl-services" = "sha256:9da79f802e82b12ef6c599a88a551ca793b7ccae355e4f718e12de61e70ee202"
 }
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
@@ -358,7 +358,7 @@ cudl_viewer_domain_name       = "cudl-viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "sandbox-cudl-viewer" = "sha256:cf7cf8e805dbe04f8c1fad02d537389a8b3ba8b12ffd51d02a33090da0c403f0"
+  "sandbox-cudl-viewer" = "sha256:5d0485fc0565047d9006aa4ef754a6e1f3def38f1df9164e7a6ce42abaf57cba"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]

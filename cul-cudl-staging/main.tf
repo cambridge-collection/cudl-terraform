@@ -175,7 +175,7 @@ module "cudl_services" {
   ecs_service_container_port                = var.cudl_services_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
-  ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.database_password.arn, data.aws_ssm_parameter.apikey_darwin.arn]
+  ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.database_password.arn, data.aws_ssm_parameter.apikey_darwin.arn, data.aws_ssm_parameter.basicauth_credentials.arn]
   vpc_id                                    = module.base_architecture.vpc_id
   alb_arn                                   = module.base_architecture.alb_arn
   alb_dns_name                              = module.base_architecture.alb_dns_name

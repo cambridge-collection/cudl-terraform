@@ -58,7 +58,15 @@ locals {
         {
           name  = "CUDL_SERVICES_DATA_LOCATION",
           value = "s3://${module.cudl-data-processing.destination_bucket}/"
-        }
+        },
+        {
+          name  = "CUDL_SERVICES_IIIF_BASE_URL",
+          value = "https://staging-viewer.cudl.lib.cam.ac.uk/iiif"
+        },
+        {
+          name  = "CUDL_SERVICES_CUDL_BASE_URL",
+          value = "https://staging-viewer.cudl.lib.cam.ac.uk/"
+        },
       ],
       secrets = [
         {
@@ -68,7 +76,15 @@ locals {
         {
           name      = "CUDL_SERVICES_USER_0_KEY",
           valueFrom = data.aws_ssm_parameter.apikey_darwin.arn
-        }
+        },
+        {
+          name  = "CUDL_SERVICES_IIIF_BASE_URL_CREDENTIALS",
+          valueFrom = data.aws_ssm_parameter.basicauth_credentials.arn
+        },
+        {
+          name  = "CUDL_SERVICES_CUDL_BASE_URL_CREDENTIALS",
+          valueFrom = data.aws_ssm_parameter.basicauth_credentials.arn
+        },
       ],
       logConfiguration = {
         logDriver = "awslogs"
