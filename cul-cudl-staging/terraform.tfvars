@@ -189,6 +189,7 @@ transform-lambda-information = [
     "maximum_concurrency"      = 100
     "use_datadog_variables"    = false
     "use_additional_variables" = true
+    "ephemeral_storage"        = 1024
     "environment_variables" = {
       ANT_TARGET             = "full"
       SEARCH_HOST            = "solr-api-cudl-ecs.staging-solr"

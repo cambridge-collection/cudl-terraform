@@ -15,6 +15,10 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   handler       = var.transform-lambda-information[count.index].handler
   publish       = true
 
+  ephemeral_storage {
+    size = var.transform-lambda-information[count.index].ephemeral_storage
+  }
+
   dynamic "image_config" {
     for_each = (var.transform-lambda-information[count.index].command != null ||
       var.transform-lambda-information[count.index].entry_point != null ||
