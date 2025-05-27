@@ -79,7 +79,7 @@ variable "transform-lambda-information" {
     use_additional_variables   = optional(bool, false)
     use_enhancements_variables = optional(bool, false)
     mount_fs                   = optional(bool, false)
-    ephemeral_storage              = optional (number, 512)
+    ephemeral_storage          = optional(number, 512)
   }))
 }
 
