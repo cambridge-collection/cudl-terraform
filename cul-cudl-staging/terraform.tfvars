@@ -349,7 +349,7 @@ cudl_services_domain_name       = "services"
 cudl_services_target_group_port = 8085
 cudl_services_container_port    = 3000
 cudl_services_ecr_repositories = {
-  "cudl/services" = "sha256:d78d91a78f24b35845cd72b8044c93568f5361906598a92a541918202f94aa30"
+  "cudl/services" = "sha256:13b3585708e0b7f59b70eb8e22da90640236d71e9dd9f0d15292cf17a1674487"
 }
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
@@ -359,7 +359,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:5d0485fc0565047d9006aa4ef754a6e1f3def38f1df9164e7a6ce42abaf57cba"
+  "cudl/viewer" = "sha256:034580c2c537109b107676185dbb1737615a4a497d9c80d3ee8953f63ef9101a"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback

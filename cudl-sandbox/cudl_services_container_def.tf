@@ -78,11 +78,11 @@ locals {
           valueFrom = data.aws_ssm_parameter.apikey_darwin.arn
         },
         {
-          name  = "CUDL_SERVICES_IIIF_BASE_URL_CREDENTIALS",
+          name      = "CUDL_SERVICES_IIIF_BASE_URL_CREDENTIALS",
           valueFrom = data.aws_ssm_parameter.basicauth_credentials.arn
         },
         {
-          name  = "CUDL_SERVICES_CUDL_BASE_URL_CREDENTIALS",
+          name      = "CUDL_SERVICES_CUDL_BASE_URL_CREDENTIALS",
           valueFrom = data.aws_ssm_parameter.basicauth_credentials.arn
         },
       ],
