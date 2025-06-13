@@ -58,7 +58,23 @@ locals {
         {
           name  = "CUDL_SERVICES_DATA_LOCATION",
           value = "s3://${module.cudl-data-processing.destination_bucket}/"
-        }
+        },
+        {
+          name  = "CUDL_SERVICES_IIIF_BASE_URL",
+          value = "https://cudl.lib.cam.ac.uk/iiif"
+        },
+        {
+          name  = "CUDL_SERVICES_CUDL_BASE_URL",
+          value = "https://cudl.lib.cam.ac.uk/"
+        },
+        {
+          name  = "CUDL_SERVICES_IIIF_BASE_URL_CREDENTIALS",
+          value = ""
+        },
+        {
+          name  = "CUDL_SERVICES_CUDL_BASE_URL_CREDENTIALS",
+          value = ""
+        },
       ],
       secrets = [
         {
