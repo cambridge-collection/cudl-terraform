@@ -39,7 +39,7 @@ dataUIThemeResources=${mount_path}/data/ui/
 imageServer=https://images.lib.cam.ac.uk/
 services=${cudl_services_url}
 IIIFImageServer=https://images.lib.cam.ac.uk/iiif/
-RTIImageServer=https://rti-images.cudl-sandbox.net/rti/
+RTIImageServer=https://rti-images.cudl.lib.cam.ac.uk/rti/
 
 # Email address to send the feedback form to.
 # Note this may not work locally as port 25 is blocked.

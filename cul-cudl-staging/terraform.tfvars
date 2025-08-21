@@ -366,3 +366,14 @@ cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", 
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 cudl_viewer_ecs_task_def_memory             = 1920
+
+rti_image_server_name_suffix                             = "cul"
+rti_image_server_bucket                                  = "cudl-rti-images"
+rti_image_server_domain_name                             = "rti-images.cudl.lib.cam.ac.uk"
+rti_image_server_hosted_zone_domain                      = "cudl.lib.cam.ac.uk"
+rti_image_server_route53_zone_id_existing                = "Z03809063VDGJ8MKPHFRV"
+rti_image_server_certificate_arn                         = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"
+rti_image_server_cloudfront_viewer_response_function_arn = "arn:aws:cloudfront::438117829123:function/staging-cudl-add-cors-response"
+rti_image_server_cloudfront_cache_policy                 = "optimized"
+rti_image_server_cloudfront_origin_request_policy_name   = "Managed-CORS-S3Origin"
+rti_image_server_cloudfront_response_headers_policy_name = "Managed-CORS-With-Preflight"

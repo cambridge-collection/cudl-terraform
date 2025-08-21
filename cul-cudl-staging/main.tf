@@ -264,3 +264,26 @@ module "cudl_viewer" {
     aws.us-east-1 = aws.us-east-1
   }
 }
+
+module "rti_image_server" {
+  source      = "git::https://github.com/cambridge-collection/terraform-aws-module-static-site.git?ref=v1.0.2"
+  name_prefix = join("-", compact([local.environment, var.rti_image_server_name_suffix]))
+  bucket_name = var.rti_image_server_bucket
+  project     = var.project
+  environment = var.environment
+
+  custom_domain                           = var.rti_image_server_domain_name
+  hosted_zone_domain                      = var.rti_image_server_hosted_zone_domain
+  route53_zone_id_existing                = var.rti_image_server_route53_zone_id_existing
+  acm_certificate_arn_us-east-1           = var.rti_image_server_certificate_arn
+  acm_create_certificate                  = false
+  cloudfront_waf_acl_arn                  = module.base_architecture.waf_acl_arn
+  cloudfront_viewer_response_function_arn = var.rti_image_server_cloudfront_viewer_response_function_arn
+  cloudfront_cache_policy                 = var.rti_image_server_cloudfront_cache_policy
+  cloudfront_origin_request_policy_name   = var.rti_image_server_cloudfront_origin_request_policy_name
+  cloudfront_response_headers_policy_name = var.rti_image_server_cloudfront_response_headers_policy_name
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.us-east-1
+  }
+}

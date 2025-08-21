@@ -469,3 +469,62 @@ variable "cudl_viewer_ecs_task_def_memory" {
   type        = number
   description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
 }
+
+variable "rti_image_server_name_suffix" {
+  type        = string
+  description = "Suffix for naming the RTI image server resources (e.g., for unique naming)."
+}
+
+variable "rti_image_server_bucket" {
+  type        = string
+  description = "Name of the S3 bucket used for storing RTI image server assets."
+}
+
+variable "rti_image_server_domain_name" {
+  type        = string
+  description = "Fully qualified domain name (FQDN) assigned to the RTI image server."
+}
+
+variable "rti_image_server_hosted_zone_domain" {
+  type        = string
+  description = "Base domain name of the hosted zone where the RTI image server record will be created."
+}
+
+variable "rti_image_server_route53_zone_id_existing" {
+  type        = string
+  description = "Existing Route 53 hosted zone ID to associate with the RTI image server domain."
+}
+
+variable "rti_image_server_certificate_arn" {
+  type        = string
+  description = "ARN of the ACM SSL/TLS certificate for securing the RTI image server domain."
+}
+
+variable "rti_image_server_cloudfront_viewer_response_function_arn" {
+  type        = string
+  description = "ARN of a CloudFront Function to add to CloudFront Distribution in Response"
+  default     = null
+}
+
+variable "rti_image_server_cloudfront_cache_policy" {
+  type        = string
+  description = "Managed cache policy to use by default: 'optimized' (Managed-CachingOptimized) or 'disabled' (Managed-CachingDisabled)."
+  default     = "optimized"
+
+  validation {
+    condition     = contains(["optimized", "disabled"], var.rti_image_server_cloudfront_cache_policy)
+    error_message = "cloudfront_cache_policy must be 'optimized' or 'disabled'."
+  }
+}
+
+variable "rti_image_server_cloudfront_origin_request_policy_name" {
+  type        = string
+  description = "Name of the CloudFront Origin Request Policy to use (e.g., Managed-CORS-S3Origin, Managed-AllViewer). If null, uses the managed S3+CORS policy."
+  default     = null
+}
+
+variable "rti_image_server_cloudfront_response_headers_policy_name" {
+  type        = string
+  description = "Name of the CloudFront Response Headers Policy to attach (e.g., CORS-With-Preflight, SecurityHeadersPolicy). If null, none is attached."
+  default     = null
+}
