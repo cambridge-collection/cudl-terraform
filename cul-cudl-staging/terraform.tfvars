@@ -359,7 +359,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:291859e5fab1512f7797073f40c16fb869952c0dae23007b3eba156bc897c318"
+  "cudl/viewer" = "sha256:4715f98cc93e12dc0300d4577792fc6c651e107b4ddea85e9db56e8e09607c03"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
