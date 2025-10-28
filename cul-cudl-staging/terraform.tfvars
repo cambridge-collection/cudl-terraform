@@ -359,7 +359,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:4715f98cc93e12dc0300d4577792fc6c651e107b4ddea85e9db56e8e09607c03"
+  "cudl/viewer" = "sha256:9cca97898898dc84beba55a2ea816450b1562659d1bb2a89c4aec9ea31e16f31"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
@@ -369,7 +369,7 @@ cudl_viewer_ecs_task_def_memory             = 1920
 
 rti_image_server_name_suffix                             = "cul"
 rti_image_server_bucket                                  = "cudl-rti-images"
-rti_image_server_domain_name                             = "rti-images.cudl.lib.cam.ac.uk"
+rti_image_server_domain_name                             = "staging-rti-images.cudl.lib.cam.ac.uk"
 rti_image_server_hosted_zone_domain                      = "cudl.lib.cam.ac.uk"
 rti_image_server_route53_zone_id_existing                = "Z03809063VDGJ8MKPHFRV"
 rti_image_server_certificate_arn                         = "arn:aws:acm:us-east-1:438117829123:certificate/3ebbcb94-1cf1-4adf-832f-add73eaea151"

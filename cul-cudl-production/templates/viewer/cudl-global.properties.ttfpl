@@ -35,6 +35,7 @@ dataUIThemeResources=${mount_path}/data/ui/
 imageServer=https://images.lib.cam.ac.uk/
 services=${cudl_services_url}
 IIIFImageServer=https://images.lib.cam.ac.uk/iiif/
+RTIImageServer=https://rti-images.cudl.lib.cam.ac.uk/rti/
 
 # Value to append to image server URL
 appendToThumbnail=.jp2/full/,180/0/default.jpg
