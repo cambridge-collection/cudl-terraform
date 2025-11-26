@@ -159,7 +159,7 @@ variable "cluster_name_suffix" {
 variable "ec2_instance_type" {
   type        = string
   description = "EC2 Instance type used by EC2 Instances"
-  default     = "t3.small"
+  default     = "t3.medium"
 }
 
 variable "asg_max_size" {

@@ -7,8 +7,8 @@ locals {
       systemControls    = [],
       image             = data.aws_ecr_image.content_loader["cudl/content-loader-db"].image_uri,
       cpu               = 128,
-      memory            = 512,
-      memoryReservation = 128,
+      memory            = 500,
+      memoryReservation = 228,
       portMappings = [
         {
           containerPort = 5432,
@@ -74,7 +74,7 @@ locals {
       systemControls    = [],
       image             = data.aws_ecr_image.content_loader["cudl/content-loader-ui"].image_uri,
       cpu               = 1920,
-      memory            = 1024,
+      memory            = 2400,
       memoryReservation = 512,
       links = [
         local.content_loader_container_name_db
