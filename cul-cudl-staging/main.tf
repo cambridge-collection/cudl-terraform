@@ -72,7 +72,7 @@ module "content_loader" {
   ecs_service_container_name                = local.content_loader_container_name_ui
   ecs_service_container_port                = var.content_loader_application_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
-  ecs_task_def_memory                       = 3000
+  ecs_task_def_memory                       = var.content_loader_ecs_task_def_memory
   s3_task_execution_bucket_objects = {
     "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/content-loader/cl-ui.env.ttfpl", {
       region                     = var.deployment-aws-region

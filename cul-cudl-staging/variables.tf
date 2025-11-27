@@ -308,6 +308,11 @@ variable "content_loader_cloudfront_origin_read_timeout" {
   description = "CloudFront origin response timeout for Content Loader"
 }
 
+variable "content_loader_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the Content loader tasks"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"

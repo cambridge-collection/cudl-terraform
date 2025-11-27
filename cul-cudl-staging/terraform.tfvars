@@ -325,6 +325,7 @@ content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", 
 content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
 content_loader_cloudfront_origin_read_timeout      = 180
+content_loader_ecs_task_def_memory                 = 3000
 
 # SOLR Worload
 solr_name_suffix       = "solr"
@@ -365,7 +366,7 @@ cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
-cudl_viewer_ecs_task_def_memory             = 1920
+cudl_viewer_ecs_task_def_memory             = 3520
 
 rti_image_server_name_suffix                             = "cul"
 rti_image_server_bucket                                  = "cudl-rti-images"
