@@ -173,11 +173,20 @@ waf_bot_control_exclusions = [
   },
   {
     "waf_bot_control_exclusion_uri" = "/v1/"
+    "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
   {
     "waf_bot_control_exclusion_uri" = ".json",
     "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
-  }
+  }, 
+  {
+    "waf_bot_control_exclusion_uri" = "itemJSON",
+    "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
+  },
+  {
+    "waf_bot_control_exclusion_uri" = "/rti/",
+    "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
+  },
 ]
 # SOLR Worload
 solr_name_suffix       = "solr"
