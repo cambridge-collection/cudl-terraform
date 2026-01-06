@@ -3,16 +3,26 @@
 This is the Terraform configuration for the Cambridge Digital Library Platform.
 Initially this will only cover the setting up the data loading process.
 
+## Architecture overview
+
+The following diagram shows the high-level AWS architecture that this Terraform configuration builds and manages:
+
+![](docs/images/cudl-arch.png)
+
 ## Prerequisites 
 
 Install Terraform: https://learn.hashicorp.com/tutorials/terraform/install-cli
+
+For a full list of AWS resources and configuration you must create **before** running Terraform (state backend, ECR images, SSM parameters, certificates, etc.), see:
+
+[CUDL Terraform Environment Setup - `docs/environment-setup.md`](docs/environment-setup.md) 
 
 ## Commands
 
 First select the environment you want to work in: dev, stage or prod.  It's recommended you 
 work and test and changes in dev first!
 
-    cd cudl-dev
+    cd cudl-sandbox
 
 To initialise the working directory run the following in the root directory of this project.
 
@@ -58,7 +68,7 @@ Before applying the Terraform in each environment, it is advisable to run tests 
 
 Terraform tests can be run in cudl-dev, cudl-staging and cudl-production. This can be done by entering the directory of choice, e.g.
 
-    cd cudl-dev
+    cd cudl-sandbox
 
 Then entering a command 
 
@@ -70,52 +80,22 @@ Currently the tests are intended to be run using an IAM role from the sandbox en
 
 Currently all tests run Terraform plan, although they could be adapted to run apply if desired.
 
-## Data Loading Process Infrastructure.
+## Data loading process
 
-The data loading process converts the data from the input format into the output format.
-This consists of for example lambda functions that convert the item TEI into JSON suitable for
-display in the viewer. For more detail on the loading process see:
-https://github.com/cambridge-collection/data-lambda-transform
+The data loading process (the `cudl-data-processing` module and related Lambdas) is documented in detail here:
 
-This diagram shows the AWS infrastructure setup required for the data loading process. 
-![](docs/images/CUDL_data_processing.jpg)
-
-## Lambda Definitions
-
-| Lambda name                                           | Type      | Runtime | Source Code                                                   |
-| :---------------------------------------------------- | :-------- | :------ | :------------------------------------------------------------ |
-| AWSLambda_CUDLPackageData_Collection_SOLR_Listener    | Container | Docker  | https://github.com/cambridge-collection/cudl-solr-listener    |
-| AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS         | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
-| AWSLambda_CUDLPackageData_DATASET_JSON                | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
-| AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY         | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
-| AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
-| AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
-| AWSLambda_CUDLPackageData_SOLR_Listener               | Container | Docker  | https://github.com/cambridge-collection/cudl-solr-listener    |
-| AWSLambda_CUDLPackageData_TEI_Processing              | Container | Docker  | https://github.com/cambridge-collection/transkribus-import    |
-| AWSLambda_CUDL_Transkribus_Ingest                     | Container | Docker  | ??                                                            |
-| AWSLambda_CUDLPackageData_UI_JSON                     | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
-| AWSLambda_CUDLPackageData_UPDATE_DB                   | Java Jar  | Java 11 | https://github.com/cambridge-collection/data-lambda-transform |
+- [CUDL Data Loading and `cudl-data-processing` module - `docs/data-loading.md`](docs/data-loading.md)
 
 
-### AWS Resources created are:
+## External resources and prerequisites
 
-- IAM policies
-- S3 buckets (shown in green)
-- SQS, SNS and Lambda functions (shown in yellow)
-- EFS volume (shown in dark green)
+This Terraform assumes several AWS resources already exist, such as:
 
-### Existing resources (not created by Terraform) are: 
+- The shared Terraform state backend (S3 bucket + DynamoDB lock table)
+- ECR repositories and images for CUDL services, viewer, SOLR, and content loader
+- S3 bucket for lambda JARs / Maven artifacts
+- SSM Parameter Store entries for passwords, API keys, and viewer configuration
 
-- Cudl viewer and Services and RDS database (shown in blue)
+For a complete, up-to-date list of external resources and how to wire them into each environment’s `terraform.tfvars`, see:
 
-## EXTERNAL RESOURCES REQUIRED BY THIS TERRAFORM SCRIPT
-
-- Existing VPN
-- Secret Manager secrets - for DB passwords
-- S3 maven bucket which contains the compiled and deployed lambdas from https://github.com/cambridge-collection/data-lambda-transform
-- RDS database (required if using viewer)
-- S3 bucket for containing the zipped xslt used for transformations from https://github.com/cambridge-collection/cudl-data-processing-xslt 
-- (Transkribus extension) S3 bucket for containing the zipped xslt used for transformations from https://github.com/cambridge-collection/transkribus-to-cudl
-
-When created, update the appropriate terraform.tfvars properties to point to these resources.
-
+[CUDL Terraform Environment Setup - `docs/environment-setup.md`](docs/environment-setup.md) 
