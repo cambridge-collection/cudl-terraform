@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:b8c0dc4d1b071044ca468f069e197da5f6472b767c824b9b93f7190549543166"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:5c8524b06c83ace9298e5a2d18a68577acd0b1148046d63615f4a5adc24e1d57"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
@@ -186,7 +186,7 @@ transform-lambda-information = [
     "memory"                   = 4096
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 100
+    "maximum_concurrency"      = 50
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
@@ -207,7 +207,7 @@ transform-lambda-information = [
     "memory"                   = 1024
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 50
+    "maximum_concurrency"      = 2
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
@@ -292,7 +292,7 @@ registered_domain_name         = "cudl-sandbox.net."
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
-ec2_instance_type              = "t3.small"
+ec2_instance_type              = "t3.medium"
 ec2_additional_userdata        = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
 echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
