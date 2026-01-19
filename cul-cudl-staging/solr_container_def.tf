@@ -87,9 +87,9 @@ locals {
           value = tostring(var.solr_target_group_port)
         },
         {
-          name  = "EXTRA_VAR"
-          value = "25"
-        }
+          name  = "NUM_WORKERS"
+          value = "3"
+        },
       ],
       environmentFiles = [],
       mountPoints      = [],
