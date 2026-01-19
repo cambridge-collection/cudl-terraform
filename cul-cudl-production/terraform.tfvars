@@ -159,9 +159,10 @@ cloudwatch_log_group             = "/ecs/CUDL"
 cloudwatch_log_destination_arn   = "arn:aws:logs:eu-west-1:874581676011:destination:cul-logs-cloudwatch-log-destination"
 waf_bot_control_inspection_level = "TARGETED"
 waf_bot_control_rule_action_overrides = [
-  "TGT_SignalAutomatedBrowser",
+  "TGT_VolumetricIpTokenAbsent",
   "TGT_VolumetricSession",
-  "GT_SignalBrowserInconsistency"
+  "TGT_SignalAutomatedBrowser",
+  "TGT_SignalBrowserInconsistency"
 ]
 waf_bot_control_exclusions = [
   {
