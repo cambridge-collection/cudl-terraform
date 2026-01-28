@@ -430,11 +430,6 @@ variable "rti_image_server_route53_zone_id_existing" {
   description = "Existing Route 53 hosted zone ID to associate with the RTI image server domain."
 }
 
-variable "rti_image_server_certificate_arn" {
-  type        = string
-  description = "ARN of the ACM SSL/TLS certificate for securing the RTI image server domain."
-}
-
 variable "rti_image_server_cloudfront_viewer_response_function_arn" {
   type        = string
   description = "ARN of a CloudFront Function to add to CloudFront Distribution in Response"

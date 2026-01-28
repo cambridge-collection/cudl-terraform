@@ -46,8 +46,6 @@ These prerequisites are also outside this repo and are reused across environment
     - ARN used in `acm_certificate_arn` in each environment’s `terraform.tfvars`.
   - `us-east-1` ACM certificate for CloudFront:
     - ARN used in `acm_certificate_arn_us-east-1`.
-  - `us-east-1` ACM certificate for the RTI image server:
-    - ARN used in `rti_image_server_certificate_arn`.
 
 ---
 
