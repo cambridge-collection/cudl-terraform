@@ -5,7 +5,7 @@ resource "aws_wafv2_web_acl" "content_loader" {
   scope       = "CLOUDFRONT"
 
   default_action {
-    allow {}
+    block {}
   }
 
   visibility_config {
@@ -86,6 +86,27 @@ resource "aws_wafv2_web_acl" "content_loader" {
     visibility_config {
       cloudwatch_metrics_enabled = true
       metric_name                = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  rule {
+    name     = "ALLOW-UK"
+    priority = 3
+
+    action {
+      allow {}
+    }
+
+    statement {
+      geo_match_statement {
+        country_codes = ["GB"]
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "allow-uk"
       sampled_requests_enabled   = true
     }
   }

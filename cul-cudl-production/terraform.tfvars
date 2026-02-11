@@ -195,8 +195,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:a94e790d34dfbe9eaa7f07403efc21c27dd19fb0769bed1c978745f5f9bf1754",
-  "cudl/solr"     = "sha256:16436e1492cabeaf8e97808f1bbb30b4e60221d67cefe0a18a1408a2b9d7320c"
+  "cudl/solr-api" = "sha256:3dfeb5429cedb7e5543145488d97fa16cfa6592beaa31a3a4836457f9360ace7",
+  "cudl/solr"     = "sha256:f76dd61402687f53d057eabf48c34143f145a17f17d7e720dac1a2db87c0fb7f"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -238,3 +238,10 @@ rti_image_server_cloudfront_viewer_response_function_arn = "arn:aws:cloudfront::
 rti_image_server_cloudfront_cache_policy                 = "optimized"
 rti_image_server_cloudfront_origin_request_policy_name   = "Managed-CORS-S3Origin"
 rti_image_server_cloudfront_response_headers_policy_name = "Managed-CORS-With-Preflight"
+
+# Daily summary fetch Lambda
+# Uncomment and override if you enable module "daily_summary_fetch" in main.tf
+daily_summary_target_url           = "https://search.cudl.lib.cam.ac.uk/summary?keyword=*&format=sdmx"
+daily_summary_results_bucket_name  = "cudl-goaccess-reports"
+daily_summary_schedule_expression  = "rate(1 day)"
+daily_summary_results_prefix       = ""

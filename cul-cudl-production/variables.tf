@@ -140,6 +140,30 @@ variable "cloudfront_route53_zone_id" {
   default     = null
 }
 
+variable "daily_summary_target_url" {
+  description = "URL for the daily summary Lambda to fetch"
+  type        = string
+  default     = "https://search.cudl.lib.cam.ac.uk/summary?keyword=*&format=sdmx"
+}
+
+variable "daily_summary_results_bucket_name" {
+  description = "Full name of the S3 bucket where the daily summary Lambda writes results"
+  type        = string
+  default     = null
+}
+
+variable "daily_summary_schedule_expression" {
+  description = "CloudWatch Events schedule expression for the daily summary Lambda"
+  type        = string
+  default     = "rate(1 day)"
+}
+
+variable "daily_summary_results_prefix" {
+  description = "Key prefix in the destination bucket for stored daily summaries"
+  type        = string
+  default     = "cudl-summary/"
+}
+
 variable "cluster_name_suffix" {
   type        = string
   description = "Name suffix of the ECS Cluster"

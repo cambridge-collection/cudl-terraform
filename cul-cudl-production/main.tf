@@ -220,6 +220,16 @@ module "cudl_viewer" {
   }
 }
 
+module "daily_summary_fetch" {
+  source = "../modules/daily-summary-fetch"
+
+  name_prefix         = join("-", [local.environment, "cudl-summary"])
+  target_url          = var.daily_summary_target_url
+  schedule_expression = var.daily_summary_schedule_expression
+  results_bucket_name = var.daily_summary_results_bucket_name
+  results_key_prefix  = var.daily_summary_results_prefix
+}
+
 module "rti_image_server" {
   source      = "git::https://github.com/cambridge-collection/terraform-aws-module-static-site.git?ref=v1.0.2"
   name_prefix = join("-", compact([local.environment, var.rti_image_server_name_suffix]))
