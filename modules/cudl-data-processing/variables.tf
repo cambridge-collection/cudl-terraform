@@ -247,6 +247,24 @@ variable "cloudfront_alternative_domain_names" {
   default     = []
 }
 
+variable "cloudfront_access_logging" {
+  type        = bool
+  description = "Whether to log CloudFront requests"
+  default     = false
+}
+
+variable "cloudfront_access_logging_bucket" {
+  type        = string
+  description = "S3 bucket domain name for CloudFront access logs"
+  default     = null
+}
+
+variable "cloudfront_access_logging_bucket_name" {
+  type        = string
+  description = "Optional S3 bucket name to create for CloudFront access logs when logging is enabled and no bucket domain name is supplied"
+  default     = null
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"

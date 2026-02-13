@@ -29,6 +29,15 @@ resource "aws_cloudfront_distribution" "this" {
     local.cloudfront_distribution_domain_name
   ], var.cloudfront_alternative_domain_names)
 
+  dynamic "logging_config" {
+    for_each = var.cloudfront_access_logging ? [1] : []
+    content {
+      include_cookies = false
+      bucket          = local.cloudfront_access_logging_bucket_domain_name
+      prefix          = var.cloudfront_distribution_name
+    }
+  }
+
   origin {
     domain_name              = aws_s3_bucket.dest-bucket.bucket_regional_domain_name
     origin_id                = local.cloudfront_distribution_domain_name
@@ -77,4 +86,6 @@ resource "aws_cloudfront_distribution" "this" {
       restriction_type = "none"
     }
   }
+
+  depends_on = [aws_s3_bucket_ownership_controls.cloudfront_access_logging]
 }

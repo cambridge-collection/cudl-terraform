@@ -48,4 +48,10 @@ locals {
   }
 
   cloudfront_distribution_domain_name = var.create_cloudfront_distribution ? var.production_deployment ? join(".", [var.cloudfront_distribution_name, data.aws_route53_zone.domain.0.name]) : join(".", [join("-", [var.environment, var.cloudfront_distribution_name]), data.aws_route53_zone.domain.0.name]) : ""
+  cloudfront_access_logging_bucket_provided = try(trim(var.cloudfront_access_logging_bucket), "") != ""
+  cloudfront_access_logging_bucket_create   = var.create_cloudfront_distribution && var.cloudfront_access_logging && !local.cloudfront_access_logging_bucket_provided
+  cloudfront_access_logging_bucket_name = trimsuffix(substr(lower(
+    coalesce(var.cloudfront_access_logging_bucket_name, "${var.environment}-${var.cloudfront_distribution_name}-cloudfront-access-logs")
+  ), 0, 63), "-")
+  cloudfront_access_logging_bucket_domain_name = local.cloudfront_access_logging_bucket_create ? aws_s3_bucket.cloudfront_access_logging[0].bucket_domain_name : var.cloudfront_access_logging_bucket
 }

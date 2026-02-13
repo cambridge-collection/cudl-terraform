@@ -10,6 +10,22 @@ resource "aws_s3_bucket" "enhancements-bucket" {
   bucket = local.enhacements_bucket_name
 }
 
+resource "aws_s3_bucket" "cloudfront_access_logging" {
+  count = local.cloudfront_access_logging_bucket_create ? 1 : 0
+
+  bucket = local.cloudfront_access_logging_bucket_name
+}
+
+# CloudFront access logging requires ACL support on the log bucket.
+resource "aws_s3_bucket_ownership_controls" "cloudfront_access_logging" {
+  count = local.cloudfront_access_logging_bucket_create ? 1 : 0
+
+  bucket = aws_s3_bucket.cloudfront_access_logging[0].id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 data "aws_iam_policy_document" "dest-bucket" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
