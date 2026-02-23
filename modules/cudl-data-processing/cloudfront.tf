@@ -77,4 +77,13 @@ resource "aws_cloudfront_distribution" "this" {
       restriction_type = "none"
     }
   }
+
+  dynamic "logging_config" {
+    for_each = var.cloudfront_access_logging ? [1] : []
+    content {
+      include_cookies = false
+      bucket          = var.cloudfront_access_logging_bucket
+      prefix          = local.cloudfront_distribution_domain_name
+    }
+  }
 }
