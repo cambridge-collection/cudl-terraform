@@ -31,7 +31,8 @@ module "cudl-data-processing" {
 }
 
 module "base_architecture" {
-  source = "../../terraform-aws-architecture-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.2.0"
+
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
   ec2_additional_userdata        = var.ec2_additional_userdata
@@ -48,15 +49,10 @@ module "base_architecture" {
   waf_use_ip_restrictions        = true
   waf_use_rate_limiting          = true
   tags                           = local.default_tags
-  vpc_private_subnet_cidr_blocks = ["10.42.0.128/26", "10.42.0.192/26"]
-  providers = {
-    aws.us-east-1 = aws.us-east-1
-  }
 }
 
 module "content_loader" {
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
-  source = "../../terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -69,7 +65,7 @@ module "content_loader" {
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   s3_task_execution_additional_buckets      = [var.lambda-jar-bucket]
   ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
-  ecs_task_def_volumes_efs                  = keys(var.content_loader_ecs_task_def_volumes)
+  ecs_task_def_volumes                      = keys(var.content_loader_ecs_task_def_volumes)
   ecs_service_container_name                = local.content_loader_container_name_ui
   ecs_service_container_port                = var.content_loader_application_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
@@ -106,8 +102,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
-  source = "../../terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -123,7 +118,7 @@ module "solr" {
   s3_task_execution_bucket                       = module.base_architecture.s3_bucket
   ecs_network_mode                               = "awsvpc"
   ecs_task_def_container_definitions             = jsonencode(local.solr_container_defs)
-  ecs_task_def_volumes_efs                       = keys(var.solr_ecs_task_def_volumes)
+  ecs_task_def_volumes                           = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                               = var.solr_ecs_task_def_cpu
   ecs_task_def_memory                            = local.solr_ecs_task_def_memory
   ecs_service_container_name                     = local.solr_container_name_api
@@ -163,8 +158,7 @@ module "solr" {
 # }
 
 module "cudl_services" {
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
-  source = "../../terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -199,8 +193,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
-  source = "../../terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -212,7 +205,7 @@ module "cudl_viewer" {
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
-  ecs_task_def_volumes_efs                  = keys(var.cudl_viewer_ecs_task_def_volumes)
+  ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name

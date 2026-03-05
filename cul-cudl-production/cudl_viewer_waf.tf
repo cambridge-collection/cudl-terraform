@@ -191,7 +191,7 @@ resource "aws_wafv2_web_acl" "cudl_viewer" {
   }
 
   rule {
-    name     = "${local.base_name_prefix}-Allow_Cambridge_VPN"
+    name     = "Allow_Cambridge_VPN"
     priority = 3
 
     action {
@@ -206,13 +206,13 @@ resource "aws_wafv2_web_acl" "cudl_viewer" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "${local.base_name_prefix}-Allow_Cambridge_VPN"
+      metric_name                = "Allow_Cambridge_VPN"
       sampled_requests_enabled   = true
     }
   }
 
   rule {
-    name     = "${local.base_name_prefix}-block-metasr-user-agent"
+    name     = "block-metasr-user-agent"
     priority = 4
 
     action {
@@ -239,7 +239,7 @@ resource "aws_wafv2_web_acl" "cudl_viewer" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "${local.base_name_prefix}-block-metasr-user-agent"
+      metric_name                = "block-metasr-user-agent"
       sampled_requests_enabled   = true
     }
   }
