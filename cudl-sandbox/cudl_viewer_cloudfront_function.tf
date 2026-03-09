@@ -3,7 +3,7 @@ resource "aws_cloudfront_function" "viewer" {
   runtime                      = "cloudfront-js-2.0"
   publish                      = true
   key_value_store_associations = [aws_cloudfront_key_value_store.viewer.arn]
-  code = templatefile("${path.module}/cloudfront-function.js", {
+  code = templatefile("${path.module}/templates/viewer/cloudfront-function.js.ttfpl", {
     key_pass = aws_cloudfrontkeyvaluestore_key.password.key
     key_user = aws_cloudfrontkeyvaluestore_key.username.key
   })

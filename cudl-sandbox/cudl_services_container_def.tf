@@ -91,7 +91,7 @@ locals {
         options = {
           awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
           awslogs-region        = var.deployment-aws-region,
-          awslogs-stream-prefix = "cudl-services-log"
+          awslogs-stream-prefix = "ecs/${local.cudl_services_container_name}"
         },
         secretOptions = []
       },

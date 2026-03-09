@@ -58,7 +58,7 @@ locals {
         options = {
           awslogs-group           = module.base_architecture.cloudwatch_log_group_name,
           awslogs-region          = var.deployment-aws-region,
-          awslogs-stream-prefix   = "ecs"
+          awslogs-stream-prefix   = "ecs/${local.content_loader_container_name_db}"
           awslogs-datetime-format = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{3}"
         }
       },
@@ -137,7 +137,7 @@ locals {
         options = {
           awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
           awslogs-region        = var.deployment-aws-region,
-          awslogs-stream-prefix = "ecs"
+          awslogs-stream-prefix = "ecs/${local.content_loader_container_name_ui}"
         }
       }
     }

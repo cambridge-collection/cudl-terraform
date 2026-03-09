@@ -12,13 +12,12 @@ locals {
     terraform    = true
   }
   additional_lambda_variables = {
-    AWS_DATA_ENHANCEMENTS_BUCKET = "${local.environment}-cudl-data-enhancements"
-    AWS_DATA_SOURCE_BUCKET       = "${local.environment}-cudl-data-source"
-    AWS_OUTPUT_BUCKET            = "${local.environment}-cudl-data-releases"
+    AWS_DATA_ENHANCEMENTS_BUCKET = lower("${local.environment}-${var.enhancements-bucket-name}")
+    AWS_DATA_SOURCE_BUCKET       = lower("${local.environment}-${var.source-bucket-name}")
+    AWS_OUTPUT_BUCKET            = lower("${local.environment}-${var.destination-bucket-name}")
   }
   enhancements_lambda_variables = {
-    AWS_CUDL_DATA_SOURCE_BUCKET = "${local.environment}-cudl-data-source"
-    AWS_OUTPUT_BUCKET           = "${local.environment}-cudl-data-source"
+    AWS_CUDL_DATA_SOURCE_BUCKET = lower("${local.environment}-${var.source-bucket-name}")
+    AWS_OUTPUT_BUCKET           = lower("${local.environment}-${var.source-bucket-name}")
   }
-  solr_ecs_task_def_memory = data.aws_ec2_instance_type.asg.memory_size - 512
 }

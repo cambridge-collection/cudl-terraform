@@ -139,7 +139,7 @@ transform-lambda-information = [
     "description"           = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataQueue_HTML"
-    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"  = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
     "use_datadog_variables" = false
     "timeout"               = 900
@@ -153,7 +153,7 @@ transform-lambda-information = [
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "vpc_name"              = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"  = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
     "use_datadog_variables" = false
     "timeout"               = 900
@@ -167,7 +167,7 @@ transform-lambda-information = [
     "description"           = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataQueue_Collections"
-    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"  = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
     "use_datadog_variables" = false
     "timeout"               = 900
@@ -180,7 +180,7 @@ transform-lambda-information = [
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a33052a2ffc556caa4e58a2ab4f2de1cdd36a032a0885ae9da634440a547af2"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
     "timeout"                  = 300
     "memory"                   = 4096
@@ -189,6 +189,7 @@ transform-lambda-information = [
     "maximum_concurrency"      = 50
     "use_datadog_variables"    = false
     "use_additional_variables" = true
+    "ephemeral_storage"        = 1024
     "environment_variables" = {
       ANT_TARGET             = "full"
       SEARCH_HOST            = "solr-api-cudl-ecs.mjh39-sandbox-solr"
@@ -201,7 +202,7 @@ transform-lambda-information = [
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
@@ -221,7 +222,7 @@ transform-lambda-information = [
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
@@ -241,7 +242,7 @@ transform-lambda-information = [
     "description"                    = "Copies file from S3 to EFS"
     "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-cudl-data-releases-efs"]
     "use_datadog_variables"          = false
     "mount_fs"                       = true
@@ -256,7 +257,7 @@ transform-lambda-information = [
     "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/curious-cures-transkribus-processing@sha256:03cf5047a7ddd72163edc8081e7cfad652c6072daa91d0ab941fc96b4d481a40"
     "queue_name"                 = "CUDL_Transkribus_IngestQueue"
     "vpc_name"                   = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"               = ["mjh39-sandbox-cudl-ecs-subnet-private-a", "mjh39-sandbox-cudl-ecs-subnet-private-b"]
+    "subnet_names"               = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"       = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
     "timeout"                    = 300
     "memory"                     = 4096
@@ -282,22 +283,25 @@ dst-s3-prefix     = ""
 tmp-dir           = "/tmp/dest/"
 lambda-alias-name = "LIVE"
 
-releases-root-directory-path = "/data"
-efs-name                     = "cudl-data-releases-efs"
-cloudfront_route53_zone_id   = "Z035173135AOVWW8L57UJ"
+releases-root-directory-path               = "/data"
+efs-name                                   = "cudl-data-releases-efs"
+cloudfront_route53_zone_id                 = "Z035173135AOVWW8L57UJ"
+data_processing_efs_throughput_mode        = "provisioned"
+data_processing_efs_provisioned_throughput = 3
+
 
 # Base Architecture
-cluster_name_suffix            = "cudl-ecs"
-registered_domain_name         = "cudl-sandbox.net."
-asg_desired_capacity           = 4 # n = number of tasks
-asg_max_size                   = 5 # n + 1
-asg_allow_all_egress           = true
-ec2_instance_type              = "t3.medium"
-ec2_additional_userdata        = <<-EOF
+cluster_name_suffix     = "cudl-ecs"
+registered_domain_name  = "cudl-sandbox.net."
+asg_desired_capacity    = 4 # n = number of tasks
+asg_max_size            = 5 # n + 1
+asg_allow_all_egress    = true
+ec2_instance_type       = "t3.medium"
+ec2_additional_userdata = <<-EOF
 echo 1 > /proc/sys/vm/swappiness
 echo ECS_RESERVED_MEMORY=256 >> /etc/ecs/ecs.config
 EOF
-route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
+# route53_delegation_set_id      = "N02288771HQRX5TRME6CM"
 route53_zone_id_existing       = "Z035173135AOVWW8L57UJ"
 route53_zone_force_destroy     = true
 alb_enable_deletion_protection = false
@@ -306,6 +310,8 @@ vpc_cidr_block                 = "10.42.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 vpc_peering_vpc_ids            = ["vpc-057886e0bdd7c4e43"]
 cloudwatch_log_group           = "/ecs/CUDLContent"
+cloudwatch_log_destination_arn = ""
+vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload
 content_loader_name_suffix       = "cl"
@@ -323,25 +329,25 @@ content_loader_health_check_status_code            = "401"
 content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
 content_loader_cloudfront_origin_read_timeout      = 180
+content_loader_ecs_task_def_memory                 = 3000
 
 # SOLR Worload
 solr_name_suffix       = "solr"
 solr_domain_name       = "solr"
-solr_api_port          = 80
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
   "cudl-solr-api" = "sha256:2af4738baca8181d29a7ac048bdfb1d4025be3bd5f1c9cd56dd106d486615808",
   "cudl-solr"     = "sha256:19cca344a643b80c909079943e5bafae4f552d270c1da15fd76b39593b32fd13"
 }
-solr_ecs_task_def_volumes      = { "solr-volume" = "/var/solr" }
-solr_container_name_api        = "solr-api"
-solr_container_name_solr       = "solr"
-solr_health_check_status_code  = "404"
-solr_allowed_methods           = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu          = 2048
-solr_use_service_discovery     = true
-solr_ingress_security_group_id = "sg-032f9f202ea602d21"
+solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
+solr_container_name_api       = "solr-api"
+solr_container_name_solr      = "solr"
+solr_health_check_status_code = "404"
+solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
+solr_ecs_task_def_cpu         = 2048
+solr_ecs_task_def_memory      = 3584
+solr_use_service_discovery    = true
 
 cudl_services_name_suffix       = "cudl-services"
 cudl_services_domain_name       = "services"
@@ -364,3 +370,5 @@ cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
+cudl_viewer_ecs_task_def_memory             = 3520
+

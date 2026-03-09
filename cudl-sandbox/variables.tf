@@ -21,6 +21,7 @@ variable "subcomponent" {
 variable "owner" {
   type        = string
   description = "Optional Owner tag. Your CRSid, e.g. jag245"
+  default     = "mjh39"
 }
 
 variable "deployment-aws-region" {
@@ -134,6 +135,16 @@ variable "transform-lambda-bucket-sqs-notifications" {
   type        = list(any)
 }
 
+variable "data_processing_efs_throughput_mode" {
+  type        = string
+  description = "Throughput mode for the file system. Valid values: bursting, provisioned, or elastic"
+}
+
+variable "data_processing_efs_provisioned_throughput" {
+  type        = number
+  description = "The throughput, measured in MiB/s, that you want to provision for the file system"
+}
+
 variable "create_cloudfront_distribution" {
   description = "Whether to create a CloudFront distribution for access to the dest-bucket"
   type        = string
@@ -187,6 +198,11 @@ variable "vpc_public_subnet_public_ip" {
   description = "Whether to automatically assign public IP addresses in the public subnets"
 }
 
+variable "vpc_endpoint_services" {
+  type        = list(string)
+  description = "List of services to create VPC Endpoints for"
+}
+
 variable "vpc_peering_vpc_ids" {
   type        = list(string)
   description = "List of VPC IDS for peering with the base architecture VPC"
@@ -196,11 +212,6 @@ variable "vpc_peering_vpc_ids" {
 variable "registered_domain_name" {
   type        = string
   description = "Registered Domain Name"
-}
-
-variable "route53_delegation_set_id" {
-  type        = string
-  description = "The ID of the reusable delegation set whose NS records should be assigned to the hosted zone"
 }
 
 variable "route53_zone_id_existing" {
@@ -226,6 +237,11 @@ variable "alb_idle_timeout" {
 variable "cloudwatch_log_group" {
   type        = string
   description = "Name of the cloudwatch log group"
+}
+
+variable "cloudwatch_log_destination_arn" {
+  type        = string
+  description = "ARN of a CloudWatch Log Destination"
 }
 
 variable "content_loader_name_suffix" {
@@ -288,6 +304,11 @@ variable "content_loader_cloudfront_origin_read_timeout" {
   description = "CloudFront origin response timeout for Content Loader"
 }
 
+variable "content_loader_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the Content loader tasks"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"
@@ -301,11 +322,6 @@ variable "solr_domain_name" {
 variable "solr_application_port" {
   type        = number
   description = "Port number to be used for the SOLR application"
-}
-
-variable "solr_api_port" {
-  type        = number
-  description = "Port number to be used for the SOLR API"
 }
 
 variable "solr_target_group_port" {
@@ -348,14 +364,14 @@ variable "solr_ecs_task_def_cpu" {
   description = "Number of cpu units used by the SOLR tasks"
 }
 
+variable "solr_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the SOLR tasks"
+}
+
 variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"
-}
-
-variable "solr_ingress_security_group_id" {
-  type        = string
-  description = "ID of the Security Group to allow access to SOLR service"
 }
 
 variable "cudl_services_name_suffix" {
@@ -440,16 +456,6 @@ variable "cudl_viewer_allowed_methods" {
   description = "List of methods allowed by the CloudFront Distribution"
 }
 
-variable "cudl_viewer_smtp_username" {
-  type        = string
-  description = "Cudl Viewer SMTP user name"
-}
-
-variable "cudl_viewer_smtp_password" {
-  type        = string
-  description = "Cudl Viewer SMTP password"
-}
-
 variable "cudl_viewer_ecs_task_def_volumes" {
   type        = map(string)
   description = "Map of volume names and container paths to attach to the Cudl Viewer ECS Task Definition"
@@ -458,4 +464,9 @@ variable "cudl_viewer_ecs_task_def_volumes" {
 variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
   type        = string
   description = "Pattern regex used in S3 to EFS task"
+}
+
+variable "cudl_viewer_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
 }
