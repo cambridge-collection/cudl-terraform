@@ -1,3 +1,26 @@
+module "base_architecture" {
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.3.1"
+
+  name_prefix                    = local.base_name_prefix
+  ec2_instance_type              = var.ec2_instance_type
+  route53_zone_domain_name       = var.registered_domain_name
+  route53_zone_id_existing       = var.route53_zone_id_existing
+  route53_zone_force_destroy     = var.route53_zone_force_destroy
+  asg_desired_capacity           = var.asg_desired_capacity
+  asg_max_size                   = var.asg_max_size
+  alb_enable_deletion_protection = var.alb_enable_deletion_protection
+  alb_idle_timeout               = var.alb_idle_timeout
+  vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
+  cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
+  vpc_cidr_block                 = var.vpc_cidr_block
+  waf_use_ip_restrictions        = true
+  waf_use_rate_limiting          = true
+  tags                           = local.default_tags
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+}
+
 module "cudl-data-processing" {
   source                                    = "../modules/cudl-data-processing"
   compressed-lambdas-directory              = var.compressed-lambdas-directory
@@ -7,6 +30,8 @@ module "cudl-data-processing" {
   dst-s3-prefix                             = var.dst-s3-prefix
   efs-name                                  = var.efs-name
   efs_subnets                               = zipmap(["${local.base_name_prefix}-subnet-private-a", "${local.base_name_prefix}-subnet-private-b"], module.base_architecture.vpc_private_subnet_ids)
+  efs_file_system_throughput_mode           = var.data_processing_efs_throughput_mode
+  efs_file_system_provisioned_throughput    = var.data_processing_efs_provisioned_throughput
   lambda-alias-name                         = var.lambda-alias-name
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
@@ -30,29 +55,8 @@ module "cudl-data-processing" {
   }
 }
 
-module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v2.2.0"
-
-  name_prefix                    = local.base_name_prefix
-  ec2_instance_type              = var.ec2_instance_type
-  ec2_additional_userdata        = var.ec2_additional_userdata
-  route53_zone_domain_name       = var.registered_domain_name
-  route53_zone_id_existing       = var.route53_zone_id_existing
-  route53_zone_force_destroy     = var.route53_zone_force_destroy
-  asg_desired_capacity           = var.asg_desired_capacity
-  asg_max_size                   = var.asg_max_size
-  alb_enable_deletion_protection = var.alb_enable_deletion_protection
-  alb_idle_timeout               = var.alb_idle_timeout
-  vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
-  cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
-  vpc_cidr_block                 = var.vpc_cidr_block
-  waf_use_ip_restrictions        = true
-  waf_use_rate_limiting          = true
-  tags                           = local.default_tags
-}
-
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -65,12 +69,13 @@ module "content_loader" {
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   s3_task_execution_additional_buckets      = [var.lambda-jar-bucket]
   ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
-  ecs_task_def_volumes                      = keys(var.content_loader_ecs_task_def_volumes)
+  ecs_task_def_volumes_host                 = var.content_loader_ecs_task_def_volumes
   ecs_service_container_name                = local.content_loader_container_name_ui
   ecs_service_container_port                = var.content_loader_application_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
+  ecs_task_def_memory                       = var.content_loader_ecs_task_def_memory
   s3_task_execution_bucket_objects = {
-    "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/cudl-loader-ui.env.ttfpl", {
+    "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/content-loader/cl-ui.env.ttfpl", {
       region          = var.deployment-aws-region
       source_bucket   = module.cudl-data-processing.source_bucket
       releases_bucket = module.cudl-data-processing.destination_bucket
@@ -102,7 +107,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -118,13 +123,13 @@ module "solr" {
   s3_task_execution_bucket                       = module.base_architecture.s3_bucket
   ecs_network_mode                               = "awsvpc"
   ecs_task_def_container_definitions             = jsonencode(local.solr_container_defs)
-  ecs_task_def_volumes                           = keys(var.solr_ecs_task_def_volumes)
+  ecs_task_def_volumes_efs                       = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                               = var.solr_ecs_task_def_cpu
-  ecs_task_def_memory                            = local.solr_ecs_task_def_memory
+  ecs_task_def_memory                            = var.solr_ecs_task_def_memory
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
-  ecs_service_deployment_minimum_healthy_percent = 0
+  ecs_service_deployment_minimum_healthy_percent = 0 # setting to 100 prevents deployments but keeps services running
   ecs_service_deployment_maximum_percent         = 100
   vpc_id                                         = module.base_architecture.vpc_id
   vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
@@ -142,24 +147,16 @@ module "solr" {
   allow_private_access                           = var.solr_use_service_discovery
   ingress_security_group_id                      = aws_security_group.solr.id
   efs_create_file_system                         = true
+  efs_access_point_posix_user_uid                = 0
+  efs_access_point_posix_user_gid                = 0
   tags                                           = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
 }
 
-# module "solr_stopped_tasks" {
-#   source = "../modules/stopped-tasks"
-#
-#   ecs_cluster_name      = module.base_architecture.ecs_cluster_name
-#   ecs_service_name      = join("-", [module.solr.name_prefix, "service"])
-#   alb_name              = join("-", [module.base_architecture.ecs_cluster_name, "alb"])
-#   alb_target_group_name = join("-", [module.solr.name_prefix, "alb", "tg"])
-# }
-
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.4.0"
-
+  source                                    = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
   domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.cudl_services_domain_name])), var.registered_domain_name])
@@ -193,7 +190,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v3.5.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -205,25 +202,31 @@ module "cudl_viewer" {
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
-  ecs_task_def_volumes                      = keys(var.cudl_viewer_ecs_task_def_volumes)
+  ecs_task_def_memory                       = var.cudl_viewer_ecs_task_def_memory
+  ecs_task_def_volumes_efs                  = keys(var.cudl_viewer_ecs_task_def_volumes)
   ecs_service_container_name                = local.cudl_viewer_container_name
   ecs_service_container_port                = var.cudl_viewer_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
-      smtp_username     = var.cudl_viewer_smtp_username
-      smtp_password     = var.cudl_viewer_smtp_password
+      smtp_username     = "this_is_not_set"
+      smtp_password     = "this_is_not_set"
       mount_path        = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
       search_url        = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
       cudl_services_url = module.cudl_services.link
-      root_url          = module.cudl_viewer.link
-      json_url          = format("%s/json/", module.cudl_viewer.link)
+      #      cudl_services_apikey    = data.aws_ssm_parameter.cudl_services_apikey.value
+      root_url = module.cudl_viewer.link
+      json_url = format("%s/json/", module.cudl_viewer.link)
     })
   }
-  s3_task_buckets                        = [module.base_architecture.s3_bucket]
-  vpc_id                                 = module.base_architecture.vpc_id
-  vpc_subnet_ids                         = module.base_architecture.vpc_private_subnet_ids
-  vpc_security_groups_extra              = [module.base_architecture.vpc_egress_security_group_id, aws_security_group.solr.id]
+  s3_task_buckets = [module.base_architecture.s3_bucket]
+  vpc_id          = module.base_architecture.vpc_id
+  vpc_subnet_ids  = module.base_architecture.vpc_private_subnet_ids
+  vpc_security_groups_extra = [
+    module.base_architecture.vpc_egress_security_group_id,
+    aws_security_group.solr.id,
+    #aws_security_group.email.id,
+  ]
   alb_arn                                = module.base_architecture.alb_arn
   alb_dns_name                           = module.base_architecture.alb_dns_name
   alb_listener_arn                       = module.base_architecture.alb_https_listener_arn

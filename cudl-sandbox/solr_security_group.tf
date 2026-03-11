@@ -17,3 +17,13 @@ resource "aws_security_group_rule" "solr_external_egress_to_asg" {
   from_port                = var.solr_target_group_port
   to_port                  = var.solr_target_group_port
 }
+
+resource "aws_security_group_rule" "asg_ingress_from_solr_external" {
+  type                     = "ingress"
+  protocol                 = "tcp"
+  description              = "Ingress on port ${var.solr_target_group_port} from SOLR external clients"
+  security_group_id        = module.base_architecture.asg_security_group_id
+  source_security_group_id = aws_security_group.solr.id
+  from_port                = var.solr_target_group_port
+  to_port                  = var.solr_target_group_port
+}

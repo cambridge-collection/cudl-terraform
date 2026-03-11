@@ -8,6 +8,7 @@ locals {
       image             = data.aws_ecr_image.cudl_viewer["sandbox-cudl-viewer"].image_uri,
       cpu               = 0,
       memoryReservation = 512,
+      memory            = var.cudl_viewer_ecs_task_def_memory,
       portMappings = [
         {
           containerPort = var.cudl_viewer_container_port,
@@ -34,7 +35,7 @@ locals {
         options = {
           awslogs-group         = module.base_architecture.cloudwatch_log_group_name,
           awslogs-region        = var.deployment-aws-region,
-          awslogs-stream-prefix = "cudl-viewer-log"
+          awslogs-stream-prefix = "ecs/${local.cudl_viewer_container_name}"
         },
         secretOptions = []
       }
