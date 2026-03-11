@@ -310,8 +310,7 @@ vpc_cidr_block                 = "10.42.0.0/22" #1024 adresses
 vpc_public_subnet_public_ip    = false
 vpc_peering_vpc_ids            = ["vpc-057886e0bdd7c4e43"]
 cloudwatch_log_group           = "/ecs/CUDLContent"
-cloudwatch_log_destination_arn = ""
-vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
+vpc_endpoint_services          = []
 
 # Content Loader Workload
 content_loader_name_suffix       = "cl"

@@ -101,7 +101,7 @@ locals {
           readOnly      = false
         }
       ],
-      volumesFrom      = [],
+      volumesFrom = [],
       logConfiguration = {
         logDriver = "awslogs"
         options = {
