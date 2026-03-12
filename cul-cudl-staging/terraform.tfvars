@@ -293,6 +293,7 @@ data_processing_efs_provisioned_throughput = 3
 # Base Architecture
 cluster_name_suffix            = "cudl-ecs"
 registered_domain_name         = "cudl.lib.cam.ac.uk."
+ec2_instance_type              = "t3.medium"
 asg_desired_capacity           = 4 # n = number of tasks
 asg_max_size                   = 5 # n + 1
 asg_allow_all_egress           = true
@@ -341,8 +342,7 @@ solr_container_name_api       = "solr-api"
 solr_container_name_solr      = "solr"
 solr_health_check_status_code = "404"
 solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
-solr_ecs_task_def_cpu         = 1536
-solr_ecs_task_def_memory      = 1638
+solr_ecs_task_def_cpu         = 2048
 solr_use_service_discovery    = true
 
 cudl_services_name_suffix       = "cudl-services"
