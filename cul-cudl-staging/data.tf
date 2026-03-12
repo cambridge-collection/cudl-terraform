@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_ec2_instance_type" "asg" {
+  instance_type = var.ec2_instance_type
+}
+
 data "aws_ecr_image" "content_loader" {
   for_each        = var.content_loader_ecr_repositories
   repository_name = each.key

@@ -368,11 +368,6 @@ variable "solr_ecs_task_def_cpu" {
   description = "Number of cpu units used by the SOLR tasks"
 }
 
-variable "solr_ecs_task_def_memory" {
-  type        = number
-  description = "Amount (in MiB) of memory used by the SOLR tasks"
-}
-
 variable "solr_use_service_discovery" {
   type        = bool
   description = "Whether SOLR should use Service Discovery"
