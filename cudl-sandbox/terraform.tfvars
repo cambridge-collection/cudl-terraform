@@ -85,6 +85,13 @@ transform-lambda-bucket-sqs-notifications = [
   },
   {
     "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "filter_prefix" = "ui/tei-assets/"
+    "filter_suffix" = ""
+    "bucket_name"   = "mjh39-sandbox-cudl-data-source"
+  },
+  {
+    "type"          = "SQS",
     "queue_name"    = "CUDLIndexQueue"
     "filter_prefix" = "solr-json/"
     "filter_suffix" = ".json"
@@ -274,6 +281,25 @@ transform-lambda-information = [
       OUTPUT_EXTENSION          = "xml"
       EXPAND_DEFAULT_ATTRIBUTES = false
       ALLOW_DELETE              = false
+    }
+  },
+  {
+    "name"                       = "cudl-copy-tei-assets"
+    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator:sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "queue_name"                 = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "subnet_names"               = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"       = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                    = 60
+    "memory"                     = 256
+    "batch_window"               = 0
+    "batch_size"                 = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"      = false
+    "function_response_types"    = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET   = "mjh39-sandbox-cudl-data-releases"
+      SOURCE_PREFIX = "ui/tei-assets/"
+      DEST_PREFIX   = "html/cudl-resources/"
     }
   }
 ]
