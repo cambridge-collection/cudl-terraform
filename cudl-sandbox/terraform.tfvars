@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:9a33052a2ffc556caa4e58a2ab4f2de1cdd36a032a0885ae9da634440a547af2"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:673da26f145fa648042a3848aa274aca03349a62d8fe7b40140f47c49ef53917"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -191,10 +191,11 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET             = "full"
-      SEARCH_HOST            = "solr-api-cudl-ecs.mjh39-sandbox-solr"
-      SEARCH_PORT            = 8081
-      SEARCH_COLLECTION_PATH = "collections"
+      ANT_TARGET               = "full"
+      SEARCH_HOST              = "solr-api-cudl-ecs.mjh39-sandbox-solr"
+      SEARCH_PORT              = 8081
+      SEARCH_COLLECTION_PATH   = "collections"
+      SKIP_COPY_TEI_WEB_ASSETS = "true"
     }
   },
   {
