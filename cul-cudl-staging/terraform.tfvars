@@ -198,10 +198,11 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET             = "full"
-      SEARCH_HOST            = "solr-api-cudl-ecs.staging-solr"
-      SEARCH_PORT            = 8081
-      SEARCH_COLLECTION_PATH = "collections"
+      ANT_TARGET               = "full"
+      SEARCH_HOST              = "solr-api-cudl-ecs.staging-solr"
+      SEARCH_PORT              = 8081
+      SEARCH_COLLECTION_PATH   = "collections"
+      SKIP_COPY_TEI_WEB_ASSETS = "true"
     }
   },
   {
