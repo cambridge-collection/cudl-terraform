@@ -18,12 +18,18 @@ async function handler(event) {
 
     if (event.request.headers.authorization &&
         event.request.headers.authorization.value === requiredBasicAuth) {
-        const redirectMatch = event.request.uri.match(/^\/view\/(MS-DAR-(?:00095|00100|00101|00102|00103|00104|00114|00115))-/);
-        if (redirectMatch) {
+        const darHookerVolMatch = event.request.uri.match(/^\/view\/(MS-DAR-(?:00095|00100|00101|00102|00103|00104|00114|00115))-/);
+        if (darHookerVolMatch) {
             return {
                 statusCode: 301,
                 statusDescription: "Moved Permanently",
-                headers: { location: { value: `/view/$${redirectMatch[1]}/1` } }
+                headers: { location: { value: `/view/$${darHookerVolMatch[1]}/1` } }
+            };
+        } else if (/^\/collections\/darwinhooker/.test(event.request.uri)) {
+            return {
+                statusCode: 301,
+                statusDescription: "Moved Permanently",
+                headers: { location: { value: "/collections/darwin_mss/1" } }
             };
         } else {
             return event.request;
