@@ -131,6 +131,13 @@ transform-lambda-bucket-sqs-notifications = [
     "filter_prefix" = "transkribus/curious-cures/"
     "filter_suffix" = ".xml"
     "bucket_name"   = "cul-cudl-data-enhancements"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "filter_prefix" = "ui/tei-assets/"
+    "filter_suffix" = ""
+    "bucket_name"   = "cul-cudl-data-source"
   }
 ]
 transform-lambda-information = [
@@ -274,6 +281,25 @@ transform-lambda-information = [
       OUTPUT_EXTENSION          = "xml"
       EXPAND_DEFAULT_ATTRIBUTES = false
       ALLOW_DELETE              = false
+    }
+  },
+  {
+    "name"                           = "cudl-copy-tei-assets"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator:sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "subnet_names"                   = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
+    "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET   = "staging-cul-cudl-data-releases"
+      SOURCE_PREFIX = "ui/tei-assets/"
+      DEST_PREFIX   = "html/cudl-resources/"
     }
   }
 ]
