@@ -207,7 +207,7 @@ module "cudl_viewer" {
   cloudfront_access_logging               = true
   cloudfront_access_logging_bucket        = aws_s3_bucket.cloudfront_access_logging.bucket_domain_name
   cloudfront_viewer_response_function_arn = aws_cloudfront_function.viewer-cors-header.arn
-  #cloudfront_viewer_request_function_arn  = aws_cloudfront_function.viewer-redirect.arn
+  cloudfront_viewer_request_function_arn  = aws_cloudfront_function.viewer-redirect.arn
   efs_use_existing_filesystem   = true
   efs_file_system_id            = module.cudl-data-processing.efs_file_system_id
   efs_security_group_id         = module.cudl-data-processing.efs_security_group_id
