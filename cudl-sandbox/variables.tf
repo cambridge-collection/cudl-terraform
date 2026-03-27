@@ -80,6 +80,7 @@ variable "transform-lambda-information" {
     command                        = optional(string)
     entry_point                    = optional(string)
     working_directory              = optional(string)
+    architectures                  = optional(list(string))
     sqs_max_tries_before_deadqueue = optional(number)
     queue_delay_seconds            = optional(number, 0)
     use_datadog_variables          = optional(bool, true)
@@ -87,7 +88,30 @@ variable "transform-lambda-information" {
     use_enhancements_variables     = optional(bool, false)
     mount_fs                       = optional(bool, false)
     ephemeral_storage              = optional(number, 512)
+    function_response_types        = optional(list(string))
+    enable_sqs_trigger             = optional(bool, true)
   }))
+}
+
+variable "pid_minter_auth_token" {
+  description = "Bearer token used by the PID pipeline Lambda when calling the Arklet minter."
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = trimspace(var.pid_minter_auth_token) != ""
+    error_message = "pid_minter_auth_token must be provided, preferably via TF_VAR_pid_minter_auth_token."
+  }
+}
+
+variable "pid_minter_url" {
+  description = "Arklet minter endpoint used by the PID pipeline Lambda."
+  type        = string
+
+  validation {
+    condition     = trimspace(var.pid_minter_url) != ""
+    error_message = "pid_minter_url must be provided, preferably via TF_VAR_pid_minter_url."
+  }
 }
 
 variable "dst-efs-prefix" {

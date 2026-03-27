@@ -1,4 +1,7 @@
-environment                  = "sandbox"
+environment = "sandbox"
+# Provide PID minter credentials via environment variables instead of committing them here:
+#   export TF_VAR_pid_minter_auth_token=...
+#   export TF_VAR_pid_minter_url=...
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
@@ -185,7 +188,7 @@ transform-lambda-information = [
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:673da26f145fa648042a3848aa274aca03349a62d8fe7b40140f47c49ef53917"
-    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
@@ -204,6 +207,23 @@ transform-lambda-information = [
       SEARCH_COLLECTION_PATH   = "collections"
       SKIP_COPY_TEI_WEB_ASSETS = "true"
     }
+  },
+  {
+    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:e3e971ff993c4d02354cbc2a44a2b1492d58b89c3f3a79d8f61110674681858e"
+    "architectures"            = ["arm64"]
+    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 50
+    "use_datadog_variables"    = false
+    "use_additional_variables" = true
+    "ephemeral_storage"        = 1024
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
@@ -285,18 +305,18 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                       = "cudl-copy-tei-assets"
-    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
-    "queue_name"                 = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
-    "subnet_names"               = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"       = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
-    "timeout"                    = 60
-    "memory"                     = 256
-    "batch_window"               = 0
-    "batch_size"                 = 1
+    "name"                           = "cudl-copy-tei-assets"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
     "sqs_max_tries_before_deadqueue" = 3
-    "use_datadog_variables"      = false
-    "function_response_types"    = ["ReportBatchItemFailures"]
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
     "environment_variables" = {
       DEST_BUCKET   = "mjh39-sandbox-cudl-data-releases"
       SOURCE_PREFIX = "ui/tei-assets/"

@@ -60,6 +60,7 @@ variable "transform-lambda-information" {
     command                        = optional(string)
     entry_point                    = optional(string)
     working_directory              = optional(string)
+    architectures                  = optional(list(string))
     sqs_max_tries_before_deadqueue = optional(number, 3)
     queue_delay_seconds            = optional(number, 0)
     use_datadog_variables          = optional(bool, true)
@@ -68,6 +69,7 @@ variable "transform-lambda-information" {
     mount_fs                       = optional(bool, false)
     ephemeral_storage              = optional(number, 512)
     function_response_types        = optional(list(string))
+    enable_sqs_trigger             = optional(bool, true)
   }))
 }
 

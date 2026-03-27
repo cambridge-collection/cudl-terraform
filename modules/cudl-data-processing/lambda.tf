@@ -7,6 +7,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   s3_bucket     = var.transform-lambda-information[count.index].jar_path != null ? var.lambda-jar-bucket : null
   s3_key        = var.transform-lambda-information[count.index].jar_path
   image_uri     = var.transform-lambda-information[count.index].image_uri
+  architectures = var.transform-lambda-information[count.index].architectures
   runtime       = var.transform-lambda-information[count.index].runtime
   timeout       = var.transform-lambda-information[count.index].timeout
   memory_size   = var.transform-lambda-information[count.index].memory
@@ -64,22 +65,12 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
   }
 }
 
-data "aws_lambda_function" "create-transform-lambda-function-versioned" {
-  count = length(var.transform-lambda-information)
-
-  function_name = substr("${var.environment}-${var.transform-lambda-information[count.index].name}", 0, 64)
-
-  depends_on = [aws_lambda_function.create-transform-lambda-function]
-}
-
-# Upgrade provider to change batch size
-
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
   count = length(var.transform-lambda-information)
 
   name             = var.lambda-alias-name
   function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
-  function_version = try(data.aws_lambda_function.create-transform-lambda-function-versioned[count.index].version, "LATEST")
+  function_version = aws_lambda_function.create-transform-lambda-function[count.index].version
 
   depends_on = [aws_lambda_function.create-transform-lambda-function]
 }
@@ -130,20 +121,23 @@ resource "aws_lambda_layer_version" "transform-properties-layer" {
 
 # Trigger lambda from the SQS queues
 resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
-  count = length(var.transform-lambda-information)
+  for_each = {
+    for index, lambda in var.transform-lambda-information : index => lambda
+    if try(lambda.enable_sqs_trigger, true)
+  }
 
-  event_source_arn                   = aws_sqs_queue.transform-lambda-sqs-queue[var.transform-lambda-information[count.index].queue_name].arn
-  function_name                      = aws_lambda_function.create-transform-lambda-function[count.index].arn
-  batch_size                         = coalesce(var.transform-lambda-information[count.index].batch_size, 10)
-  maximum_batching_window_in_seconds = var.transform-lambda-information[count.index].batch_window
+  event_source_arn                   = aws_sqs_queue.transform-lambda-sqs-queue[each.value.queue_name].arn
+  function_name                      = aws_lambda_alias.create-transform-lambda-alias[tonumber(each.key)].arn
+  batch_size                         = coalesce(each.value.batch_size, 10)
+  maximum_batching_window_in_seconds = each.value.batch_window
 
-  function_response_types = var.transform-lambda-information[count.index].function_response_types
+  function_response_types = each.value.function_response_types
 
   # NOTE not available in aws provider 4.24.0
   dynamic "scaling_config" {
-    for_each = var.transform-lambda-information[count.index].maximum_concurrency != null ? [1] : []
+    for_each = each.value.maximum_concurrency != null ? [1] : []
     content {
-      maximum_concurrency = var.transform-lambda-information[count.index].maximum_concurrency
+      maximum_concurrency = each.value.maximum_concurrency
     }
   }
 }
