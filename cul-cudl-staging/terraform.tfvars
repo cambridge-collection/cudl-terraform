@@ -177,7 +177,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:7542d95eaf257409741eb1338e20069e002502f7702ad8820fefad6f15d363fd"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:dedac9887de0399578d64d0fe5d0df67d03ffd05e090d29e8778555f83d8b3d7"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-a", "staging-cudl-ecs-subnet-private-b"]
@@ -191,10 +191,13 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET             = "full"
-      SEARCH_HOST            = "solr-api-cudl-ecs.staging-solr"
-      SEARCH_PORT            = 8081
-      SEARCH_COLLECTION_PATH = "collections"
+      ANT_TARGET               = "full"
+      SEARCH_HOST              = "solr-api-cudl-ecs.staging-solr"
+      SEARCH_PORT              = 8081
+      SEARCH_COLLECTION_PATH   = "collections"
+      SKIP_PAGE_XML_COPY       = "true"
+      SKIP_CORE_XML_COPY       = "true"
+      #SKIP_COPY_TEI_WEB_ASSETS = "true"
     }
   },
   {
@@ -334,8 +337,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:38e68886cf61cb563de3ad8611f3c708816f78605f43540ffa2e0a9652bb73af",
-  "cudl/solr"     = "sha256:9c144888d9a51757a8732a457e0f712d397ec25143a9caded6661a3e880b031d"
+  "cudl/solr-api" = "sha256:6df1d6c1858a1f799287afae76f14473a29f26851ce37e91286f364f512a8c98",
+  "cudl/solr"     = "sha256:dfd38c747de46c54296a7a85b230aced6d35790845c0cc94b7f0f3530b2e69a2"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
