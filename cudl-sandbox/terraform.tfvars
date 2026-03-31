@@ -23,7 +23,7 @@ transform-lambda-bucket-sns-notifications = [
         "raw"        = true
       },
       {
-        "queue_name" = "CUDL_TEIProcessingQueue",
+        "queue_name" = "CUDL_TEIArkIngestionQueue",
         "raw"        = true
       },
     ]
@@ -212,7 +212,7 @@ transform-lambda-information = [
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:e3e971ff993c4d02354cbc2a44a2b1492d58b89c3f3a79d8f61110674681858e"
     "architectures"            = ["arm64"]
-    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]

@@ -127,7 +127,7 @@ resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
   }
 
   event_source_arn                   = aws_sqs_queue.transform-lambda-sqs-queue[each.value.queue_name].arn
-  function_name                      = aws_lambda_alias.create-transform-lambda-alias[tonumber(each.key)].arn
+  function_name                      = aws_lambda_function.create-transform-lambda-function[tonumber(each.key)].arn
   batch_size                         = coalesce(each.value.batch_size, 10)
   maximum_batching_window_in_seconds = each.value.batch_window
 
