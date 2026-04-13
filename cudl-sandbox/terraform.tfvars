@@ -16,10 +16,6 @@ transform-lambda-bucket-sns-notifications = [
     "filter_suffix" = ".xml"
     "subscriptions" = [
       {
-        "queue_name" = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY",
-        "raw"        = true
-      },
-      {
         "queue_name" = "CUDL_TEIProcessingQueue",
         "raw"        = true
       },
@@ -88,7 +84,7 @@ transform-lambda-bucket-sqs-notifications = [
     "queue_name"    = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
     "filter_prefix" = "ui/tei-assets/"
     "filter_suffix" = ""
-    "bucket_name"   = "mjh39-sandbox-cudl-data-source"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
