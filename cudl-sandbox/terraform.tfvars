@@ -1,7 +1,8 @@
 environment = "sandbox"
-# Provide PID minter credentials via environment variables instead of committing them here:
-#   export TF_VAR_pid_minter_auth_token=...
-#   export TF_VAR_pid_minter_url=...
+# The PID Lambda reads minter configuration from an existing Secrets Manager secret.
+# By default Terraform looks up <environment>/cudl/pid-pipeline, which matches
+# the existing sandbox secret mjh39-sandbox/cudl/pid-pipeline.
+# pid_pipeline_secret_name = "mjh39-sandbox/cudl/pid-pipeline"
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
@@ -210,7 +211,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:e3e971ff993c4d02354cbc2a44a2b1492d58b89c3f3a79d8f61110674681858e"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:fd16c4a28868d9ed74f0f330cbfd2da4223919deaab01bdfabb1896a4ccf95f0"
     "architectures"            = ["arm64"]
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"

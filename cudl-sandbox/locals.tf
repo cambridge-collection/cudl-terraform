@@ -20,14 +20,13 @@ locals {
     AWS_CUDL_DATA_SOURCE_BUCKET = lower("${local.environment}-${var.source-bucket-name}")
     AWS_OUTPUT_BUCKET           = lower("${local.environment}-${var.source-bucket-name}")
   }
-  pid_pipeline_secret_name = "${local.environment}/cudl/pid-pipeline"
-  pid_pipeline_secret_values = {
-    PID_MINTER_AUTH_TOKEN = var.pid_minter_auth_token
-    PID_MINTER_URL        = var.pid_minter_url
-  }
+  pid_pipeline_secret_name = coalesce(
+    var.pid_pipeline_secret_name,
+    "${local.environment}/cudl/pid-pipeline"
+  )
   pid_pipeline_environment_variables = merge(
-    local.pid_pipeline_secret_values,
     {
+      PID_PIPELINE_SECRET_ARN = data.aws_secretsmanager_secret.pid_pipeline.arn
       PID_FORWARD_QUEUE_URL = format(
         "https://sqs.%s.amazonaws.com/%s/%s",
         var.deployment-aws-region,
