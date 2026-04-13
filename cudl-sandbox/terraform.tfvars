@@ -184,7 +184,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:673da26f145fa648042a3848aa274aca03349a62d8fe7b40140f47c49ef53917"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:1afa1530a59c270fd78d84ae404cd65873277b9eeadf5543ca7ecbff359bd3f1"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -198,11 +198,16 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET               = "full"
-      SEARCH_HOST              = "solr-api-cudl-ecs.mjh39-sandbox-solr"
-      SEARCH_PORT              = 8081
-      SEARCH_COLLECTION_PATH   = "collections"
-      SKIP_COPY_TEI_WEB_ASSETS = "true"
+      ANT_TARGET                     = "full"
+      SEARCH_HOST                    = "solr-api-cudl-ecs.mjh39-sandbox-solr"
+      SEARCH_PORT                    = 8081
+      SEARCH_COLLECTION_PATH         = "collections"
+      SKIP_COPY_TEI_WEB_ASSETS       = "true"
+      EMIT_EMF_METRICS               = "false"
+      LAMBDA_TIMEOUT_MARGIN_MS       = 180000
+      ENABLE_SHA_METADATA            = "false"
+      ENABLE_RELEASE_STATUS_METADATA = "false"
+      LOG_LEVEL                      = "INFO"
     }
   },
   {
@@ -285,18 +290,18 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                       = "cudl-copy-tei-assets"
-    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator:sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
-    "queue_name"                 = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
-    "subnet_names"               = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"       = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
-    "timeout"                    = 60
-    "memory"                     = 256
-    "batch_window"               = 0
-    "batch_size"                 = 1
+    "name"                           = "cudl-copy-tei-assets"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator:sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
     "sqs_max_tries_before_deadqueue" = 3
-    "use_datadog_variables"      = false
-    "function_response_types"    = ["ReportBatchItemFailures"]
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
     "environment_variables" = {
       DEST_BUCKET   = "mjh39-sandbox-cudl-data-releases"
       SOURCE_PREFIX = "ui/tei-assets/"
@@ -363,8 +368,8 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:2af4738baca8181d29a7ac048bdfb1d4025be3bd5f1c9cd56dd106d486615808",
-  "cudl-solr"     = "sha256:19cca344a643b80c909079943e5bafae4f552d270c1da15fd76b39593b32fd13"
+  "cudl-solr-api" = "sha256:0b50c2f22a615ab66a48ae98caace7e129361514f341396f32adc5d86e1e6190",
+  "cudl-solr"     = "sha256:f79f619f15b12383f53215d67bff527bcf8f7e8977b425b0485521e1cf346b39"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
