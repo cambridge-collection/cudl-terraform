@@ -35,15 +35,18 @@ locals {
       )
     }
   )
+  lambda_dynamic_env_vars = {
+    AWSLambda_CUDL_ARK_Ingestion = local.pid_pipeline_environment_variables
+  }
   transform_lambda_information_effective = [
-    for lambda in var.transform-lambda-information : lambda.name == "AWSLambda_CUDL_ARK_Ingestion" ? merge(
+    for lambda in var.transform-lambda-information : merge(
       lambda,
       {
         environment_variables = merge(
-          try(lambda.environment_variables, {}),
-          local.pid_pipeline_environment_variables
+          lookup(lambda, "environment_variables", {}),
+          lookup(local.lambda_dynamic_env_vars, lambda.name, {})
         )
       }
-    ) : lambda
+    )
   ]
 }
