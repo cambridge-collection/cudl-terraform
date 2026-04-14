@@ -311,7 +311,7 @@ transform-lambda-information = [
   },
   {
     "name"                           = "cudl-copy-tei-assets"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator:sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
     "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
