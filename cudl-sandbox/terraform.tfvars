@@ -1,4 +1,8 @@
-environment                  = "sandbox"
+environment = "sandbox"
+# The PID Lambda reads minter configuration from an existing Secrets Manager secret.
+# By default Terraform looks up <environment>/cudl/pid-pipeline, which matches
+# the existing sandbox secret mjh39-sandbox/cudl/pid-pipeline.
+# pid_pipeline_secret_name = "mjh39-sandbox/cudl/pid-pipeline"
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
@@ -16,7 +20,7 @@ transform-lambda-bucket-sns-notifications = [
     "filter_suffix" = ".xml"
     "subscriptions" = [
       {
-        "queue_name" = "CUDL_TEIProcessingQueue",
+        "queue_name" = "CUDL_TEIArkIngestionQueue",
         "raw"        = true
       },
     ]
@@ -181,7 +185,7 @@ transform-lambda-information = [
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
     "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:1afa1530a59c270fd78d84ae404cd65873277b9eeadf5543ca7ecbff359bd3f1"
-    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
@@ -208,6 +212,23 @@ transform-lambda-information = [
       ENABLE_RELEASE_STATUS_METADATA = "false"
       LOG_LEVEL                      = "INFO"
     }
+  },
+  {
+    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:fd16c4a28868d9ed74f0f330cbfd2da4223919deaab01bdfabb1896a4ccf95f0"
+    "architectures"            = ["arm64"]
+    "queue_name"               = "CUDL_TEIArkIngestionQueue"
+    "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 50
+    "use_datadog_variables"    = false
+    "use_additional_variables" = true
+    "ephemeral_storage"        = 1024
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
@@ -401,4 +422,3 @@ cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 cudl_viewer_ecs_task_def_memory             = 3520
-

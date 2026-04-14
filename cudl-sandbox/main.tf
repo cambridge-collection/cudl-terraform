@@ -35,7 +35,7 @@ module "cudl-data-processing" {
   lambda-alias-name                         = var.lambda-alias-name
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
-  transform-lambda-information              = var.transform-lambda-information
+  transform-lambda-information              = local.transform_lambda_information_effective
   additional_lambda_environment_variables   = local.additional_lambda_variables
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id

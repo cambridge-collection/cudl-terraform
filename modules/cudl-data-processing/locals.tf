@@ -40,7 +40,7 @@ locals {
   transform_lambda_queues = { for lambda in var.transform-lambda-information : lambda.queue_name => {
     queue_delay_seconds            = lambda.queue_delay_seconds
     sqs_max_tries_before_deadqueue = lambda.sqs_max_tries_before_deadqueue
-  } }
+  } if try(lambda.enable_sqs_trigger, true) }
 
   transform-lambda-buckets = {
     for bucket in toset([aws_s3_bucket.source-bucket, aws_s3_bucket.dest-bucket, aws_s3_bucket.enhancements-bucket]) :
