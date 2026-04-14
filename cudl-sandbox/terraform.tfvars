@@ -86,7 +86,7 @@ transform-lambda-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
-    "filter_prefix" = "ui/tei-assets/"
+    "filter_prefix" = "tei-assets/"
     "filter_suffix" = ""
     "bucket_name"   = "cudl-data-source"
   },
@@ -324,7 +324,7 @@ transform-lambda-information = [
     "function_response_types"        = ["ReportBatchItemFailures"]
     "environment_variables" = {
       DEST_BUCKET   = "mjh39-sandbox-cudl-data-releases"
-      SOURCE_PREFIX = "ui/tei-assets/"
+      SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
     }
   }
