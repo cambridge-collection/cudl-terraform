@@ -205,12 +205,12 @@ transform-lambda-information = [
       SKIP_COPY_TEI_WEB_ASSETS       = "true"
       SKIP_PAGE_XML_COPY             = "true"
       SKIP_CORE_XML_COPY             = "true"
-      SKIP_TEI_FULL_COPY             = "true"
+      SKIP_TEI_FULL_COPY             = "false"
       EMIT_EMF_METRICS               = "false"
       LAMBDA_TIMEOUT_MARGIN_MS       = 180000
-      ENABLE_SHA_METADATA            = "false"
-      ENABLE_RELEASE_STATUS_METADATA = "false"
-      LOG_LEVEL                      = "INFO"
+      ENABLE_SHA_METADATA            = "true"
+      ENABLE_RELEASE_STATUS_METADATA = "true"
+      LOG_LEVEL                      = "ERROR"
     }
   },
   {
