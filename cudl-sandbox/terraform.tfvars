@@ -227,8 +227,11 @@ transform-lambda-information = [
     "batch_size"               = 1
     "maximum_concurrency"      = 50
     "use_datadog_variables"    = false
-    "use_additional_variables" = true
+    "use_additional_variables" = false
     "ephemeral_storage"        = 1024
+    "environment_variables" = {
+      PID_LOG_LEVEL = "ERROR"
+    }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
