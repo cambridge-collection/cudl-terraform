@@ -147,18 +147,20 @@ data "aws_iam_policy_document" "s3-deploy-document" {
 }
 
 resource "aws_iam_role" "assume-datasync-role" {
-  name = "${var.environment}-cudl-assume-datasync-role"
+  count = var.create_datasync ? 1 : 0
+  name  = "${var.environment}-cudl-assume-datasync-role"
 
   assume_role_policy = data.aws_iam_policy_document.assume-role-datasync-policy.json
 }
 
 resource "aws_iam_policy" "run-datasync-policy" {
-  name = "${var.environment}-cudl-datasync-policy"
-
+  count  = var.create_datasync ? 1 : 0
+  name   = "${var.environment}-cudl-datasync-policy"
   policy = data.aws_iam_policy_document.s3-deploy-document.json
 }
 
 resource "aws_iam_role_policy_attachment" "cudl-datasync-policy-and-role-attachment" {
-  role       = aws_iam_role.assume-datasync-role.name
-  policy_arn = aws_iam_policy.run-datasync-policy.arn
+  count      = var.create_datasync ? 1 : 0
+  role       = aws_iam_role.assume-datasync-role[0].name
+  policy_arn = aws_iam_policy.run-datasync-policy[0].arn
 }

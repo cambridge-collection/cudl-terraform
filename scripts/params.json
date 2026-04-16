@@ -1,0 +1,72 @@
+[
+  {
+    "path": "Services/APIKey/Viewer",
+    "value": "ValueNotActuallyValidated",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/SMTP/Username",
+    "value": "TODOSMTPUSERNAME",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/SMTP/Password",
+    "value": "TODOSMTPPASSWORD",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/SMTP/Port",
+    "value": "465",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/CloudFront/Username",
+    "value": "TODO_USERNAME",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/CloudFront/Password",
+    "value": "TODO_PASSWORD",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/Recaptcha/Sitekey",
+    "value": "TODO",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/Recaptcha/Secretkey",
+    "value": "TODO",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/Google/AnalyticsId",
+    "value": "Notactuallyused",
+    "type": "SecureString"
+  },
+  {
+    "path": "Viewer/Google/GA4AnalyticsId",
+    "value": "G-TODO",
+    "type": "SecureString"
+  },
+  {
+    "path": "Services/DB/Password",
+    "value": "NOTUSED",
+    "type": "SecureString"
+  },
+  {
+    "path": "Services/APIKey/Darwin",
+    "value": "NOTUSED",
+    "type": "SecureString"
+  },
+  {
+    "path": "Services/BasicAuth/Credentials",
+    "value": "TODO_USERNAME:TODO_PASSWORD",
+    "type": "String"
+  },
+  {
+    "path": "ContentLoader/DB/Password",
+    "value": "CHANGE_ME",
+    "type": "SecureString"
+  }
+]

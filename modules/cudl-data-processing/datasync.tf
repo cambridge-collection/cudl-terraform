@@ -1,9 +1,9 @@
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
-  for_each = var.efs_subnets
+  for_each = var.create_datasync ? var.efs_subnets : {}
 
   destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.key].arn
   name                     = "${var.environment}-cudl-data-releases-s3-to-efs-${data.aws_subnet.efs[each.key].availability_zone}"
-  source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
+  source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3[0].arn
 
   options {
     bytes_per_second       = -1
@@ -13,11 +13,11 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-s3-to-efs" {
 }
 
 resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs-" {
-  for_each = var.efs_subnets
+  for_each = var.create_datasync ? var.efs_subnets : {}
 
   destination_location_arn = aws_datasync_location_efs.cudl-datasync-efs[each.key].arn
   name                     = "${var.environment}-cudl-data-releases-pages-s3-to-efs-${data.aws_subnet.efs[each.key].availability_zone}"
-  source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3.arn
+  source_location_arn      = aws_datasync_location_s3.cudl-datasync-s3[0].arn
 
   includes {
     filter_type = "SIMPLE_PATTERN"
@@ -32,7 +32,7 @@ resource "aws_datasync_task" "cudl-production-cudl-data-releases-pages-s3-to-efs
 }
 
 resource "aws_datasync_location_efs" "cudl-datasync-efs" {
-  for_each = var.efs_subnets
+  for_each = var.create_datasync ? var.efs_subnets : {}
 
   efs_file_system_arn = aws_efs_file_system.efs-volume.arn
   subdirectory        = var.releases-root-directory-path
@@ -44,10 +44,12 @@ resource "aws_datasync_location_efs" "cudl-datasync-efs" {
 }
 
 resource "aws_datasync_location_s3" "cudl-datasync-s3" {
+  count = var.create_datasync ? 1 : 0
+
   s3_bucket_arn = aws_s3_bucket.dest-bucket.arn
   subdirectory  = ""
 
   s3_config {
-    bucket_access_role_arn = aws_iam_role.assume-datasync-role.arn
+    bucket_access_role_arn = aws_iam_role.assume-datasync-role[0].arn
   }
 }

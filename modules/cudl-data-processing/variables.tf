@@ -313,3 +313,9 @@ variable "production_deployment" {
   description = "Whether to modify the domain name used by transcriptions for Live service"
   default     = false
 }
+
+variable "create_datasync" {
+  type        = bool
+  description = "Whether to create DataSync tasks and locations for S3-to-EFS sync"
+  default     = true
+}
