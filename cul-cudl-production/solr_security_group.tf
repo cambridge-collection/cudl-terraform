@@ -17,3 +17,13 @@ resource "aws_security_group_rule" "solr_external_egress_to_asg" {
   from_port                = var.solr_target_group_port
   to_port                  = var.solr_target_group_port
 }
+
+resource "aws_security_group_rule" "solr_external_ingress_self" {
+  type              = "ingress"
+  protocol          = "tcp"
+  description       = "Ingress on port ${var.solr_target_group_port} from same SG (permits cudl_viewer access to solr)"
+  security_group_id = aws_security_group.solr.id
+  self              = true
+  from_port         = var.solr_target_group_port
+  to_port           = var.solr_target_group_port
+}
