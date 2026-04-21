@@ -184,7 +184,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:2299393172df2bd3e4424a98e0aef77564644a56426b15d5bc2ba2816b59bf53"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c7f9255eb0ecc6caaba294f7c30972fcc339a4209342b47fe9a538a32d299cae"
     "queue_name"               = "CUDL_TEIProcessingQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -193,7 +193,7 @@ transform-lambda-information = [
     "memory"                   = 4096
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 100
+    "maximum_concurrency"      = 50
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
