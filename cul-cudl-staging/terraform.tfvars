@@ -198,13 +198,13 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET               = "full"
-      SEARCH_HOST              = "solr-api-cudl-ecs.staging-solr"
-      SEARCH_PORT              = 8081
-      SEARCH_COLLECTION_PATH   = "collections"
+      ANT_TARGET                     = "full"
+      SEARCH_HOST                    = "solr-api-cudl-ecs.staging-solr"
+      SEARCH_PORT                    = 8081
+      SEARCH_COLLECTION_PATH         = "collections"
       SKIP_COPY_TEI_WEB_ASSETS       = "true"
-      SKIP_PAGE_XML_COPY       = "true"
-      SKIP_CORE_XML_COPY       = "true"
+      SKIP_PAGE_XML_COPY             = "true"
+      SKIP_CORE_XML_COPY             = "true"
       SKIP_TEI_FULL_COPY             = "false"
       EMIT_EMF_METRICS               = "false"
       LAMBDA_TIMEOUT_MARGIN_MS       = 180000
@@ -310,7 +310,7 @@ transform-lambda-information = [
       DEST_BUCKET   = "staging-cul-cudl-data-releases"
       SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
-  }
+    }
   }
 
 ]
