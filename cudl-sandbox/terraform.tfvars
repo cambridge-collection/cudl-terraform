@@ -1,4 +1,8 @@
-environment                  = "sandbox"
+environment = "sandbox"
+# The PID Lambda reads minter configuration from an existing Secrets Manager secret.
+# By default Terraform looks up <environment>/cudl/pid-pipeline, which matches
+# the existing sandbox secret mjh39-sandbox/cudl/pid-pipeline.
+# pid_pipeline_secret_name = "mjh39-sandbox/cudl/pid-pipeline"
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
@@ -16,11 +20,7 @@ transform-lambda-bucket-sns-notifications = [
     "filter_suffix" = ".xml"
     "subscriptions" = [
       {
-        "queue_name" = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY",
-        "raw"        = true
-      },
-      {
-        "queue_name" = "CUDL_TEIProcessingQueue",
+        "queue_name" = "CUDL_TEIArkIngestionQueue",
         "raw"        = true
       },
     ]
@@ -86,9 +86,9 @@ transform-lambda-bucket-sqs-notifications = [
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
-    "filter_prefix" = "ui/tei-assets/"
+    "filter_prefix" = "tei-assets/"
     "filter_suffix" = ""
-    "bucket_name"   = "mjh39-sandbox-cudl-data-source"
+    "bucket_name"   = "cudl-data-source"
   },
   {
     "type"          = "SQS",
@@ -184,8 +184,8 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:673da26f145fa648042a3848aa274aca03349a62d8fe7b40140f47c49ef53917"
-    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:1afa1530a59c270fd78d84ae404cd65873277b9eeadf5543ca7ecbff359bd3f1"
+    "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
@@ -198,11 +198,39 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET               = "full"
-      SEARCH_HOST              = "solr-api-cudl-ecs.mjh39-sandbox-solr"
-      SEARCH_PORT              = 8081
-      SEARCH_COLLECTION_PATH   = "collections"
-      SKIP_COPY_TEI_WEB_ASSETS = "true"
+      ANT_TARGET                     = "full"
+      SEARCH_HOST                    = "solr-api-cudl-ecs.mjh39-sandbox-solr"
+      SEARCH_PORT                    = 8081
+      SEARCH_COLLECTION_PATH         = "collections"
+      SKIP_COPY_TEI_WEB_ASSETS       = "true"
+      SKIP_PAGE_XML_COPY             = "true"
+      SKIP_CORE_XML_COPY             = "true"
+      SKIP_TEI_FULL_COPY             = "false"
+      EMIT_EMF_METRICS               = "false"
+      LAMBDA_TIMEOUT_MARGIN_MS       = 180000
+      ENABLE_SHA_METADATA            = "true"
+      ENABLE_RELEASE_STATUS_METADATA = "true"
+      LOG_LEVEL                      = "ERROR"
+    }
+  },
+  {
+    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:5383d2be5b05884d22b9edb605e213507a126f657f0ee9bfdd44c098b388764d"
+    "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
+    "queue_name"               = "CUDL_TEIArkIngestionQueue"
+    "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 50
+    "use_datadog_variables"    = false
+    "use_additional_variables" = false
+    "ephemeral_storage"        = 1024
+    "environment_variables" = {
+      PID_LOG_LEVEL = "ERROR"
     }
   },
   {
@@ -285,21 +313,21 @@ transform-lambda-information = [
     }
   },
   {
-    "name"                       = "cudl-copy-tei-assets"
-    "image_uri"                  = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator:sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
-    "queue_name"                 = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
-    "subnet_names"               = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"       = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
-    "timeout"                    = 60
-    "memory"                     = 256
-    "batch_window"               = 0
-    "batch_size"                 = 1
+    "name"                           = "cudl-copy-tei-assets"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
     "sqs_max_tries_before_deadqueue" = 3
-    "use_datadog_variables"      = false
-    "function_response_types"    = ["ReportBatchItemFailures"]
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
     "environment_variables" = {
       DEST_BUCKET   = "mjh39-sandbox-cudl-data-releases"
-      SOURCE_PREFIX = "ui/tei-assets/"
+      SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
     }
   }
@@ -363,8 +391,8 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:2af4738baca8181d29a7ac048bdfb1d4025be3bd5f1c9cd56dd106d486615808",
-  "cudl-solr"     = "sha256:19cca344a643b80c909079943e5bafae4f552d270c1da15fd76b39593b32fd13"
+  "cudl-solr-api" = "sha256:0b50c2f22a615ab66a48ae98caace7e129361514f341396f32adc5d86e1e6190",
+  "cudl-solr"     = "sha256:f79f619f15b12383f53215d67bff527bcf8f7e8977b425b0485521e1cf346b39"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -397,4 +425,3 @@ cudl_viewer_allowed_methods                 = ["HEAD", "GET", "OPTIONS"]
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_datasync_task_s3_to_efs_pattern = "/json/*|/pages/*|/cudl.dl-dataset.json|/cudl.ui.json5|/collections/*|/ui/*"
 cudl_viewer_ecs_task_def_memory             = 3520
-

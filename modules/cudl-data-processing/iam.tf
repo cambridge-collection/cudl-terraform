@@ -31,7 +31,8 @@ data "aws_iam_policy_document" "allow-get-and-list-policy" {
     actions = [
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
-      "sqs:GetQueueAttributes"
+      "sqs:GetQueueAttributes",
+      "sqs:SendMessage"
     ]
     resources = [
       "arn:aws:sqs:*:*:${var.environment}-*"
