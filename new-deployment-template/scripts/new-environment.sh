@@ -124,9 +124,13 @@ do_substitution "$SRC_ENV_TITLE" "$NEW_ENV_TITLE" \
 do_substitution "$SRC_ENV" "$NEW_ENV" \
   "env name: ${SRC_ENV} → ${NEW_ENV}"
 
-# AWS account ID in ECR URIs and ARNs
-do_substitution "$SRC_ACCOUNT" "$NEW_ACCOUNT" \
-  "account ID: ${SRC_ACCOUNT} → ${NEW_ACCOUNT}"
+# AWS account ID in ECR URIs and ARNs (skipped if template has no real ARN yet)
+if [[ -n "$SRC_ACCOUNT" ]]; then
+  do_substitution "$SRC_ACCOUNT" "$NEW_ACCOUNT" \
+    "account ID: ${SRC_ACCOUNT} → ${NEW_ACCOUNT}"
+else
+  echo "  Skipping account ID substitution (no account ID found in template acm_certificate_arn)"
+fi
 
 # Domain name  (e.g. cul-development.net → neworg.example.com)
 do_substitution "$SRC_DOMAIN" "$NEW_DOMAIN" \
@@ -145,8 +149,9 @@ patch_institution() {
   sed -i 's|route53_zone_id_existing   = "Z[A-Z0-9]*"|route53_zone_id_existing   = "FIXME: set after creating hosted zone"|' "$file"
   sed -i 's|cloudfront_route53_zone_id = "Z[A-Z0-9]*"|cloudfront_route53_zone_id = "FIXME: set after creating hosted zone"|' "$file"
 
-  # ACM cert ARN — unknown until bootstrap-environment.sh runs and cert is issued
-  sed -i 's|acm_certificate_arn = "arn:aws:acm:[^"]*"|acm_certificate_arn = "FIXME: set after bootstrap-environment.sh and wildcard cert apply"|' "$file"
+  # ACM cert ARNs — must be created manually in ACM before running Terraform (see DEPLOY.md step 10)
+  sed -i 's|acm_certificate_arn[[:space:]]*= "arn:aws:acm:[^"]*"|acm_certificate_arn           = "FIXME: ARN of wildcard cert in eu-west-1"|' "$file"
+  sed -i 's|acm_certificate_arn_us-east-1[[:space:]]*= "arn:aws:acm:[^"]*"|acm_certificate_arn_us-east-1 = "FIXME: ARN of wildcard cert in us-east-1"|' "$file"
 
   # CloudWatch log destination — only valid for accounts granted access to the central logger
   sed -i 's|cloudwatch_log_destination_arn = "arn:aws:logs:[^"]*"|cloudwatch_log_destination_arn = "FIXME: set if using central log forwarding"|' "$file"
@@ -201,12 +206,12 @@ echo "     ./scripts/copy-ecr-images.sh  --pull"
 echo "     ./scripts/copy-ecr-images.sh  --push --src-account ${SRC_ACCOUNT}"
 echo "     ./scripts/copy-lambda-jars.sh --download"
 echo "     ./scripts/copy-lambda-jars.sh --upload --dst-bucket cul-cudl.mvn.${NEW_DOMAIN}"
-echo "     ./scripts/copy-ssm-params.sh  --export params.json --src-env ${SRC_ENV_TITLE}"
-echo "     ./scripts/copy-ssm-params.sh  --import params.json --dst-env ${NEW_ENV_TITLE}"
+echo "     (cd cul-${SRC_ENV} && ../scripts/copy-ssm-params.sh --export params.json)"
+echo "     (cd ${OUT_DIR}    && ../scripts/copy-ssm-params.sh --import params.json)"
 echo "     rm params.json"
 echo ""
 echo "  3. Fill in FIXME values in ${OUT_DIR}/institution.auto.tfvars"
-echo "     (Route53 zone ID, ACM cert ARN, log destination)"
+echo "     (Route53 zone ID, ACM cert ARNs for eu-west-1 and us-east-1, log destination)"
 echo ""
 echo "  4. Run:  ./scripts/update-ecr-digests.sh --env ${NEW_ENV}"
 echo "     (updates all ECR sha256 digests from the new account)"

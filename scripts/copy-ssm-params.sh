@@ -3,19 +3,31 @@
 #
 # Two-step workflow — log into each account separately:
 #
-#   Step 1 — logged into source account:
+#   Step 1 — logged into source account, run from the source environment directory:
 #     ./copy-ssm-params.sh --discover
-#     ./copy-ssm-params.sh --export params.json --src-env Staging
+#     ./copy-ssm-params.sh --export params.json
 #
-#   Step 2 — logged into destination account:
-#     ./copy-ssm-params.sh --import params.json --dst-env Development [--dry-run]
+#   Step 2 — logged into destination account, run from the destination environment directory:
+#     ./copy-ssm-params.sh --import params.json [--dry-run]
 #
-# --src-env / --dst-env are the title-cased environment names as they appear
-# in the SSM path, e.g. Staging, Production, Development.
+# --src-env / --dst-env default to the environment name read from institution.auto.tfvars
+# in the current directory (title-cased, e.g. development → Development).
+# Pass them explicitly to override, e.g. --src-env Staging.
 
 set -euo pipefail
 
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Auto-detect the title-cased environment name from institution.auto.tfvars in the
+# current directory (e.g. environment = "development" → "Development").
+DETECTED_ENV=""
+INST_TFVARS="$(pwd)/institution.auto.tfvars"
+if [[ -f "$INST_TFVARS" ]]; then
+  _raw="$(grep -E '^environment[[:space:]]*=' "$INST_TFVARS" | sed 's/.*=[[:space:]]*"\(.*\)".*/\1/' | head -1)"
+  if [[ -n "$_raw" && "$_raw" != *"FIXME"* ]]; then
+    DETECTED_ENV="$(printf '%s' "${_raw:0:1}" | tr '[:lower:]' '[:upper:]')${_raw:1}"
+  fi
+fi
 
 REGION="eu-west-1"
 SSM_ROOT="/Environments"
@@ -41,10 +53,14 @@ PARAMS=(
 usage() {
   echo "Usage:"
   echo "  $0 --discover                                      # list all $SSM_ROOT/ params in current account"
-  echo "  $0 --export <file.json> --src-env <Env>           # export params from current account"
-  echo "  $0 --import <file.json> --dst-env <Env>           # import params into current account"
-  echo "  $0 --import <file.json> --dst-env <Env> --dry-run"
+  echo "  $0 --export <file.json> [--src-env <Env>]         # export params from current account"
+  echo "  $0 --import <file.json> [--dst-env <Env>]         # import params into current account"
+  echo "  $0 --import <file.json> [--dst-env <Env>] --dry-run"
   echo "  $0 --region <region>  (default: $REGION)"
+  echo ""
+  echo "  --src-env / --dst-env are the title-cased environment name, e.g. 'Development'."
+  echo "  If omitted, the name is read from institution.auto.tfvars in the current directory."
+  [[ -n "$DETECTED_ENV" ]] && echo "  Auto-detected: $DETECTED_ENV"
   exit 1
 }
 
@@ -94,8 +110,19 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -z "$MODE" ]] && usage
-[[ "$MODE" == "export" && -z "$SRC_ENV" ]] && echo "ERROR: --export requires --src-env" && usage
-[[ "$MODE" == "import" && -z "$DST_ENV" ]] && echo "ERROR: --import requires --dst-env" && usage
+
+# Fall back to auto-detected env name if not provided on the command line
+SRC_ENV="${SRC_ENV:-$DETECTED_ENV}"
+DST_ENV="${DST_ENV:-$DETECTED_ENV}"
+
+if [[ "$MODE" == "export" && -z "$SRC_ENV" ]]; then
+  echo "ERROR: --export requires --src-env (or run from a directory containing institution.auto.tfvars)"
+  usage
+fi
+if [[ "$MODE" == "import" && -z "$DST_ENV" ]]; then
+  echo "ERROR: --import requires --dst-env (or run from a directory containing institution.auto.tfvars)"
+  usage
+fi
 
 # Resolve a bare filename (no directory component) relative to the scripts directory
 # so the file is always in the same place regardless of where the script is invoked from.

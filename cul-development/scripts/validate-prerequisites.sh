@@ -56,6 +56,7 @@ ENV=$(tfvar environment)
 DOMAIN=$(tfvar registered_domain_name | sed 's/\.$//')  # strip trailing dot
 ZONE_ID=$(tfvar route53_zone_id_existing)
 ACM_ARN=$(tfvar acm_certificate_arn)
+ACM_ARN_US_EAST_1=$(tfvar acm_certificate_arn_us-east-1)
 JAR_BUCKET=$(tfvar lambda-jar-bucket)
 LOG_GROUP=$(tfvar cloudwatch_log_group)
 LOG_DEST=$(tfvar cloudwatch_log_destination_arn)
@@ -92,7 +93,19 @@ ACCOUNT=$(echo "$IDENTITY" | python3 -c "import sys,json; print(json.load(sys.st
 ARN=$(echo     "$IDENTITY" | python3 -c "import sys,json; print(json.load(sys.stdin)['Arn'])")
 pass "Authenticated as $ARN"
 
-# ── 3. Terraform state backend ────────────────────────────────────────────────
+# ── 3. Auto Scaling service-linked role ──────────────────────────────────────
+header "Auto Scaling service-linked role"
+
+SLR_EXISTS=$(aws iam get-role \
+  --role-name AWSServiceRoleForAutoScaling \
+  --query 'Role.RoleName' --output text 2>/dev/null || echo "")
+if [[ -n "$SLR_EXISTS" ]]; then
+  pass "AWSServiceRoleForAutoScaling exists"
+else
+  fail "AWSServiceRoleForAutoScaling missing  (run ./scripts/bootstrap-environment.sh)"
+fi
+
+# ── 4. Terraform state backend ────────────────────────────────────────────────
 header "Terraform state backend"
 
 if [[ -z "$STATE_BUCKET" ]]; then
@@ -151,11 +164,11 @@ else
   fi
 fi
 
-# ── 6. ACM certificate ────────────────────────────────────────────────────────
-header "ACM certificate (eu-west-1)"
+# ── 6. ACM certificates ───────────────────────────────────────────────────────
+header "ACM certificate (eu-west-1, ALB)"
 
 if [[ -z "$ACM_ARN" || "$ACM_ARN" == *"FIXME"* ]]; then
-  fail "acm_certificate_arn not set in institution.auto.tfvars"
+  fail "acm_certificate_arn not set in institution.auto.tfvars (see DEPLOY.md step 10)"
 else
   CERT_STATUS=$(aws acm describe-certificate \
     --certificate-arn "$ACM_ARN" --region "$REGION" \
@@ -165,6 +178,22 @@ else
     PENDING_VALIDATION) warn "ACM certificate PENDING_VALIDATION — DNS records may not be propagated yet" ;;
     "")               fail "ACM certificate not found: $ACM_ARN" ;;
     *)                fail "ACM certificate status is $CERT_STATUS: $ACM_ARN" ;;
+  esac
+fi
+
+header "ACM certificate (us-east-1, CloudFront)"
+
+if [[ -z "$ACM_ARN_US_EAST_1" || "$ACM_ARN_US_EAST_1" == *"FIXME"* ]]; then
+  fail "acm_certificate_arn_us-east-1 not set in institution.auto.tfvars (see DEPLOY.md step 10)"
+else
+  CERT_STATUS_USE1=$(aws acm describe-certificate \
+    --certificate-arn "$ACM_ARN_US_EAST_1" --region "us-east-1" \
+    --query 'Certificate.Status' --output text 2>/dev/null || echo "")
+  case "$CERT_STATUS_USE1" in
+    ISSUED)           pass "ACM certificate ISSUED: $ACM_ARN_US_EAST_1" ;;
+    PENDING_VALIDATION) warn "ACM certificate PENDING_VALIDATION — DNS records may not be propagated yet" ;;
+    "")               fail "ACM certificate not found: $ACM_ARN_US_EAST_1" ;;
+    *)                fail "ACM certificate status is $CERT_STATUS_USE1: $ACM_ARN_US_EAST_1" ;;
   esac
 fi
 

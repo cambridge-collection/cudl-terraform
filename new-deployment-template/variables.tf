@@ -210,8 +210,7 @@ variable "acm_certificate_arn" {
 
 variable "acm_certificate_arn_us-east-1" {
   type        = string
-  description = "ARN of an existing ACM certificate in us-east-1 region suitable for the Route 53 domain (unused; wildcard cert managed in acm_wildcard_cert.tf)"
-  default     = null
+  description = "ARN of an existing ACM certificate in us-east-1 region suitable for the Route 53 domain (required by CloudFront)"
 }
 
 variable "route53_zone_force_destroy" {

@@ -167,6 +167,22 @@ else
 fi
 
 echo ""
+echo "=== Auto Scaling service-linked role ==="
+if [[ "$DRY_RUN" == true ]]; then
+  echo "  DRY  iam create-service-linked-role: AWSServiceRoleForAutoScaling"
+else
+  if aws iam get-role --role-name AWSServiceRoleForAutoScaling \
+      --query 'Role.RoleName' --output text 2>/dev/null | grep -q .; then
+    echo "  EXISTS  AWSServiceRoleForAutoScaling"
+  else
+    aws iam create-service-linked-role \
+      --aws-service-name autoscaling.amazonaws.com \
+      --no-cli-pager > /dev/null
+    echo "  CREATED AWSServiceRoleForAutoScaling"
+  fi
+fi
+
+echo ""
 echo "=== Maven/JAR artifact bucket ==="
 create_s3 "$JAR_BUCKET" "Lambda JAR artifacts"
 
@@ -182,8 +198,8 @@ else
   echo "                             ./scripts/copy-ecr-images.sh --push --src-account <id>"
   echo "  3. Copy Lambda JARs:       ./scripts/copy-lambda-jars.sh --download  (source account)"
   echo "                             ./scripts/copy-lambda-jars.sh --upload --dst-bucket ${JAR_BUCKET}"
-  echo "  4. Copy SSM parameters:    ./scripts/copy-ssm-params.sh --export params.json --src-env Staging"
-  echo "                             ./scripts/copy-ssm-params.sh --import params.json --dst-env ${ENV_TITLE}"
+  echo "  4. Copy SSM parameters:    (cd <source-env-dir> && ../scripts/copy-ssm-params.sh --export params.json)"
+  echo "                             (cd cul-${ENV}      && ../scripts/copy-ssm-params.sh --import params.json)"
   echo "  5. Update institution.auto.tfvars with Route53 zone IDs and ACM cert ARN"
   echo "  6. Run update-ecr-digests.sh to refresh sha256 digests"
   echo "  7. terraform init && terraform apply --target=module.base_architecture"

@@ -52,7 +52,7 @@ module "cudl-data-processing" {
   cloudfront_route53_zone_id                = var.cloudfront_route53_zone_id
   create_cloudfront_distribution            = var.create_cloudfront_distribution
   acm_create_certificate                    = false
-  acm_certificate_arn                       = aws_acm_certificate_validation.wildcard_us_east_1.certificate_arn
+  acm_certificate_arn                       = var.acm_certificate_arn_us-east-1
   create_datasync                           = false
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -110,8 +110,8 @@ module "content_loader" {
   }
   efs_create_file_system        = true
   acm_create_certificate        = false
-  acm_certificate_arn           = aws_acm_certificate_validation.wildcard_eu_west_1.certificate_arn
-  acm_certificate_arn_us-east-1 = aws_acm_certificate_validation.wildcard_us_east_1.certificate_arn
+  acm_certificate_arn           = var.acm_certificate_arn
+  acm_certificate_arn_us-east-1 = var.acm_certificate_arn_us-east-1
   tags                          = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -161,7 +161,7 @@ module "solr" {
   efs_create_file_system                         = true
   acm_create_certificate                         = false
   acm_certificate_arn                            = var.acm_certificate_arn
-  acm_certificate_arn_us-east-1                  = aws_acm_certificate_validation.wildcard_us_east_1.certificate_arn
+  acm_certificate_arn_us-east-1                  = var.acm_certificate_arn_us-east-1
   tags                                           = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -199,7 +199,7 @@ module "cudl_services" {
   cloudfront_allowed_methods                = var.cudl_services_allowed_methods
   acm_create_certificate                    = false
   acm_certificate_arn                       = var.acm_certificate_arn
-  acm_certificate_arn_us-east-1             = aws_acm_certificate_validation.wildcard_us_east_1.certificate_arn
+  acm_certificate_arn_us-east-1             = var.acm_certificate_arn_us-east-1
   tags                                      = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -265,7 +265,7 @@ module "cudl_viewer" {
   efs_security_group_id                  = module.cudl-data-processing.efs_security_group_id
   acm_create_certificate                 = false
   acm_certificate_arn                    = var.acm_certificate_arn
-  acm_certificate_arn_us-east-1          = aws_acm_certificate_validation.wildcard_us_east_1.certificate_arn
+  acm_certificate_arn_us-east-1          = var.acm_certificate_arn_us-east-1
   tags                                   = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1

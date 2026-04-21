@@ -20,7 +20,7 @@ validation (usually under 10 minutes).
 7. [Copy Lambda JAR artifacts](#7-copy-lambda-jar-artifacts)
 8. [Copy or create SSM Parameter Store secrets](#8-copy-or-create-ssm-parameter-store-secrets)
 9. [Configure institution.auto.tfvars](#9-configure-institutionautotfvars)
-10. [Create the ACM wildcard certificate](#10-create-the-acm-wildcard-certificate)
+10. [Create the ACM wildcard certificates](#10-create-the-acm-wildcard-certificates)
 11. [Run the pre-flight validation](#11-run-the-pre-flight-validation)
 12. [Deploy with Terraform](#12-deploy-with-terraform)
 13. [Load sample data and verify](#13-load-sample-data-and-verify)
@@ -205,6 +205,11 @@ This creates:
 | DynamoDB lock table | `terraform-state-lock-cudl-myorg` |
 | CloudWatch log group | `/ecs/CUDL-Myorg` |
 | Lambda JAR bucket | `cul-cudl.mvn.myorg.example.com` |
+| IAM service-linked role | `AWSServiceRoleForAutoScaling` |
+
+> **Why the service-linked role?** New AWS accounts don't have this role until Auto
+> Scaling is used for the first time. Terraform will fail to create the Auto Scaling
+> Group without it.
 
 > **Note:** S3 bucket names are globally unique across all AWS accounts. If the JAR
 > bucket name is taken, choose a different name and update `lambda-jar-bucket` in
@@ -288,11 +293,12 @@ rm -rf /tmp/lambda-jars
 The application containers read secrets from SSM Parameter Store at runtime.
 All parameters must exist or Terraform will fail to resolve their ARNs at plan time.
 
-If you have a `params.json` exported from an existing environment, import it with:
+If you have a `params.json` exported from an existing environment, import it with
+(run from the `cul-myorg/` directory so the env name is auto-detected):
 
 ```bash
-./scripts/copy-ssm-params.sh --import params.json --dst-env Myorg --dry-run
-./scripts/copy-ssm-params.sh --import params.json --dst-env Myorg
+../scripts/copy-ssm-params.sh --import params.json --dry-run
+../scripts/copy-ssm-params.sh --import params.json
 ```
 
 A bare filename resolves to `scripts/params.json` regardless of working directory.
@@ -371,49 +377,99 @@ grep -n FIXME institution.auto.tfvars
 | `cloudfront_route53_zone_id` | Same zone ID (both variables can be the same zone) |
 | `cloudwatch_log_destination_arn` | ARN of your central CloudWatch destination, or remove/leave as FIXME (logging forwarding is disabled for development — see [cloudwatch.tf](cloudwatch.tf)) |
 | `acm_certificate_arn` | Created in step 10 below — leave as FIXME for now |
+| `acm_certificate_arn_us-east-1` | Created in step 10 below — leave as FIXME for now |
 | ECR digests | Already updated by `update-ecr-digests.sh` in step 6 |
 
 ---
 
-## 10. Create the ACM wildcard certificate
+## 10. Create the ACM wildcard certificates
 
-The ALB HTTPS listener requires an ACM certificate to exist before Terraform can
-complete the base architecture deployment. The certificate is defined in
-[acm_wildcard_cert.tf](acm_wildcard_cert.tf) but needs to be applied before the
-full deployment.
+Two wildcard certificates are required:
 
-Make sure `route53_zone_id_existing` and `registered_domain_name` are set in
-`institution.auto.tfvars` (from step 9), then:
+- **eu-west-1** — used by the ALB HTTPS listener
+- **us-east-1** — required by CloudFront (CloudFront only accepts certificates in us-east-1)
+
+Both must be created manually in AWS Certificate Manager before running Terraform.
+
+### 10.1 Request the certificates
+
+Run the following twice — once for each region:
 
 ```bash
-terraform init
+# eu-west-1 (ALB)
+aws acm request-certificate \
+  --domain-name "*.myorg.example.com" \
+  --subject-alternative-names "myorg.example.com" \
+  --validation-method DNS \
+  --region eu-west-1
 
-terraform apply \
-  -target=aws_acm_certificate_validation.wildcard_eu_west_1 \
-  -target=aws_acm_certificate_validation.wildcard_us_east_1
+# us-east-1 (CloudFront)
+aws acm request-certificate \
+  --domain-name "*.myorg.example.com" \
+  --subject-alternative-names "myorg.example.com" \
+  --validation-method DNS \
+  --region us-east-1
 ```
 
-Terraform will create the certificates and the DNS validation records in Route 53,
-then wait for the certificates to be issued (usually 5–10 minutes).
+Each command prints a `CertificateArn`. Note both ARNs.
 
-Once the apply completes, get the eu-west-1 certificate ARN:
+### 10.2 Add DNS validation records
+
+For each certificate, add the CNAME validation record to your Route 53 hosted zone.
+
+**Easiest — AWS Console:** open Certificate Manager in each region, select the pending
+certificate, and click **Create records in Route 53**.
+
+**CLI:**
 
 ```bash
-aws acm list-certificates \
+# Get the validation record (repeat for the us-east-1 cert)
+aws acm describe-certificate \
+  --certificate-arn <arn> \
   --region eu-west-1 \
-  --query "CertificateSummaryList[?DomainName=='*.myorg.example.com'].CertificateArn" \
-  --output text
+  --query 'Certificate.DomainValidationOptions[0].ResourceRecord'
+
+# Add the CNAME to Route 53
+aws route53 change-resource-record-sets \
+  --hosted-zone-id <your-zone-id> \
+  --change-batch '{
+    "Changes": [{
+      "Action": "CREATE",
+      "ResourceRecordSet": {
+        "Name": "<Name from above>",
+        "Type": "CNAME",
+        "TTL": 300,
+        "ResourceRecords": [{"Value": "<Value from above>"}]
+      }
+    }]
+  }'
 ```
 
-Copy that ARN and set it in `institution.auto.tfvars`:
+> **Note:** both certificates cover the same domain, so they share the same DNS
+> validation CNAME — you only need to add it to Route 53 once.
+
+### 10.3 Wait for ISSUED status
+
+```bash
+aws acm describe-certificate \
+  --certificate-arn <eu-west-1-arn> \
+  --region eu-west-1 \
+  --query 'Certificate.Status'
+
+aws acm describe-certificate \
+  --certificate-arn <us-east-1-arn> \
+  --region us-east-1 \
+  --query 'Certificate.Status'
+```
+
+Both should reach `ISSUED` within 5–10 minutes of the DNS records propagating.
+
+### 10.4 Set the ARNs in institution.auto.tfvars
 
 ```hcl
-acm_certificate_arn = "arn:aws:acm:eu-west-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+acm_certificate_arn           = "arn:aws:acm:eu-west-1:123456789012:certificate/..."
+acm_certificate_arn_us-east-1 = "arn:aws:acm:us-east-1:123456789012:certificate/..."
 ```
-
-> **Why two certs?** The ALB uses a `eu-west-1` certificate. CloudFront requires
-> a `us-east-1` certificate — that is handled automatically by the same
-> `acm_wildcard_cert.tf` file and does not need a separate ARN in configuration.
 
 ---
 
@@ -608,10 +664,9 @@ cd ..
 # Fill in institution.auto.tfvars (zone IDs, DB host, etc.)
 
 terraform init
-terraform apply -target=aws_acm_certificate_validation.wildcard_eu_west_1 \
-                -target=aws_acm_certificate_validation.wildcard_us_east_1
 
-# Add cert ARN to institution.auto.tfvars, then:
+# Create wildcard certs manually in ACM (eu-west-1 and us-east-1) — see step 10
+# Add both ARNs to institution.auto.tfvars, then:
 ./scripts/validate-prerequisites.sh
 
 terraform apply --target=module.base_architecture

@@ -27,9 +27,11 @@ vpc_cidr_block = "10.50.0.0/22"
 route53_zone_id_existing   = "Z0793873J5B5RKU48R3D"
 cloudfront_route53_zone_id = "Z0793873J5B5RKU48R3D"
 
-# ACM — eu-west-1 certificate for the ALB HTTPS listener.
-# The us-east-1 / CloudFront certificate is managed in acm_wildcard_cert.tf.
-acm_certificate_arn = "arn:aws:acm:eu-west-1:206247777824:certificate/9f58fdb2-6384-4cc5-8274-6f8491a27104"
+# ACM — certificates for the ALB HTTPS listener (eu-west-1) and CloudFront distributions (us-east-1).
+# Both must be created manually in AWS Certificate Manager before running Terraform.
+# See DEPLOY.md step 10 for instructions.
+acm_certificate_arn           = "arn:aws:acm:eu-west-1:206247777824:certificate/9f58fdb2-6384-4cc5-8274-6f8491a27104"
+acm_certificate_arn_us-east-1 = "FIXME: ARN of wildcard cert in us-east-1, e.g. arn:aws:acm:us-east-1:206247777824:certificate/..."
 
 # S3 — Maven/JAR bucket for JAR-based Lambda functions (created by bootstrap-environment.sh).
 lambda-jar-bucket = "cul-cudl.mvn.cul-development.net"
