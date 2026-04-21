@@ -88,7 +88,7 @@ transform-lambda-bucket-sqs-notifications = [
     "queue_name"    = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
     "filter_prefix" = "tei-assets/"
     "filter_suffix" = ""
-    "bucket_name"   = "cudl-data-source"
+    "bucket_name"   = "cul-cudl-data-source"
   },
   {
     "type"          = "SQS",
