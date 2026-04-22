@@ -173,6 +173,10 @@ waf_bot_control_exclusions = [
     "waf_bot_control_exclusion_uri" = "/iiif/"
   },
   {
+    "waf_bot_control_exclusion_uri"        = "/embed",
+    "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
+  },
+  {
     "waf_bot_control_exclusion_uri" = "/v1/"
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
