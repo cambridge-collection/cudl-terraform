@@ -93,12 +93,6 @@ variable "transform-lambda-information" {
   }))
 }
 
-variable "pid_pipeline_secret_name" {
-  description = "Secrets Manager secret name containing the PID pipeline configuration. When unset, defaults to <environment>/cudl/pid-pipeline."
-  type        = string
-  default     = null
-}
-
 variable "dst-efs-prefix" {
   description = "Use to set the DST_EFS_PREFIX variable in the properties file passed to the lambda layer"
   type        = string
@@ -479,4 +473,10 @@ variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
 variable "cudl_viewer_ecs_task_def_memory" {
   type        = number
   description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
+}
+
+variable "enable_ark_workflow" {
+  description = "Whether TEI XML files should be routed through the ARK ingestion lambda before TEI processing."
+  type        = bool
+  default     = false
 }

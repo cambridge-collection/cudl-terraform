@@ -35,7 +35,7 @@ module "cudl-data-processing" {
   lambda-alias-name                         = var.lambda-alias-name
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
-  transform-lambda-information              = local.transform_lambda_information_effective
+  transform-lambda-information              = local.transform_lambda_information
   additional_lambda_environment_variables   = local.additional_lambda_variables
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
@@ -44,7 +44,7 @@ module "cudl-data-processing" {
   lambda-jar-bucket                         = var.lambda-jar-bucket
   aws-account-number                        = data.aws_caller_identity.current.account_id
   transform-lambda-bucket-sns-notifications = var.transform-lambda-bucket-sns-notifications
-  transform-lambda-bucket-sqs-notifications = var.transform-lambda-bucket-sqs-notifications
+  transform-lambda-bucket-sqs-notifications = local.transform_lambda_bucket_sqs_notifications
   environment                               = local.environment
   source-bucket-name                        = var.source-bucket-name
   enhancements-bucket-name                  = var.enhancements-bucket-name
