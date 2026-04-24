@@ -306,7 +306,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:5383d2be5b05884d22b9edb605e213507a126f657f0ee9bfdd44c098b388764d"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:c13c4c074a8ad8156923335c722356c442b60c9c4b1ad303ee5b4215c974ba4b"
     "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
