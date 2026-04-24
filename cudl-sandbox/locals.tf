@@ -26,42 +26,6 @@ locals {
     AWS_CUDL_DATA_SOURCE_BUCKET = lower("${local.environment}-${var.source-bucket-name}")
     AWS_OUTPUT_BUCKET           = lower("${local.environment}-${var.source-bucket-name}")
   }
-  tei_processing_forward_queue_url = format(
-    "https://sqs.%s.amazonaws.com/%s/%s",
-    var.deployment-aws-region,
-    data.aws_caller_identity.current.account_id,
-    substr("${local.environment}-${local.tei_processing_forward_queue_name}", 0, 64)
-  )
-  ark_lambda_environment_variables = {
-    PID_FORWARD_QUEUE_URL = local.tei_processing_forward_queue_url
-  }
-  transform_lambda_information = concat(
-    [
-      for lambda in var.transform-lambda-information : lambda
-      if lambda.name != "AWSLambda_CUDL_ARK_Ingestion"
-    ],
-    var.enable_ark_workflow ? [
-      merge(
-        one([
-          for lambda in var.transform-lambda-information : lambda
-          if lambda.name == "AWSLambda_CUDL_ARK_Ingestion"
-        ]),
-        {
-          environment_variables = merge(
-            local.ark_lambda_environment_variables,
-            lookup(
-              one([
-                for lambda in var.transform-lambda-information : lambda
-                if lambda.name == "AWSLambda_CUDL_ARK_Ingestion"
-              ]),
-              "environment_variables",
-              {}
-            )
-          )
-        }
-      )
-    ] : []
-  )
   transform_lambda_bucket_sqs_notifications = [
     for notification in var.transform-lambda-bucket-sqs-notifications : (
       notification.bucket_name == local.tei_processing_notification.bucket_name &&
