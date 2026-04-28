@@ -306,7 +306,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:c13c4c074a8ad8156923335c722356c442b60c9c4b1ad303ee5b4215c974ba4b"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:4b5eb553e7af649506736ccfb854c198b66a0bf6738f11a855f07979e3c38445"
     "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
@@ -316,7 +316,7 @@ transform-lambda-information = [
     "memory"                   = 4096
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 50
+    "maximum_concurrency"      = 40
     "enable_sqs_trigger"       = true
     "use_datadog_variables"    = false
     "use_additional_variables" = false
