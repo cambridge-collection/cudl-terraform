@@ -8,23 +8,11 @@ enhancements-bucket-name     = "cul-cudl-data-enhancements"
 source-bucket-name           = "cul-cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "cul-cudl.mvn.cudl.lib.cam.ac.uk"
+enable_ark_workflow               = true
+tei_processing_forward_queue_name = "CUDL_TEIProcessingForwardQueue"
+tei_ark_ingestion_queue_name      = "CUDL_TEIArkIngestionQueue"
 
 transform-lambda-bucket-sns-notifications = [
-  {
-    "bucket_name"   = "cul-cudl-data-source"
-    "filter_prefix" = "items/data/tei/",
-    "filter_suffix" = ".xml"
-    "subscriptions" = [
-      {
-        "queue_name" = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY",
-        "raw"        = true
-      },
-      {
-        "queue_name" = "CUDL_TEIProcessingQueue",
-        "raw"        = true
-      },
-    ]
-  },
   {
     "bucket_name"   = "cul-cudl-data-releases"
     "filter_prefix" = "collections/",
@@ -138,6 +126,13 @@ transform-lambda-bucket-sqs-notifications = [
     "filter_prefix" = "transkribus/curious-cures/"
     "filter_suffix" = ".xml"
     "bucket_name"   = "cul-cudl-data-enhancements"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDL_TEIArkIngestionQueue"
+    "filter_prefix" = "items/data/tei/"
+    "filter_suffix" = ".xml"
+    "bucket_name"   = "cul-cudl-data-source"
   }
 ]
 transform-lambda-information = [
@@ -184,8 +179,8 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c7f9255eb0ecc6caaba294f7c30972fcc339a4209342b47fe9a538a32d299cae"
-    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c7f9255eb0ecc6caaba294f7c30972fcc339a4209342b47fe9a538a32d299cae" #TODO
+    "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["staging-cudl-ecs-vpc-egress", "staging-solr-external"]
@@ -310,6 +305,28 @@ transform-lambda-information = [
       DEST_BUCKET   = "staging-cul-cudl-data-releases"
       SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
+    }
+  }
+  ,
+  {
+    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
+    "image_uri"                = "" # TODO
+    "queue_name"               = "CUDL_TEIArkIngestionQueue"
+    "vpc_name"                 = "staging-cudl-ecs-vpc"
+    "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["staging-cudl-ecs-vpc-egress", "staging-solr-external"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 50
+    "use_datadog_variables"    = false
+    "use_additional_variables" = false
+    "ephemeral_storage"        = 1024
+    "environment_variables" = {
+      PID_LOG_LEVEL           = "INFO" #INFO or ERROR
+      PID_FORWARD_QUEUE_URL   = "" #TODO
+      PID_PIPELINE_SECRET_ARN = "" #TODO
     }
   }
 

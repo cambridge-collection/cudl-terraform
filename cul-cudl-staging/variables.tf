@@ -74,6 +74,7 @@ variable "transform-lambda-information" {
     command                        = optional(string)
     entry_point                    = optional(string)
     working_directory              = optional(string)
+    architectures                  = optional(list(string))
     sqs_max_tries_before_deadqueue = optional(number)
     queue_delay_seconds            = optional(number, 0)
     use_datadog_variables          = optional(bool, true)
@@ -81,7 +82,25 @@ variable "transform-lambda-information" {
     use_enhancements_variables     = optional(bool, false)
     mount_fs                       = optional(bool, false)
     ephemeral_storage              = optional(number, 512)
+    function_response_types        = optional(list(string))
+    enable_sqs_trigger             = optional(bool, true)
   }))
+}
+
+variable "enable_ark_workflow" {
+  description = "Whether TEI XML files should be routed through the ARK ingestion lambda before TEI processing."
+  type        = bool
+  default     = false
+}
+
+variable "tei_processing_forward_queue_name" {
+  description = "Name of the SQS queue used for TEI processing (non-ARK workflow)."
+  type        = string
+}
+
+variable "tei_ark_ingestion_queue_name" {
+  description = "Name of the SQS queue used for ARK ingestion (ARK workflow)."
+  type        = string
 }
 
 variable "dst-efs-prefix" {

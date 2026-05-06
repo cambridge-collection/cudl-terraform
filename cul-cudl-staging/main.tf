@@ -12,12 +12,12 @@ module "base_architecture" {
   alb_idle_timeout               = var.alb_idle_timeout
   vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
-  vpc_cidr_block                  = var.vpc_cidr_block
-  vpc_private_subnet_cidr_blocks  = ["10.88.0.128/26", "10.88.0.192/26"]
-  vpc_nat_gateway_single          = false
-  acm_create_certificate          = false
-  acm_certificate_arn             = var.acm_certificate_arn
-  tags                            = local.default_tags
+  vpc_cidr_block                 = var.vpc_cidr_block
+  vpc_private_subnet_cidr_blocks = ["10.88.0.128/26", "10.88.0.192/26"]
+  vpc_nat_gateway_single         = false
+  acm_create_certificate         = false
+  acm_certificate_arn            = var.acm_certificate_arn
+  tags                           = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
@@ -37,7 +37,7 @@ module "cudl-data-processing" {
   lambda-alias-name                         = var.lambda-alias-name
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
-  transform-lambda-information              = var.transform-lambda-information
+  transform-lambda-information              = local.transform_lambda_information
   additional_lambda_environment_variables   = local.additional_lambda_variables
   enhancements_lambda_environment_variables = local.enhancements_lambda_variables
   vpc-id                                    = module.base_architecture.vpc_id
@@ -46,7 +46,7 @@ module "cudl-data-processing" {
   lambda-jar-bucket                         = var.lambda-jar-bucket
   aws-account-number                        = data.aws_caller_identity.current.account_id
   transform-lambda-bucket-sns-notifications = var.transform-lambda-bucket-sns-notifications
-  transform-lambda-bucket-sqs-notifications = var.transform-lambda-bucket-sqs-notifications
+  transform-lambda-bucket-sqs-notifications = local.transform_lambda_bucket_sqs_notifications
   environment                               = local.environment
   source-bucket-name                        = var.source-bucket-name
   enhancements-bucket-name                  = var.enhancements-bucket-name
