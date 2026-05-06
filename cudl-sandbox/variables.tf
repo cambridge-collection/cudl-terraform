@@ -58,6 +58,12 @@ variable "lambda-jar-bucket" {
   type        = string
 }
 
+variable "tei_ark_ingestion_queue_name" {
+  description = "SQS queue name used for TEI ark ingestion when ark workflow is enabled"
+  type        = string
+  default     = "CUDL_TEIArkIngestionQueue"
+}
+
 variable "transform-lambda-information" {
   description = "A list of objects containing information about the transformation lambda functions"
   type = list(object({

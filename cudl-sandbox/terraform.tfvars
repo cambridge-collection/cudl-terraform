@@ -9,6 +9,7 @@ source-bucket-name           = "cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "sandbox.mvn.cudl.lib.cam.ac.uk"
 enable_ark_workflow          = true
+tei_ark_ingestion_queue_name = "CUDL_TEIArkIngestionQueue"
 
 transform-lambda-bucket-sns-notifications = [
   {
