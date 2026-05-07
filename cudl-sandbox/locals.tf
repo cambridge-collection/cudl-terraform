@@ -32,7 +32,7 @@ locals {
       notification.filter_prefix == local.tei_processing_notification.filter_prefix &&
       lookup(notification, "filter_suffix", "") == local.tei_processing_notification.filter_suffix
       ) ? merge(notification, {
-        queue_name = var.enable_ark_workflow ? "CUDL_TEIArkIngestionQueue" : local.tei_processing_forward_queue_name
-    }) : notification
+        queue_name = var.enable_ark_workflow ? var.tei_ark_ingestion_queue_name : local.tei_processing_forward_queue_name
+      }) : notification
   ]
 }

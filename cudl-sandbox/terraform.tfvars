@@ -9,6 +9,7 @@ source-bucket-name           = "cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "sandbox.mvn.cudl.lib.cam.ac.uk"
 enable_ark_workflow          = true
+tei_ark_ingestion_queue_name = "CUDL_TEIArkIngestionQueue"
 
 transform-lambda-bucket-sns-notifications = [
   {
@@ -177,7 +178,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:1afa1530a59c270fd78d84ae404cd65873277b9eeadf5543ca7ecbff359bd3f1"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:fb71c9b50f28205d0ef628b9e76a1a67882d3a04bd5ddc6cbc4c79acd25664ab"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -203,7 +204,8 @@ transform-lambda-information = [
       LAMBDA_TIMEOUT_MARGIN_MS       = 180000
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
-      LOG_LEVEL                      = "INFO" #INFO or ERROR
+      ENABLE_TEI_SHA_IN_CORE_XML     = "true"
+      LOG_LEVEL                      = "ERROR" #INFO or ERROR
     }
   },
   {
@@ -306,7 +308,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:5383d2be5b05884d22b9edb605e213507a126f657f0ee9bfdd44c098b388764d"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:4b5eb553e7af649506736ccfb854c198b66a0bf6738f11a855f07979e3c38445"
     "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
@@ -316,13 +318,13 @@ transform-lambda-information = [
     "memory"                   = 4096
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 50
+    "maximum_concurrency"      = 40
     "enable_sqs_trigger"       = true
     "use_datadog_variables"    = false
     "use_additional_variables" = false
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      PID_LOG_LEVEL           = "INFO" #INFO or ERROR
+      PID_LOG_LEVEL           = "ERROR" #INFO or ERROR
       PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/563181399728/mjh39-sandbox-CUDL_TEIProcessingForwardQueue"
       PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:563181399728:secret:mjh39-sandbox/cudl/pid-pipeline-n2ddl1"
     }
@@ -388,7 +390,7 @@ solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
   "cudl-solr-api" = "sha256:0b50c2f22a615ab66a48ae98caace7e129361514f341396f32adc5d86e1e6190",
-  "cudl-solr"     = "sha256:f79f619f15b12383f53215d67bff527bcf8f7e8977b425b0485521e1cf346b39"
+  "cudl-solr"     = "sha256:0763ef9fccdf71d84a4a6820c442d934ec2638e1b0079f1d2d35c2c3b10a5925"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
