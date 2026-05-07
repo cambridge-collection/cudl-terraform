@@ -1,8 +1,4 @@
-environment = "sandbox"
-# The PID Lambda reads minter configuration from an existing Secrets Manager secret.
-# By default Terraform looks up <environment>/cudl/pid-pipeline, which matches
-# the existing sandbox secret mjh39-sandbox/cudl/pid-pipeline.
-# pid_pipeline_secret_name = "mjh39-sandbox/cudl/pid-pipeline"
+environment                  = "sandbox"
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
@@ -12,19 +8,10 @@ enhancements-bucket-name     = "cudl-data-enhancements"
 source-bucket-name           = "cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 lambda-jar-bucket            = "sandbox.mvn.cudl.lib.cam.ac.uk"
+enable_ark_workflow          = true
+tei_ark_ingestion_queue_name = "CUDL_TEIArkIngestionQueue"
 
 transform-lambda-bucket-sns-notifications = [
-  {
-    "bucket_name"   = "cudl-data-source"
-    "filter_prefix" = "items/data/tei/",
-    "filter_suffix" = ".xml"
-    "subscriptions" = [
-      {
-        "queue_name" = "CUDL_TEIArkIngestionQueue",
-        "raw"        = true
-      },
-    ]
-  },
   {
     "bucket_name"   = "cudl-data-releases"
     "filter_prefix" = "collections/",
@@ -138,6 +125,13 @@ transform-lambda-bucket-sqs-notifications = [
     "filter_prefix" = "transkribus/curious-cures/"
     "filter_suffix" = ".xml"
     "bucket_name"   = "cudl-data-enhancements"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDL_TEIArkIngestionQueue"
+    "filter_prefix" = "items/data/tei/"
+    "filter_suffix" = ".xml"
+    "bucket_name"   = "cudl-data-source"
   }
 ]
 transform-lambda-information = [
@@ -210,27 +204,7 @@ transform-lambda-information = [
       LAMBDA_TIMEOUT_MARGIN_MS       = 180000
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
-      LOG_LEVEL                      = "ERROR"
-    }
-  },
-  {
-    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:5383d2be5b05884d22b9edb605e213507a126f657f0ee9bfdd44c098b388764d"
-    "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
-    "queue_name"               = "CUDL_TEIArkIngestionQueue"
-    "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
-    "timeout"                  = 300
-    "memory"                   = 4096
-    "batch_window"             = 2
-    "batch_size"               = 1
-    "maximum_concurrency"      = 50
-    "use_datadog_variables"    = false
-    "use_additional_variables" = false
-    "ephemeral_storage"        = 1024
-    "environment_variables" = {
-      PID_LOG_LEVEL = "ERROR"
+      LOG_LEVEL                      = "INFO" #INFO or ERROR
     }
   },
   {
@@ -329,6 +303,29 @@ transform-lambda-information = [
       DEST_BUCKET   = "mjh39-sandbox-cudl-data-releases"
       SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
+    }
+  },
+  {
+    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:4b5eb553e7af649506736ccfb854c198b66a0bf6738f11a855f07979e3c38445"
+    "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
+    "queue_name"               = "CUDL_TEIArkIngestionQueue"
+    "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
+    "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-solr-external"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 40
+    "enable_sqs_trigger"       = true
+    "use_datadog_variables"    = false
+    "use_additional_variables" = false
+    "ephemeral_storage"        = 1024
+    "environment_variables" = {
+      PID_LOG_LEVEL           = "INFO" #INFO or ERROR
+      PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/563181399728/mjh39-sandbox-CUDL_TEIProcessingForwardQueue"
+      PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:563181399728:secret:mjh39-sandbox/cudl/pid-pipeline-n2ddl1"
     }
   }
 ]

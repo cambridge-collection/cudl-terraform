@@ -58,6 +58,12 @@ variable "lambda-jar-bucket" {
   type        = string
 }
 
+variable "tei_ark_ingestion_queue_name" {
+  description = "SQS queue name used for TEI ark ingestion when ark workflow is enabled"
+  type        = string
+  default     = "CUDL_TEIArkIngestionQueue"
+}
+
 variable "transform-lambda-information" {
   description = "A list of objects containing information about the transformation lambda functions"
   type = list(object({
@@ -91,12 +97,6 @@ variable "transform-lambda-information" {
     function_response_types        = optional(list(string))
     enable_sqs_trigger             = optional(bool, true)
   }))
-}
-
-variable "pid_pipeline_secret_name" {
-  description = "Secrets Manager secret name containing the PID pipeline configuration. When unset, defaults to <environment>/cudl/pid-pipeline."
-  type        = string
-  default     = null
 }
 
 variable "dst-efs-prefix" {
@@ -479,4 +479,10 @@ variable "cudl_viewer_datasync_task_s3_to_efs_pattern" {
 variable "cudl_viewer_ecs_task_def_memory" {
   type        = number
   description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
+}
+
+variable "enable_ark_workflow" {
+  description = "Whether TEI XML files should be routed through the ARK ingestion lambda before TEI processing."
+  type        = bool
+  default     = false
 }
