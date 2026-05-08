@@ -317,5 +317,5 @@ variable "production_deployment" {
 variable "create_datasync" {
   type        = bool
   description = "Whether to create DataSync tasks and locations for S3-to-EFS sync"
-  default     = true
+  default     = false
 }
