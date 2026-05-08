@@ -162,19 +162,36 @@ done
 echo ""
 
 # ── Update terraform.tfvars — Lambda image_uri values ─────────────────────────
-# Pattern:  <account>.dkr.ecr.<region>.amazonaws.com/cudl/repo@sha256:HEX
+# Matches image_uri values containing the repo name (handles real account IDs and ACCOUNT_ID placeholder).
 echo "Patching ${MAIN_TFVARS##*/} ..."
 for REPO in "${LAMBDA_REPOS[@]}"; do
   [[ -z "${DIGESTS[$REPO]+x}" ]] && continue
-  NEW="${DIGESTS[$REPO]}"
-  OLD_URI=$(grep -oE "[0-9]+\.dkr\.ecr\.[a-z0-9-]+\.amazonaws\.com/${REPO}@sha256:[0-9a-f]+" \
-    "$MAIN_TFVARS" | head -1 || echo "")
-  if [[ -z "$OLD_URI" ]]; then
+  NEW_URI="${REGISTRY}/${REPO}@${DIGESTS[$REPO]}"
+  FOUND=$(python3 -c "
+import re, sys
+content = open(sys.argv[1]).read()
+print('yes' if re.search(r'\"image_uri\"\s*=\s*\"[^\"]*' + re.escape(sys.argv[2]) + r'[^\"]*\"', content) else 'no')
+" "$MAIN_TFVARS" "$REPO")
+  if [[ "$FOUND" != "yes" ]]; then
     echo "  SKIP (entry not found): ${REPO}"
     continue
   fi
-  NEW_URI="${REGISTRY}/${REPO}@${NEW}"
-  patch_file "$MAIN_TFVARS" "$OLD_URI" "$NEW_URI" "${REPO}"
+  if [[ "$DRY_RUN" == true ]]; then
+    echo "  WOULD UPDATE  ${REPO}"
+  else
+    python3 - "$MAIN_TFVARS" "$REPO" "$NEW_URI" <<'PYEOF'
+import re, sys
+path, repo, new_uri = sys.argv[1], sys.argv[2], sys.argv[3]
+content = open(path).read()
+content = re.sub(
+    r'("image_uri"\s*=\s*)"[^"]*' + re.escape(repo) + r'[^"]*"',
+    r'\g<1>"' + new_uri + '"',
+    content
+)
+open(path, 'w').write(content)
+PYEOF
+    echo "  UPDATED  ${REPO}"
+  fi
 done
 echo ""
 

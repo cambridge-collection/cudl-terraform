@@ -4,14 +4,14 @@
 project                      = "CUDL"
 component                    = "cudl-data-workflows"
 subcomponent                 = "cudl-transform-lambda"
-destination-bucket-name      = "cul-cudl-data-releases"
-transcriptions-bucket-name   = "cul-cudl-transcriptions"
-source-bucket-name           = "cul-cudl-data-source"
+destination-bucket-name      = "REPLACEME-cudl-data-releases"
+transcriptions-bucket-name   = "REPLACEME-cudl-transcriptions"
+source-bucket-name           = "REPLACEME-cudl-data-source"
 compressed-lambdas-directory = "compressed_lambdas"
 
 transform-lambda-bucket-sns-notifications = [
   {
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
     "filter_prefix" = "items/data/tei/",
     "filter_suffix" = ".xml"
     "subscriptions" = [
@@ -26,7 +26,7 @@ transform-lambda-bucket-sns-notifications = [
     ]
   },
   {
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
     "filter_prefix" = "collections/",
     "filter_suffix" = ".json"
     "subscriptions" = [
@@ -47,83 +47,83 @@ transform-lambda-bucket-sqs-notifications = [
     "queue_name"    = "CUDLPackageDataQueue_HTML",
     "filter_prefix" = "pages/html/",
     "filter_suffix" = ".html"
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "pages/images/"
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "cudl.dl-dataset"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "cudl.ui"
     "filter_suffix" = ".json5"
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_Collections"
     "filter_prefix" = "collections/"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "filter_prefix" = "ui/"
     "filter_suffix" = ""
-    "bucket_name"   = "cul-cudl-data-source"
+    "bucket_name"   = "REPLACEME-cudl-data-source"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLIndexQueue"
     "filter_prefix" = "solr-json/"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.dl-dataset.json"
     "filter_suffix" = ""
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.ui.json5"
     "filter_suffix" = ""
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "json/"
     "filter_suffix" = ".json"
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "pages/"
     "filter_suffix" = ""
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
   },
   {
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "ui/"
     "filter_suffix" = ""
-    "bucket_name"   = "cul-cudl-data-releases"
+    "bucket_name"   = "REPLACEME-cudl-data-releases"
   },
 ]
 transform-lambda-information = [
@@ -132,8 +132,8 @@ transform-lambda-information = [
     "description"           = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataQueue_HTML"
-    "subnet_names"          = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["development-cudl-ecs-vpc-egress"]
+    "subnet_names"          = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"  = ["REPLACEME-cudl-ecs-vpc-egress"]
     "use_datadog_variables" = false
     "timeout"               = 900
     "memory"                = 512
@@ -145,9 +145,9 @@ transform-lambda-information = [
     "description"           = "Copies file from the source s3 bucket into the destination (release) s3 bucket, unchanged"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
-    "vpc_name"              = "development-cudl-ecs-vpc"
-    "subnet_names"          = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["development-cudl-ecs-vpc-egress"]
+    "vpc_name"              = "REPLACEME-cudl-ecs-vpc"
+    "subnet_names"          = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"  = ["REPLACEME-cudl-ecs-vpc-egress"]
     "use_datadog_variables" = false
     "timeout"               = 900
     "memory"                = 512
@@ -160,8 +160,8 @@ transform-lambda-information = [
     "description"           = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
     "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"            = "CUDLPackageDataQueue_Collections"
-    "subnet_names"          = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["development-cudl-ecs-vpc-egress"]
+    "subnet_names"          = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"  = ["REPLACEME-cudl-ecs-vpc-egress"]
     "use_datadog_variables" = false
     "timeout"               = 900
     "memory"                = 512
@@ -170,11 +170,11 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "206247777824.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:dedac9887de0399578d64d0fe5d0df67d03ffd05e090d29e8778555f83d8b3d7"
+    "image_uri"                = "ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:FIXME"
     "queue_name"               = "CUDL_TEIProcessingQueue"
-    "vpc_name"                 = "development-cudl-ecs-vpc"
-    "subnet_names"             = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"     = ["development-cudl-ecs-vpc-egress", "development-solr-external"]
+    "vpc_name"                 = "REPLACEME-cudl-ecs-vpc"
+    "subnet_names"             = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["REPLACEME-cudl-ecs-vpc-egress", "REPLACEME-solr-external"]
     "timeout"                  = 300
     "memory"                   = 3000 # There is a limit of 3008 memory for new AWS acocunts
     "batch_window"             = 2
@@ -185,7 +185,7 @@ transform-lambda-information = [
     "ephemeral_storage"        = 1024
     "environment_variables" = {
       ANT_TARGET               = "full"
-      SEARCH_HOST              = "solr-api-cudl-ecs.development-solr"
+      SEARCH_HOST              = "solr-api-cudl-ecs.REPLACEME-solr"
       SEARCH_PORT              = 8081
       SEARCH_COLLECTION_PATH   = "collections"
       SKIP_PAGE_XML_COPY       = "true"
@@ -195,11 +195,11 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "206247777824.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:FIXME"
     "queue_name"               = "CUDLIndexQueue"
-    "vpc_name"                 = "development-cudl-ecs-vpc"
-    "subnet_names"             = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"     = ["development-cudl-ecs-vpc-egress", "development-solr-external"]
+    "vpc_name"                 = "REPLACEME-cudl-ecs-vpc"
+    "subnet_names"             = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["REPLACEME-cudl-ecs-vpc-egress", "REPLACEME-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -208,18 +208,18 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.development-solr"
+      API_HOST = "solr-api-cudl-ecs.REPLACEME-solr"
       API_PORT = "8081"
       API_PATH = "item"
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "206247777824.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:FIXME"
     "queue_name"               = "CUDLIndexCollectionQueue"
-    "vpc_name"                 = "development-cudl-ecs-vpc"
-    "subnet_names"             = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"     = ["development-cudl-ecs-vpc-egress", "development-solr-external"]
+    "vpc_name"                 = "REPLACEME-cudl-ecs-vpc"
+    "subnet_names"             = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["REPLACEME-cudl-ecs-vpc-egress", "REPLACEME-solr-external"]
     "timeout"                  = 180
     "memory"                   = 1024
     "batch_window"             = 2
@@ -228,7 +228,7 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.development-solr"
+      API_HOST = "solr-api-cudl-ecs.REPLACEME-solr"
       API_PORT = "8081"
       API_PATH = "collection"
     }
@@ -238,8 +238,8 @@ transform-lambda-information = [
     "description"                    = "Copies file from S3 to EFS"
     "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
     "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"                   = ["development-cudl-ecs-subnet-private-eu-west-1a", "development-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"           = ["development-cudl-ecs-vpc-egress", "development-cudl-data-releases-efs"]
+    "subnet_names"                   = ["REPLACEME-cudl-ecs-subnet-private-eu-west-1a", "REPLACEME-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["REPLACEME-cudl-ecs-vpc-egress", "REPLACEME-cudl-data-releases-efs"]
     "use_datadog_variables"          = false
     "mount_fs"                       = true
     "sqs_max_tries_before_deadqueue" = 1
@@ -283,7 +283,7 @@ content_loader_container_name_ui                   = "dl-loader-ui"
 content_loader_container_name_db                   = "dl-loader-db"
 content_loader_health_check_status_code            = "401"
 content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
-content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
+content_loader_releases_bucket_production          = "production-REPLACEME-cudl-data-releases"
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
 content_loader_cloudfront_origin_read_timeout      = 60   # 180 requires a quota increase; default max is 60
 content_loader_ecs_task_def_memory                 = 3000
@@ -316,3 +316,5 @@ cudl_viewer_health_check_status_code = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
 cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_ecs_task_def_memory             = 3520
+
+iiif_image_server_url = "https://images.lib.cam.ac.uk/iiif/"

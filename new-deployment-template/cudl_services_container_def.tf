@@ -61,11 +61,11 @@ locals {
         },
         {
           name  = "CUDL_SERVICES_IIIF_BASE_URL",
-          value = "https://cudl.cul-development.net/iiif"
+          value = "https://cudl.${trimsuffix(var.registered_domain_name, ".")}/iiif"
         },
         {
           name  = "CUDL_SERVICES_CUDL_BASE_URL",
-          value = "https://cudl.cul-development.net/"
+          value = "https://cudl.${trimsuffix(var.registered_domain_name, ".")}/"
         },
       ],
       secrets = [

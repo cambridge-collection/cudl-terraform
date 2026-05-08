@@ -14,7 +14,7 @@ module "base_architecture" {
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
   vpc_cidr_block                  = var.vpc_cidr_block
   vpc_private_subnet_cidr_blocks  = ["10.50.0.128/26", "10.50.0.192/26"]
-  vpc_nat_gateway_single          = false
+  vpc_nat_gateway_single          = true
   acm_create_certificate          = false
   acm_certificate_arn             = var.acm_certificate_arn
   tags                            = local.default_tags
@@ -87,6 +87,7 @@ module "content_loader" {
       source_bucket              = module.cudl-data-processing.source_bucket
       releases_bucket            = module.cudl-data-processing.destination_bucket
       releases_bucket_production = var.content_loader_releases_bucket_production
+      iiif_image_server_url           = var.iiif_image_server_url
     })
   }
   vpc_id                         = module.base_architecture.vpc_id
@@ -235,9 +236,10 @@ module "cudl_viewer" {
       ga4_google_analytics_id = data.aws_ssm_parameter.cudl_viewer_ga4_google_analytics_id.value
       mount_path              = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
       search_url              = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
-      cudl_services_url       = module.cudl_services.link  
+      cudl_services_url       = module.cudl_services.link
       root_url                = module.cudl_viewer.link
       json_url                = format("%s/json/", module.cudl_viewer.link)
+      iiif_image_server_url        = var.iiif_image_server_url
     })
   }
   s3_task_buckets = [module.base_architecture.s3_bucket]

@@ -73,15 +73,6 @@ if [[ -d "$OUT_DIR" ]]; then
   exit 1
 fi
 
-# Title-case helper (first letter uppercase, rest unchanged)
-title_case() {
-  local upper
-  upper="$(printf '%s' "${1:0:1}" | tr '[:lower:]' '[:upper:]')"
-  printf '%s%s' "$upper" "${1:1}"
-}
-SRC_ENV_TITLE="$(title_case "$SRC_ENV")"
-NEW_ENV_TITLE="$(title_case "$NEW_ENV")"
-
 echo "Source:      cul-${SRC_ENV}  (account ${SRC_ACCOUNT}, domain ${SRC_DOMAIN})"
 echo "Destination: ${OUT_DIR}"
 echo "New env:     ${NEW_ENV}  (account ${NEW_ACCOUNT}, domain ${NEW_DOMAIN})"
@@ -116,11 +107,15 @@ do_substitution() {
 }
 
 echo "Applying substitutions ..."
-# Title-case env name  (e.g. Development → Neworg)
-do_substitution "$SRC_ENV_TITLE" "$NEW_ENV_TITLE" \
-  "env title-case: ${SRC_ENV_TITLE} → ${NEW_ENV_TITLE}"
+# Env placeholder in terraform.tfvars and terraform.tf  (e.g. REPLACEME → neworg)
+do_substitution "REPLACEME" "$NEW_ENV" \
+  "env placeholder: REPLACEME → ${NEW_ENV}"
 
-# Lowercase env name  (e.g. development → neworg)
+# Account ID placeholder in lambda image_uri values
+do_substitution "ACCOUNT_ID" "$NEW_ACCOUNT" \
+  "account ID placeholder: ACCOUNT_ID → ${NEW_ACCOUNT}"
+
+# Env placeholder in institution.auto.tfvars
 do_substitution "$SRC_ENV" "$NEW_ENV" \
   "env name: ${SRC_ENV} → ${NEW_ENV}"
 
@@ -132,7 +127,7 @@ else
   echo "  Skipping account ID substitution (no account ID found in template acm_certificate_arn)"
 fi
 
-# Domain name  (e.g. cul-development.net → neworg.example.com)
+# Domain placeholder in institution.auto.tfvars  (e.g. FIXME domain → neworg.example.com)
 do_substitution "$SRC_DOMAIN" "$NEW_DOMAIN" \
   "domain: ${SRC_DOMAIN} → ${NEW_DOMAIN}"
 

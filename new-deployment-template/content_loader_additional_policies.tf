@@ -49,9 +49,9 @@ data "aws_iam_policy_document" "development_cudl_data_releases" {
 }
 
 resource "aws_iam_policy" "development_cudl_data_releases" {
-  name        = format("%s-development-cudl-data-releases", module.content_loader.name_prefix)
+  name        = format("%s-%s-cudl-data-releases", module.content_loader.name_prefix, lower(var.environment))
   path        = "/"
-  description = format("Policy for %s-development-cudl-data-releases", module.content_loader.name_prefix)
+  description = format("Policy for %s-%s-cudl-data-releases", module.content_loader.name_prefix, lower(var.environment))
   policy      = data.aws_iam_policy_document.development_cudl_data_releases.json
 }
 
@@ -164,8 +164,8 @@ data "aws_iam_policy_document" "development_cudl_data_source" {
 }
 
 resource "aws_iam_policy" "development_cudl_data_source" {
-  name        = format("%s-development-cudl-data-source", module.content_loader.name_prefix)
+  name        = format("%s-%s-cudl-data-source", module.content_loader.name_prefix, lower(var.environment))
   path        = "/"
-  description = format("Policy for %s-development-cudl-data-source", module.content_loader.name_prefix)
+  description = format("Policy for %s-%s-cudl-data-source", module.content_loader.name_prefix, lower(var.environment))
   policy      = data.aws_iam_policy_document.development_cudl_data_source.json
 }

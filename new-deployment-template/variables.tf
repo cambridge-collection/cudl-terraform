@@ -459,3 +459,8 @@ variable "cudl_viewer_ecs_task_def_memory" {
   type        = number
   description = "Amount (in MiB) of memory used by the CUDL Viewer tasks"
 }
+
+variable "iiif_image_server_url" {
+  type        = string
+  description = "Base URL of the image server, with trailing slash, e.g. https://images.lib.cam.ac.uk/"
+}

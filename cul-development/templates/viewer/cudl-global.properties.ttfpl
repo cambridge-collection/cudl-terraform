@@ -36,9 +36,9 @@ dataUIThemeResources=${mount_path}/data/ui/
 
 # URLs for image and services servers.
 # Note after switch to IIIF (thumbnail data) we can remove IIIFImageServer
-imageServer=https://images.lib.cam.ac.uk/
+imageServer=${iiif_image_server_url}
 services=${cudl_services_url}
-IIIFImageServer=https://images.lib.cam.ac.uk/iiif/
+IIIFImageServer=${iiif_image_server_url}
 
 # Email address to send the feedback form to.
 # Note this may not work locally as port 25 is blocked.

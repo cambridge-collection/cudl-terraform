@@ -92,6 +92,7 @@ module "content_loader" {
       source_bucket              = module.cudl-data-processing.source_bucket
       releases_bucket            = module.cudl-data-processing.destination_bucket
       releases_bucket_production = var.content_loader_releases_bucket_production
+      iiif_image_server_url           = var.iiif_image_server_url
     })
   }
   cloudfront_vpc_origin_id = module.base_architecture.cloudfront_vpc_origin_id
@@ -252,6 +253,7 @@ module "cudl_viewer" {
       cudl_services_url       = module.cudl_services.link
       root_url                = module.cudl_viewer.link
       json_url                = format("%s/json/", module.cudl_viewer.link)
+      iiif_image_server_url        = var.iiif_image_server_url
     })
   }
   s3_task_buckets = [module.base_architecture.s3_bucket]

@@ -316,3 +316,5 @@ cudl_viewer_health_check_status_code = "200"
 cudl_viewer_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
 cudl_viewer_ecs_task_def_volumes     = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
 cudl_viewer_ecs_task_def_memory      = 3520
+
+iiif_image_server_url = "https://images.lib.cam.ac.uk/iiif/"
