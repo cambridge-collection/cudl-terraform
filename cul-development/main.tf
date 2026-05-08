@@ -1,5 +1,7 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.3.1"
+  #source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.3.1"
+  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
+  source = "../../../projects/terraform-aws-architecture-ecs"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -12,12 +14,14 @@ module "base_architecture" {
   alb_idle_timeout               = var.alb_idle_timeout
   vpc_public_subnet_public_ip    = var.vpc_public_subnet_public_ip
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
-  vpc_cidr_block                  = var.vpc_cidr_block
-  vpc_private_subnet_cidr_blocks  = ["10.50.0.128/26", "10.50.0.192/26"]
-  vpc_nat_gateway_single          = false
-  acm_create_certificate          = false
-  acm_certificate_arn             = var.acm_certificate_arn
-  tags                            = local.default_tags
+  vpc_cidr_block                 = var.vpc_cidr_block
+  vpc_private_subnet_cidr_blocks = ["10.50.0.128/26", "10.50.0.192/26"]
+  vpc_nat_gateway_single         = true
+  vpc_s3_gateway_endpoint_create = true
+  alb_internal                   = true
+  acm_create_certificate         = false
+  acm_certificate_arn            = var.acm_certificate_arn
+  tags                           = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
@@ -53,14 +57,15 @@ module "cudl-data-processing" {
   create_cloudfront_distribution            = var.create_cloudfront_distribution
   acm_create_certificate                    = false
   acm_certificate_arn                       = var.acm_certificate_arn_us-east-1
-  create_datasync                           = false
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  #source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
+  source = "../../../projects/terraform-aws-workload-ecs"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -89,10 +94,11 @@ module "content_loader" {
       releases_bucket_production = var.content_loader_releases_bucket_production
     })
   }
-  vpc_id                         = module.base_architecture.vpc_id
-  vpc_subnet_ids                 = module.base_architecture.vpc_private_subnet_ids
-  alb_arn                        = module.base_architecture.alb_arn
-  alb_dns_name                   = module.base_architecture.alb_dns_name
+  cloudfront_vpc_origin_id = module.base_architecture.cloudfront_vpc_origin_id
+  vpc_id                   = module.base_architecture.vpc_id
+  vpc_subnet_ids           = module.base_architecture.vpc_private_subnet_ids
+  alb_arn                  = module.base_architecture.alb_arn
+  # alb_dns_name                   = module.base_architecture.alb_dns_name
   alb_listener_arn               = module.base_architecture.alb_https_listener_arn
   ecs_cluster_arn                = module.base_architecture.ecs_cluster_arn
   route53_zone_id                = module.base_architecture.route53_public_hosted_zone
@@ -119,7 +125,9 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  #  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
+  source = "../../../projects/terraform-aws-workload-ecs"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -146,30 +154,33 @@ module "solr" {
   vpc_id                                         = module.base_architecture.vpc_id
   vpc_subnet_ids                                 = module.base_architecture.vpc_private_subnet_ids
   alb_arn                                        = module.base_architecture.alb_arn
-  alb_dns_name                                   = module.base_architecture.alb_dns_name
-  alb_listener_arn                               = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn                                = module.base_architecture.ecs_cluster_arn
-  route53_zone_id                                = module.base_architecture.route53_public_hosted_zone
-  asg_name                                       = module.base_architecture.asg_name
-  asg_security_group_id                          = module.base_architecture.asg_security_group_id
-  alb_security_group_id                          = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn                       = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn                         = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
-  cloudfront_allowed_methods                     = var.solr_allowed_methods
-  allow_private_access                           = var.solr_use_service_discovery
-  ingress_security_group_id                      = aws_security_group.solr.id
-  efs_create_file_system                         = true
-  acm_create_certificate                         = false
-  acm_certificate_arn                            = var.acm_certificate_arn
-  acm_certificate_arn_us-east-1                  = var.acm_certificate_arn_us-east-1
-  tags                                           = local.default_tags
+  #alb_dns_name                                   = module.base_architecture.alb_dns_name
+  alb_listener_arn              = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn               = module.base_architecture.ecs_cluster_arn
+  route53_zone_id               = module.base_architecture.route53_public_hosted_zone
+  asg_name                      = module.base_architecture.asg_name
+  asg_security_group_id         = module.base_architecture.asg_security_group_id
+  alb_security_group_id         = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn      = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn        = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
+  cloudfront_allowed_methods    = var.solr_allowed_methods
+  cloudfront_vpc_origin_id      = module.base_architecture.cloudfront_vpc_origin_id
+  allow_private_access          = var.solr_use_service_discovery
+  ingress_security_group_id     = aws_security_group.solr.id
+  efs_create_file_system        = true
+  acm_create_certificate        = false
+  acm_certificate_arn           = var.acm_certificate_arn
+  acm_certificate_arn_us-east-1 = var.acm_certificate_arn_us-east-1
+  tags                          = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  #  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
+  source = "../../../projects/terraform-aws-workload-ecs"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -187,27 +198,30 @@ module "cudl_services" {
   ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.basicauth_credentials.arn, data.aws_ssm_parameter.database_password.arn]
   vpc_id                                    = module.base_architecture.vpc_id
   alb_arn                                   = module.base_architecture.alb_arn
-  alb_dns_name                              = module.base_architecture.alb_dns_name
-  alb_listener_arn                          = module.base_architecture.alb_https_listener_arn
-  ecs_cluster_arn                           = module.base_architecture.ecs_cluster_arn
-  route53_zone_id                           = module.base_architecture.route53_public_hosted_zone
-  asg_name                                  = module.base_architecture.asg_name
-  asg_security_group_id                     = module.base_architecture.asg_security_group_id
-  alb_security_group_id                     = module.base_architecture.alb_security_group_id
-  cloudwatch_log_group_arn                  = module.base_architecture.cloudwatch_log_group_arn
-  cloudfront_waf_acl_arn                    = module.base_architecture.waf_acl_arn
-  cloudfront_allowed_methods                = var.cudl_services_allowed_methods
-  acm_create_certificate                    = false
-  acm_certificate_arn                       = var.acm_certificate_arn
-  acm_certificate_arn_us-east-1             = var.acm_certificate_arn_us-east-1
-  tags                                      = local.default_tags
+  #alb_dns_name                              = module.base_architecture.alb_dns_name
+  alb_listener_arn              = module.base_architecture.alb_https_listener_arn
+  ecs_cluster_arn               = module.base_architecture.ecs_cluster_arn
+  route53_zone_id               = module.base_architecture.route53_public_hosted_zone
+  asg_name                      = module.base_architecture.asg_name
+  asg_security_group_id         = module.base_architecture.asg_security_group_id
+  alb_security_group_id         = module.base_architecture.alb_security_group_id
+  cloudwatch_log_group_arn      = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_waf_acl_arn        = module.base_architecture.waf_acl_arn
+  cloudfront_allowed_methods    = var.cudl_services_allowed_methods
+  cloudfront_vpc_origin_id      = module.base_architecture.cloudfront_vpc_origin_id
+  acm_create_certificate        = false
+  acm_certificate_arn           = var.acm_certificate_arn
+  acm_certificate_arn_us-east-1 = var.acm_certificate_arn_us-east-1
+  tags                          = local.default_tags
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  #  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
+  source = "../../../projects/terraform-aws-workload-ecs"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -235,7 +249,7 @@ module "cudl_viewer" {
       ga4_google_analytics_id = data.aws_ssm_parameter.cudl_viewer_ga4_google_analytics_id.value
       mount_path              = var.cudl_viewer_ecs_task_def_volumes["cudl-viewer"]
       search_url              = format("http://%s:%s/", trimsuffix(module.solr.private_access_host, "."), var.solr_target_group_port)
-      cudl_services_url       = module.cudl_services.link  
+      cudl_services_url       = module.cudl_services.link
       root_url                = module.cudl_viewer.link
       json_url                = format("%s/json/", module.cudl_viewer.link)
     })
@@ -248,8 +262,8 @@ module "cudl_viewer" {
     aws_security_group.solr.id,
     aws_security_group.email.id,
   ]
-  alb_arn                                = module.base_architecture.alb_arn
-  alb_dns_name                           = module.base_architecture.alb_dns_name
+  alb_arn = module.base_architecture.alb_arn
+  #alb_dns_name                           = module.base_architecture.alb_dns_name
   alb_listener_arn                       = module.base_architecture.alb_https_listener_arn
   ecs_cluster_arn                        = module.base_architecture.ecs_cluster_arn
   route53_zone_id                        = module.base_architecture.route53_public_hosted_zone
@@ -259,6 +273,7 @@ module "cudl_viewer" {
   cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
   cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
+  cloudfront_vpc_origin_id               = module.base_architecture.cloudfront_vpc_origin_id
   cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
   efs_use_existing_filesystem            = true
   efs_file_system_id                     = module.cudl-data-processing.efs_file_system_id

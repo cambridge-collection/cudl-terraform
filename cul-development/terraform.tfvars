@@ -184,12 +184,12 @@ transform-lambda-information = [
     "use_additional_variables" = true
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      ANT_TARGET               = "full"
-      SEARCH_HOST              = "solr-api-cudl-ecs.development-solr"
-      SEARCH_PORT              = 8081
-      SEARCH_COLLECTION_PATH   = "collections"
-      SKIP_PAGE_XML_COPY       = "true"
-      SKIP_CORE_XML_COPY       = "true"
+      ANT_TARGET             = "full"
+      SEARCH_HOST            = "solr-api-cudl-ecs.development-solr"
+      SEARCH_PORT            = 8081
+      SEARCH_COLLECTION_PATH = "collections"
+      SKIP_PAGE_XML_COPY     = "true"
+      SKIP_CORE_XML_COPY     = "true"
       #SKIP_COPY_TEI_WEB_ASSETS = "true"
     }
   },
@@ -261,12 +261,12 @@ data_processing_efs_throughput_mode        = "provisioned"
 data_processing_efs_provisioned_throughput = 3
 
 # Base Architecture
-cluster_name_suffix            = "cudl-ecs"
-ec2_instance_type              = "t3.medium"
-asg_desired_capacity           = 4 # n = number of tasks
-asg_max_size                   = 5 # n + 1
-asg_allow_all_egress           = true
-route53_zone_force_destroy     = true
+cluster_name_suffix        = "cudl-ecs"
+ec2_instance_type          = "t3.medium"
+asg_desired_capacity       = 4 # n = number of tasks
+asg_max_size               = 5 # n + 1
+asg_allow_all_egress       = true
+route53_zone_force_destroy = true
 # acm_certificate_arn_us-east-1 is not set here; wildcard cert is managed in acm_wildcard_cert.tf
 alb_enable_deletion_protection = false
 alb_idle_timeout               = "900"
@@ -274,10 +274,10 @@ vpc_public_subnet_public_ip    = false
 vpc_endpoint_services          = ["ssmmessages", "ssm", "ec2messages", "ecr.api", "ecr.dkr", "ecs", "ecs-agent", "ecs-telemetry", "logs", "elasticfilesystem", "secretsmanager"]
 
 # Content Loader Workload
-content_loader_name_suffix       = "cl"
-content_loader_domain_name       = "content-loader"
-content_loader_application_port  = 8081
-content_loader_target_group_port = 9009
+content_loader_name_suffix                         = "cl"
+content_loader_domain_name                         = "content-loader"
+content_loader_application_port                    = 8081
+content_loader_target_group_port                   = 9009
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui                   = "dl-loader-ui"
 content_loader_container_name_db                   = "dl-loader-db"
@@ -285,14 +285,14 @@ content_loader_health_check_status_code            = "401"
 content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
-content_loader_cloudfront_origin_read_timeout      = 60   # 180 requires a quota increase; default max is 60
+content_loader_cloudfront_origin_read_timeout      = 60 # 180 requires a quota increase; default max is 60
 content_loader_ecs_task_def_memory                 = 3000
 
 # SOLR Workload
-solr_name_suffix       = "solr"
-solr_domain_name       = "search"
-solr_application_port  = 8983
-solr_target_group_port = 8081
+solr_name_suffix              = "solr"
+solr_domain_name              = "search"
+solr_application_port         = 8983
+solr_target_group_port        = 8081
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
 solr_container_name_solr      = "solr"
@@ -313,6 +313,6 @@ cudl_viewer_domain_name              = "viewer"
 cudl_viewer_target_group_port        = 5008
 cudl_viewer_container_port           = 8080
 cudl_viewer_health_check_status_code = "200"
-cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
-cudl_viewer_ecs_task_def_volumes            = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
-cudl_viewer_ecs_task_def_memory             = 3520
+cudl_viewer_allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
+cudl_viewer_ecs_task_def_volumes     = { "cudl-viewer" = "/srv/cudl-viewer/cudl-data" }
+cudl_viewer_ecs_task_def_memory      = 3520
