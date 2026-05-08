@@ -1,7 +1,7 @@
 locals {
-  environment                       = var.environment
-  base_name_prefix                  = join("-", compact([local.environment, var.cluster_name_suffix]))
-  ark_lambda_name         = "AWSLambda_CUDL_ARK_Ingestion"
+  environment      = var.environment
+  base_name_prefix = join("-", compact([local.environment, var.cluster_name_suffix]))
+  ark_lambda_name  = "AWSLambda_CUDL_ARK_Ingestion"
   tei_processing_notification = {
     bucket_name   = var.source-bucket-name
     filter_prefix = "items/data/tei/"

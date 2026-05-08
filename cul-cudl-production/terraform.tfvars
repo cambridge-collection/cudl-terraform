@@ -177,19 +177,19 @@ waf_bot_control_exclusions = [
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
   {
-    "waf_bot_control_exclusion_uri" = "/v1/"
+    "waf_bot_control_exclusion_uri"        = "/v1/"
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
   {
-    "waf_bot_control_exclusion_uri" = ".json",
-    "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
-  }, 
-  {
-    "waf_bot_control_exclusion_uri" = "itemJSON",
+    "waf_bot_control_exclusion_uri"        = ".json",
     "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
   },
   {
-    "waf_bot_control_exclusion_uri" = "/rti/",
+    "waf_bot_control_exclusion_uri"        = "itemJSON",
+    "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
+  },
+  {
+    "waf_bot_control_exclusion_uri"        = "/rti/",
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
 ]
@@ -245,7 +245,7 @@ rti_image_server_cloudfront_response_headers_policy_name = "Managed-CORS-With-Pr
 
 # Daily summary fetch Lambda
 # Uncomment and override if you enable module "daily_summary_fetch" in main.tf
-daily_summary_target_url           = "https://search.cudl.lib.cam.ac.uk/summary?keyword=*&format=sdmx"
-daily_summary_results_bucket_name  = "cudl-goaccess-reports"
-daily_summary_schedule_expression  = "rate(1 day)"
-daily_summary_results_prefix       = ""
+daily_summary_target_url          = "https://search.cudl.lib.cam.ac.uk/summary?keyword=*&format=sdmx"
+daily_summary_results_bucket_name = "cudl-goaccess-reports"
+daily_summary_schedule_expression = "rate(1 day)"
+daily_summary_results_prefix      = ""
