@@ -31,7 +31,7 @@ cloudfront_route53_zone_id = "Z0793873J5B5RKU48R3D"
 # Both must be created manually in AWS Certificate Manager before running Terraform.
 # See DEPLOY.md step 10 for instructions.
 acm_certificate_arn           = "arn:aws:acm:eu-west-1:206247777824:certificate/9f58fdb2-6384-4cc5-8274-6f8491a27104"
-acm_certificate_arn_us-east-1 = "FIXME: ARN of wildcard cert in us-east-1, e.g. arn:aws:acm:us-east-1:206247777824:certificate/..."
+acm_certificate_arn_us-east-1 = "arn:aws:acm:us-east-1:206247777824:certificate/e1bf3bee-f668-483e-ae51-2aa425cc6ea5"
 
 # S3 — Maven/JAR bucket for JAR-based Lambda functions (created by bootstrap-environment.sh).
 lambda-jar-bucket = "cul-cudl.mvn.cul-development.net"
