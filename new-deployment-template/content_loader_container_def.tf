@@ -75,8 +75,8 @@ locals {
       name              = local.content_loader_container_name_ui,
       systemControls    = [],
       image             = data.aws_ecr_image.content_loader["cudl/content-loader-ui"].image_uri,
-      cpu               = 1920,
-      memory            = 2400,
+      cpu               = 896,
+      memory            = 2200,
       memoryReservation = 512,
       links = [
         local.content_loader_container_name_db

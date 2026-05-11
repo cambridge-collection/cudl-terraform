@@ -83,6 +83,7 @@ module "content_loader" {
   ecs_service_container_port                = var.content_loader_application_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
   ecs_task_def_memory                       = var.content_loader_ecs_task_def_memory
+  ecs_task_def_cpu                          = var.content_loader_ecs_task_def_cpu
   ssm_task_execution_parameter_arns = [
     data.aws_ssm_parameter.content_loader_db_password.arn,
   ]
@@ -192,6 +193,8 @@ module "cudl_services" {
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
+  ecs_task_def_memory                       = var.cudl_services_ecs_task_def_memory
+  ecs_task_def_cpu                          = var.cudl_services_ecs_task_def_cpu
   ecs_service_container_name                = local.cudl_services_container_name
   ecs_service_container_port                = var.cudl_services_container_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name

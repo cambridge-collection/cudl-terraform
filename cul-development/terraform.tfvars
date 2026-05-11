@@ -263,8 +263,8 @@ data_processing_efs_provisioned_throughput = 3
 # Base Architecture
 cluster_name_suffix        = "cudl-ecs"
 ec2_instance_type          = "t3.medium"
-asg_desired_capacity       = 4 # n = number of tasks
-asg_max_size               = 5 # n + 1
+asg_desired_capacity       = 3 # n = number of tasks
+asg_max_size               = 4 # n + 1
 asg_allow_all_egress       = true
 route53_zone_force_destroy = true
 # acm_certificate_arn_us-east-1 is not set here; wildcard cert is managed in acm_wildcard_cert.tf
@@ -286,7 +286,8 @@ content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", 
 content_loader_releases_bucket_production          = "production-cul-cudl-data-releases"
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
 content_loader_cloudfront_origin_read_timeout      = 60 # 180 requires a quota increase; default max is 60
-content_loader_ecs_task_def_memory                 = 3000
+content_loader_ecs_task_def_memory                 = 2700
+content_loader_ecs_task_def_cpu                    = 1024
 
 # SOLR Workload
 solr_name_suffix              = "solr"
@@ -306,6 +307,8 @@ cudl_services_domain_name              = "services"
 cudl_services_target_group_port        = 8085
 cudl_services_container_port           = 3000
 cudl_services_health_check_status_code = "404"
+cudl_services_ecs_task_def_memory      = 1024
+cudl_services_ecs_task_def_cpu         = 512
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 
 cudl_viewer_name_suffix              = "cudl-viewer"

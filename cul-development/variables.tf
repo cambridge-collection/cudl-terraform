@@ -308,6 +308,11 @@ variable "content_loader_ecs_task_def_memory" {
   description = "Amount (in MiB) of memory used by the Content loader tasks"
 }
 
+variable "content_loader_ecs_task_def_cpu" {
+  type        = number
+  description = "Number of CPU units used by the Content loader tasks"
+}
+
 variable "solr_name_suffix" {
   type        = string
   description = "Suffix to add to SOLR resource names"
@@ -403,6 +408,16 @@ variable "cudl_services_health_check_status_code" {
 #   type        = map(string)
 #   description = "Map of volume names and container paths to attach to the CUDL Services ECS Task Definition"
 # }
+
+variable "cudl_services_ecs_task_def_memory" {
+  type        = number
+  description = "Amount (in MiB) of memory used by the CUDL Services tasks"
+}
+
+variable "cudl_services_ecs_task_def_cpu" {
+  type        = number
+  description = "Number of CPU units used by the CUDL Services tasks"
+}
 
 variable "cudl_services_allowed_methods" {
   type        = list(string)
