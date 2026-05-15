@@ -1,7 +1,5 @@
 module "base_architecture" {
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.3.1"
-  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
-  source = "../../../projects/terraform-aws-architecture-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.4.0"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -19,6 +17,7 @@ module "base_architecture" {
   vpc_nat_gateway_single         = true
   vpc_s3_gateway_endpoint_create = true
   alb_internal                   = true
+  cloudfront_create_vpc_origin   = true
   acm_create_certificate         = false
   acm_certificate_arn            = var.acm_certificate_arn
   tags                           = local.default_tags
@@ -63,9 +62,7 @@ module "cudl-data-processing" {
 }
 
 module "content_loader" {
-  #source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
-  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
-  source = "../../../projects/terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -127,9 +124,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  #  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
-  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
-  source = "../../../projects/terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -180,9 +175,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  #  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
-  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
-  source = "../../../projects/terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -223,9 +216,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  #  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
-  # NOTE this needs the latest changes so upgrade to latest version after VPC origin support etc is released.
-  source = "../../../projects/terraform-aws-workload-ecs"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
