@@ -177,19 +177,19 @@ waf_bot_control_exclusions = [
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
   {
-    "waf_bot_control_exclusion_uri" = "/v1/"
+    "waf_bot_control_exclusion_uri"        = "/v1/"
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
   {
-    "waf_bot_control_exclusion_uri" = ".json",
-    "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
-  }, 
-  {
-    "waf_bot_control_exclusion_uri" = "itemJSON",
+    "waf_bot_control_exclusion_uri"        = ".json",
     "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
   },
   {
-    "waf_bot_control_exclusion_uri" = "/rti/",
+    "waf_bot_control_exclusion_uri"        = "itemJSON",
+    "waf_bot_control_exclusion_match_type" = "ENDS_WITH"
+  },
+  {
+    "waf_bot_control_exclusion_uri"        = "/rti/",
     "waf_bot_control_exclusion_match_type" = "STARTS_WITH"
   },
 ]
@@ -225,7 +225,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:70e1574f683f395cd2bc2ecc6ec964b7de95c5a11a8df627f01a62cac1b2704c"
+  "cudl/viewer" = "sha256:182deea95b63d7f06d5ae17ebc32dab9466d431e12d90a1857182336bf7a3a6f"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
@@ -245,7 +245,7 @@ rti_image_server_cloudfront_response_headers_policy_name = "Managed-CORS-With-Pr
 
 # Daily summary fetch Lambda
 # Uncomment and override if you enable module "daily_summary_fetch" in main.tf
-daily_summary_target_url           = "https://search.cudl.lib.cam.ac.uk/summary?keyword=*&format=sdmx"
-daily_summary_results_bucket_name  = "cudl-goaccess-reports"
-daily_summary_schedule_expression  = "rate(1 day)"
-daily_summary_results_prefix       = ""
+daily_summary_target_url          = "https://search.cudl.lib.cam.ac.uk/summary?keyword=*&format=sdmx"
+daily_summary_results_bucket_name = "cudl-goaccess-reports"
+daily_summary_schedule_expression = "rate(1 day)"
+daily_summary_results_prefix      = ""
