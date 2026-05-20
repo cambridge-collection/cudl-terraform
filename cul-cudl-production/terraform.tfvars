@@ -199,8 +199,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:bd656d72a2913d5b190465d67d0f38f73a7f8641778a4d64735d1bf43d1e886d",
-  "cudl/solr"     = "sha256:68d95719d82dd8c15d6d60bed860fdb59c733d778628709d8a2ae20f8db3f8c8"
+  "cudl/solr-api" = "sha256:c0d603aecb6ed8e2806a5ece8284fb1eda47d9ee65fac5901d42c95cd03b95f2",
+  "cudl/solr"     = "sha256:0cbc721fa29e260a83db2780519bf2ef96cc24e4ac4209397dfe3dea0ecb71be"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -225,7 +225,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:70e1574f683f395cd2bc2ecc6ec964b7de95c5a11a8df627f01a62cac1b2704c"
+  "cudl/viewer" = "sha256:182deea95b63d7f06d5ae17ebc32dab9466d431e12d90a1857182336bf7a3a6f"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback

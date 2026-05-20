@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.4.0"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -14,7 +14,10 @@ module "base_architecture" {
   cloudwatch_log_group           = var.cloudwatch_log_group # TODO create log group
   vpc_cidr_block                 = var.vpc_cidr_block
   vpc_private_subnet_cidr_blocks = ["10.88.0.128/26", "10.88.0.192/26"]
-  vpc_nat_gateway_single         = false
+  vpc_nat_gateway_single         = true
+  alb_internal                   = true
+  cloudfront_create_vpc_origin   = true
+  vpc_s3_gateway_endpoint_create = true
   acm_create_certificate         = false
   acm_certificate_arn            = var.acm_certificate_arn
   tags                           = local.default_tags
@@ -60,7 +63,7 @@ module "cudl-data-processing" {
 }
 
 module "content_loader" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -97,6 +100,7 @@ module "content_loader" {
   asg_security_group_id          = module.base_architecture.asg_security_group_id
   alb_security_group_id          = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn       = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_vpc_origin_id       = module.base_architecture.cloudfront_vpc_origin_id
   cloudfront_waf_acl_arn         = aws_wafv2_web_acl.content_loader.arn # custom WAF ACL for Content Loader
   cloudfront_origin_read_timeout = var.content_loader_cloudfront_origin_read_timeout
   cloudfront_allowed_methods     = var.content_loader_allowed_methods
@@ -116,7 +120,7 @@ module "content_loader" {
 }
 
 module "solr" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                                    = join("-", compact([local.environment, var.solr_name_suffix]))
   account_id                                     = data.aws_caller_identity.current.account_id
@@ -151,6 +155,7 @@ module "solr" {
   asg_security_group_id                          = module.base_architecture.asg_security_group_id
   alb_security_group_id                          = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn                       = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_vpc_origin_id                       = module.base_architecture.cloudfront_vpc_origin_id
   cloudfront_waf_acl_arn                         = aws_wafv2_web_acl.solr.arn # custom WAF ACL for SOLR
   cloudfront_allowed_methods                     = var.solr_allowed_methods
   allow_private_access                           = var.solr_use_service_discovery
@@ -166,7 +171,7 @@ module "solr" {
 }
 
 module "cudl_services" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -192,6 +197,7 @@ module "cudl_services" {
   asg_security_group_id                     = module.base_architecture.asg_security_group_id
   alb_security_group_id                     = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn                  = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_vpc_origin_id                  = module.base_architecture.cloudfront_vpc_origin_id
   cloudfront_waf_acl_arn                    = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods                = var.cudl_services_allowed_methods
   acm_create_certificate                    = false
@@ -204,7 +210,7 @@ module "cudl_services" {
 }
 
 module "cudl_viewer" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.3.1"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
   name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
   account_id                                = data.aws_caller_identity.current.account_id
@@ -256,6 +262,7 @@ module "cudl_viewer" {
   asg_security_group_id                  = module.base_architecture.asg_security_group_id
   alb_security_group_id                  = module.base_architecture.alb_security_group_id
   cloudwatch_log_group_arn               = module.base_architecture.cloudwatch_log_group_arn
+  cloudfront_vpc_origin_id               = module.base_architecture.cloudfront_vpc_origin_id
   cloudfront_waf_acl_arn                 = module.base_architecture.waf_acl_arn
   cloudfront_allowed_methods             = var.cudl_viewer_allowed_methods
   cloudfront_viewer_request_function_arn = aws_cloudfront_function.viewer.arn
