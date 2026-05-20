@@ -17,6 +17,7 @@ module "base_architecture" {
   waf_use_rate_limiting          = true
   alb_internal                   = true
   cloudfront_create_vpc_origin   = true
+  vpc_nat_gateway_single         = true
   vpc_s3_gateway_endpoint_create = true
   tags                           = local.default_tags
   providers = {
