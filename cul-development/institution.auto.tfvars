@@ -61,5 +61,5 @@ cudl_services_ecr_repositories = {
   "cudl/services" = "sha256:bc86da808e1420fde49196cdbc12251f1e79ba5dc3f0c5a68e4e197ebe1c7902"
 }
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:89f506db9ee6d75ccf93602cf5ba7a9b58d2bbe62193b8d7d8a994a62453b320"
+  "cudl/viewer" = "sha256:ee37a6fc145c85887078553777ec275348c01577d90cad5d60bd9a7ce6f1f9df"
 }

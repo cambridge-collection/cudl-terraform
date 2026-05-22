@@ -39,6 +39,8 @@ dataUIThemeResources=${mount_path}/data/ui/
 imageServer=${iiif_image_server_url}
 services=${cudl_services_url}
 IIIFImageServer=${iiif_image_server_url}
+RTIImageServer=https://mlb-gh.github.io/
+RTILayout=deepzoom
 
 # Email address to send the feedback form to.
 # Note this may not work locally as port 25 is blocked.
