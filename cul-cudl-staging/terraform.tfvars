@@ -1,30 +1,18 @@
-environment                  = "staging"
-project                      = "CUDL"
-component                    = "cudl-data-workflows"
-subcomponent                 = "cudl-transform-lambda"
-destination-bucket-name      = "cul-cudl-data-releases"
-transcriptions-bucket-name   = "cul-cudl-transcriptions"
-enhancements-bucket-name     = "cul-cudl-data-enhancements"
-source-bucket-name           = "cul-cudl-data-source"
-compressed-lambdas-directory = "compressed_lambdas"
-lambda-jar-bucket            = "cul-cudl.mvn.cudl.lib.cam.ac.uk"
+environment                       = "staging"
+project                           = "CUDL"
+component                         = "cudl-data-workflows"
+subcomponent                      = "cudl-transform-lambda"
+destination-bucket-name           = "cul-cudl-data-releases"
+transcriptions-bucket-name        = "cul-cudl-transcriptions"
+enhancements-bucket-name          = "cul-cudl-data-enhancements"
+source-bucket-name                = "cul-cudl-data-source"
+compressed-lambdas-directory      = "compressed_lambdas"
+lambda-jar-bucket                 = "cul-cudl.mvn.cudl.lib.cam.ac.uk"
+enable_ark_workflow               = true
+tei_processing_forward_queue_name = "CUDL_TEIProcessingForwardQueue"
+tei_ark_ingestion_queue_name      = "CUDL_TEIArkIngestionQueue"
 
 transform-lambda-bucket-sns-notifications = [
-  {
-    "bucket_name"   = "cul-cudl-data-source"
-    "filter_prefix" = "items/data/tei/",
-    "filter_suffix" = ".xml"
-    "subscriptions" = [
-      {
-        "queue_name" = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY",
-        "raw"        = true
-      },
-      {
-        "queue_name" = "CUDL_TEIProcessingQueue",
-        "raw"        = true
-      },
-    ]
-  },
   {
     "bucket_name"   = "cul-cudl-data-releases"
     "filter_prefix" = "collections/",
@@ -138,6 +126,13 @@ transform-lambda-bucket-sqs-notifications = [
     "filter_prefix" = "transkribus/curious-cures/"
     "filter_suffix" = ".xml"
     "bucket_name"   = "cul-cudl-data-enhancements"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDL_TEIArkIngestionQueue"
+    "filter_prefix" = "items/data/tei/"
+    "filter_suffix" = ".xml"
+    "bucket_name"   = "cul-cudl-data-source"
   }
 ]
 transform-lambda-information = [
@@ -185,7 +180,7 @@ transform-lambda-information = [
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
     "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c86cbec23052cfe668125784975b44d867610ad9fd200e5480afe48d68940da1"
-    "queue_name"               = "CUDL_TEIProcessingQueue"
+    "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["staging-cudl-ecs-vpc-egress", "staging-solr-external"]
@@ -310,6 +305,28 @@ transform-lambda-information = [
       DEST_BUCKET   = "staging-cul-cudl-data-releases"
       SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
+    }
+  }
+  ,
+  {
+    "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:b8d4811028bb874c2768cd5b4816982018a5d611bcb2583df06029bf3032d24e" # VERIFY
+    "queue_name"               = "CUDL_TEIArkIngestionQueue"
+    "vpc_name"                 = "staging-cudl-ecs-vpc"
+    "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"     = ["staging-cudl-ecs-vpc-egress", "staging-solr-external"]
+    "timeout"                  = 300
+    "memory"                   = 4096
+    "batch_window"             = 2
+    "batch_size"               = 1
+    "maximum_concurrency"      = 50
+    "use_datadog_variables"    = false
+    "use_additional_variables" = false
+    "ephemeral_storage"        = 1024
+    "environment_variables" = {
+      PID_LOG_LEVEL           = "INFO"
+      PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/438117829123/staging-CUDL_TEIProcessingForwardQueue" #VERIFY
+      PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:438117829123:secret:staging/cudl/pid-pipeline-nD9nmb" #VERIFY
     }
   }
 
