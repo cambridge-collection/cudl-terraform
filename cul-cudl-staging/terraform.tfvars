@@ -310,7 +310,7 @@ transform-lambda-information = [
   ,
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "" # TODO
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:b8d4811028bb874c2768cd5b4816982018a5d611bcb2583df06029bf3032d24e" # VERIFY
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -324,9 +324,9 @@ transform-lambda-information = [
     "use_additional_variables" = false
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      PID_LOG_LEVEL           = "ERROR"
-      PID_FORWARD_QUEUE_URL   = "" #TODO
-      PID_PIPELINE_SECRET_ARN = "" #TODO
+      PID_LOG_LEVEL           = "INFO"
+      PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/438117829123/staging-CUDL_TEIProcessingForwardQueue" #VERIFY
+      PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:438117829123:secret:staging/cudl/pid-pipeline-nD9nmb" #VERIFY
     }
   }
 
