@@ -205,6 +205,7 @@ transform-lambda-information = [
       LAMBDA_TIMEOUT_MARGIN_MS       = 180000
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
+      ENABLE_TEI_SHA_IN_CORE_XML     = "true"
       LOG_LEVEL                      = "ERROR"
 
     }
