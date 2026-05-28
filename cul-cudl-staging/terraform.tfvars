@@ -206,7 +206,7 @@ transform-lambda-information = [
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
-      LOG_LEVEL                      = "ERROR"
+      LOG_LEVEL                      = "INFO"
 
     }
   },

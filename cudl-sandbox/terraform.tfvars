@@ -205,7 +205,7 @@ transform-lambda-information = [
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
-      LOG_LEVEL                      = "ERROR" #INFO or ERROR
+      LOG_LEVEL                      = "INFO" #INFO or ERROR
     }
   },
   {
@@ -324,7 +324,7 @@ transform-lambda-information = [
     "use_additional_variables" = false
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      PID_LOG_LEVEL           = "ERROR" #INFO or ERROR
+      PID_LOG_LEVEL           = "INFO" #INFO or ERROR
       PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/563181399728/mjh39-sandbox-CUDL_TEIProcessingForwardQueue"
       PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:563181399728:secret:mjh39-sandbox/cudl/pid-pipeline-n2ddl1"
     }
