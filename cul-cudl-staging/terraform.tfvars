@@ -179,7 +179,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c86cbec23052cfe668125784975b44d867610ad9fd200e5480afe48d68940da1"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:122649ec723abda8b1c22145c0322ce02540eed23d7d5d68cfe847e13be698a1"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -206,7 +206,7 @@ transform-lambda-information = [
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
-      LOG_LEVEL                      = "ERROR"
+      LOG_LEVEL                      = "INFO"
 
     }
   },
@@ -311,7 +311,7 @@ transform-lambda-information = [
   ,
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:b8d4811028bb874c2768cd5b4816982018a5d611bcb2583df06029bf3032d24e" # VERIFY
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:9ae349c86bc7ac998e71ebf71e6cc112f7d1d9b40cdcee807d75796b86536741" # VERIFY
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -389,7 +389,7 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:c0d603aecb6ed8e2806a5ece8284fb1eda47d9ee65fac5901d42c95cd03b95f2",
+  "cudl/solr-api" = "sha256:4d1625efc0645672f25d84192daf1bdbd538c499b17503d6a443227222755dab",
   "cudl/solr"     = "sha256:0cbc721fa29e260a83db2780519bf2ef96cc24e4ac4209397dfe3dea0ecb71be"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }

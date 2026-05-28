@@ -199,7 +199,7 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:c0d603aecb6ed8e2806a5ece8284fb1eda47d9ee65fac5901d42c95cd03b95f2",
+  "cudl/solr-api" = "sha256:4d1625efc0645672f25d84192daf1bdbd538c499b17503d6a443227222755dab",
   "cudl/solr"     = "sha256:0cbc721fa29e260a83db2780519bf2ef96cc24e4ac4209397dfe3dea0ecb71be"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }

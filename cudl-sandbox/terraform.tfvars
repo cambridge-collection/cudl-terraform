@@ -178,7 +178,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:c86cbec23052cfe668125784975b44d867610ad9fd200e5480afe48d68940da1"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:122649ec723abda8b1c22145c0322ce02540eed23d7d5d68cfe847e13be698a1"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -205,7 +205,7 @@ transform-lambda-information = [
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
-      LOG_LEVEL                      = "ERROR" #INFO or ERROR
+      LOG_LEVEL                      = "INFO" #INFO or ERROR
     }
   },
   {
@@ -308,7 +308,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:4b5eb553e7af649506736ccfb854c198b66a0bf6738f11a855f07979e3c38445"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:9ae349c86bc7ac998e71ebf71e6cc112f7d1d9b40cdcee807d75796b86536741"
     "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
@@ -324,7 +324,7 @@ transform-lambda-information = [
     "use_additional_variables" = false
     "ephemeral_storage"        = 1024
     "environment_variables" = {
-      PID_LOG_LEVEL           = "ERROR" #INFO or ERROR
+      PID_LOG_LEVEL           = "INFO" #INFO or ERROR
       PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/563181399728/mjh39-sandbox-CUDL_TEIProcessingForwardQueue"
       PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:563181399728:secret:mjh39-sandbox/cudl/pid-pipeline-n2ddl1"
     }
@@ -389,7 +389,7 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:0b50c2f22a615ab66a48ae98caace7e129361514f341396f32adc5d86e1e6190",
+  "cudl-solr-api" = "sha256:4d1625efc0645672f25d84192daf1bdbd538c499b17503d6a443227222755dab",
   "cudl-solr"     = "sha256:a57844f565a93a1a2255a0dcaf3c6337eec4563c7ee5915dbec8dadb07d11e11"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
