@@ -179,7 +179,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c86cbec23052cfe668125784975b44d867610ad9fd200e5480afe48d68940da1"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:122649ec723abda8b1c22145c0322ce02540eed23d7d5d68cfe847e13be698a1"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -311,7 +311,7 @@ transform-lambda-information = [
   ,
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:b8d4811028bb874c2768cd5b4816982018a5d611bcb2583df06029bf3032d24e" # VERIFY
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:9ae349c86bc7ac998e71ebf71e6cc112f7d1d9b40cdcee807d75796b86536741" # VERIFY
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
