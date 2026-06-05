@@ -86,6 +86,13 @@ transform-lambda-bucket-sqs-notifications = [
   },
   {
     "type"          = "SQS",
+    "queue_name"    = "CUDLIndexQueue"
+    "filter_prefix" = "unreleased/solr-json/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.dl-dataset.json"
     "filter_suffix" = ""
@@ -102,6 +109,13 @@ transform-lambda-bucket-sqs-notifications = [
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "json/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "filter_prefix" = "unreleased/json/"
     "filter_suffix" = ".json"
     "bucket_name"   = "cudl-data-releases"
   },
@@ -178,7 +192,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:122649ec723abda8b1c22145c0322ce02540eed23d7d5d68cfe847e13be698a1"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:8cf5285655d075745f4a5e76f69c09b6cb987b98a3b00f001f75a9828e0fedcb"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -205,12 +219,13 @@ transform-lambda-information = [
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
-      LOG_LEVEL                      = "INFO" #INFO or ERROR
+      ENABLE_UNRELEASED_PARTITION    = "TRUE"
+      LOG_LEVEL                      = "WARN"
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:0040f3d54bc48fb720ef14add59c37f1f5a55ded55947f4e88c7259e60f50fd0"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -223,9 +238,11 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.mjh39-sandbox-solr"
-      API_PORT = "8081"
-      API_PATH = "item"
+      API_HOST             = "solr-api-cudl-ecs.mjh39-sandbox-solr"
+      API_PORT             = "8081"
+      API_PATH             = "item"
+      LOG_LEVEL            = "INFO"
+      RELEASES_PARTITIONED = "TRUE"
     }
   },
   {
@@ -389,8 +406,8 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:4d1625efc0645672f25d84192daf1bdbd538c499b17503d6a443227222755dab",
-  "cudl-solr"     = "sha256:a57844f565a93a1a2255a0dcaf3c6337eec4563c7ee5915dbec8dadb07d11e11"
+  "cudl-solr-api" = "sha256:c57c35d16fb04ee6151c216136e7e5dae277f475ecb34562375357f01af0693a",
+  "cudl-solr"     = "sha256:a64a232b0c8434f38f34f76d1aaa2d94ba4360faf7676f71e1c048cd91d93ef9"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
