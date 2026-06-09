@@ -263,6 +263,8 @@ transform-lambda-information = [
       API_HOST = "solr-api-cudl-ecs.mjh39-sandbox-solr"
       API_PORT = "8081"
       API_PATH = "collection"
+      LOG_LEVEL            = "INFO"
+      RELEASES_PARTITIONED = "TRUE"
     }
   },
   {
@@ -406,8 +408,8 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:c57c35d16fb04ee6151c216136e7e5dae277f475ecb34562375357f01af0693a",
-  "cudl-solr"     = "sha256:a64a232b0c8434f38f34f76d1aaa2d94ba4360faf7676f71e1c048cd91d93ef9"
+  "cudl-solr-api" = "sha256:1388dabe1efddeeb7dd1012f9a84cb36f80993e5d52052292a78f0c347d0c20f",
+  "cudl-solr"     = "sha256:866e97a1096594a30fa3b24fd6ebdec6bd26d85b40bcbc883ccea7cdd78bbda5"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
