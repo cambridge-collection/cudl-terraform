@@ -111,3 +111,22 @@ resource "aws_iam_policy" "sandbox_cudl_data_source" {
   description = format("Policy for %s-sandbox-cudl-data-source", module.content_loader.name_prefix)
   policy      = data.aws_iam_policy_document.sandbox_cudl_data_source.json
 }
+
+data "aws_iam_policy_document" "ecs_exec" {
+  statement {
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "ecs_exec" {
+  name        = format("%s-ecs-exec", module.content_loader.name_prefix)
+  path        = "/"
+  description = "Allow ECS Exec (SSM session manager) for the content loader task"
+  policy      = data.aws_iam_policy_document.ecs_exec.json
+}
