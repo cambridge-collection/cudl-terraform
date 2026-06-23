@@ -17,9 +17,6 @@ locals {
         }
       ],
       essential = true,
-      command = [
-        "-p 5432"
-      ],
       environment = [
         {
           name  = "POSTGRES_USER",
@@ -65,12 +62,12 @@ locals {
       healthCheck = {
         command = [
           "CMD-SHELL",
-          "pg_isready  || exit 1"
+          "pg_isready -U dl-loading-ui || exit 1"
         ],
-        interval    = 30,
+        interval    = 10,
         timeout     = 5,
         retries     = 3,
-        startPeriod = 300
+        startPeriod = 60
       }
     },
     {
@@ -81,7 +78,7 @@ locals {
       memory            = 1024,
       memoryReservation = 512,
       links = [
-        local.content_loader_container_name_db
+        "${local.content_loader_container_name_db}:dl-loading-db"
       ],
       portMappings = [
         {

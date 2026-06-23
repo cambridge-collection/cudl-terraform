@@ -390,13 +390,13 @@ content_loader_domain_name       = "contentloader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "dl-loader-db" = "sha256:49a8074c30f12800d1c36813d85fb4e3e69952d67990f20c6ff05b1e97e19568",
-  "dl-loader-ui" = "sha256:092d9134da0c04855e61d14ddb812df9e564b8a33af4931609b5f5feb4861502"
+  "dl-loader-db" = "sha256:b1a711dc43f0a1169914b83504b4df55f19f2803daa9dba386a21f72b92b6066",
+  "dl-loader-ui" = "sha256:15a84d97d6a3b07859f790cbc92823b236337f3e64bbab80ecdcf367d1fdb48c"
 }
-content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
+content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data-v2" }
 content_loader_container_name_ui                   = "dl-loader-ui"
 content_loader_container_name_db                   = "dl-loader-db"
-content_loader_health_check_status_code            = "401"
+content_loader_health_check_status_code            = "200,401,404"
 content_loader_allowed_methods                     = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
 content_loader_waf_common_ruleset_override_actions = ["SizeRestrictions_QUERYSTRING", "SizeRestrictions_BODY", "GenericLFI_BODY", "CrossSiteScripting_BODY"]
 content_loader_cloudfront_origin_read_timeout      = 180
