@@ -26,6 +26,21 @@ transform-lambda-bucket-sns-notifications = [
         "raw"        = true
       }
     ]
+  },
+  {
+    "bucket_name"   = "cudl-data-releases"
+    "filter_prefix" = "unreleased/collections/",
+    "filter_suffix" = ".json"
+    "subscriptions" = [
+      {
+        "queue_name" = "CUDLIndexCollectionQueue",
+        "raw"        = true
+      },
+      {
+        "queue_name" = "CUDLPackageDataCopyFileToEFSQueue",
+        "raw"        = true
+      }
+    ]
   }
 ]
 transform-lambda-bucket-sqs-notifications = [
@@ -150,45 +165,62 @@ transform-lambda-bucket-sqs-notifications = [
 ]
 transform-lambda-information = [
   {
-    "name"                  = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
-    "description"           = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataQueue_HTML"
-    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
+    "description"                    = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:392e0078d9cff323661c7891840a734b5fe24d953c144ff3bf31b93213e2850e"
+    "queue_name"                     = "CUDLPackageDataQueue_HTML"
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET = "mjh39-sandbox-cudl-data-releases"
+      TRANSFORM   = "html"
+    }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
-    "description"           = "Copies file from the source s3 bucket into the destination (release) s3 bucket, unchanged"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
-    "vpc_name"              = "mjh39-sandbox-cudl-ecs-vpc"
-    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "other_filters"         = "cudl.dl-dataset.json|cudl.ui.json"
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
+    "description"                    = "Copies files verbatim from the source bucket to the releases bucket (identity copy)"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:41a81091de2fdaddec05ad93b095d5dbd36c1d44402194749f9c79cb554b9b13"
+    "queue_name"                     = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET = "mjh39-sandbox-cudl-data-releases"
+    }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
-    "description"           = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataQueue_Collections"
-    "subnet_names"          = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
+    "description"                    = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:392e0078d9cff323661c7891840a734b5fe24d953c144ff3bf31b93213e2850e"
+    "queue_name"                     = "CUDLPackageDataQueue_Collections"
+    "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 512
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET            = "mjh39-sandbox-cudl-data-releases"
+      TRANSFORM              = "json"
+      DST_XSLT_OUTPUT_FOLDER = "json/"
+      DST_XSLT_OUTPUT_SUFFIX = ".json"
+    }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
@@ -260,9 +292,9 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.mjh39-sandbox-solr"
-      API_PORT = "8081"
-      API_PATH = "collection"
+      API_HOST             = "solr-api-cudl-ecs.mjh39-sandbox-solr"
+      API_PORT             = "8081"
+      API_PATH             = "collection"
       LOG_LEVEL            = "INFO"
       RELEASES_PARTITIONED = "TRUE"
     }
@@ -408,7 +440,7 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:1388dabe1efddeeb7dd1012f9a84cb36f80993e5d52052292a78f0c347d0c20f",
+  "cudl-solr-api" = "sha256:f35b8497da02dd60f7b56cb96352e98be1064a1569c99e0607e1a07e524020b5",
   "cudl-solr"     = "sha256:866e97a1096594a30fa3b24fd6ebdec6bd26d85b40bcbc883ccea7cdd78bbda5"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
