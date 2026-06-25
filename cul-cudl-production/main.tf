@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.4.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.4.1"
 
   name_prefix                             = local.base_name_prefix
   ec2_instance_type                       = var.ec2_instance_type
@@ -130,11 +130,13 @@ module "cudl_services" {
   ecr_repositories_exist                    = true
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
-  ecs_task_def_memory                       = data.aws_ec2_instance_type.asg.memory_size - 592
-  ecs_service_container_name                = local.cudl_services_container_name
-  ecs_service_container_port                = var.cudl_services_container_port
-  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
-  s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
+  ecs_task_def_memory                       = data.aws_ec2_instance_type.asg.memory_size - 768
+  ecs_service_container_name                     = local.cudl_services_container_name
+  ecs_service_container_port                     = var.cudl_services_container_port
+  ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
+  ecs_service_deployment_minimum_healthy_percent = 0
+  ecs_service_deployment_maximum_percent         = 100
+  s3_task_buckets                                = [module.cudl-data-processing.destination_bucket]
   ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.database_password.arn, data.aws_ssm_parameter.apikey_darwin.arn]
   vpc_id                                    = module.base_architecture.vpc_id
   alb_arn                                   = module.base_architecture.alb_arn
@@ -173,10 +175,12 @@ module "cudl_viewer" {
   ecs_network_mode                          = "awsvpc"
   ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
   ecs_task_def_volumes_efs                  = keys(var.cudl_viewer_ecs_task_def_volumes)
-  ecs_task_def_memory                       = data.aws_ec2_instance_type.asg.memory_size - 592
-  ecs_service_container_name                = local.cudl_viewer_container_name
-  ecs_service_container_port                = var.cudl_viewer_container_port
-  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
+  ecs_task_def_memory                       = data.aws_ec2_instance_type.asg.memory_size - 768
+  ecs_service_container_name                     = local.cudl_viewer_container_name
+  ecs_service_container_port                     = var.cudl_viewer_container_port
+  ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
+  ecs_service_deployment_minimum_healthy_percent = 0
+  ecs_service_deployment_maximum_percent         = 100
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
       smtp_host               = format("email-smtp.%s.amazonaws.com", var.deployment-aws-region)

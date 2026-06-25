@@ -8,7 +8,7 @@ locals {
       image             = data.aws_ecr_image.cudl_viewer["cudl/viewer"].image_uri,
       cpu               = 2048,
       memoryReservation = data.aws_ec2_instance_type.asg.memory_size - 1104,
-      memory            = data.aws_ec2_instance_type.asg.memory_size - 592,
+      memory            = data.aws_ec2_instance_type.asg.memory_size - 768,
       portMappings = [
         {
           containerPort = var.cudl_viewer_container_port,
