@@ -301,8 +301,8 @@ transform-lambda-information = [
   },
   {
     "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
-    "description"                    = "Copies file from S3 to EFS"
-    "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "description"                    = "Copies files verbatim from the releases bucket to the EFS mount"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:d761890d6ae88960a4e47855c4d612f1c99ca5b7cd5ed25aeefb903fc27d03c4"
     "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-cudl-data-releases-efs"]
@@ -310,9 +310,13 @@ transform-lambda-information = [
     "mount_fs"                       = true
     "timeout"                        = 900
     "memory"                         = 512
-    "sqs_max_tries_before_deadqueue" = 1
-    "handler"                        = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
-    "runtime"                        = "java11"
+    "sqs_max_tries_before_deadqueue" = 3
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DST_EFS_PREFIX  = "/mnt/cudl-data-releases"
+      DST_EFS_ENABLED = "true"
+      LOG_LEVEL       = "INFO"
+    }
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
