@@ -167,7 +167,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
     "description"                    = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:92a40c2d16736f3a91a4cb56f1aba938f2bff5c471a847f550bff4e8e6c87869"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:4593cce3e4fac94bdbde000295f5d3270a52438a4570261e7023c4c6ef59975d"
     "queue_name"                     = "CUDLPackageDataQueue_HTML"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
@@ -186,7 +186,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
     "description"                    = "Copies files verbatim from the source bucket to the releases bucket (identity copy)"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:1b9ccdb1bcbd233f6d8901f73cc84d075cd59d66c6889b2f0b3c7c8ab860db00"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:1cca83beac6c58684c40bbea550a1f5daed0548c4e7f63c32f3c82266d75426e"
     "queue_name"                     = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
@@ -204,7 +204,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
     "description"                    = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:92a40c2d16736f3a91a4cb56f1aba938f2bff5c471a847f550bff4e8e6c87869"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:4593cce3e4fac94bdbde000295f5d3270a52438a4570261e7023c4c6ef59975d"
     "queue_name"                     = "CUDLPackageDataQueue_Collections"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
@@ -302,7 +302,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
     "description"                    = "Copies files verbatim from the releases bucket to the EFS mount"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:d761890d6ae88960a4e47855c4d612f1c99ca5b7cd5ed25aeefb903fc27d03c4"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:df94903e9532bc405a0a22daeff7513b66fb1584bace486fe1fc213e4fa4c1f7"
     "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-cudl-data-releases-efs"]
@@ -344,7 +344,7 @@ transform-lambda-information = [
   },
   {
     "name"                           = "cudl-copy-tei-assets"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:1b9ccdb1bcbd233f6d8901f73cc84d075cd59d66c6889b2f0b3c7c8ab860db00"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:1cca83beac6c58684c40bbea550a1f5daed0548c4e7f63c32f3c82266d75426e"
     "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress"]
