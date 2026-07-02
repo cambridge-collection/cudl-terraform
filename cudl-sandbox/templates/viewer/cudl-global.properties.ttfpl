@@ -84,4 +84,4 @@ metadata_service=${cudl_services_url}
 metadata_version=/v1/metadata/
 
 showUnreleasedContent=true
-unreleasedDataDirectory=/srv/cudl-viewer/cudl-data/unreleased
+unreleasedDataDirectory=/srv/cudl-viewer/cudl-data/data/unreleased
