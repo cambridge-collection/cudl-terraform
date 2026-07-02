@@ -302,7 +302,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
     "description"                    = "Copies files verbatim from the releases bucket to the EFS mount"
-    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:f37e4332ea9440751a079f6b57e8e62e1bc6c9996a74fea428d82f6d80c3b921"
+    "image_uri"                      = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:e421710650d16627413343e3a75aacf70a11d9ee3af670b2573be6adbb59c7d3"
     "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
     "subnet_names"                   = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["mjh39-sandbox-cudl-ecs-vpc-egress", "mjh39-sandbox-cudl-data-releases-efs"]
