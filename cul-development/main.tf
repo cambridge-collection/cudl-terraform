@@ -1,5 +1,5 @@
 module "base_architecture" {
-  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.4.0"
+  source = "git::https://github.com/cambridge-collection/terraform-aws-architecture-ecs.git?ref=v4.4.1"
 
   name_prefix                    = local.base_name_prefix
   ec2_instance_type              = var.ec2_instance_type
@@ -90,7 +90,7 @@ module "content_loader" {
       source_bucket              = module.cudl-data-processing.source_bucket
       releases_bucket            = module.cudl-data-processing.destination_bucket
       releases_bucket_production = var.content_loader_releases_bucket_production
-      iiif_image_server_url           = var.iiif_image_server_url
+      iiif_image_server_url      = var.iiif_image_server_url
     })
   }
   cloudfront_vpc_origin_id = module.base_architecture.cloudfront_vpc_origin_id
@@ -177,24 +177,26 @@ module "solr" {
 module "cudl_services" {
   source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
-  name_prefix                               = join("-", compact([local.environment, var.cudl_services_name_suffix]))
-  account_id                                = data.aws_caller_identity.current.account_id
-  domain_name                               = join(".", [join("-", compact([var.environment, var.cudl_services_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = var.cudl_services_target_group_port
-  alb_target_group_health_check_status_code = var.cudl_services_health_check_status_code
-  ecr_repository_names                      = keys(var.cudl_services_ecr_repositories)
-  ecr_repositories_exist                    = true
-  s3_task_execution_bucket                  = module.base_architecture.s3_bucket
-  ecs_task_def_container_definitions        = jsonencode(local.cudl_services_container_defs)
-  ecs_task_def_memory                       = var.cudl_services_ecs_task_def_memory
-  ecs_task_def_cpu                          = var.cudl_services_ecs_task_def_cpu
-  ecs_service_container_name                = local.cudl_services_container_name
-  ecs_service_container_port                = var.cudl_services_container_port
-  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
-  s3_task_buckets                           = [module.cudl-data-processing.destination_bucket]
-  ssm_task_execution_parameter_arns         = [data.aws_ssm_parameter.basicauth_credentials.arn, data.aws_ssm_parameter.database_password.arn]
-  vpc_id                                    = module.base_architecture.vpc_id
-  alb_arn                                   = module.base_architecture.alb_arn
+  name_prefix                                    = join("-", compact([local.environment, var.cudl_services_name_suffix]))
+  account_id                                     = data.aws_caller_identity.current.account_id
+  domain_name                                    = join(".", [join("-", compact([var.environment, var.cudl_services_domain_name])), var.registered_domain_name])
+  alb_target_group_port                          = var.cudl_services_target_group_port
+  alb_target_group_health_check_status_code      = var.cudl_services_health_check_status_code
+  ecr_repository_names                           = keys(var.cudl_services_ecr_repositories)
+  ecr_repositories_exist                         = true
+  s3_task_execution_bucket                       = module.base_architecture.s3_bucket
+  ecs_task_def_container_definitions             = jsonencode(local.cudl_services_container_defs)
+  ecs_task_def_memory                            = var.cudl_services_ecs_task_def_memory
+  ecs_task_def_cpu                               = var.cudl_services_ecs_task_def_cpu
+  ecs_service_container_name                     = local.cudl_services_container_name
+  ecs_service_container_port                     = var.cudl_services_container_port
+  ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
+  ecs_service_deployment_minimum_healthy_percent = 0
+  ecs_service_deployment_maximum_percent         = 100
+  s3_task_buckets                                = [module.cudl-data-processing.destination_bucket]
+  ssm_task_execution_parameter_arns              = [data.aws_ssm_parameter.basicauth_credentials.arn, data.aws_ssm_parameter.database_password.arn]
+  vpc_id                                         = module.base_architecture.vpc_id
+  alb_arn                                        = module.base_architecture.alb_arn
   #alb_dns_name                              = module.base_architecture.alb_dns_name
   alb_listener_arn              = module.base_architecture.alb_https_listener_arn
   ecs_cluster_arn               = module.base_architecture.ecs_cluster_arn
@@ -218,21 +220,23 @@ module "cudl_services" {
 module "cudl_viewer" {
   source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
-  name_prefix                               = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
-  account_id                                = data.aws_caller_identity.current.account_id
-  domain_name                               = join(".", [join("-", compact([var.environment, var.cudl_viewer_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = var.cudl_viewer_container_port
-  alb_target_group_health_check_status_code = var.cudl_viewer_health_check_status_code
-  ecr_repository_names                      = keys(var.cudl_viewer_ecr_repositories)
-  ecr_repositories_exist                    = true
-  s3_task_execution_bucket                  = module.base_architecture.s3_bucket
-  ecs_network_mode                          = "awsvpc"
-  ecs_task_def_container_definitions        = jsonencode(local.cudl_viewer_container_defs)
-  ecs_task_def_volumes_efs                  = keys(var.cudl_viewer_ecs_task_def_volumes)
-  ecs_task_def_memory                       = var.cudl_viewer_ecs_task_def_memory
-  ecs_service_container_name                = local.cudl_viewer_container_name
-  ecs_service_container_port                = var.cudl_viewer_container_port
-  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
+  name_prefix                                    = join("-", compact([local.environment, var.cudl_viewer_name_suffix]))
+  account_id                                     = data.aws_caller_identity.current.account_id
+  domain_name                                    = join(".", [join("-", compact([var.environment, var.cudl_viewer_domain_name])), var.registered_domain_name])
+  alb_target_group_port                          = var.cudl_viewer_container_port
+  alb_target_group_health_check_status_code      = var.cudl_viewer_health_check_status_code
+  ecr_repository_names                           = keys(var.cudl_viewer_ecr_repositories)
+  ecr_repositories_exist                         = true
+  s3_task_execution_bucket                       = module.base_architecture.s3_bucket
+  ecs_network_mode                               = "awsvpc"
+  ecs_task_def_container_definitions             = jsonencode(local.cudl_viewer_container_defs)
+  ecs_task_def_volumes_efs                       = keys(var.cudl_viewer_ecs_task_def_volumes)
+  ecs_task_def_memory                            = var.cudl_viewer_ecs_task_def_memory
+  ecs_service_container_name                     = local.cudl_viewer_container_name
+  ecs_service_container_port                     = var.cudl_viewer_container_port
+  ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name
+  ecs_service_deployment_minimum_healthy_percent = 0
+  ecs_service_deployment_maximum_percent         = 100
   s3_task_bucket_objects = {
     "${module.cudl_viewer.name_prefix}/cudl-global.properties" = templatefile("${path.root}/templates/viewer/cudl-global.properties.ttfpl", {
       smtp_host               = format("email-smtp.%s.amazonaws.com", var.deployment-aws-region)
@@ -247,7 +251,7 @@ module "cudl_viewer" {
       cudl_services_url       = module.cudl_services.link
       root_url                = module.cudl_viewer.link
       json_url                = format("%s/json/", module.cudl_viewer.link)
-      iiif_image_server_url        = var.iiif_image_server_url
+      iiif_image_server_url   = var.iiif_image_server_url
     })
   }
   s3_task_buckets = [module.base_architecture.s3_bucket]
