@@ -54,6 +54,7 @@ module "cudl-data-processing" {
   enhancements-bucket-name                  = var.enhancements-bucket-name
   cloudfront_route53_zone_id                = var.cloudfront_route53_zone_id
   create_cloudfront_distribution            = var.create_cloudfront_distribution
+  cloudfront_viewer_request_function_arn    = aws_cloudfront_function.releases_path_filter.arn
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
