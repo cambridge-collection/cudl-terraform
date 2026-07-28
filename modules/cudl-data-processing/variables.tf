@@ -271,6 +271,8 @@ variable "cloudfront_ordered_cache_behaviors" {
     Empty = unchanged. path_pattern matches the INCOMING viewer URI, before the viewer-request
     function rewrites it (match "/letters-timeline-json" or "/view/*", not "/sites/.../letters.json"
     or "*.html"). List specific patterns before broad ones.
+    response_headers_policy_id takes an ID, not a name, so the caller can pass a resource
+    reference: no AWS managed policy sets Cache-Control, so downstream no-store needs a custom one.
   EOT
   type = list(object({
     path_pattern                   = string
@@ -279,6 +281,7 @@ variable "cloudfront_ordered_cache_behaviors" {
     allowed_methods                = optional(list(string), ["GET", "HEAD", "OPTIONS"])
     cached_methods                 = optional(list(string), ["GET", "HEAD"])
     attach_viewer_request_function = optional(bool, true)
+    response_headers_policy_id     = optional(string)
   }))
   default = []
 

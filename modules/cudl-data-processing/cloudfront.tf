@@ -66,13 +66,14 @@ resource "aws_cloudfront_distribution" "this" {
   dynamic "ordered_cache_behavior" {
     for_each = local.occb
     content {
-      path_pattern           = ordered_cache_behavior.value.path_pattern
-      allowed_methods        = ordered_cache_behavior.value.allowed_methods
-      cached_methods         = ordered_cache_behavior.value.cached_methods
-      compress               = ordered_cache_behavior.value.compress
-      target_origin_id       = local.cloudfront_distribution_domain_name
-      viewer_protocol_policy = "redirect-to-https"
-      cache_policy_id        = data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.cache_policy_name].id
+      path_pattern               = ordered_cache_behavior.value.path_pattern
+      allowed_methods            = ordered_cache_behavior.value.allowed_methods
+      cached_methods             = ordered_cache_behavior.value.cached_methods
+      compress                   = ordered_cache_behavior.value.compress
+      target_origin_id           = local.cloudfront_distribution_domain_name
+      viewer_protocol_policy     = "redirect-to-https"
+      cache_policy_id            = data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.cache_policy_name].id
+      response_headers_policy_id = ordered_cache_behavior.value.response_headers_policy_id
 
       dynamic "function_association" {
         for_each = ordered_cache_behavior.value.attach_viewer_request_function && var.cloudfront_viewer_request_function_arn != null ? [1] : []
