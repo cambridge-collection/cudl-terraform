@@ -54,6 +54,7 @@ module "cudl-data-processing" {
   enhancements-bucket-name                  = var.enhancements-bucket-name
   cloudfront_route53_zone_id                = var.cloudfront_route53_zone_id
   create_cloudfront_distribution            = var.create_cloudfront_distribution
+  cloudfront_viewer_request_function_arn    = aws_cloudfront_function.releases_path_filter.arn
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
@@ -101,7 +102,8 @@ module "content_loader" {
   cloudfront_allowed_methods     = var.content_loader_allowed_methods
   iam_task_additional_policies = {
     staging_releases = aws_iam_policy.sandbox_cudl_data_releases.arn,
-    staging_source   = aws_iam_policy.sandbox_cudl_data_source.arn
+    staging_source   = aws_iam_policy.sandbox_cudl_data_source.arn,
+    ecs_exec         = aws_iam_policy.ecs_exec.arn
   }
   efs_create_file_system = true
   tags                   = local.default_tags
