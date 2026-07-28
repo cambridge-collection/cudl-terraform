@@ -224,7 +224,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:8cf5285655d075745f4a5e76f69c09b6cb987b98a3b00f001f75a9828e0fedcb"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:8f2e3c195bb92b0be98c99bd52b6ff147c623931c08a39b96e4179be5c202134"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -257,7 +257,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:0040f3d54bc48fb720ef14add59c37f1f5a55ded55947f4e88c7259e60f50fd0"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:21a0b4697f64501f427e5516b75be4506dbf245fcc29ccac84a88d614d275537"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -279,7 +279,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-solr-listener@sha256:21a0b4697f64501f427e5516b75be4506dbf245fcc29ccac84a88d614d275537"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -363,7 +363,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:9ae349c86bc7ac998e71ebf71e6cc112f7d1d9b40cdcee807d75796b86536741"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minter@sha256:21a13308aec53676e4e1cd15da39cfa46d8a4175509f466e24ecec835f86ac6a"
     "architectures"            = ["x86_64"] # Remove this line moving to cul-cudl-staging
     "queue_name"               = "CUDL_TEIArkIngestionQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
@@ -445,7 +445,7 @@ solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
   "cudl-solr-api" = "sha256:6ca1531a929a7f3b35e4356262636027ae5aa3dcb0c6b0575d0561c570ef0264",
-  "cudl-solr"     = "sha256:866e97a1096594a30fa3b24fd6ebdec6bd26d85b40bcbc883ccea7cdd78bbda5"
+  "cudl-solr"     = "sha256:1e95f00b184bd5b0471e21236753a32a047873a8273fe747d851d2d7a5ad8340"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
