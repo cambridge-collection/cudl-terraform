@@ -259,6 +259,35 @@ variable "cloudfront_access_logging_bucket" {
   default     = null
 }
 
+variable "cloudfront_default_cache_policy" {
+  description = "Managed cache-policy name for the CloudFront distribution's default cache behavior"
+  type        = string
+  default     = "Managed-CachingDisabled"
+}
+
+variable "cloudfront_ordered_cache_behaviors" {
+  description = <<-EOT
+    Ordered path-specific cache behaviors, evaluated BEFORE the default (first match wins).
+    Empty = unchanged. path_pattern matches the INCOMING viewer URI, before the viewer-request
+    function rewrites it (match "/letters-timeline-json" or "/view/*", not "/sites/.../letters.json"
+    or "*.html"). List specific patterns before broad ones.
+  EOT
+  type = list(object({
+    path_pattern                   = string
+    cache_policy_name              = optional(string, "Managed-CachingOptimized")
+    compress                       = optional(bool, true)
+    allowed_methods                = optional(list(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods                 = optional(list(string), ["GET", "HEAD"])
+    attach_viewer_request_function = optional(bool, true)
+  }))
+  default = []
+
+  validation {
+    condition     = length(distinct([for b in var.cloudfront_ordered_cache_behaviors : b.path_pattern])) == length(var.cloudfront_ordered_cache_behaviors)
+    error_message = "path_pattern values must be unique (CloudFront rejects duplicate ordered behaviors)."
+  }
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
