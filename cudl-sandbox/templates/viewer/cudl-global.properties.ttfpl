@@ -85,3 +85,6 @@ metadata_version=/v1/metadata/
 
 showUnreleasedContent=true
 unreleasedDataDirectory=/srv/cudl-viewer/cudl-data/data/unreleased
+
+# Search Facets
+facets.itemStatus.enabled=true
