@@ -426,8 +426,8 @@ content_loader_domain_name       = "contentloader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "dl-loader-db" = "sha256:b1a711dc43f0a1169914b83504b4df55f19f2803daa9dba386a21f72b92b6066",
-  "dl-loader-ui" = "sha256:15a84d97d6a3b07859f790cbc92823b236337f3e64bbab80ecdcf367d1fdb48c"
+  "dl-loader-db" = "sha256:56081ed5d1876b190c9b15d150d8512477e4baeb9f874e93c4250cd29097d066",
+  "dl-loader-ui" = "sha256:51c9c95b43bf84aed8cf2e5f3f3e2e7b3cea2ddf59c84abe086ae5061a493bfe"
 }
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data-v2" }
 content_loader_container_name_ui                   = "dl-loader-ui"

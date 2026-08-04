@@ -74,7 +74,7 @@ module "content_loader" {
   s3_task_execution_bucket                  = module.base_architecture.s3_bucket
   s3_task_execution_additional_buckets      = [var.lambda-jar-bucket]
   ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
-  ecs_task_def_volumes_host                 = var.content_loader_ecs_task_def_volumes
+  ecs_task_def_volumes_efs                  = keys(var.content_loader_ecs_task_def_volumes)
   ecs_service_container_name                = local.content_loader_container_name_ui
   ecs_service_container_port                = var.content_loader_application_port
   ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
