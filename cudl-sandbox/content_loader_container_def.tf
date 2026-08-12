@@ -31,6 +31,10 @@ locals {
           value = "dl-loading-ui"
         },
         {
+          name  = "PGDATA",
+          value = var.content_loader_ecs_task_def_volumes[var.content_loader_container_name_db]
+        },
+        {
           name  = "TRIGGER_DEPLOYMENT"
           value = "003"
         }
