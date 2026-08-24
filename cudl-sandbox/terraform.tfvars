@@ -252,7 +252,7 @@ transform-lambda-information = [
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
       ENABLE_UNRELEASED_PARTITION    = "TRUE"
-      LOG_LEVEL                      = "WARN"
+      LOG_LEVEL                      = "INFO"
     }
   },
   {
