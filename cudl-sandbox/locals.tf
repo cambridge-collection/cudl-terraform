@@ -2,6 +2,7 @@ locals {
   environment                       = strcontains(lower(var.environment), "sandbox") ? join("-", [var.owner, var.environment]) : var.environment
   base_name_prefix                  = join("-", compact([local.environment, var.cluster_name_suffix]))
   tei_processing_forward_queue_name = "CUDL_TEIProcessingForwardQueue"
+  solr_ecs_task_def_memory          = data.aws_ec2_instance_type.asg.memory_size - 768
   tei_processing_notification = {
     bucket_name   = "cudl-data-source"
     filter_prefix = "items/data/tei/"

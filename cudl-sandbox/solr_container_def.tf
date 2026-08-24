@@ -7,8 +7,8 @@ locals {
       systemControls    = [],
       image             = data.aws_ecr_image.solr["cudl-solr"].image_uri,
       cpu               = floor((var.solr_ecs_task_def_cpu / 3) * 2),
-      memory            = var.solr_ecs_task_def_memory - 512
-      memoryReservation = var.solr_ecs_task_def_memory - 1024
+      memory            = local.solr_ecs_task_def_memory - 512
+      memoryReservation = local.solr_ecs_task_def_memory - 1024
       portMappings = [
         {
           containerPort = var.solr_application_port,
@@ -23,7 +23,7 @@ locals {
       environment = [
         {
           name  = "SOLR_HEAP",
-          value = format("%sm", floor(var.solr_ecs_task_def_memory / 2))
+          value = format("%sm", floor(local.solr_ecs_task_def_memory / 2))
         }
       ],
       environmentFiles = [],

@@ -453,7 +453,6 @@ solr_container_name_solr      = "solr"
 solr_health_check_status_code = "404"
 solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 solr_ecs_task_def_cpu         = 2048
-solr_ecs_task_def_memory      = 3584
 solr_use_service_discovery    = true
 
 cudl_services_name_suffix       = "cudl-services"
