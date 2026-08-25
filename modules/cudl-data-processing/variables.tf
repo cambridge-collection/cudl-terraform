@@ -271,9 +271,10 @@ variable "cloudfront_ordered_cache_behaviors" {
     Empty = unchanged. path_pattern matches the INCOMING viewer URI, before the viewer-request
     function rewrites it (match "/letters-timeline-json" or "/view/*", not "/sites/.../letters.json"
     or "*.html"). List specific patterns before broad ones.
-    prevent_all_caching stops the edge AND the browser caching the path: it attaches module-managed
-    policies giving zero TTLs with compression still enabled, plus Cache-Control: no-store. It
-    overrides cache_policy_name. Use it instead of hand-rolling a response headers policy.
+    prevent_all_caching stops the edge AND the browser caching the path: it selects
+    Managed-CachingDisabled and attaches a module-managed Cache-Control: no-store policy. It
+    overrides cache_policy_name. Note that CloudFront rejects compression settings on a policy with
+    caching disabled, so these paths cannot be compressed at the edge.
     response_headers_policy_id takes an ID, not a name, so the caller can pass a resource
     reference. It is for the remaining cases, such as CORS.
   EOT
