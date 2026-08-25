@@ -1,8 +1,7 @@
 locals {
-  occb = var.cloudfront_ordered_cache_behaviors
   cache_policy_names = toset(concat(
     [var.cloudfront_default_cache_policy],
-    [for b in local.occb : b.cache_policy_name],
+    [for b in var.cloudfront_ordered_cache_behaviors : b.cache_policy_name],
   ))
 }
 
@@ -64,7 +63,7 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   dynamic "ordered_cache_behavior" {
-    for_each = local.occb
+    for_each = var.cloudfront_ordered_cache_behaviors
     content {
       path_pattern               = ordered_cache_behavior.value.path_pattern
       allowed_methods            = ordered_cache_behavior.value.allowed_methods
