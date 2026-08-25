@@ -1,14 +1,62 @@
 locals {
   cache_policy_names = toset(concat(
     [var.cloudfront_default_cache_policy],
-    [for b in var.cloudfront_ordered_cache_behaviors : b.cache_policy_name],
+    [for b in var.cloudfront_ordered_cache_behaviors : b.cache_policy_name if !b.prevent_all_caching],
   ))
+  prevent_all_caching_used = anytrue([for b in var.cloudfront_ordered_cache_behaviors : b.prevent_all_caching])
+  policy_name_prefix       = replace(local.cloudfront_distribution_domain_name, ".", "-")
 }
 
 data "aws_cloudfront_cache_policy" "selected" {
   for_each = local.cache_policy_names
   provider = aws.us-east-1
   name     = each.value
+}
+
+# NOTE No managed cache policy combines zero TTLs with compression support, so behaviors that must
+# stay uncached would otherwise also be served uncompressed
+resource "aws_cloudfront_cache_policy" "no_caching" {
+  count    = var.create_cloudfront_distribution && local.prevent_all_caching_used ? 1 : 0
+  provider = aws.us-east-1
+
+  name        = "${local.policy_name_prefix}-no-caching"
+  comment     = "Zero TTLs with Gzip and Brotli enabled"
+  min_ttl     = 0
+  default_ttl = 0
+  max_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    enable_accept_encoding_gzip   = true
+    enable_accept_encoding_brotli = true
+
+    cookies_config {
+      cookie_behavior = "none"
+    }
+    headers_config {
+      header_behavior = "none"
+    }
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+  }
+}
+
+# NOTE A cache policy only stops CloudFront caching; without this header the browser is free to
+# cache heuristically. No AWS managed response headers policy sets Cache-Control
+resource "aws_cloudfront_response_headers_policy" "no_store" {
+  count    = var.create_cloudfront_distribution && local.prevent_all_caching_used ? 1 : 0
+  provider = aws.us-east-1
+
+  name    = "${local.policy_name_prefix}-no-store"
+  comment = "Prevents browser and proxy caching"
+
+  custom_headers_config {
+    items {
+      header   = "Cache-Control"
+      value    = "no-store"
+      override = true
+    }
+  }
 }
 
 resource "aws_cloudfront_origin_access_control" "this" {
@@ -71,8 +119,8 @@ resource "aws_cloudfront_distribution" "this" {
       compress                   = ordered_cache_behavior.value.compress
       target_origin_id           = local.cloudfront_distribution_domain_name
       viewer_protocol_policy     = "redirect-to-https"
-      cache_policy_id            = data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.cache_policy_name].id
-      response_headers_policy_id = ordered_cache_behavior.value.response_headers_policy_id
+      cache_policy_id            = ordered_cache_behavior.value.prevent_all_caching ? one(aws_cloudfront_cache_policy.no_caching[*].id) : data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.cache_policy_name].id
+      response_headers_policy_id = ordered_cache_behavior.value.prevent_all_caching ? one(aws_cloudfront_response_headers_policy.no_store[*].id) : ordered_cache_behavior.value.response_headers_policy_id
 
       dynamic "function_association" {
         for_each = ordered_cache_behavior.value.attach_viewer_request_function && var.cloudfront_viewer_request_function_arn != null ? [1] : []
