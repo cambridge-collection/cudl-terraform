@@ -262,6 +262,48 @@ variable "cloudfront_access_logging_bucket" {
   default     = null
 }
 
+variable "cloudfront_default_cache_policy" {
+  description = "Managed cache-policy name for the CloudFront distribution's default cache behavior"
+  type        = string
+  default     = "Managed-CachingDisabled"
+}
+
+variable "cloudfront_ordered_cache_behaviors" {
+  description = <<-EOT
+    Ordered path-specific cache behaviors, evaluated BEFORE the default (first match wins).
+    Empty = unchanged. path_pattern matches the INCOMING viewer URI, before the viewer-request
+    function rewrites it (match "/letters-timeline-json" or "/view/*", not "/sites/.../letters.json"
+    or "*.html"). List specific patterns before broad ones.
+    prevent_all_caching stops the edge AND the browser caching the path: it selects
+    Managed-CachingDisabled and attaches a module-managed Cache-Control: no-store policy. It
+    overrides cache_policy_name. Note that CloudFront rejects compression settings on a policy with
+    caching disabled, so these paths cannot be compressed at the edge.
+    response_headers_policy_id takes an ID, not a name, so the caller can pass a resource
+    reference. It is for the remaining cases, such as CORS.
+  EOT
+  type = list(object({
+    path_pattern                   = string
+    cache_policy_name              = optional(string, "Managed-CachingOptimized")
+    prevent_all_caching            = optional(bool, false)
+    compress                       = optional(bool, true)
+    allowed_methods                = optional(list(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods                 = optional(list(string), ["GET", "HEAD"])
+    attach_viewer_request_function = optional(bool, true)
+    response_headers_policy_id     = optional(string)
+  }))
+  default = []
+
+  validation {
+    condition     = length(distinct([for b in var.cloudfront_ordered_cache_behaviors : b.path_pattern])) == length(var.cloudfront_ordered_cache_behaviors)
+    error_message = "path_pattern values must be unique (CloudFront rejects duplicate ordered behaviors)."
+  }
+
+  validation {
+    condition     = alltrue([for b in var.cloudfront_ordered_cache_behaviors : !(b.prevent_all_caching && b.response_headers_policy_id != null)])
+    error_message = "prevent_all_caching attaches a module-managed response headers policy, so it cannot be combined with response_headers_policy_id on the same behavior."
+  }
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"

@@ -1,6 +1,34 @@
-data "aws_cloudfront_cache_policy" "managed_caching_disabled" {
+locals {
+  cache_policy_names = toset(concat(
+    [var.cloudfront_default_cache_policy],
+    [for b in var.cloudfront_ordered_cache_behaviors : b.prevent_all_caching ? "Managed-CachingDisabled" : b.cache_policy_name],
+  ))
+  prevent_all_caching_used = anytrue([for b in var.cloudfront_ordered_cache_behaviors : b.prevent_all_caching])
+  policy_name_prefix       = replace(local.cloudfront_distribution_domain_name, ".", "-")
+}
+
+data "aws_cloudfront_cache_policy" "selected" {
+  for_each = local.cache_policy_names
   provider = aws.us-east-1
-  name     = "Managed-CachingDisabled"
+  name     = each.value
+}
+
+# NOTE A cache policy only stops CloudFront caching; without this header the browser is free to
+# cache heuristically. No AWS managed response headers policy sets Cache-Control
+resource "aws_cloudfront_response_headers_policy" "no_store" {
+  count    = var.create_cloudfront_distribution && local.prevent_all_caching_used ? 1 : 0
+  provider = aws.us-east-1
+
+  name    = "${local.policy_name_prefix}-no-store"
+  comment = "Prevents browser and proxy caching"
+
+  custom_headers_config {
+    items {
+      header   = "Cache-Control"
+      value    = "no-store"
+      override = true
+    }
+  }
 }
 
 resource "aws_cloudfront_origin_access_control" "this" {
@@ -43,13 +71,35 @@ resource "aws_cloudfront_distribution" "this" {
     smooth_streaming       = false
     target_origin_id       = local.cloudfront_distribution_domain_name
     viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id        = data.aws_cloudfront_cache_policy.managed_caching_disabled.id
+    cache_policy_id        = data.aws_cloudfront_cache_policy.selected[var.cloudfront_default_cache_policy].id
 
     dynamic "function_association" {
       for_each = var.cloudfront_viewer_request_function_arn != null ? [1] : []
       content {
         event_type   = "viewer-request"
         function_arn = var.cloudfront_viewer_request_function_arn
+      }
+    }
+  }
+
+  dynamic "ordered_cache_behavior" {
+    for_each = var.cloudfront_ordered_cache_behaviors
+    content {
+      path_pattern               = ordered_cache_behavior.value.path_pattern
+      allowed_methods            = ordered_cache_behavior.value.allowed_methods
+      cached_methods             = ordered_cache_behavior.value.cached_methods
+      compress                   = ordered_cache_behavior.value.compress
+      target_origin_id           = local.cloudfront_distribution_domain_name
+      viewer_protocol_policy     = "redirect-to-https"
+      cache_policy_id            = data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.prevent_all_caching ? "Managed-CachingDisabled" : ordered_cache_behavior.value.cache_policy_name].id
+      response_headers_policy_id = ordered_cache_behavior.value.prevent_all_caching ? one(aws_cloudfront_response_headers_policy.no_store[*].id) : ordered_cache_behavior.value.response_headers_policy_id
+
+      dynamic "function_association" {
+        for_each = ordered_cache_behavior.value.attach_viewer_request_function && var.cloudfront_viewer_request_function_arn != null ? [1] : []
+        content {
+          event_type   = "viewer-request"
+          function_arn = var.cloudfront_viewer_request_function_arn
+        }
       }
     }
   }
