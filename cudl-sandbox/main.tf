@@ -63,22 +63,27 @@ module "cudl-data-processing" {
 module "content_loader" {
   source = "git::https://github.com/cambridge-collection/terraform-aws-workload-ecs.git?ref=v4.4.0"
 
-  name_prefix                               = join("-", compact([local.environment, var.content_loader_name_suffix]))
-  account_id                                = data.aws_caller_identity.current.account_id
-  domain_name                               = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.content_loader_domain_name])), var.registered_domain_name])
-  alb_target_group_port                     = var.content_loader_target_group_port
-  alb_target_group_health_check_status_code = var.content_loader_health_check_status_code
-  ecr_repository_names                      = keys(var.content_loader_ecr_repositories)
-  ecr_repositories_exist                    = true
-  s3_task_buckets                           = [module.cudl-data-processing.source_bucket]
-  s3_task_execution_bucket                  = module.base_architecture.s3_bucket
-  s3_task_execution_additional_buckets      = [var.lambda-jar-bucket]
-  ecs_task_def_container_definitions        = jsonencode(local.content_loader_container_defs)
-  ecs_task_def_volumes_efs                  = keys(var.content_loader_ecs_task_def_volumes)
-  ecs_service_container_name                = local.content_loader_container_name_ui
-  ecs_service_container_port                = var.content_loader_application_port
-  ecs_service_capacity_provider_name        = module.base_architecture.ecs_capacity_provider_name
-  ecs_task_def_memory                       = var.content_loader_ecs_task_def_memory
+  name_prefix                                       = join("-", compact([local.environment, var.content_loader_name_suffix]))
+  account_id                                        = data.aws_caller_identity.current.account_id
+  domain_name                                       = join(".", [join("-", compact([var.environment, var.cluster_name_suffix, var.content_loader_domain_name])), var.registered_domain_name])
+  alb_target_group_port                             = var.content_loader_target_group_port
+  alb_target_group_health_check_status_code         = var.content_loader_health_check_status_code
+  alb_target_group_deregistration_delay             = 60
+  alb_target_group_health_check_interval            = 15 # 2 passes = 30s, against a ~50s UI boot and no ECS health check grace period
+  alb_target_group_health_check_unhealthy_threshold = 10 # 150s unresponsive before condemned
+  ecr_repository_names                              = keys(var.content_loader_ecr_repositories)
+  ecr_repositories_exist                            = true
+  s3_task_buckets                                   = [module.cudl-data-processing.source_bucket]
+  s3_task_execution_bucket                          = module.base_architecture.s3_bucket
+  s3_task_execution_additional_buckets              = [var.lambda-jar-bucket]
+  ecs_task_def_container_definitions                = jsonencode(local.content_loader_container_defs)
+  ecs_task_def_volumes_efs                          = keys(var.content_loader_ecs_task_def_volumes)
+  ecs_service_container_name                        = local.content_loader_container_name_ui
+  ecs_service_container_port                        = var.content_loader_application_port
+  ecs_service_capacity_provider_name                = module.base_architecture.ecs_capacity_provider_name
+  ecs_service_deployment_minimum_healthy_percent    = 0
+  ecs_service_deployment_maximum_percent            = 101 # floors to 1 task, so old and new never share PGDATA; AZ rebalancing rejects <= 100
+  ecs_task_def_memory                               = var.content_loader_ecs_task_def_memory
   s3_task_execution_bucket_objects = {
     "${var.environment}-cudl-loader-ui.env" = templatefile("${path.root}/templates/content-loader/cl-ui.env.ttfpl", {
       region          = var.deployment-aws-region
@@ -131,7 +136,7 @@ module "solr" {
   ecs_task_def_container_definitions             = jsonencode(local.solr_container_defs)
   ecs_task_def_volumes_efs                       = keys(var.solr_ecs_task_def_volumes)
   ecs_task_def_cpu                               = var.solr_ecs_task_def_cpu
-  ecs_task_def_memory                            = var.solr_ecs_task_def_memory
+  ecs_task_def_memory                            = local.solr_ecs_task_def_memory
   ecs_service_container_name                     = local.solr_container_name_api
   ecs_service_container_port                     = var.solr_target_group_port
   ecs_service_capacity_provider_name             = module.base_architecture.ecs_capacity_provider_name

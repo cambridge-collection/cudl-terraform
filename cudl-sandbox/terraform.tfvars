@@ -224,7 +224,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:fef520663cfbe7aa2141b95279d2cd2cfb526c3c02881a58f0799e153bbd7927"
+    "image_uri"                = "563181399728.dkr.ecr.eu-west-1.amazonaws.com/cudl-tei-processing@sha256:6c4a18cb938d9387b47ea70cd49ad034a33c7505a975658111f69f493f631884"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "mjh39-sandbox-cudl-ecs-vpc"
     "subnet_names"             = ["mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1a", "mjh39-sandbox-cudl-ecs-subnet-private-eu-west-1b"]
@@ -252,7 +252,7 @@ transform-lambda-information = [
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
       ENABLE_UNRELEASED_PARTITION    = "TRUE"
-      LOG_LEVEL                      = "WARN"
+      LOG_LEVEL                      = "INFO"
     }
   },
   {
@@ -288,7 +288,7 @@ transform-lambda-information = [
     "memory"                   = 1024
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 2
+    "maximum_concurrency"      = 5
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
@@ -444,8 +444,8 @@ solr_domain_name       = "solr"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl-solr-api" = "sha256:0bcc93b808bdfb5e65902c6691550aa986f95c7f14e1d3c4f610cd78ec0c7b8a",
-  "cudl-solr"     = "sha256:d59e6d9b7da087f88de057e816fc86aac089548ff56d19050ec1dd7701868211"
+  "cudl-solr-api" = "sha256:7f25aa28700724d63618c50c7c5fe7b64892748a8ae9abf9e6c96f0200a69e27",
+  "cudl-solr"     = "sha256:1dc42f52ebe66229c41bc7428264e9c3f80c433a6d99be866ed1590695a092ef"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -453,7 +453,6 @@ solr_container_name_solr      = "solr"
 solr_health_check_status_code = "404"
 solr_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
 solr_ecs_task_def_cpu         = 2048
-solr_ecs_task_def_memory      = 3584
 solr_use_service_discovery    = true
 
 cudl_services_name_suffix       = "cudl-services"
