@@ -257,7 +257,7 @@ module "rti_image_server" {
   route53_zone_id_existing                = var.rti_image_server_route53_zone_id_existing
   acm_certificate_arn_us-east-1           = var.acm_certificate_arn_us-east-1
   acm_create_certificate                  = false
-  cloudfront_waf_acl_arn                  = module.base_architecture.waf_acl_arn
+  cloudfront_waf_acl_arn                  = aws_wafv2_web_acl.rti_image_server.arn
   cloudfront_viewer_response_function_arn = var.rti_image_server_cloudfront_viewer_response_function_arn
   cloudfront_cache_policy                 = var.rti_image_server_cloudfront_cache_policy
   cloudfront_origin_request_policy_name   = var.rti_image_server_cloudfront_origin_request_policy_name
