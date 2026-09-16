@@ -1,3 +1,14 @@
+resource "aws_wafv2_ip_set" "allow" {
+  count = var.create_cloudfront_distribution && length(var.waf_ip_allow_list_addresses) > 0 ? 1 : 0
+
+  name               = join("-", [var.environment, var.cloudfront_distribution_name, var.waf_ip_allow_list_name])
+  provider           = aws.us-east-1
+  description        = "Managed by Terraform for ${var.environment} ${var.cloudfront_distribution_name}"
+  scope              = "CLOUDFRONT"
+  ip_address_version = "IPV4"
+  addresses          = var.waf_ip_allow_list_addresses
+}
+
 resource "aws_wafv2_web_acl" "this" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
@@ -84,11 +95,37 @@ resource "aws_wafv2_web_acl" "this" {
     }
   }
 
+  # Terminating, so it must precede the rate-limiting rule to exempt these addresses from it,
+  # while still being evaluated by the managed rule groups above.
+  dynamic "rule" {
+    for_each = length(var.waf_ip_allow_list_addresses) > 0 ? [1] : []
+    content {
+      name     = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-ip-allow-list"])
+      priority = 3
+
+      action {
+        allow {}
+      }
+
+      statement {
+        ip_set_reference_statement {
+          arn = aws_wafv2_ip_set.allow[0].arn
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-ip-allow-list"])
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+
   dynamic "rule" {
     for_each = var.waf_use_rate_limiting ? [1] : []
     content {
       name     = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-rate-limiting"])
-      priority = 3
+      priority = 4
 
       action {
         block {}

@@ -124,7 +124,7 @@ The `cudl-data-processing` module and its supporting code create:
 
 - **Edge & security**
   - Optional CloudFront distribution in `us-east-1` exposing the destination bucket
-  - WAFv2 WebACL for the distribution, using AWS managed rule groups and optional rate limiting
+  - WAFv2 WebACL for the distribution, using AWS managed rule groups with an optional IP allow list and rate limiting
   - Route53 records and ACM certificates (if configured to be created)
 
 - **Monitoring**
@@ -149,9 +149,36 @@ When `create_cloudfront_distribution` is enabled, the module creates a WAFv2 Web
 
 Within the common rule set, `NoUserAgent_HEADER` is overridden to count rather than block, so requests without a user agent are recorded but still served.
 
+Two further rules are optional and off by default: an IP allow list at priority 3 and rate limiting at priority 4. Rules are evaluated in priority order, so the allow list is always considered before rate limiting.
+
+### IP allow list
+
+An optional allow rule (priority 3) permits requests from a set of CIDR ranges, typically the UL VPN. Providing one or more ranges creates an `aws_wafv2_ip_set` named `<environment>-<cloudfront_distribution_name>-<waf_ip_allow_list_name>` and adds the rule that references it:
+
+| Variable                      | Default    | Description                                                                               |
+| :---------------------------- | :--------- | :---------------------------------------------------------------------------------------- |
+| `waf_ip_allow_list_addresses` | `[]`       | CIDR ranges allowed unconditionally. An empty list disables the allow list and its IP set  |
+| `waf_ip_allow_list_name`      | `"UL_VPN"` | Suffix for the IP set name, prefixed with the environment and distribution name            |
+
+The rule is terminating: a request from a listed range is allowed outright and no later rule is evaluated, which is what exempts those addresses from rate limiting. Because it sits after the managed rule groups rather than before them, allow-listed traffic is still inspected for bad input and IP reputation, and is blocked if it trips either.
+
+Note that the IP set holds IPv4 ranges only. CloudFront serves IPv6 by default, so a client connecting over IPv6 arrives with a source address the allow list cannot match and is rate limited as normal.
+
+Rule matches are published to CloudWatch, and sampled requests are retained for inspection in the WAF console, under the metric name `<environment>-<cloudfront_distribution_name>-waf-web-acl-rule-ip-allow-list`.
+
+For example, in an environment's `main.tf`:
+
+```hcl
+module "cudl-data-processing" {
+  # ...
+  waf_ip_allow_list_addresses = ["192.0.2.0/24"] # replace with the real VPN range
+  waf_ip_allow_list_name      = "UL_VPN"
+}
+```
+
 ### Rate limiting
 
-An optional rate-based rule (priority 3) blocks requests from a single originating IP address once they exceed a configured limit within an evaluation window. It is disabled by default and is wired up per environment through the following variables:
+An optional rate-based rule (priority 4) blocks requests from a single originating IP address once they exceed a configured limit within an evaluation window. It is disabled by default and is wired up per environment through the following variables:
 
 | Variable                                  | Default         | Description                                                                                   |
 | :---------------------------------------- | :-------------- | :-------------------------------------------------------------------------------------------- |

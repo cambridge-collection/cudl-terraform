@@ -331,6 +331,18 @@ variable "waf_rate_limiting_scope_down_match_type" {
   }
 }
 
+variable "waf_ip_allow_list_addresses" {
+  description = "CIDR ranges to allow unconditionally, exempting them from rate limiting. Empty disables the allow list. The rule is terminating, so it is evaluated after the managed rule groups but before rate limiting"
+  type        = list(string)
+  default     = []
+}
+
+variable "waf_ip_allow_list_name" {
+  description = "Suffix for the allow list IP set name, prefixed with the environment and CloudFront distribution name to keep it unique within the account"
+  type        = string
+  default     = "UL_VPN"
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
