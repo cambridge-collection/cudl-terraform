@@ -124,7 +124,7 @@ The `cudl-data-processing` module and its supporting code create:
 
 - **Edge & security**
   - Optional CloudFront distribution in `us-east-1` exposing the destination bucket
-  - WAFv2 WebACL for the distribution
+  - WAFv2 WebACL for the distribution, using AWS managed rule groups and optional rate limiting
   - Route53 records and ACM certificates (if configured to be created)
 
 - **Monitoring**
@@ -134,6 +134,49 @@ For the exact resource definitions, see:
 
 - `modules/cudl-data-processing/*.tf`
 - Environment-specific variables in `cul-cudl-*/terraform.tfvars`
+
+---
+
+## CloudFront WAF
+
+When `create_cloudfront_distribution` is enabled, the module creates a WAFv2 WebACL in `us-east-1` and associates it with the distribution. The WebACL allows requests by default and applies the following AWS managed rule groups:
+
+| Priority | Rule group                              |
+| :------- | :-------------------------------------- |
+| 0        | `AWSManagedRulesAmazonIpReputationList` |
+| 1        | `AWSManagedRulesCommonRuleSet`          |
+| 2        | `AWSManagedRulesKnownBadInputsRuleSet`  |
+
+Within the common rule set, `NoUserAgent_HEADER` is overridden to count rather than block, so requests without a user agent are recorded but still served.
+
+### Rate limiting
+
+An optional rate-based rule (priority 3) blocks requests from a single originating IP address once they exceed a configured limit within an evaluation window. It is disabled by default and is wired up per environment through the following variables:
+
+| Variable                                  | Default         | Description                                                                                   |
+| :---------------------------------------- | :-------------- | :-------------------------------------------------------------------------------------------- |
+| `waf_use_rate_limiting`                   | `false`         | Whether to add the rate-based rule to the WebACL                                               |
+| `waf_rate_limit`                          | `300`           | Requests permitted from one IP address within the evaluation window                            |
+| `waf_rate_limiting_evaluation_window`     | `300`           | Seconds over which requests are counted. Valid values are `60`, `120`, `300` and `600`         |
+| `waf_rate_limiting_scope_down_uri`        | `null`          | URI path to restrict rate limiting to. If unset, all requests to the distribution are counted  |
+| `waf_rate_limiting_scope_down_match_type` | `"STARTS_WITH"` | How the scope-down URI is matched: `EXACTLY`, `STARTS_WITH`, `CONTAINS` or `ENDS_WITH`         |
+
+The scope-down URI narrows which requests the rule counts, so rate limiting can be targeted at expensive paths (for example `/iiif/`) while leaving the rest of the distribution unthrottled. Requests falling outside the scope-down match are neither counted nor blocked by this rule. Paths are normalised before matching but compared case-sensitively, so a scope-down URI of `/iiif/` will not match a request to `/IIIF/`.
+
+Rule matches are published to CloudWatch, and sampled requests are retained for inspection in the WAF console, under the metric name `<environment>-<cloudfront_distribution_name>-waf-web-acl-rule-rate-limiting`.
+
+For example, in an environment's `main.tf`:
+
+```hcl
+module "cudl-data-processing" {
+  # ...
+  waf_use_rate_limiting                   = true
+  waf_rate_limit                          = 500
+  waf_rate_limiting_evaluation_window     = 60
+  waf_rate_limiting_scope_down_uri        = "/iiif/"
+  waf_rate_limiting_scope_down_match_type = "STARTS_WITH"
+}
+```
 
 ---
 

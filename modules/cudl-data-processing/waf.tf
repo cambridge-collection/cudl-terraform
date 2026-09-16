@@ -84,6 +84,49 @@ resource "aws_wafv2_web_acl" "this" {
     }
   }
 
+  dynamic "rule" {
+    for_each = var.waf_use_rate_limiting ? [1] : []
+    content {
+      name     = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-rate-limiting"])
+      priority = 3
+
+      action {
+        block {}
+      }
+
+      statement {
+        rate_based_statement {
+          limit                 = var.waf_rate_limit
+          aggregate_key_type    = "IP"
+          evaluation_window_sec = var.waf_rate_limiting_evaluation_window
+
+          dynamic "scope_down_statement" {
+            for_each = var.waf_rate_limiting_scope_down_uri != null ? [1] : []
+            content {
+              byte_match_statement {
+                search_string         = var.waf_rate_limiting_scope_down_uri
+                positional_constraint = var.waf_rate_limiting_scope_down_match_type
+                field_to_match {
+                  uri_path {}
+                }
+                text_transformation {
+                  priority = 0
+                  type     = "NORMALIZE_PATH"
+                }
+              }
+            }
+          }
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-rate-limiting"])
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+
   visibility_config {
     cloudwatch_metrics_enabled = true
     metric_name                = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-no-rule"])

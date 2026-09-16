@@ -291,6 +291,46 @@ variable "cloudfront_ordered_cache_behaviors" {
   }
 }
 
+variable "waf_use_rate_limiting" {
+  description = "Whether to rate limit requests from a single originating IP address on the CloudFront WAF"
+  type        = bool
+  default     = false
+}
+
+variable "waf_rate_limit" {
+  description = "The limit of requests from a single originating IP address within waf_rate_limiting_evaluation_window"
+  type        = number
+  default     = 300
+}
+
+variable "waf_rate_limiting_evaluation_window" {
+  description = "Number of seconds during which the WAF should count requests for rate limiting. Valid values are 60, 120, 300 and 600"
+  type        = number
+  default     = 300
+
+  validation {
+    condition     = contains([60, 120, 300, 600], var.waf_rate_limiting_evaluation_window)
+    error_message = "waf_rate_limiting_evaluation_window must be one of 60, 120, 300 or 600 seconds."
+  }
+}
+
+variable "waf_rate_limiting_scope_down_uri" {
+  description = "URI path to restrict rate limiting to. If null, rate limiting applies to all requests"
+  type        = string
+  default     = null
+}
+
+variable "waf_rate_limiting_scope_down_match_type" {
+  description = "How to match waf_rate_limiting_scope_down_uri. Valid values are: EXACTLY, STARTS_WITH, CONTAINS, ENDS_WITH"
+  type        = string
+  default     = "STARTS_WITH"
+
+  validation {
+    condition     = contains(["EXACTLY", "STARTS_WITH", "CONTAINS", "ENDS_WITH"], var.waf_rate_limiting_scope_down_match_type)
+    error_message = "waf_rate_limiting_scope_down_match_type must be one of EXACTLY, STARTS_WITH, CONTAINS or ENDS_WITH."
+  }
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"
