@@ -27,6 +27,21 @@ transform-lambda-bucket-sns-notifications = [
         "raw"        = true
       }
     ]
+  },
+  {
+    "bucket_name"   = "cul-cudl-data-releases"
+    "filter_prefix" = "unreleased/collections/",
+    "filter_suffix" = ".json"
+    "subscriptions" = [
+      {
+        "queue_name" = "CUDLIndexCollectionQueue",
+        "raw"        = true
+      },
+      {
+        "queue_name" = "CUDLPackageDataCopyFileToEFSQueue",
+        "raw"        = true
+      }
+    ]
   }
 ]
 transform-lambda-bucket-sqs-notifications = [
@@ -87,6 +102,13 @@ transform-lambda-bucket-sqs-notifications = [
   },
   {
     "type"          = "SQS",
+    "queue_name"    = "CUDLIndexQueue"
+    "filter_prefix" = "unreleased/solr-json/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cul-cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "cudl.dl-dataset.json"
     "filter_suffix" = ""
@@ -103,6 +125,13 @@ transform-lambda-bucket-sqs-notifications = [
     "type"          = "SQS",
     "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
     "filter_prefix" = "json/"
+    "filter_suffix" = ".json"
+    "bucket_name"   = "cul-cudl-data-releases"
+  },
+  {
+    "type"          = "SQS",
+    "queue_name"    = "CUDLPackageDataCopyFileToEFSQueue"
+    "filter_prefix" = "unreleased/json/"
     "filter_suffix" = ".json"
     "bucket_name"   = "cul-cudl-data-releases"
   },
@@ -137,49 +166,67 @@ transform-lambda-bucket-sqs-notifications = [
 ]
 transform-lambda-information = [
   {
-    "name"                  = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
-    "description"           = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataQueue_HTML"
-    "subnet_names"          = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["staging-cudl-ecs-vpc-egress"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertHTMLIdsHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
+    "description"                    = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:6f17655e7ea9c06f92113a42f4b6f62b978df49c33ca90acb486a4fd652d1336"
+    "queue_name"                     = "CUDLPackageDataQueue_HTML"
+    "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET = "staging-cul-cudl-data-releases"
+      TRANSFORM   = "html"
+    }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
-    "description"           = "Copies file from the source s3 bucket into the destination (release) s3 bucket, unchanged"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
-    "vpc_name"              = "staging-cudl-ecs-vpc"
-    "subnet_names"          = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["staging-cudl-ecs-vpc-egress"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "other_filters"         = "cudl.dl-dataset.json|cudl.ui.json"
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyFileHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_FILE_UNCHANGED_COPY"
+    "description"                    = "Copies files verbatim from the source bucket to the releases bucket (identity copy)"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:4db60990316e63307a3fb557649e7ce8c898dadef82aec653310f900e71a8663"
+    "queue_name"                     = "CUDLPackageDataQueue_FILES_UNCHANGED_COPY"
+    "vpc_name"                       = "staging-cudl-ecs-vpc"
+    "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 256
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET = "staging-cul-cudl-data-releases"
+    }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
-    "description"           = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataQueue_Collections"
-    "subnet_names"          = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["staging-cudl-ecs-vpc-egress"]
-    "use_datadog_variables" = false
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.ConvertJSONIdsHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
+    "description"                    = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:6f17655e7ea9c06f92113a42f4b6f62b978df49c33ca90acb486a4fd652d1336"
+    "queue_name"                     = "CUDLPackageDataQueue_Collections"
+    "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
+    "timeout"                        = 60
+    "memory"                         = 512
+    "batch_window"                   = 0
+    "batch_size"                     = 1
+    "sqs_max_tries_before_deadqueue" = 3
+    "use_datadog_variables"          = false
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DEST_BUCKET            = "staging-cul-cudl-data-releases"
+      TRANSFORM              = "json"
+      DST_XSLT_OUTPUT_FOLDER = "json/"
+      DST_XSLT_OUTPUT_SUFFIX = ".json"
+    }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:122649ec723abda8b1c22145c0322ce02540eed23d7d5d68cfe847e13be698a1"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:6fb3d81a1563556edc7bd1b174136ff7e033f616a4003017a9ddf0c9533e95cc"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -206,13 +253,14 @@ transform-lambda-information = [
       ENABLE_SHA_METADATA            = "true"
       ENABLE_RELEASE_STATUS_METADATA = "true"
       ENABLE_TEI_SHA_IN_CORE_XML     = "true"
+      ENABLE_UNRELEASED_PARTITION    = "TRUE"
       LOG_LEVEL                      = "INFO"
 
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:402837f03848d9c55645a3437e062362b18aaaf812dcc54e931a90a586fbda5e"
     "queue_name"               = "CUDLIndexQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -225,14 +273,16 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.staging-solr"
-      API_PORT = "8081"
-      API_PATH = "item"
+      API_HOST             = "solr-api-cudl-ecs.staging-solr"
+      API_PORT             = "8081"
+      API_PATH             = "item"
+      LOG_LEVEL            = "INFO"
+      RELEASES_PARTITIONED = "TRUE"
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:402837f03848d9c55645a3437e062362b18aaaf812dcc54e931a90a586fbda5e"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -245,25 +295,31 @@ transform-lambda-information = [
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.staging-solr"
-      API_PORT = "8081"
-      API_PATH = "collection"
+      API_HOST             = "solr-api-cudl-ecs.staging-solr"
+      API_PORT             = "8081"
+      API_PATH             = "collection"
+      LOG_LEVEL            = "INFO"
+      RELEASES_PARTITIONED = "TRUE"
     }
   },
   {
     "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
-    "description"                    = "Copies file from S3 to EFS"
-    "jar_path"                       = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
+    "description"                    = "Copies files verbatim from the releases bucket to the EFS mount"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:50eaeb6fea6158e1d186e786dc438e0a286944396f60e3f114bc6ca43df6afaf"
     "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
     "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["staging-cudl-ecs-vpc-egress", "staging-cudl-data-releases-efs"]
     "use_datadog_variables"          = false
     "mount_fs"                       = true
-    "sqs_max_tries_before_deadqueue" = 1
     "timeout"                        = 900
     "memory"                         = 512
-    "handler"                        = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
-    "runtime"                        = "java11"
+    "sqs_max_tries_before_deadqueue" = 3
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DST_EFS_PREFIX  = "/mnt/cudl-data-releases"
+      DST_EFS_ENABLED = "true"
+      LOG_LEVEL       = "INFO"
+    }
   },
   {
     "name"                       = "AWSLambda_CUDL_Transkribus_Ingest"
@@ -291,7 +347,7 @@ transform-lambda-information = [
   },
   {
     "name"                           = "cudl-copy-tei-assets"
-    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:88ef2d76ed015c8a1e2d39d5db482eac22b3a3aa392b3a0a723321507b889459"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/s3-replicator@sha256:4db60990316e63307a3fb557649e7ce8c898dadef82aec653310f900e71a8663"
     "queue_name"                     = "CUDLPackageDataQueue_UI_TEI_ASSETS_COPY"
     "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
@@ -307,8 +363,7 @@ transform-lambda-information = [
       SOURCE_PREFIX = "tei-assets/"
       DEST_PREFIX   = "html/cudl-resources/"
     }
-  }
-  ,
+  },
   {
     "name"                     = "AWSLambda_CUDL_ARK_Ingestion"
     "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/pid-minting@sha256:9ae349c86bc7ac998e71ebf71e6cc112f7d1d9b40cdcee807d75796b86536741" # VERIFY
@@ -327,10 +382,9 @@ transform-lambda-information = [
     "environment_variables" = {
       PID_LOG_LEVEL           = "INFO"
       PID_FORWARD_QUEUE_URL   = "https://sqs.eu-west-1.amazonaws.com/438117829123/staging-CUDL_TEIProcessingForwardQueue" #VERIFY
-      PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:438117829123:secret:staging/cudl/pid-pipeline-nD9nmb" #VERIFY
+      PID_PIPELINE_SECRET_ARN = "arn:aws:secretsmanager:eu-west-1:438117829123:secret:staging/cudl/pid-pipeline-nD9nmb"   #VERIFY
     }
   }
-
 ]
 dst-efs-prefix    = "/mnt/cudl-data-releases"
 dst-prefix        = "html/"
@@ -370,8 +424,8 @@ content_loader_domain_name       = "content-loader"
 content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
-  "cudl/content-loader-db" = "sha256:26092924ee4c2e086f8ca116a7f9de2350233658107aa5e76e75b07f2d31f5b4",
-  "cudl/content-loader-ui" = "sha256:6d042df4170b601411bf63488253fbd70eb54bad335d04eeee956d2c4f31f4f8"
+  "cudl/content-loader-db" = "sha256:56081ed5d1876b190c9b15d150d8512477e4baeb9f874e93c4250cd29097d066",
+  "cudl/content-loader-ui" = "sha256:73e819ebeef099f84ad2fdb8cef0eeacea94a0a0cf7511ea50c2bad7de5c6a51"
 }
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui                   = "dl-loader-ui"
@@ -389,8 +443,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:62a3587ebe78bbd69b2cdacd2f75b2be3b9e5af6f6e0303b0c94d87b4af31d0d",
-  "cudl/solr"     = "sha256:0cbc721fa29e260a83db2780519bf2ef96cc24e4ac4209397dfe3dea0ecb71be"
+  "cudl/solr-api" = "sha256:7f25aa28700724d63618c50c7c5fe7b64892748a8ae9abf9e6c96f0200a69e27",
+  "cudl/solr"     = "sha256:76966d3d7cfae08f0693f53eb2a09209dc669f060c9273810ad00614b82d4106"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -405,7 +459,7 @@ cudl_services_domain_name       = "services"
 cudl_services_target_group_port = 8085
 cudl_services_container_port    = 3000
 cudl_services_ecr_repositories = {
-  "cudl/services" = "sha256:bc86da808e1420fde49196cdbc12251f1e79ba5dc3f0c5a68e4e197ebe1c7902"
+  "cudl/services" = "sha256:7742e6781a774e3f9bab833b8dbb1714de30a8bce1d86d9868d1171e8fcf464a"
 }
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
@@ -415,7 +469,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:182deea95b63d7f06d5ae17ebc32dab9466d431e12d90a1857182336bf7a3a6f"
+  "cudl/viewer" = "sha256:66ecbb1118cc7ea178ef5e1034d50a298e94cb98bd1953b7763009566894ae44"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback
