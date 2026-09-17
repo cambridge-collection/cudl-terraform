@@ -162,7 +162,7 @@ An optional allow rule (priority 3) permits requests from a set of CIDR ranges, 
 
 The rule is terminating: a request from a listed range is allowed outright and no later rule is evaluated, which is what exempts those addresses from rate limiting. Because it sits after the managed rule groups rather than before them, allow-listed traffic is still inspected for bad input and IP reputation, and is blocked if it trips either.
 
-Note that the IP set holds IPv4 ranges only. CloudFront serves IPv6 by default, so a client connecting over IPv6 arrives with a source address the allow list cannot match and is rate limited as normal.
+Note that the IP set holds IPv4 ranges only. A viewer arriving over IPv6 carries a source address the allow list cannot match. Covering those ranges would need a second IP set with `ip_address_version = "IPV6"`. Whether this affects a given deployment depends on its distribution's `IsIPV6Enabled` value.
 
 Rule matches are published to CloudWatch, and sampled requests are retained for inspection in the WAF console, under the metric name `<environment>-<cloudfront_distribution_name>-waf-web-acl-rule-ip-allow-list`.
 
