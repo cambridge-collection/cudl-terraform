@@ -386,11 +386,10 @@ transform-lambda-information = [
     }
   }
 ]
-dst-efs-prefix    = "/mnt/cudl-data-releases"
-dst-prefix        = "html/"
-dst-s3-prefix     = ""
-tmp-dir           = "/tmp/dest/"
-lambda-alias-name = "LIVE"
+dst-efs-prefix = "/mnt/cudl-data-releases"
+dst-prefix     = "html/"
+dst-s3-prefix  = ""
+tmp-dir        = "/tmp/dest/"
 
 releases-root-directory-path               = "/data"
 efs-name                                   = "cudl-data-releases-efs"

@@ -37,7 +37,7 @@ module "cudl-data-processing" {
   efs_subnets                               = zipmap(["${local.base_name_prefix}-subnet-private-a", "${local.base_name_prefix}-subnet-private-b"], module.base_architecture.vpc_private_subnet_ids)
   efs_file_system_throughput_mode           = var.data_processing_efs_throughput_mode
   efs_file_system_provisioned_throughput    = var.data_processing_efs_provisioned_throughput
-  lambda-alias-name                         = var.lambda-alias-name
+  create_lambda_aliases                     = false
   releases-root-directory-path              = var.releases-root-directory-path
   tmp-dir                                   = var.tmp-dir
   transform-lambda-information              = local.transform_lambda_information

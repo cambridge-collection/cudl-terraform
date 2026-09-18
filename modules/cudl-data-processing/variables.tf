@@ -115,6 +115,13 @@ variable "tmp-dir" {
 variable "lambda-alias-name" {
   description = "Use to set the name for the lambda function alias(es)"
   type        = string
+  default     = "LIVE"
+}
+
+variable "create_lambda_aliases" {
+  description = "Whether to create a named alias for each transform lambda"
+  type        = bool
+  default     = true
 }
 
 variable "vpc-id" {
