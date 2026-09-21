@@ -65,7 +65,7 @@ A cache policy only controls CloudFront's own storage; it says nothing to the br
 
 Note that these paths cannot be compressed at the edge. CloudFront rejects a cache policy that sets both zero TTLs and the accept-encoding parameters — the encoding settings are part of the cache key, and there is no cache key when nothing is cached. Uncached and compressed is not an available combination.
 
-Use it for live query endpoints and anything else that must never be served stale. `response_headers_policy_id` remains available for the other cases, such as CORS, where you pass the ID of a policy you have created yourself. The two cannot be combined on the same behavior.
+Use it for live query endpoints and anything else that must never be served stale. `response_headers_policy_name` remains available for the other cases, such as CORS, where you name either an AWS managed policy or one you have created yourself. The two cannot be combined on the same behavior.
 
 ## Inputs
 
@@ -89,7 +89,7 @@ The module has around 50 variables covering the buckets, Lambdas, EFS and networ
   - `allowed_methods` (list(string), default: `["GET", "HEAD", "OPTIONS"]`)
   - `cached_methods` (list(string), default: `["GET", "HEAD"]`)
   - `attach_viewer_request_function` (bool, default: `true`) — attach `cloudfront_viewer_request_function_arn` to this behavior. Setting this to false for a path whose S3 key only exists after a rewrite will produce a 404.
-  - `response_headers_policy_id` (string, optional) — ID, not a name, so a resource reference can be passed. Cannot be combined with `prevent_all_caching`.
+  - `response_headers_policy_name` (string, optional) — an AWS managed policy such as `Managed-SimpleCORS`, or a custom one passed as a `.name` reference. Cannot be combined with `prevent_all_caching`.
 
 - `cloudfront_viewer_request_function_arn` (string, optional, default: `null`)  
   ARN of a CloudFront Function handling viewer requests, typically for URL rewriting.
@@ -150,7 +150,7 @@ module "cudl-data-processing" {
 }
 ```
 
-Several behaviors together, showing ordering and a caller-supplied CORS policy. Because `response_headers_policy_id` takes a resource reference, the list has to be built in `locals.tf` rather than set in `terraform.tfvars`:
+Several behaviors together, showing ordering and a caller-supplied CORS policy. A policy you create yourself has to be passed as a `.name` reference, so that Terraform creates it before looking it up; that forces the list into `locals.tf`. A list naming only AWS managed policies can be set in `terraform.tfvars` instead:
 
 ```hcl
 resource "aws_cloudfront_response_headers_policy" "cors" {
@@ -179,7 +179,7 @@ locals {
     {
       path_pattern               = "/json/manifests/*"
       cache_policy_name          = "Managed-CachingOptimized"
-      response_headers_policy_id = aws_cloudfront_response_headers_policy.cors.id
+      response_headers_policy_name = aws_cloudfront_response_headers_policy.cors.name
     },
     {
       path_pattern      = "/json/*"

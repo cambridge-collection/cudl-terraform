@@ -275,8 +275,9 @@ variable "cloudfront_ordered_cache_behaviors" {
     Managed-CachingDisabled and attaches a module-managed Cache-Control: no-store policy. It
     overrides cache_policy_name. Note that CloudFront rejects compression settings on a policy with
     caching disabled, so these paths cannot be compressed at the edge.
-    response_headers_policy_id takes an ID, not a name, so the caller can pass a resource
-    reference. It is for the remaining cases, such as CORS.
+    response_headers_policy_name is resolved by name on the us-east-1 provider, so it takes an
+    AWS managed policy (Managed-SimpleCORS) or a custom one, passed as a .name reference. It is
+    for the remaining cases, such as CORS.
   EOT
   type = list(object({
     path_pattern                   = string
@@ -286,7 +287,7 @@ variable "cloudfront_ordered_cache_behaviors" {
     allowed_methods                = optional(list(string), ["GET", "HEAD", "OPTIONS"])
     cached_methods                 = optional(list(string), ["GET", "HEAD"])
     attach_viewer_request_function = optional(bool, true)
-    response_headers_policy_id     = optional(string)
+    response_headers_policy_name   = optional(string)
   }))
   default = []
 
@@ -296,8 +297,8 @@ variable "cloudfront_ordered_cache_behaviors" {
   }
 
   validation {
-    condition     = alltrue([for b in var.cloudfront_ordered_cache_behaviors : !(b.prevent_all_caching && b.response_headers_policy_id != null)])
-    error_message = "prevent_all_caching attaches a module-managed response headers policy, so it cannot be combined with response_headers_policy_id on the same behavior."
+    condition     = alltrue([for b in var.cloudfront_ordered_cache_behaviors : !(b.prevent_all_caching && b.response_headers_policy_name != null)])
+    error_message = "prevent_all_caching attaches a module-managed response headers policy, so it cannot be combined with response_headers_policy_name on the same behavior."
   }
 }
 
