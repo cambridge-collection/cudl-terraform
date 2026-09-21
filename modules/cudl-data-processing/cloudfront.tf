@@ -5,10 +5,20 @@ locals {
   ))
   prevent_all_caching_used = anytrue([for b in var.cloudfront_ordered_cache_behaviors : b.prevent_all_caching])
   policy_name_prefix       = replace(local.cloudfront_distribution_domain_name, ".", "-")
+  response_headers_policy_names = toset([
+    for b in var.cloudfront_ordered_cache_behaviors : b.response_headers_policy_name
+    if b.response_headers_policy_name != null
+  ])
 }
 
 data "aws_cloudfront_cache_policy" "selected" {
   for_each = local.cache_policy_names
+  provider = aws.us-east-1
+  name     = each.value
+}
+
+data "aws_cloudfront_response_headers_policy" "selected" {
+  for_each = local.response_headers_policy_names
   provider = aws.us-east-1
   name     = each.value
 }
@@ -85,14 +95,20 @@ resource "aws_cloudfront_distribution" "this" {
   dynamic "ordered_cache_behavior" {
     for_each = var.cloudfront_ordered_cache_behaviors
     content {
-      path_pattern               = ordered_cache_behavior.value.path_pattern
-      allowed_methods            = ordered_cache_behavior.value.allowed_methods
-      cached_methods             = ordered_cache_behavior.value.cached_methods
-      compress                   = ordered_cache_behavior.value.compress
-      target_origin_id           = local.cloudfront_distribution_domain_name
-      viewer_protocol_policy     = "redirect-to-https"
-      cache_policy_id            = data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.prevent_all_caching ? "Managed-CachingDisabled" : ordered_cache_behavior.value.cache_policy_name].id
-      response_headers_policy_id = ordered_cache_behavior.value.prevent_all_caching ? aws_cloudfront_response_headers_policy.no_store.0.id : ordered_cache_behavior.value.response_headers_policy_id
+      path_pattern           = ordered_cache_behavior.value.path_pattern
+      allowed_methods        = ordered_cache_behavior.value.allowed_methods
+      cached_methods         = ordered_cache_behavior.value.cached_methods
+      compress               = ordered_cache_behavior.value.compress
+      target_origin_id       = local.cloudfront_distribution_domain_name
+      viewer_protocol_policy = "redirect-to-https"
+      cache_policy_id        = data.aws_cloudfront_cache_policy.selected[ordered_cache_behavior.value.prevent_all_caching ? "Managed-CachingDisabled" : ordered_cache_behavior.value.cache_policy_name].id
+      response_headers_policy_id = (
+        ordered_cache_behavior.value.prevent_all_caching
+        ? aws_cloudfront_response_headers_policy.no_store.0.id
+        : ordered_cache_behavior.value.response_headers_policy_name != null
+        ? data.aws_cloudfront_response_headers_policy.selected[ordered_cache_behavior.value.response_headers_policy_name].id
+        : null
+      )
 
       dynamic "function_association" {
         for_each = ordered_cache_behavior.value.attach_viewer_request_function && var.cloudfront_viewer_request_function_arn != null ? [1] : []
