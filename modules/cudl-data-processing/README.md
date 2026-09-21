@@ -23,7 +23,7 @@ CloudFront is a global service, so the distribution itself is not regional. Thes
 
 ## CloudFront caching and compression
 
-The distribution has one default cache behavior and, optionally, a list of path-specific ordered behaviors. CloudFront evaluates the ordered behaviors in list order, first match wins, and anything matching none of them falls through to the default.
+The distribution has one default cache behavior and, optionally, a list of path-specific ordered behaviors. The ordered behaviors take precedence: CloudFront checks them first, in list order, and the first matching pattern wins. The default behavior is the catch-all, used only for requests that match no ordered behavior.
 
 ### Path patterns match the URL the viewer sent
 
@@ -43,7 +43,7 @@ Two related points:
 
 ### Ordering
 
-Entries are evaluated in the order given, so list specific patterns before broad ones. Note that a trailing wildcard is a prefix match: `/search*` also matches `/search.config.json`.
+Entries are evaluated in the order given, and all of them before the default behavior, so list specific patterns before broad ones. Note that a trailing wildcard is a prefix match: `/search*` also matches `/search.config.json`.
 
 ### Compression
 
