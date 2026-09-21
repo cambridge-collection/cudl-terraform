@@ -180,15 +180,16 @@ module "cudl-data-processing" {
 
 An optional rate-based rule (priority 4) blocks requests from a single originating IP address once they exceed a configured limit within an evaluation window. It is disabled by default and is wired up per environment through the following variables:
 
-| Variable                                  | Default         | Description                                                                                   |
-| :---------------------------------------- | :-------------- | :-------------------------------------------------------------------------------------------- |
-| `waf_use_rate_limiting`                   | `false`         | Whether to add the rate-based rule to the WebACL                                               |
-| `waf_rate_limit`                          | `300`           | Requests permitted from one IP address within the evaluation window                            |
-| `waf_rate_limiting_evaluation_window`     | `300`           | Seconds over which requests are counted. Valid values are `60`, `120`, `300` and `600`         |
-| `waf_rate_limiting_scope_down_uri`        | `null`          | URI path to restrict rate limiting to. If unset, all requests to the distribution are counted  |
-| `waf_rate_limiting_scope_down_match_type` | `"STARTS_WITH"` | How the scope-down URI is matched: `EXACTLY`, `STARTS_WITH`, `CONTAINS` or `ENDS_WITH`         |
+| Variable                              | Default | Description                                                                                    |
+| :------------------------------------ | :------ | :--------------------------------------------------------------------------------------------- |
+| `waf_use_rate_limiting`               | `false` | Whether to add the rate-based rule to the WebACL                                                |
+| `waf_rate_limit`                      | `300`   | Requests permitted from one IP address within the evaluation window                             |
+| `waf_rate_limiting_evaluation_window` | `300`   | Seconds over which requests are counted. Valid values are `60`, `120`, `300` and `600`          |
+| `waf_rate_limiting_scope_down_uris`   | `[]`    | URI paths to restrict rate limiting to. If empty, all requests to the distribution are counted   |
 
-The scope-down URI narrows which requests the rule counts, so rate limiting can be targeted at expensive paths (for example `/iiif/`) while leaving the rest of the distribution unthrottled. Requests falling outside the scope-down match are neither counted nor blocked by this rule. Paths are normalised before matching but compared case-sensitively, so a scope-down URI of `/iiif/` will not match a request to `/IIIF/`.
+Each entry in `waf_rate_limiting_scope_down_uris` takes a `uri` and an optional `match_type`, one of `EXACTLY`, `STARTS_WITH` (the default), `CONTAINS` or `ENDS_WITH`. Several entries are combined with OR, so a request matching any one of them is counted.
+
+The scope-down URIs narrow which requests the rule counts, so rate limiting can be targeted at expensive paths (for example `/iiif/`) while leaving the rest of the distribution unthrottled. Requests matching none of the entries are neither counted nor blocked by this rule. Paths are normalised before matching but compared case-sensitively, so a scope-down URI of `/iiif/` will not match a request to `/IIIF/`.
 
 Rule matches are published to CloudWatch, and sampled requests are retained for inspection in the WAF console, under the metric name `<environment>-<cloudfront_distribution_name>-waf-web-acl-rule-rate-limiting`.
 
@@ -197,11 +198,13 @@ For example, in an environment's `main.tf`:
 ```hcl
 module "cudl-data-processing" {
   # ...
-  waf_use_rate_limiting                   = true
-  waf_rate_limit                          = 500
-  waf_rate_limiting_evaluation_window     = 60
-  waf_rate_limiting_scope_down_uri        = "/iiif/"
-  waf_rate_limiting_scope_down_match_type = "STARTS_WITH"
+  waf_use_rate_limiting               = true
+  waf_rate_limit                      = 500
+  waf_rate_limiting_evaluation_window = 60
+  waf_rate_limiting_scope_down_uris = [
+    { uri = "/iiif/" },
+    { uri = ".json", match_type = "ENDS_WITH" },
+  ]
 }
 ```
 

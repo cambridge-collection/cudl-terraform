@@ -314,20 +314,24 @@ variable "waf_rate_limiting_evaluation_window" {
   }
 }
 
-variable "waf_rate_limiting_scope_down_uri" {
-  description = "URI path to restrict rate limiting to. If null, rate limiting applies to all requests"
-  type        = string
-  default     = null
-}
-
-variable "waf_rate_limiting_scope_down_match_type" {
-  description = "How to match waf_rate_limiting_scope_down_uri. Valid values are: EXACTLY, STARTS_WITH, CONTAINS, ENDS_WITH"
-  type        = string
-  default     = "STARTS_WITH"
+variable "waf_rate_limiting_scope_down_uris" {
+  description = <<-EOT
+    URI paths to restrict rate limiting to. Empty applies rate limiting to all requests; several
+    entries are combined with OR, so a request matching any one of them is counted.
+    match_type is how the URI is compared: EXACTLY, STARTS_WITH, CONTAINS or ENDS_WITH.
+  EOT
+  type = list(object({
+    uri        = string
+    match_type = optional(string, "STARTS_WITH")
+  }))
+  default = []
 
   validation {
-    condition     = contains(["EXACTLY", "STARTS_WITH", "CONTAINS", "ENDS_WITH"], var.waf_rate_limiting_scope_down_match_type)
-    error_message = "waf_rate_limiting_scope_down_match_type must be one of EXACTLY, STARTS_WITH, CONTAINS or ENDS_WITH."
+    condition = alltrue([
+      for s in var.waf_rate_limiting_scope_down_uris :
+      contains(["EXACTLY", "STARTS_WITH", "CONTAINS", "ENDS_WITH"], s.match_type)
+    ])
+    error_message = "match_type must be one of EXACTLY, STARTS_WITH, CONTAINS or ENDS_WITH."
   }
 }
 

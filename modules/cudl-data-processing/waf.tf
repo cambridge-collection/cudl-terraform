@@ -138,17 +138,44 @@ resource "aws_wafv2_web_acl" "this" {
           evaluation_window_sec = var.waf_rate_limiting_evaluation_window
 
           dynamic "scope_down_statement" {
-            for_each = var.waf_rate_limiting_scope_down_uri != null ? [1] : []
+            for_each = length(var.waf_rate_limiting_scope_down_uris) > 0 ? [1] : []
             content {
-              byte_match_statement {
-                search_string         = var.waf_rate_limiting_scope_down_uri
-                positional_constraint = var.waf_rate_limiting_scope_down_match_type
-                field_to_match {
-                  uri_path {}
+
+              # A single URI is matched directly: or_statement needs two or more statements.
+              dynamic "byte_match_statement" {
+                for_each = length(var.waf_rate_limiting_scope_down_uris) == 1 ? var.waf_rate_limiting_scope_down_uris : []
+                content {
+                  search_string         = byte_match_statement.value.uri
+                  positional_constraint = byte_match_statement.value.match_type
+                  field_to_match {
+                    uri_path {}
+                  }
+                  text_transformation {
+                    priority = 0
+                    type     = "NORMALIZE_PATH"
+                  }
                 }
-                text_transformation {
-                  priority = 0
-                  type     = "NORMALIZE_PATH"
+              }
+
+              dynamic "or_statement" {
+                for_each = length(var.waf_rate_limiting_scope_down_uris) > 1 ? [1] : []
+                content {
+                  dynamic "statement" {
+                    for_each = var.waf_rate_limiting_scope_down_uris
+                    content {
+                      byte_match_statement {
+                        search_string         = statement.value.uri
+                        positional_constraint = statement.value.match_type
+                        field_to_match {
+                          uri_path {}
+                        }
+                        text_transformation {
+                          priority = 0
+                          type     = "NORMALIZE_PATH"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
