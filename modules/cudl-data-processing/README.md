@@ -15,7 +15,7 @@ For the pipeline narrative — how data moves from TEI source through the Lambda
 - A CloudWatch dashboard, and IAM roles and policies for the above.
 - When `create_cloudfront_distribution` is set:
   - A CloudFront distribution fronting the destination bucket, with an origin access control.
-  - A WAFv2 WebACL protecting the distribution.
+  - A WAFv2 WebACL protecting the distribution, and an IP set if `waf_ip_allow_list_addresses` is set (see below).
   - Route 53 records for the distribution domain, and an ACM certificate if `acm_create_certificate` is set (otherwise `acm_certificate_arn` supplies an existing one).
   - A `Cache-Control: no-store` response headers policy, if any behavior uses `prevent_all_caching` (see below).
 
@@ -67,9 +67,35 @@ Note that these paths cannot be compressed at the edge. CloudFront rejects a cac
 
 Use it for live query endpoints and anything else that must never be served stale. `response_headers_policy_name` remains available for the other cases, such as CORS, where you name either an AWS managed policy or one you have created yourself. The two cannot be combined on the same behavior.
 
+## WAF
+
+The WebACL is created alongside the distribution and attached to it. Its default action is to allow, so a request is served unless a rule blocks it. Rules are evaluated in priority order:
+
+| Priority | Rule | Action | Created |
+| --- | --- | --- | --- |
+| 0 | `AWSManagedRulesAmazonIpReputationList` | managed | always |
+| 1 | `AWSManagedRulesCommonRuleSet` | managed | always |
+| 2 | `AWSManagedRulesKnownBadInputsRuleSet` | managed | always |
+| 3 | IP allow list | allow, terminating | when `waf_ip_allow_list_addresses` is non-empty |
+| 4 | Rate limiting | block | when `waf_use_rate_limiting` is set |
+
+Within the common rule set, `NoUserAgent_HEADER` is overridden to count, so requests with no User-Agent are recorded but still served.
+
+### Rate limiting
+
+The rate-based rule blocks an IP once it exceeds `waf_rate_limit` requests within `waf_rate_limiting_evaluation_window` seconds. The window must be 60, 120, 300 or 600; anything else fails validation.
+
+By default the rule counts every request, and `waf_rate_limiting_scope_down_uris` narrows it to particular paths. The inversion is easy to miss: an empty list is the broad setting, not the narrow one. Entries are combined with OR, so a request is counted if it matches any of them. Each takes a `uri` and a `match_type` of `EXACTLY`, `STARTS_WITH` (the default), `CONTAINS` or `ENDS_WITH`, compared against the normalised URI path.
+
+### The IP allow list
+
+`waf_ip_allow_list_addresses` exempts CIDR ranges from rate limiting. Its priority is deliberate: the rule is terminating, so placing it after the managed rule groups keeps allowed addresses screened for bad inputs, while placing it before the rate-limiting rule stops their requests being counted against the limit.
+
+The IP set is IPv4 only, so an IPv6 range cannot be added. The distribution does not enable IPv6, but were it turned on, allow-listed clients arriving over IPv6 would no longer be exempt.
+
 ## Inputs
 
-The module has around 50 variables covering the buckets, Lambdas, EFS and networking; see `variables.tf` for the full set. The CloudFront and caching inputs are:
+The module has around 50 variables covering the buckets, Lambdas, EFS and networking; see `variables.tf` for the full set. The CloudFront, caching and WAF inputs are:
 
 - `create_cloudfront_distribution` (string, optional, default: `false`)  
   Whether to create the distribution and its supporting resources at all. When false, none of the inputs below have any effect.
@@ -111,6 +137,26 @@ The module has around 50 variables covering the buckets, Lambdas, EFS and networ
 
 - `cloudfront_route53_zone_id` (string, optional, default: `null`)  
   Hosted zone in which to create the distribution's DNS records.
+
+- `waf_use_rate_limiting` (bool, optional, default: `false`)  
+  Whether to add the rate-limiting rule to the WebACL.
+
+- `waf_rate_limit` (number, optional, default: `300`)  
+  Requests allowed from one IP within the evaluation window before it is blocked.
+
+- `waf_rate_limiting_evaluation_window` (number, optional, default: `300`)  
+  Seconds over which requests are counted. Must be 60, 120, 300 or 600.
+
+- `waf_rate_limiting_scope_down_uris` (list(object), optional, default: `[]`)  
+  Paths to restrict rate limiting to; an empty list rate limits every request. Each object takes:
+  - `uri` (string, required) — the path to compare against.
+  - `match_type` (string, default: `STARTS_WITH`) — one of `EXACTLY`, `STARTS_WITH`, `CONTAINS` or `ENDS_WITH`.
+
+- `waf_ip_allow_list_addresses` (list(string), optional, default: `[]`)  
+  IPv4 CIDR ranges exempt from rate limiting. An empty list omits the allow list rule entirely.
+
+- `waf_ip_allow_list_name` (string, optional, default: `UL_VPN`)  
+  Suffix for the IP set name, prefixed with the environment and distribution name to keep it unique within the account.
 
 ## Example usage
 
@@ -177,8 +223,8 @@ locals {
   cloudfront_ordered_cache_behaviors = [
     # Listed before /json/*, which would otherwise match these paths first
     {
-      path_pattern               = "/json/manifests/*"
-      cache_policy_name          = "Managed-CachingOptimized"
+      path_pattern                 = "/json/manifests/*"
+      cache_policy_name            = "Managed-CachingOptimized"
       response_headers_policy_name = aws_cloudfront_response_headers_policy.cors.name
     },
     {
