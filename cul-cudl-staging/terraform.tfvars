@@ -168,7 +168,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_HTML_to_HTML_Translate_URLS"
     "description"                    = "Processes HTML files from source data format into the releases data format by transforming the URL paths"
-    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:6f17655e7ea9c06f92113a42f4b6f62b978df49c33ca90acb486a4fd652d1336"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:60d7476cbe828398630795296209398d5d458543d9b5f207ad9181636808b369"
     "queue_name"                     = "CUDLPackageDataQueue_HTML"
     "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
@@ -206,7 +206,7 @@ transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_JSON_to_JSON_Translate_URLS"
     "description"                    = "Transforms the collection json file into a json format with suitable paths for the viewer / db"
-    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:6f17655e7ea9c06f92113a42f4b6f62b978df49c33ca90acb486a4fd652d1336"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/data-transmogrifier@sha256:60d7476cbe828398630795296209398d5d458543d9b5f207ad9181636808b369"
     "queue_name"                     = "CUDLPackageDataQueue_Collections"
     "subnet_names"                   = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"           = ["staging-cudl-ecs-vpc-egress"]
@@ -226,7 +226,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:6fb3d81a1563556edc7bd1b174136ff7e033f616a4003017a9ddf0c9533e95cc"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:8c07feeded9ad1d4ccf04dd3187f2e1d95496bf3fc8ccd9abb8911999fbf8a6d"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
