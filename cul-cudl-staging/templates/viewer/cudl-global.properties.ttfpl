@@ -15,9 +15,6 @@ cudl-viewer-content.images.path=${mount_path}/data/pages/images
 enable.refresh=true
 caching.enabled=false
 
-# Search facets
-facets.itemStatus.enabled=true
-
 # Value to append to image server URL
 appendToThumbnail=.jp2/full/,180/0/default.jpg
 appendToImage=.jp2
@@ -82,3 +79,6 @@ pdf.cache.path=/tmp/pdf-cache
 metadata_apikey=${cudl_services_apikey}
 metadata_service=${cudl_services_url}
 metadata_version=/v1/metadata/
+
+showReleaseStatus=true
+unreleasedDataDirectory=/srv/cudl-viewer/cudl-data/data/unreleased

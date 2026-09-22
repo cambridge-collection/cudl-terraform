@@ -92,6 +92,10 @@ locals {
           name  = "NUM_WORKERS"
           value = "3"
         },
+        {
+          name  = "ENABLE_ORPHAN_PAGE_PRUNE"
+          value = "false"
+        },
       ],
       environmentFiles = [],
       mountPoints      = [],

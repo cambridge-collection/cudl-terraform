@@ -123,11 +123,6 @@ variable "tmp-dir" {
   type        = string
 }
 
-variable "lambda-alias-name" {
-  description = "Use to set the name for the lambda function alias(es)"
-  type        = string
-}
-
 variable "releases-root-directory-path" {
   description = "Specify the root path for the releases access point in the EFS"
   type        = string

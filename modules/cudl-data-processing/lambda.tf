@@ -66,7 +66,7 @@ resource "aws_lambda_function" "create-transform-lambda-function" {
 }
 
 resource "aws_lambda_alias" "create-transform-lambda-alias" {
-  count = length(var.transform-lambda-information)
+  count = var.create_lambda_aliases ? length(var.transform-lambda-information) : 0
 
   name             = var.lambda-alias-name
   function_name    = aws_lambda_function.create-transform-lambda-function[count.index].arn
