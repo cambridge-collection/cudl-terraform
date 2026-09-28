@@ -269,6 +269,105 @@ variable "cloudfront_access_logging_bucket" {
   default     = null
 }
 
+variable "cloudfront_default_cache_policy" {
+  description = "Managed cache-policy name for the CloudFront distribution's default cache behavior"
+  type        = string
+  default     = "Managed-CachingDisabled"
+}
+
+variable "cloudfront_ordered_cache_behaviors" {
+  description = <<-EOT
+    Ordered path-specific cache behaviors, evaluated BEFORE the default (first match wins).
+    Empty = unchanged. path_pattern matches the INCOMING viewer URI, before the viewer-request
+    function rewrites it (match "/letters-timeline-json" or "/view/*", not "/sites/.../letters.json"
+    or "*.html"). List specific patterns before broad ones.
+    prevent_all_caching stops the edge AND the browser caching the path: it selects
+    Managed-CachingDisabled and attaches a module-managed Cache-Control: no-store policy. It
+    overrides cache_policy_name. Note that CloudFront rejects compression settings on a policy with
+    caching disabled, so these paths cannot be compressed at the edge.
+    response_headers_policy_name is resolved by name on the us-east-1 provider, so it takes an
+    AWS managed policy (Managed-SimpleCORS) or a custom one, passed as a .name reference. It is
+    for the remaining cases, such as CORS.
+  EOT
+  type = list(object({
+    path_pattern                   = string
+    cache_policy_name              = optional(string, "Managed-CachingOptimized")
+    prevent_all_caching            = optional(bool, false)
+    compress                       = optional(bool, true)
+    allowed_methods                = optional(list(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods                 = optional(list(string), ["GET", "HEAD"])
+    attach_viewer_request_function = optional(bool, true)
+    response_headers_policy_name   = optional(string)
+  }))
+  default = []
+
+  validation {
+    condition     = length(distinct([for b in var.cloudfront_ordered_cache_behaviors : b.path_pattern])) == length(var.cloudfront_ordered_cache_behaviors)
+    error_message = "path_pattern values must be unique (CloudFront rejects duplicate ordered behaviors)."
+  }
+
+  validation {
+    condition     = alltrue([for b in var.cloudfront_ordered_cache_behaviors : !(b.prevent_all_caching && b.response_headers_policy_name != null)])
+    error_message = "prevent_all_caching attaches a module-managed response headers policy, so it cannot be combined with response_headers_policy_name on the same behavior."
+  }
+}
+
+variable "waf_use_rate_limiting" {
+  description = "Whether to rate limit requests from a single originating IP address on the CloudFront WAF"
+  type        = bool
+  default     = false
+}
+
+variable "waf_rate_limit" {
+  description = "The limit of requests from a single originating IP address within waf_rate_limiting_evaluation_window"
+  type        = number
+  default     = 300
+}
+
+variable "waf_rate_limiting_evaluation_window" {
+  description = "Number of seconds during which the WAF should count requests for rate limiting. Valid values are 60, 120, 300 and 600"
+  type        = number
+  default     = 300
+
+  validation {
+    condition     = contains([60, 120, 300, 600], var.waf_rate_limiting_evaluation_window)
+    error_message = "waf_rate_limiting_evaluation_window must be one of 60, 120, 300 or 600 seconds."
+  }
+}
+
+variable "waf_rate_limiting_scope_down_uris" {
+  description = <<-EOT
+    URI paths to restrict rate limiting to. Empty applies rate limiting to all requests; several
+    entries are combined with OR, so a request matching any one of them is counted.
+    match_type is how the URI is compared: EXACTLY, STARTS_WITH, CONTAINS or ENDS_WITH.
+  EOT
+  type = list(object({
+    uri        = string
+    match_type = optional(string, "STARTS_WITH")
+  }))
+  default = []
+
+  validation {
+    condition = alltrue([
+      for s in var.waf_rate_limiting_scope_down_uris :
+      contains(["EXACTLY", "STARTS_WITH", "CONTAINS", "ENDS_WITH"], s.match_type)
+    ])
+    error_message = "match_type must be one of EXACTLY, STARTS_WITH, CONTAINS or ENDS_WITH."
+  }
+}
+
+variable "waf_ip_allow_list_addresses" {
+  description = "CIDR ranges to allow unconditionally, exempting them from rate limiting. Empty disables the allow list. The rule is terminating, so it is evaluated after the managed rule groups but before rate limiting"
+  type        = list(string)
+  default     = []
+}
+
+variable "waf_ip_allow_list_name" {
+  description = "Suffix for the allow list IP set name, prefixed with the environment and CloudFront distribution name to keep it unique within the account"
+  type        = string
+  default     = "UL_VPN"
+}
+
 variable "efs_nfs_mount_port" {
   type        = number
   description = "NFS protocol port for EFS mounts"

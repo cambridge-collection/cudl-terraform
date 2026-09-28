@@ -1,3 +1,14 @@
+resource "aws_wafv2_ip_set" "allow" {
+  count = var.create_cloudfront_distribution && length(var.waf_ip_allow_list_addresses) > 0 ? 1 : 0
+
+  name               = join("-", [var.environment, var.cloudfront_distribution_name, var.waf_ip_allow_list_name])
+  provider           = aws.us-east-1
+  description        = "Managed by Terraform for ${var.environment} ${var.cloudfront_distribution_name}"
+  scope              = "CLOUDFRONT"
+  ip_address_version = "IPV4"
+  addresses          = var.waf_ip_allow_list_addresses
+}
+
 resource "aws_wafv2_web_acl" "this" {
   count = var.create_cloudfront_distribution ? 1 : 0
 
@@ -81,6 +92,102 @@ resource "aws_wafv2_web_acl" "this" {
       cloudwatch_metrics_enabled = true
       metric_name                = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
       sampled_requests_enabled   = true
+    }
+  }
+
+  # Terminating, so it must precede the rate-limiting rule to exempt these addresses from it,
+  # while still being evaluated by the managed rule groups above.
+  dynamic "rule" {
+    for_each = length(var.waf_ip_allow_list_addresses) > 0 ? [1] : []
+    content {
+      name     = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-ip-allow-list"])
+      priority = 3
+
+      action {
+        allow {}
+      }
+
+      statement {
+        ip_set_reference_statement {
+          arn = aws_wafv2_ip_set.allow[0].arn
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-ip-allow-list"])
+        sampled_requests_enabled   = true
+      }
+    }
+  }
+
+  dynamic "rule" {
+    for_each = var.waf_use_rate_limiting ? [1] : []
+    content {
+      name     = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-rate-limiting"])
+      priority = 4
+
+      action {
+        block {}
+      }
+
+      statement {
+        rate_based_statement {
+          limit                 = var.waf_rate_limit
+          aggregate_key_type    = "IP"
+          evaluation_window_sec = var.waf_rate_limiting_evaluation_window
+
+          dynamic "scope_down_statement" {
+            for_each = length(var.waf_rate_limiting_scope_down_uris) > 0 ? [1] : []
+            content {
+
+              # A single URI is matched directly: or_statement needs two or more statements.
+              dynamic "byte_match_statement" {
+                for_each = length(var.waf_rate_limiting_scope_down_uris) == 1 ? var.waf_rate_limiting_scope_down_uris : []
+                content {
+                  search_string         = byte_match_statement.value.uri
+                  positional_constraint = byte_match_statement.value.match_type
+                  field_to_match {
+                    uri_path {}
+                  }
+                  text_transformation {
+                    priority = 0
+                    type     = "NORMALIZE_PATH"
+                  }
+                }
+              }
+
+              dynamic "or_statement" {
+                for_each = length(var.waf_rate_limiting_scope_down_uris) > 1 ? [1] : []
+                content {
+                  dynamic "statement" {
+                    for_each = var.waf_rate_limiting_scope_down_uris
+                    content {
+                      byte_match_statement {
+                        search_string         = statement.value.uri
+                        positional_constraint = statement.value.match_type
+                        field_to_match {
+                          uri_path {}
+                        }
+                        text_transformation {
+                          priority = 0
+                          type     = "NORMALIZE_PATH"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = join("-", [var.environment, var.cloudfront_distribution_name, "waf-web-acl-rule-rate-limiting"])
+        sampled_requests_enabled   = true
+      }
     }
   }
 
