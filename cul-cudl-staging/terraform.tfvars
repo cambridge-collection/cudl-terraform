@@ -226,7 +226,7 @@ transform-lambda-information = [
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_TEI_Processing"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:8c07feeded9ad1d4ccf04dd3187f2e1d95496bf3fc8ccd9abb8911999fbf8a6d"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/tei-processing@sha256:c4e71b745efd03396ce6e8b9faa0d376329e7092dc25d386af6743b0c07827ce"
     "queue_name"               = "CUDL_TEIProcessingForwardQueue"
     "vpc_name"                 = "staging-cudl-ecs-vpc"
     "subnet_names"             = ["staging-cudl-ecs-subnet-private-eu-west-1a", "staging-cudl-ecs-subnet-private-eu-west-1b"]
@@ -424,7 +424,7 @@ content_loader_application_port  = 8081
 content_loader_target_group_port = 9009
 content_loader_ecr_repositories = {
   "cudl/content-loader-db" = "sha256:56081ed5d1876b190c9b15d150d8512477e4baeb9f874e93c4250cd29097d066",
-  "cudl/content-loader-ui" = "sha256:73e819ebeef099f84ad2fdb8cef0eeacea94a0a0cf7511ea50c2bad7de5c6a51"
+  "cudl/content-loader-ui" = "sha256:ed6699aea1abf2c46b368efb2e51f7b374fea5535ef3e06b595f14ce7ad572c8"
 }
 content_loader_ecs_task_def_volumes                = { "dl-loader-db" = "/var/lib/postgresql/data" }
 content_loader_container_name_ui                   = "dl-loader-ui"
@@ -442,8 +442,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:7f25aa28700724d63618c50c7c5fe7b64892748a8ae9abf9e6c96f0200a69e27",
-  "cudl/solr"     = "sha256:a3206ac28ea2802d53df9633bc480a6bbf7926b9a26a4d0714cfd64a39b2ef45"
+  "cudl/solr-api" = "sha256:db884676f51556a7a7cc0f9ca2d4c70baa62b59a8c01039eec99d6c4763b4f51",
+  "cudl/solr"     = "sha256:e571818a59b00096258d71929795d49df8fda1c7197084594d6ed2f8cab058a1"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"

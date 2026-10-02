@@ -1,0 +1,11 @@
+function handler(event) {
+    var uri = event.request.uri;
+    if (uri === '/pages' || uri.startsWith('/pages/') ||
+        uri === '/unreleased' || uri.startsWith('/unreleased/')) {
+        return {
+            statusCode: 403,
+            statusDescription: 'Forbidden'
+        };
+    }
+    return event.request;
+}

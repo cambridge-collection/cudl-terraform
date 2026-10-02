@@ -73,9 +73,9 @@ transform-lambda-bucket-sqs-notifications = [
 transform-lambda-information = [
   {
     "name"                     = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:402837f03848d9c55645a3437e062362b18aaaf812dcc54e931a90a586fbda5e"
     "queue_name"               = "CUDLIndexQueue"
-    "queue_delay_seconds"      = 10
+    "queue_delay_seconds"      = 600
     "vpc_name"                 = "production-cudl-ecs-vpc"
     "subnet_names"             = ["production-cudl-ecs-subnet-private-eu-west-1a", "production-cudl-ecs-subnet-private-eu-west-1b"]
     "security_group_names"     = ["production-cudl-ecs-vpc-egress", "production-solr-external"]
@@ -83,18 +83,20 @@ transform-lambda-information = [
     "memory"                   = 1024
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 35
+    "maximum_concurrency"      = 20
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.production-solr"
-      API_PORT = "8081"
-      API_PATH = "item"
+      API_HOST             = "solr-api-cudl-ecs.production-solr"
+      API_PORT             = "8081"
+      API_PATH             = "item"
+      LOG_LEVEL            = "INFO"
+      RELEASES_PARTITIONED = "TRUE"
     }
   },
   {
     "name"                     = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d"
+    "image_uri"                = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:402837f03848d9c55645a3437e062362b18aaaf812dcc54e931a90a586fbda5e"
     "queue_name"               = "CUDLIndexCollectionQueue"
     "vpc_name"                 = "production-cudl-ecs-vpc"
     "subnet_names"             = ["production-cudl-ecs-subnet-private-eu-west-1a", "production-cudl-ecs-subnet-private-eu-west-1b"]
@@ -103,35 +105,41 @@ transform-lambda-information = [
     "memory"                   = 1024
     "batch_window"             = 2
     "batch_size"               = 1
-    "maximum_concurrency"      = 5
+    "maximum_concurrency"      = 3
     "use_datadog_variables"    = false
     "use_additional_variables" = true
     "environment_variables" = {
-      API_HOST = "solr-api-cudl-ecs.production-solr"
-      API_PORT = "8081"
-      API_PATH = "collection"
+      API_HOST             = "solr-api-cudl-ecs.production-solr"
+      API_PORT             = "8081"
+      API_PATH             = "collection"
+      LOG_LEVEL            = "INFO"
+      RELEASES_PARTITIONED = "TRUE"
     }
   },
   {
-    "name"                  = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
-    "description"           = "Copies file from S3 to EFS"
-    "jar_path"              = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar"
-    "queue_name"            = "CUDLPackageDataCopyFileToEFSQueue"
-    "subnet_names"          = ["production-cudl-ecs-subnet-private-eu-west-1a", "production-cudl-ecs-subnet-private-eu-west-1b"]
-    "security_group_names"  = ["production-cudl-ecs-vpc-egress", "production-cudl-data-releases-efs"]
-    "use_datadog_variables" = false
-    "mount_fs"              = true
-    "timeout"               = 900
-    "memory"                = 512
-    "handler"               = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest"
-    "runtime"               = "java11"
+    "name"                           = "AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS"
+    "description"                    = "Copies files verbatim from the releases bucket to the EFS mount"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:50eaeb6fea6158e1d186e786dc438e0a286944396f60e3f114bc6ca43df6afaf"
+    "queue_name"                     = "CUDLPackageDataCopyFileToEFSQueue"
+    "subnet_names"                   = ["production-cudl-ecs-subnet-private-eu-west-1a", "production-cudl-ecs-subnet-private-eu-west-1b"]
+    "security_group_names"           = ["production-cudl-ecs-vpc-egress", "production-cudl-data-releases-efs"]
+    "use_datadog_variables"          = false
+    "mount_fs"                       = true
+    "timeout"                        = 900
+    "memory"                         = 512
+    "sqs_max_tries_before_deadqueue" = 3
+    "function_response_types"        = ["ReportBatchItemFailures"]
+    "environment_variables" = {
+      DST_EFS_PREFIX  = "/mnt/cudl-data-releases"
+      DST_EFS_ENABLED = "true"
+      LOG_LEVEL       = "INFO"
+    }
   }
 ]
-dst-efs-prefix    = "/mnt/cudl-data-releases"
-dst-prefix        = "html/"
-dst-s3-prefix     = ""
-tmp-dir           = "/tmp/dest/"
-lambda-alias-name = "LIVE"
+dst-efs-prefix = "/mnt/cudl-data-releases"
+dst-prefix     = "html/"
+dst-s3-prefix  = ""
+tmp-dir        = "/tmp/dest/"
 
 releases-root-directory-path = "/data"
 efs-name                     = "cudl-data-releases-efs"
@@ -199,8 +207,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:4d1625efc0645672f25d84192daf1bdbd538c499b17503d6a443227222755dab",
-  "cudl/solr"     = "sha256:0cbc721fa29e260a83db2780519bf2ef96cc24e4ac4209397dfe3dea0ecb71be"
+  "cudl/solr-api" = "sha256:db884676f51556a7a7cc0f9ca2d4c70baa62b59a8c01039eec99d6c4763b4f51",
+  "cudl/solr"     = "sha256:e571818a59b00096258d71929795d49df8fda1c7197084594d6ed2f8cab058a1"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
@@ -215,7 +223,7 @@ cudl_services_domain_name       = "services"
 cudl_services_target_group_port = 8085
 cudl_services_container_port    = 3000
 cudl_services_ecr_repositories = {
-  "cudl/services" = "sha256:bc86da808e1420fde49196cdbc12251f1e79ba5dc3f0c5a68e4e197ebe1c7902"
+  "cudl/services" = "sha256:7742e6781a774e3f9bab833b8dbb1714de30a8bce1d86d9868d1171e8fcf464a"
 }
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
@@ -225,7 +233,7 @@ cudl_viewer_domain_name       = "viewer"
 cudl_viewer_target_group_port = 5008
 cudl_viewer_container_port    = 8080
 cudl_viewer_ecr_repositories = {
-  "cudl/viewer" = "sha256:182deea95b63d7f06d5ae17ebc32dab9466d431e12d90a1857182336bf7a3a6f"
+  "cudl/viewer" = "sha256:8826f474184c18936112a035896445cf35b7be67873060652081c999c08141aa"
 }
 cudl_viewer_health_check_status_code        = "200"
 cudl_viewer_allowed_methods                 = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"] # NOTE need to allow email feedback

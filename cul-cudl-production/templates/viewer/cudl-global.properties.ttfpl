@@ -15,9 +15,6 @@ cudl-viewer-content.images.path=${mount_path}/data/pages/images
 enable.refresh=true
 caching.enabled=true
 
-# Search facets
-facets.itemStatus.enabled=false
-
 GoogleAnalyticsId=${google_analytics_id}
 GA4GoogleAnalyticsId=${ga4_google_analytics_id}
 
@@ -82,3 +79,5 @@ pdf.cache.path=/tmp/pdf-cache
 metadata_apikey=${cudl_services_apikey}
 metadata_service=${cudl_services_url}
 metadata_version=/v1/metadata/
+
+showReleaseStatus=false
