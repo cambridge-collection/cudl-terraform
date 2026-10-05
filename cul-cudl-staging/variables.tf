@@ -76,6 +76,7 @@ variable "transform-lambda-information" {
     working_directory              = optional(string)
     architectures                  = optional(list(string))
     sqs_max_tries_before_deadqueue = optional(number)
+    sqs_visibility_timeout_seconds = optional(number)
     queue_delay_seconds            = optional(number, 0)
     use_datadog_variables          = optional(bool, true)
     use_additional_variables       = optional(bool, false)

@@ -3,7 +3,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
 
   name = substr("${var.environment}-${each.key}", 0, 64)
 
-  visibility_timeout_seconds = 900
+  visibility_timeout_seconds = each.value.sqs_visibility_timeout_seconds
   delay_seconds              = each.value.queue_delay_seconds
 
   policy = jsonencode({
