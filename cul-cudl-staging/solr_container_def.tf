@@ -24,6 +24,10 @@ locals {
         {
           name  = "SOLR_HEAP",
           value = format("%sm", floor(local.solr_ecs_task_def_memory / 2))
+        },
+        {
+          name  = "SOLR_OPTS",
+          value = "-Dsolr.cdcp.autoSoftCommit.maxTime=60000"
         }
       ],
       environmentFiles = [],
