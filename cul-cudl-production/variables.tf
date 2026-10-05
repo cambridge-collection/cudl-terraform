@@ -74,6 +74,7 @@ variable "transform-lambda-information" {
     command                        = optional(string)
     entry_point                    = optional(string)
     working_directory              = optional(string)
+    architectures                  = optional(list(string))
     sqs_max_tries_before_deadqueue = optional(number)
     sqs_visibility_timeout_seconds = optional(number)
     queue_delay_seconds            = optional(number, 0)
@@ -82,6 +83,8 @@ variable "transform-lambda-information" {
     use_enhancements_variables     = optional(bool, false)
     mount_fs                       = optional(bool, false)
     ephemeral_storage              = optional(number, 512)
+    function_response_types        = optional(list(string))
+    enable_sqs_trigger             = optional(bool, true)
   }))
 }
 
