@@ -44,6 +44,7 @@ resource "aws_sqs_queue" "transform-lambda-sqs-queue" {
 resource "aws_sqs_queue" "transform-lambda-dead-letter-queue" {
   for_each                   = local.transform_lambda_queues
   visibility_timeout_seconds = 900
+  message_retention_seconds  = var.dlq_message_retention_seconds
   name                       = substr("${var.environment}-${each.key}_DeadLetterQueue", 0, 80)
 }
 

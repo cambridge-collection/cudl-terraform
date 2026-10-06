@@ -422,3 +422,9 @@ variable "production_deployment" {
   description = "Whether to modify the domain name used by transcriptions for Live service"
   default     = false
 }
+
+variable "dlq_message_retention_seconds" {
+  type        = number
+  description = "How long the transform lambda dead-letter queues keep messages. Null uses the SQS default of 4 days"
+  default     = null
+}

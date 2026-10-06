@@ -55,6 +55,7 @@ module "cudl-data-processing" {
   aws-account-number                        = data.aws_caller_identity.current.account_id
   transform-lambda-bucket-sns-notifications = var.transform-lambda-bucket-sns-notifications
   transform-lambda-bucket-sqs-notifications = var.transform-lambda-bucket-sqs-notifications
+  dlq_message_retention_seconds             = 604800
   environment                               = local.environment
   source-bucket-name                        = var.source-bucket-name
   enhancements-bucket-name                  = var.enhancements-bucket-name
