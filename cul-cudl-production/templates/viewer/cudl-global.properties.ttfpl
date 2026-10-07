@@ -81,3 +81,4 @@ metadata_service=${cudl_services_url}
 metadata_version=/v1/metadata/
 
 showReleaseStatus=false
+searchFacetLimit=200

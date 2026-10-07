@@ -1,0 +1,863 @@
+[0m[1mmodule.daily_summary_fetch.data.archive_file.lambda: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.data.archive_file.lambda: Read complete after 0s [id=0f612dde7451aee6230645075ed07e1744120665][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_ga4_google_analytics_id: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_region.this: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.assume-role-datasync-policy: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_route53_zone.domain[0]: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.apikey_darwin: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_region.this: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.aws_cloudwatch_log_group.lambda: Refreshing state... [id=/aws/lambda/production-cudl-summary-daily-summary-fetch][0m
+[0m[1maws_cloudfront_function.viewer-redirect: Refreshing state... [id=production-cudl-viewer-redirect][0m
+[0m[1mmodule.rti_image_server.aws_s3_bucket.static_site: Refreshing state... [id=production-cul-cudl-rti-images][0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.assume-role-datasync-policy: Read complete after 0s [id=470491992][0m
+[0m[1mmodule.cudl_viewer.data.aws_region.this: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.solr.data.aws_region.this: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.assume-role-lambda-policy: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_ecr_repository.existing["cudl/services"]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket.enhancements-bucket: Refreshing state... [id=production-cul-cudl-data-enhancements][0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.assume-role-lambda-policy: Read complete after 0s [id=2690255455][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_google_analytics_id: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.apikey_darwin: Read complete after 0s [id=/Environments/Production/CUDL/Services/APIKey/Darwin][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_cloudfront_password: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_google_analytics_id: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/Google/AnalyticsId][0m
+[0m[1mmodule.cudl_services.data.aws_region.this: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_region.this: Read complete after 0s [id=eu-west-1][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_ga4_google_analytics_id: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/Google/GA4AnalyticsId][0m
+[0m[1mmodule.base_architecture.data.aws_kms_alias.ebs: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_ami.ecs_ami: Reading...[0m[0m
+[0m[1mmodule.base_architecture.aws_ecs_cluster.this: Refreshing state... [id=arn:aws:ecs:eu-west-1:438117829123:cluster/production-cudl-ecs][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_cloudfront_password: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/CloudFront/Password][0m
+[0m[1mmodule.base_architecture.data.aws_iam_policy_document.assume_role_policy: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_iam_policy_document.assume_role_policy: Read complete after 0s [id=2851119427][0m
+[0m[1mmodule.base_architecture.data.aws_route53_zone.existing[0]: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_ecr_repository.existing["cudl/services"]: Read complete after 0s [id=cudl/services][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_smtp_port: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_region.current: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_region.current: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.solr.data.aws_ecr_repository.existing["cudl/solr"]: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_kms_alias.ebs: Read complete after 0s [id=arn:aws:kms:eu-west-1:438117829123:alias/aws/ebs][0m
+[0m[1mmodule.solr.data.aws_ecr_repository.existing["cudl/solr-api"]: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_smtp_port: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/SMTP/Port][0m
+[0m[1mdata.aws_ssm_parameter.database_password: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.transform_lambda_vpc[2]: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.database_password: Read complete after 0s [id=/Environments/Production/CUDL/Services/DB/Password][0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.transform_lambda_vpc[1]: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_ecr_repository.existing["cudl/solr"]: Read complete after 0s [id=cudl/solr][0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.transform_lambda_vpc[0]: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_ecr_repository.existing["cudl/solr-api"]: Read complete after 0s [id=cudl/solr-api][0m
+[0m[1mmodule.daily_summary_fetch.data.aws_iam_policy_document.assume_role: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.data.aws_iam_policy_document.assume_role: Read complete after 0s [id=2690255455][0m
+[0m[1mmodule.base_architecture.aws_vpc.this: Refreshing state... [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.base_architecture.data.aws_ami.ecs_ami: Read complete after 0s [id=ami-0fac451d91e95f35c][0m
+[0m[1mmodule.daily_summary_fetch.aws_cloudwatch_event_rule.daily_summary: Refreshing state... [id=production-cudl-summary-daily-summary-schedule][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_recaptcha_sitekey: Reading...[0m[0m
+[0m[1maws_s3_bucket.cloudfront_access_logging: Refreshing state... [id=production-cudl-ecs-cloudfront-access-logs][0m
+[0m[1maws_cloudfront_function.viewer-cors-header: Refreshing state... [id=production-cudl-viewer-cors-header][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_recaptcha_sitekey: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/Recaptcha/Sitekey][0m
+[0m[1mdata.aws_ecr_image.cudl_viewer["cudl/viewer"]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.transform_lambda_vpc[1]: Read complete after 0s [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.cudl-data-processing.aws_cloudwatch_dashboard.lambda: Refreshing state... [id=Production-Data-Processing-Lambda][0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.transform_lambda_vpc[2]: Read complete after 0s [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.base_architecture.data.aws_caller_identity.current: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.transform_lambda_vpc[0]: Read complete after 0s [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.cudl_viewer.data.aws_ecr_repository.existing["cudl/viewer"]: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_caller_identity.current: Read complete after 0s [id=438117829123][0m
+[0m[1mmodule.base_architecture.aws_s3_bucket.this[0]: Refreshing state... [id=production-cudl-ecs][0m
+[0m[1mdata.aws_ecr_image.cudl_viewer["cudl/viewer"]: Read complete after 0s [id=sha256:8826f474184c18936112a035896445cf35b7be67873060652081c999c08141aa][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket.source-bucket: Refreshing state... [id=production-cul-cudl-data-source][0m
+[0m[1mmodule.cudl-data-processing.data.aws_route53_zone.domain[0]: Read complete after 0s [id=Z03809063VDGJ8MKPHFRV][0m
+[0m[1mdata.aws_ecr_image.solr["cudl/solr-api"]: Reading...[0m[0m
+[0m[1mdata.aws_ecr_image.solr["cudl/solr-api"]: Read complete after 0s [id=sha256:db884676f51556a7a7cc0f9ca2d4c70baa62b59a8c01039eec99d6c4763b4f51][0m
+[0m[1mdata.aws_ecr_image.solr["cudl/solr"]: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_route53_zone.existing[0]: Read complete after 0s [id=Z03809063VDGJ8MKPHFRV][0m
+[0m[1mmodule.daily_summary_fetch.data.aws_caller_identity.current: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_ecr_repository.existing["cudl/viewer"]: Read complete after 0s [id=cudl/viewer][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_recaptcha_secretkey: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.data.aws_caller_identity.current: Read complete after 0s [id=438117829123][0m
+[0m[1maws_cloudfront_key_value_store.viewer: Refreshing state... [id=70281421-b865-4718-a2f1-15ab2651019a][0m
+[0m[1mmodule.cudl-data-processing.aws_cloudwatch_dashboard.sqs: Refreshing state... [id=Production-Data-Processing-SQS][0m
+[0m[1mdata.aws_ecr_image.solr["cudl/solr"]: Read complete after 0s [id=sha256:e571818a59b00096258d71929795d49df8fda1c7197084594d6ed2f8cab058a1][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket.dest-bucket: Refreshing state... [id=production-cul-cudl-data-releases][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_recaptcha_secretkey: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/Recaptcha/Secretkey][0m
+[0m[1mdata.aws_ec2_instance_type.asg: Reading...[0m[0m
+[0m[1mdata.aws_ec2_instance_type.asg: Read complete after 1s [id=t3.large][0m
+[0m[1mmodule.cudl-data-processing.aws_efs_file_system.efs-volume: Refreshing state... [id=fs-0b2e0af201d806f52][0m
+[0m[1mmodule.base_architecture.data.aws_availability_zones.available: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_availability_zones.available: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.base_architecture.data.aws_cloudwatch_log_group.existing[0]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.aws_sqs_queue.transform-lambda-dead-letter-queue["CUDLIndexCollectionQueue"]: Refreshing state... [id=https://sqs.eu-west-1.amazonaws.com/438117829123/production-CUDLIndexCollectionQueue_DeadLetterQueue][0m
+[0m[1mmodule.cudl-data-processing.aws_sqs_queue.transform-lambda-dead-letter-queue["CUDLPackageDataCopyFileToEFSQueue"]: Refreshing state... [id=https://sqs.eu-west-1.amazonaws.com/438117829123/production-CUDLPackageDataCopyFileToEFSQueue_DeadLetterQueue][0m
+[0m[1mmodule.cudl-data-processing.aws_sqs_queue.transform-lambda-dead-letter-queue["CUDLIndexQueue"]: Refreshing state... [id=https://sqs.eu-west-1.amazonaws.com/438117829123/production-CUDLIndexQueue_DeadLetterQueue][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_smtp_password: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_cloudwatch_log_group.existing[0]: Read complete after 0s [id=/ecs/CUDL][0m
+[0m[1mdata.aws_ssm_parameter.cudl_services_apikey: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_smtp_password: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/SMTP/Password][0m
+[0m[1mdata.aws_ecr_image.cudl_services["cudl/services"]: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.data.aws_region.current: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.data.aws_region.current: Read complete after 0s [id=eu-west-1][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_cloudfront_username: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.cudl_services_apikey: Read complete after 0s [id=/Environments/Production/CUDL/Services/APIKey/Viewer][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_smtp_username: Reading...[0m[0m
+[0m[1mdata.aws_caller_identity.current: Reading...[0m[0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_cloudfront_username: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/CloudFront/Username][0m
+[0m[1mmodule.rti_image_server.aws_cloudfront_origin_access_control.oac: Refreshing state... [id=E2PY3Z6NO870XL][0m
+[0m[1mdata.aws_caller_identity.current: Read complete after 0s [id=438117829123][0m
+[0m[1mmodule.cudl-data-processing.aws_iam_role.assume-datasync-role: Refreshing state... [id=production-cudl-assume-datasync-role][0m
+[0m[1mmodule.cudl-data-processing.aws_iam_role.assume-lambda-role: Refreshing state... [id=production-assume-lambda-role][0m
+[0m[1mdata.aws_ecr_image.cudl_services["cudl/services"]: Read complete after 0s [id=sha256:7742e6781a774e3f9bab833b8dbb1714de30a8bce1d86d9868d1171e8fcf464a][0m
+[0m[1mmodule.base_architecture.aws_iam_role.instance: Refreshing state... [id=production-cudl-ecs-instance-role][0m
+[0m[1mdata.aws_ssm_parameter.cudl_viewer_smtp_username: Read complete after 0s [id=/Environments/Production/CUDL/Viewer/SMTP/Username][0m
+[0m[1mmodule.solr.data.aws_cloudfront_cache_policy.managed_caching_disabled[0]: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_cloudfront_origin_request_policy.managed_all_viewer[0]: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_cloudfront_cache_policy.managed_caching_disabled[0]: Reading...[0m[0m
+[0m[1maws_wafv2_web_acl.rti_image_server: Refreshing state... [id=cf78e5e5-a79a-43f6-acd9-325b4159717a][0m
+[0m[1mmodule.solr.data.aws_cloudfront_cache_policy.managed_caching_disabled[0]: Read complete after 0s [id=4135ea2d-6df8-44a3-9df3-4b5a84be39ad][0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_cache_policy.managed_caching_optimized: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_cloudfront_origin_request_policy.managed_all_viewer[0]: Read complete after 0s [id=216adef6-5c7f-47e4-b989-5492eafa07d3][0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_origin_request_policy.managed_orp_cors_s3: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_cloudfront_origin_request_policy.managed_all_viewer[0]: Reading...[0m[0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_response_headers_policy.selected[0]: Reading...[0m[0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_origin_request_policy.selected[0]: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_cloudfront_cache_policy.managed_caching_disabled[0]: Read complete after 1s [id=4135ea2d-6df8-44a3-9df3-4b5a84be39ad][0m
+[0m[1mmodule.cudl_viewer.data.aws_cloudfront_cache_policy.managed_caching_disabled[0]: Reading...[0m[0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_origin_request_policy.managed_orp_cors_s3: Read complete after 1s [id=88a5eaf4-2fd4-4709-b370-b4c650ea3fcf][0m
+[0m[1mmodule.solr.data.aws_cloudfront_origin_request_policy.managed_all_viewer[0]: Reading...[0m[0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_cache_policy.managed_caching_optimized: Read complete after 1s [id=658327ea-f89d-4fab-a63d-7e88639e58f6][0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_cache_policy.managed_caching_disabled: Reading...[0m[0m
+[0m[1mmodule.base_architecture.aws_wafv2_web_acl.this: Refreshing state... [id=c9b39cd4-7fec-451a-9186-0061d53f339d][0m
+[0m[1maws_wafv2_web_acl.solr: Refreshing state... [id=2b931c3e-cfda-4a4f-93c7-6c480a982b6b][0m
+[0m[1mmodule.cudl_viewer.data.aws_cloudfront_origin_request_policy.managed_all_viewer[0]: Read complete after 0s [id=216adef6-5c7f-47e4-b989-5492eafa07d3][0m
+[0m[1mmodule.cudl-data-processing.data.aws_cloudfront_cache_policy.selected["Managed-CachingDisabled"]: Reading...[0m[0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_response_headers_policy.selected[0]: Read complete after 0s [id=5cc3b908-e619-4b99-88e5-2cf7f45965bd][0m
+[0m[1mmodule.base_architecture.aws_vpc_dhcp_options.this: Refreshing state... [id=dopt-04023b7e82745669e][0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_origin_request_policy.selected[0]: Read complete after 0s [id=88a5eaf4-2fd4-4709-b370-b4c650ea3fcf][0m
+[0m[1mmodule.base_architecture.data.aws_ec2_managed_prefix_list.s3: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_cloudfront_cache_policy.managed_caching_disabled[0]: Read complete after 0s [id=4135ea2d-6df8-44a3-9df3-4b5a84be39ad][0m
+[0m[1mmodule.solr.data.aws_cloudfront_origin_request_policy.managed_all_viewer[0]: Read complete after 0s [id=216adef6-5c7f-47e4-b989-5492eafa07d3][0m
+[0m[1mmodule.daily_summary_fetch.aws_iam_role.lambda: Refreshing state... [id=production-cudl-summary-daily-summary-fetch-role][0m
+[0m[1mmodule.rti_image_server.aws_s3_bucket_website_configuration.static_site: Refreshing state... [id=production-cul-cudl-rti-images][0m
+[0m[1mmodule.rti_image_server.aws_s3_bucket_cors_configuration.static_site_cors: Refreshing state... [id=production-cul-cudl-rti-images][0m
+[0m[1mmodule.rti_image_server.data.aws_cloudfront_cache_policy.managed_caching_disabled: Read complete after 0s [id=4135ea2d-6df8-44a3-9df3-4b5a84be39ad][0m
+[0m[1mmodule.cudl-data-processing.data.aws_security_groups.transform_lambda_security_groups[0]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_security_groups.transform_lambda_security_groups[1]: Reading...[0m[0m
+[0m[1maws_wafv2_web_acl.cudl_viewer: Refreshing state... [id=b388c1d9-2713-4ecd-855d-fd3601708983][0m
+[0m[1mmodule.cudl-data-processing.data.aws_cloudfront_cache_policy.selected["Managed-CachingDisabled"]: Read complete after 0s [id=4135ea2d-6df8-44a3-9df3-4b5a84be39ad][0m
+[0m[1mmodule.cudl-data-processing.data.aws_security_groups.transform_lambda_security_groups[2]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_security_groups.transform_lambda_security_groups[0]: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.cudl-data-processing.data.aws_security_groups.transform_lambda_security_groups[1]: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnets.transform_lambda_subnets[2]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnets.transform_lambda_subnets[0]: Reading...[0m[0m
+[0m[1mmodule.base_architecture.data.aws_ec2_managed_prefix_list.s3: Read complete after 0s [id=pl-6da54004][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnets.transform_lambda_subnets[1]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_security_groups.transform_lambda_security_groups[2]: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.base_architecture.aws_route_table.main: Refreshing state... [id=rtb-05d5c35801c57e834][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnets.transform_lambda_subnets[0]: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.base_architecture.aws_internet_gateway.this: Refreshing state... [id=igw-024e0063f53f643da][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnets.transform_lambda_subnets[2]: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.base_architecture.aws_route_table.public: Refreshing state... [id=rtb-03aba98cef895906e][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnets.transform_lambda_subnets[1]: Read complete after 0s [id=eu-west-1][0m
+[0m[1mmodule.base_architecture.aws_security_group.alb: Refreshing state... [id=sg-0e43b7a99106f2f5d][0m
+[0m[1mmodule.base_architecture.aws_security_group.asg: Refreshing state... [id=sg-09b856a8360633d8a][0m
+[0m[1mmodule.base_architecture.aws_default_security_group.this: Refreshing state... [id=sg-029e9cebe2d492df7][0m
+[0m[1mmodule.base_architecture.aws_security_group.vpc_egress[0]: Refreshing state... [id=sg-00994f6beaaa02564][0m
+[0m[1maws_s3_bucket_ownership_controls.cloudfront_access_logging: Refreshing state... [id=production-cudl-ecs-cloudfront-access-logs][0m
+[0m[1mmodule.base_architecture.aws_subnet.private[0]: Refreshing state... [id=subnet-0497f70093943cf72][0m
+[0m[1mmodule.base_architecture.aws_subnet.private[1]: Refreshing state... [id=subnet-05d41aab06163279a][0m
+[0m[1mmodule.base_architecture.aws_subnet.public[1]: Refreshing state... [id=subnet-0101c2c15b6a8dcfa][0m
+[0m[1mmodule.base_architecture.aws_subnet.public[0]: Refreshing state... [id=subnet-05759dc759532ddfd][0m
+[0m[1mmodule.cudl-data-processing.aws_efs_access_point.efs-access-point: Refreshing state... [id=fsap-0a34feb16f215e113][0m
+[0m[1mmodule.base_architecture.aws_s3_bucket_versioning.this[0]: Refreshing state... [id=production-cudl-ecs][0m
+[0m[1mmodule.daily_summary_fetch.data.aws_iam_policy_document.lambda: Reading...[0m[0m
+[0m[1mmodule.daily_summary_fetch.data.aws_iam_policy_document.lambda: Read complete after 0s [id=2871834864][0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.s3-deploy-document: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.local_file.create-local-lambda-properties-file: Refreshing state... [id=8c34885e683af5fd0e579f3fb340373218e8e8d4][0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.s3-deploy-document: Read complete after 0s [id=1683414436][0m
+[0m[1mmodule.cudl-data-processing.aws_cloudfront_origin_access_control.this[0]: Refreshing state... [id=E3HKGRAE10TZ42][0m
+[0m[1maws_cloudfrontkeyvaluestore_key.username: Refreshing state... [id=arn:aws:cloudfront::438117829123:key-value-store/70281421-b865-4718-a2f1-15ab2651019a,username][0m
+[0m[1maws_cloudfrontkeyvaluestore_key.password: Refreshing state... [id=arn:aws:cloudfront::438117829123:key-value-store/70281421-b865-4718-a2f1-15ab2651019a,password][0m
+[0m[1mmodule.base_architecture.aws_iam_role_policy_attachment.ssm_managed_instance: Refreshing state... [id=production-cudl-ecs-instance-role-20241002140513551200000002][0m
+[0m[1mmodule.cudl-data-processing.aws_wafv2_web_acl.this[0]: Refreshing state... [id=06faff42-49aa-45e6-b403-ac4ab2910c43][0m
+[0m[1mmodule.base_architecture.aws_iam_role_policy_attachment.ec2_container_service: Refreshing state... [id=production-cudl-ecs-instance-role-20241002140513367000000001][0m
+[0m[1mmodule.base_architecture.aws_iam_instance_profile.instance: Refreshing state... [id=production-cudl-ecs-instance-profile][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_location_s3.cudl-datasync-s3: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:location/loc-0c5c3dfbb468e5042][0m
+[0m[1mmodule.base_architecture.aws_vpc_dhcp_options_association.this: Refreshing state... [id=dopt-04023b7e82745669e-vpc-066db035c68a7e3b9][0m
+[0m[1maws_security_group.email: Refreshing state... [id=sg-0e7f948084702e8fd][0m
+[0m[1maws_security_group.solr: Refreshing state... [id=sg-0773b8905c96772e5][0m
+[0m[1mmodule.base_architecture.aws_route.cudl_vpc_ec2_route_igw: Refreshing state... [id=r-rtb-03aba98cef895906e1080289494][0m
+[0m[1mmodule.base_architecture.aws_security_group_rule.vpc_egress_https[0]: Refreshing state... [id=sgrule-1775218664][0m
+[0m[1mmodule.base_architecture.aws_security_group_rule.vpc_egress_http[0]: Refreshing state... [id=sgrule-1233865439][0m
+[0m[1mmodule.daily_summary_fetch.aws_lambda_function.daily_summary: Refreshing state... [id=production-cudl-summary-daily-summary-fetch][0m
+[0m[1maws_cloudwatch_log_subscription_filter.logging_destination: Refreshing state... [id=cwlsf-3006696100][0m
+[0m[1mmodule.daily_summary_fetch.aws_iam_policy.lambda: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-summary-daily-summary-fetch-policy][0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.ecs_assume_role: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.ecs_assume_role: Read complete after 0s [id=3148763324][0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.datasync_assume_role: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.datasync_assume_role: Read complete after 0s [id=2947762764][0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.datasync_assume_role: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.datasync_assume_role: Read complete after 0s [id=2947762764][0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.datasync_assume_role: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.datasync_assume_role: Read complete after 0s [id=2947762764][0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.ecs_assume_role: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.ecs_assume_role: Read complete after 0s [id=3148763324][0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.ecs_assume_role: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.ecs_assume_role: Read complete after 0s [id=3148763324][0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.allow-get-and-list-policy: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_iam_policy_document.allow-get-and-list-policy: Read complete after 0s [id=767756998][0m
+[0m[1mmodule.cudl-data-processing.aws_sqs_queue.transform-lambda-sqs-queue["CUDLIndexCollectionQueue"]: Refreshing state... [id=https://sqs.eu-west-1.amazonaws.com/438117829123/production-CUDLIndexCollectionQueue][0m
+[0m[1mmodule.cudl-data-processing.aws_sqs_queue.transform-lambda-sqs-queue["CUDLPackageDataCopyFileToEFSQueue"]: Refreshing state... [id=https://sqs.eu-west-1.amazonaws.com/438117829123/production-CUDLPackageDataCopyFileToEFSQueue][0m
+[0m[1mmodule.cudl-data-processing.aws_sqs_queue.transform-lambda-sqs-queue["CUDLIndexQueue"]: Refreshing state... [id=https://sqs.eu-west-1.amazonaws.com/438117829123/production-CUDLIndexQueue][0m
+[0m[1mmodule.cudl-data-processing.aws_sns_topic.transform_sns_topics["cul-cudl-data-releases-collections-json"]: Refreshing state... [id=arn:aws:sns:eu-west-1:438117829123:production-cul-cudl-data-releases-collections-json-event-notification-topic][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_versioning.transform-lambda-source-bucket-versioning["cul-cudl-data-releases"]: Refreshing state... [id=production-cul-cudl-data-releases][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_versioning.transform-lambda-source-bucket-versioning["cul-cudl-data-enhancements"]: Refreshing state... [id=production-cul-cudl-data-enhancements][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_versioning.transform-lambda-source-bucket-versioning["cul-cudl-data-source"]: Refreshing state... [id=production-cul-cudl-data-source][0m
+[0m[1mmodule.cudl-data-processing.aws_iam_policy.run-datasync-policy: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-datasync-policy][0m
+[0m[1mmodule.cudl-data-processing.data.archive_file.zip_transform_properties_lambda_layer: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.archive_file.zip_transform_properties_lambda_layer: Read complete after 0s [id=71a1ac50d392dfe15f239184e51572435162e87f][0m
+[0m[1mmodule.base_architecture.aws_lb.this: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:loadbalancer/app/production-cudl-ecs-alb/6ba8ff09827e6851][0m
+[0m[1mmodule.base_architecture.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-07e8d3f1a2975aed8][0m
+[0m[1mmodule.base_architecture.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-071f284ed400abcb7][0m
+[0m[1mmodule.base_architecture.aws_eip.nat[0]: Refreshing state... [id=eipalloc-01fa5ae6de44ee140][0m
+[0m[1maws_cloudfront_function.viewer: Refreshing state... [id=production-cudl-viewer][0m
+[0m[1mmodule.cudl_viewer.data.aws_route53_zone.domain: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_route53_zone.domain: Read complete after 0s [id=Z03809063VDGJ8MKPHFRV][0m
+[0m[1mmodule.solr.data.aws_route53_zone.domain: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_route53_zone.domain: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_vpc.this: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_vpc.this: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.aws_lb_target_group.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:targetgroup/production-cudl-viewer-alb-tg/23e86412b2e7c484][0m
+[0m[1mmodule.solr.aws_service_discovery_private_dns_namespace.this[0]: Refreshing state... [id=ns-bbifgg6wlsozmtmr][0m
+[0m[1mmodule.solr.aws_lb_target_group.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:targetgroup/production-solr-alb-tg/3f66c0f8c1775be1][0m
+[0m[1mmodule.cudl_services.aws_lb_target_group.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:targetgroup/production-cudl-services-alb-tg/b555a0bd6305a464][0m
+[0m[1mmodule.cudl_viewer.data.aws_vpc.this: Read complete after 1s [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.solr.data.aws_vpc.this: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_route53_zone.domain: Read complete after 1s [id=Z03809063VDGJ8MKPHFRV][0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.existing_cudl_vpc: Reading...[0m[0m
+[0m[1mmodule.solr.aws_security_group.efs[0]: Refreshing state... [id=sg-00c4d69d3e39ba992][0m
+[0m[1mmodule.cudl_services.data.aws_vpc.this: Read complete after 1s [id=vpc-066db035c68a7e3b9][0m
+[0m[1maws_security_group_rule.email_egress_smtp: Refreshing state... [id=sgrule-470776654][0m
+[0m[1mmodule.cudl_services.data.aws_route53_zone.domain: Read complete after 1s [id=Z03809063VDGJ8MKPHFRV][0m
+[0m[1mmodule.base_architecture.aws_launch_template.this[0]: Refreshing state... [id=lt-0302cfb1c3a16a16c][0m
+[0m[1maws_security_group_rule.solr_external_egress_to_asg: Refreshing state... [id=sgrule-1513252786][0m
+[0m[1maws_security_group_rule.solr_external_ingress_self: Refreshing state... [id=sgrule-512923471][0m
+[0m[1mmodule.cudl_viewer.data.aws_efs_file_system.other[0]: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.aws_s3_object.task["production-cudl-viewer/cudl-global.properties"]: Refreshing state... [id=production-cudl-viewer/cudl-global.properties][0m
+[0m[1mmodule.solr.aws_iam_role.task_role: Refreshing state... [id=production-solr-workload-task-role][0m
+[0m[1mmodule.solr.aws_iam_role.task_execution_role: Refreshing state... [id=production-solr-workload-execution-role][0m
+[0m[1mmodule.solr.data.aws_vpc.this: Read complete after 0s [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.cudl_viewer.aws_iam_role.task_execution_role: Refreshing state... [id=production-cudl-viewer-workload-execution-role][0m
+[0m[1mmodule.cudl_viewer.aws_iam_role.task_role: Refreshing state... [id=production-cudl-viewer-workload-task-role][0m
+[0m[1mmodule.cudl-data-processing.data.aws_vpc.existing_cudl_vpc: Read complete after 0s [id=vpc-066db035c68a7e3b9][0m
+[0m[1mmodule.cudl_services.aws_iam_role.task_role: Refreshing state... [id=production-cudl-services-workload-task-role][0m
+[0m[1mmodule.cudl_viewer.data.aws_efs_file_system.other[0]: Read complete after 0s [id=fs-0b2e0af201d806f52][0m
+[0m[1mmodule.cudl_services.aws_iam_role.task_execution_role: Refreshing state... [id=production-cudl-services-workload-execution-role][0m
+[0m[1mmodule.cudl-data-processing.aws_iam_policy.run-lambda-policy: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-lambda-policy][0m
+[0m[1mmodule.daily_summary_fetch.aws_iam_role_policy_attachment.lambda: Refreshing state... [id=production-cudl-summary-daily-summary-fetch-role-20260211144227857800000002][0m
+[0m[1mmodule.daily_summary_fetch.aws_cloudwatch_event_target.daily_summary: Refreshing state... [id=production-cudl-summary-daily-summary-schedule-production-cudl-summary-daily-summary-fetch-target][0m
+[0m[1mmodule.daily_summary_fetch.aws_lambda_permission.event_invoke: Refreshing state... [id=terraform-20260211144241713700000003][0m
+[0m[1mmodule.cudl-data-processing.aws_sns_topic_subscription.transform_sns_event_subscriptions[0]: Refreshing state... [id=arn:aws:sns:eu-west-1:438117829123:production-cul-cudl-data-releases-collections-json-event-notification-topic:2ea95f33-3906-4ecd-bf2f-b1446a13b514][0m
+[0m[1mmodule.cudl-data-processing.aws_iam_role_policy_attachment.cudl-datasync-policy-and-role-attachment: Refreshing state... [id=production-cudl-assume-datasync-role-20241002142143200000000005][0m
+[0m[1mmodule.cudl-data-processing.aws_sns_topic_subscription.transform_sns_event_subscriptions[1]: Refreshing state... [id=arn:aws:sns:eu-west-1:438117829123:production-cul-cudl-data-releases-collections-json-event-notification-topic:721d7f03-686a-4a18-b57a-aa531494077c][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_layer_version.transform-properties-layer: Refreshing state... [id=arn:aws:lambda:eu-west-1:438117829123:layer:production-properties:12][0m
+[0m[1mmodule.base_architecture.aws_lb_listener.https: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea][0m
+[0m[1mmodule.base_architecture.aws_cloudfront_vpc_origin.this[0]: Refreshing state... [id=vo_Gi88xkofkjfCBP2xN2BDAK][0m
+[0m[1mmodule.base_architecture.aws_nat_gateway.nat[0]: Refreshing state... [id=nat-0ab874201855e43fa][0m
+[0m[1mmodule.solr.aws_service_discovery_service.this[0]: Refreshing state... [id=srv-dswiodqbvkvlvhf2][0m
+[0m[1mmodule.cudl_services.aws_security_group_rule.asg_ingress_from_alb[0]: Refreshing state... [id=sgrule-2539749218][0m
+[0m[1mmodule.cudl_services.aws_security_group_rule.alb_egress_to_asg[0]: Refreshing state... [id=sgrule-2316436134][0m
+[0m[1mmodule.solr.aws_security_group_rule.alb_egress_to_asg[0]: Refreshing state... [id=sgrule-3523810011][0m
+[0m[1mmodule.solr.aws_security_group_rule.asg_ingress_from_alb[0]: Refreshing state... [id=sgrule-3113052659][0m
+[0m[1mmodule.cudl_viewer.aws_security_group_rule.asg_ingress_from_alb[0]: Refreshing state... [id=sgrule-3303681479][0m
+[0m[1mmodule.cudl_viewer.aws_security_group_rule.alb_egress_to_asg[0]: Refreshing state... [id=sgrule-3000211284][0m
+[0m[1mmodule.solr.aws_security_group_rule.efs_ingress_nfs_from_asg[0]: Refreshing state... [id=sgrule-1656817914][0m
+[0m[1mmodule.solr.aws_security_group_rule.asg_egress_nfs_to_efs[0]: Refreshing state... [id=sgrule-2756681022][0m
+[0m[1mmodule.base_architecture.aws_autoscaling_group.this[0]: Refreshing state... [id=production-cudl-ecs-asg][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnet.efs["production-cudl-ecs-subnet-private-b"]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnet.efs["production-cudl-ecs-subnet-private-a"]: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_subnet.ecs[0]: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_subnet.ecs[1]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnet.efs["production-cudl-ecs-subnet-private-b"]: Read complete after 0s [id=subnet-05d41aab06163279a][0m
+[0m[1mmodule.cudl_viewer.aws_efs_access_point.other[0]: Refreshing state... [id=fsap-0eea34e99435383d0][0m
+[0m[1mmodule.solr.aws_efs_file_system.this[0]: Refreshing state... [id=fs-0773fb0fbaa77ad0d][0m
+[0m[1mmodule.cudl-data-processing.data.aws_subnet.efs["production-cudl-ecs-subnet-private-a"]: Read complete after 0s [id=subnet-0497f70093943cf72][0m
+[0m[1mmodule.cudl_viewer.data.aws_subnet.ecs[0]: Reading...[0m[0m
+[0m[1mmodule.solr.data.aws_subnet.ecs[0]: Read complete after 0s [id=subnet-0497f70093943cf72][0m
+[0m[1mmodule.cudl_viewer.data.aws_subnet.ecs[1]: Reading...[0m[0m
+[0m[1mmodule.cudl-data-processing.aws_security_group.efs: Refreshing state... [id=sg-0522c31a36b75dd2a][0m
+[0m[1mmodule.cudl_viewer.aws_ecs_task_definition.this: Refreshing state... [id=production-cudl-viewer][0m
+[0m[1mmodule.cudl-data-processing.aws_cloudfront_distribution.this[0]: Refreshing state... [id=EX5R6P57YE1WQ][0m
+[0m[1mmodule.solr.data.aws_subnet.ecs[1]: Read complete after 0s [id=subnet-05d41aab06163279a][0m
+[0m[1mmodule.cudl_viewer.data.aws_subnet.ecs[0]: Read complete after 0s [id=subnet-0497f70093943cf72][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_function.create-transform-lambda-function[1]: Refreshing state... [id=production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_function.create-transform-lambda-function[0]: Refreshing state... [id=production-AWSLambda_CUDLPackageData_SOLR_Listener][0m
+[0m[1mmodule.cudl_viewer.data.aws_subnet.ecs[1]: Read complete after 0s [id=subnet-05d41aab06163279a][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_function.create-transform-lambda-function[2]: Refreshing state... [id=production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS][0m
+[0m[1mmodule.cudl-data-processing.aws_iam_role_policy_attachment.cudl-policy-and-role-attachment: Refreshing state... [id=production-assume-lambda-role-20241002142206979600000007][0m
+[0m[1mmodule.cudl_services.aws_ecs_task_definition.this: Refreshing state... [id=production-cudl-services][0m
+[0m[1mmodule.rti_image_server.aws_cloudfront_distribution.static_site: Refreshing state... [id=EE7501Z09IBGO][0m
+[0m[1mmodule.base_architecture.aws_route_table.private[1]: Refreshing state... [id=rtb-06656ec9544771240][0m
+[0m[1mmodule.base_architecture.aws_route_table.private[0]: Refreshing state... [id=rtb-02f90ffb60454c559][0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.task_role_permissions: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.task_role_permissions: Read complete after 0s [id=2091583681][0m
+[0m[1mmodule.base_architecture.aws_ecs_capacity_provider.this: Refreshing state... [id=arn:aws:ecs:eu-west-1:438117829123:capacity-provider/production-cudl-ecs-capacity-provider][0m
+[0m[1mmodule.base_architecture.data.aws_security_group.cloudfront_vpc_origin[0]: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.task_role_permissions: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.task_role_permissions: Read complete after 0s [id=426180879][0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.task_role_permissions: Reading...[0m[0m
+[0m[1mmodule.solr.aws_efs_mount_target.this[0]: Refreshing state... [id=fsmt-0c9966c4e79e4f518][0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.task_role_permissions: Read complete after 0s [id=4250101708][0m
+[0m[1mmodule.solr.aws_efs_mount_target.this[1]: Refreshing state... [id=fsmt-0db5dc89f0916f2ac][0m
+[0m[1mmodule.solr.aws_efs_access_point.this[0]: Refreshing state... [id=fsap-04d8349da31550c3a][0m
+[0m[1mmodule.cudl-data-processing.aws_security_group_rule.efs_ingress_nfs_from_vpc: Refreshing state... [id=sgrule-1598080496][0m
+[0m[1mmodule.base_architecture.data.aws_security_group.cloudfront_vpc_origin[0]: Read complete after 0s [id=sg-00ffa32630b49928d][0m
+[0m[1mmodule.cudl-data-processing.aws_efs_mount_target.efs-mount-point["production-cudl-ecs-subnet-private-a"]: Refreshing state... [id=fsmt-0d4b106e7f6b485fd][0m
+[0m[1mmodule.cudl-data-processing.aws_efs_mount_target.efs-mount-point["production-cudl-ecs-subnet-private-b"]: Refreshing state... [id=fsmt-0d6517b1aedfc0730][0m
+[0m[1mmodule.cudl-data-processing.aws_security_group_rule.efs_egress_nfs_to_vpc: Refreshing state... [id=sgrule-4276509828][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_location_efs.cudl-datasync-efs["production-cudl-ecs-subnet-private-a"]: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:location/loc-0a40b357382a1cbcc][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_location_efs.cudl-datasync-efs["production-cudl-ecs-subnet-private-b"]: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:location/loc-090c9cf1aecb0fb31][0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.task_execution_role_permissions: Reading...[0m[0m
+[0m[1mmodule.cudl_services.data.aws_iam_policy_document.task_execution_role_permissions: Read complete after 0s [id=1324921099][0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.task_execution_role_permissions: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.aws_iam_policy.task_policy[0]: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-viewer-workload-task-policy][0m
+[0m[1mmodule.solr.data.aws_iam_policy_document.task_execution_role_permissions: Read complete after 0s [id=347245555][0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.task_execution_role_permissions: Reading...[0m[0m
+[0m[1mmodule.cudl_viewer.data.aws_iam_policy_document.task_execution_role_permissions: Read complete after 0s [id=4251847766][0m
+[0m[1mmodule.base_architecture.aws_route_table_association.private[1]: Refreshing state... [id=rtbassoc-0425707dca7e09c82][0m
+[0m[1mmodule.base_architecture.aws_route_table_association.private[0]: Refreshing state... [id=rtbassoc-07686d895afcfb2c4][0m
+[0m[1mmodule.cudl_services.aws_iam_policy.task_policy[0]: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-services-workload-task-policy][0m
+[0m[1mmodule.base_architecture.aws_vpc_endpoint.s3[0]: Refreshing state... [id=vpce-012419464be7430a5][0m
+[0m[1mmodule.base_architecture.aws_ecs_cluster_capacity_providers.this: Refreshing state... [id=production-cudl-ecs][0m
+[0m[1mmodule.solr.aws_iam_policy.task_policy[0]: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-solr-workload-task-policy][0m
+[0m[1mmodule.cudl-data-processing.aws_route53_record.cloudfront_alias[0]: Refreshing state... [id=Z03809063VDGJ8MKPHFRV_transcriptions.cudl.lib.cam.ac.uk_A][0m
+[0m[1mmodule.base_architecture.aws_security_group_rule.alb_ingress_vpc_origin[0]: Refreshing state... [id=sgrule-3101696393][0m
+[0m[1mmodule.solr.aws_ecs_task_definition.this: Refreshing state... [id=production-solr][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_event_source_mapping.sqs-trigger-lambda-transforms["0"]: Refreshing state... [id=29c9c975-38e4-4b83-85e6-6cc62a5c7062][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_event_source_mapping.sqs-trigger-lambda-transforms["1"]: Refreshing state... [id=0ceebcf0-fd36-49cc-8f6d-acf59c09b5c9][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_event_source_mapping.sqs-trigger-lambda-transforms["2"]: Refreshing state... [id=3931bed1-e13d-499e-b4b0-b6d0a1c13616][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_alias.create-transform-lambda-alias[1]: Refreshing state... [id=arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener:LIVE][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_alias.create-transform-lambda-alias[2]: Refreshing state... [id=arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS:LIVE][0m
+[0m[1mmodule.cudl-data-processing.aws_lambda_alias.create-transform-lambda-alias[0]: Refreshing state... [id=arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_SOLR_Listener:LIVE][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_notification.transform-lambda-bucket-notifications["cul-cudl-data-releases"]: Refreshing state... [id=production-cul-cudl-data-releases][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_notification.transform-lambda-bucket-notifications["cul-cudl-data-source"]: Refreshing state... [id=production-cul-cudl-data-source][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_notification.transform-lambda-bucket-notifications["cul-cudl-data-enhancements"]: Refreshing state... [id=production-cul-cudl-data-enhancements][0m
+[0m[1mmodule.rti_image_server.aws_s3_bucket_policy.cloudfront_oac_policy: Refreshing state... [id=production-cul-cudl-rti-images][0m
+[0m[1mmodule.solr.aws_lb_listener_certificate.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea_arn:aws:acm:eu-west-1:438117829123:certificate/5a38d7e0-b903-4cbe-bc35-ebf41f4bddd1][0m
+[0m[1mmodule.cudl_viewer.aws_lb_listener_certificate.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea_arn:aws:acm:eu-west-1:438117829123:certificate/5a38d7e0-b903-4cbe-bc35-ebf41f4bddd1][0m
+[0m[1mmodule.solr.aws_lb_listener_rule.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener-rule/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea/6353305c7d2a069e][0m
+[0m[1mmodule.cudl_viewer.aws_lb_listener_rule.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener-rule/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea/63552a01badbf96d][0m
+[0m[1mmodule.cudl_services.aws_lb_listener_rule.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener-rule/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea/d2d14d7c1cd8a9c8][0m
+[0m[1mmodule.cudl_services.aws_lb_listener_certificate.this[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:eu-west-1:438117829123:listener/app/production-cudl-ecs-alb/6ba8ff09827e6851/3dfcab6727801cea_arn:aws:acm:eu-west-1:438117829123:certificate/5a38d7e0-b903-4cbe-bc35-ebf41f4bddd1][0m
+[0m[1mmodule.cudl_services.aws_iam_policy.task_execution_policy: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-services-workload-execution-policy][0m
+[0m[1mmodule.solr.aws_iam_policy.task_execution_policy: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-solr-workload-execution-policy][0m
+[0m[1mmodule.cudl_viewer.aws_iam_policy.task_execution_policy: Refreshing state... [id=arn:aws:iam::438117829123:policy/production-cudl-viewer-workload-execution-policy][0m
+[0m[1mmodule.cudl_services.aws_autoscaling_attachment.automatic_attachment[0]: Refreshing state... [id=production-cudl-ecs-asg-20241002141049538700000004][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_task.cudl-production-cudl-data-releases-pages-s3-to-efs-["production-cudl-ecs-subnet-private-a"]: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:task/task-029c05d7673f7b5f0][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_task.cudl-production-cudl-data-releases-pages-s3-to-efs-["production-cudl-ecs-subnet-private-b"]: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:task/task-089a09616fe935050][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_task.cudl-production-cudl-data-releases-s3-to-efs["production-cudl-ecs-subnet-private-b"]: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:task/task-04fcbc4f7bbf1e1ea][0m
+[0m[1mmodule.cudl-data-processing.aws_datasync_task.cudl-production-cudl-data-releases-s3-to-efs["production-cudl-ecs-subnet-private-a"]: Refreshing state... [id=arn:aws:datasync:eu-west-1:438117829123:task/task-038fc4965fc0f0b80][0m
+[0m[1mmodule.cudl-data-processing.aws_s3_bucket_policy.dest-bucket[0]: Refreshing state... [id=production-cul-cudl-data-releases][0m
+[0m[1mmodule.cudl_viewer.aws_security_group_rule.asg_egress_nfs_to_existing_efs[0]: Refreshing state... [id=sgrule-4006627241][0m
+[0m[1mmodule.cudl_viewer.aws_iam_role_policy_attachment.task_policy_attachment[0]: Refreshing state... [id=production-cudl-viewer-workload-task-role-20241002142143292200000006][0m
+[0m[1mmodule.cudl_services.aws_iam_role_policy_attachment.task_policy_attachment[0]: Refreshing state... [id=production-cudl-services-workload-task-role-20241002142143021200000004][0m
+[0m[1mmodule.solr.aws_iam_role_policy_attachment.task_policy_attachment[0]: Refreshing state... [id=production-solr-workload-task-role-20241002142142897100000003][0m
+[0m[1mmodule.cudl_viewer.aws_ecs_service.this: Refreshing state... [id=arn:aws:ecs:eu-west-1:438117829123:service/production-cudl-ecs/production-cudl-viewer-service][0m
+[0m[1mmodule.solr.aws_ecs_service.this: Refreshing state... [id=arn:aws:ecs:eu-west-1:438117829123:service/production-cudl-ecs/production-solr-service][0m
+[0m[1mmodule.cudl_services.aws_ecs_service.this: Refreshing state... [id=arn:aws:ecs:eu-west-1:438117829123:service/production-cudl-ecs/production-cudl-services-service][0m
+[0m[1mmodule.cudl_services.aws_cloudfront_distribution.this[0]: Refreshing state... [id=E3U5JRM924D907][0m
+[0m[1mmodule.cudl_services.aws_iam_role_policy_attachment.task_execution_policy_attachment: Refreshing state... [id=production-cudl-services-workload-execution-role-20241002141107639900000007][0m
+[0m[1mmodule.solr.aws_iam_role_policy_attachment.task_execution_policy_attachment: Refreshing state... [id=production-solr-workload-execution-role-20241002141107367400000006][0m
+[0m[1mmodule.solr.aws_cloudfront_distribution.this[0]: Refreshing state... [id=E2FT8MV9YQX0KM][0m
+[0m[1mmodule.cudl_viewer.aws_iam_role_policy_attachment.task_execution_policy_attachment: Refreshing state... [id=production-cudl-viewer-workload-execution-role-20241002141107098200000005][0m
+[0m[1mmodule.cudl_services.aws_route53_record.cloudfront_alias[0]: Refreshing state... [id=Z03809063VDGJ8MKPHFRV_services.cudl.lib.cam.ac.uk_A][0m
+[0m[1mmodule.solr.aws_route53_record.cloudfront_alias[0]: Refreshing state... [id=Z03809063VDGJ8MKPHFRV_search.cudl.lib.cam.ac.uk_A][0m
+[0m[1mmodule.cudl_viewer.aws_cloudfront_distribution.this[0]: Refreshing state... [id=E2NVNMFIDDRT37][0m
+[0m[1mmodule.cudl_viewer.aws_route53_record.cloudfront_alias[0]: Refreshing state... [id=Z03809063VDGJ8MKPHFRV_viewer.cudl.lib.cam.ac.uk_A][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [32m+[0m create[0m
+  [33m~[0m update in-place[0m
+  [31m-[0m destroy[0m
+[31m-[0m/[32m+[0m destroy and then create replacement[0m
+[32m+[0m/[31m-[0m create replacement and then destroy[0m
+ [36m<=[0m read (data resources)[0m
+
+Terraform will perform the following actions:
+
+[1m  # aws_cloudfront_function.releases_path_filter[0m will be created
+[0m  [32m+[0m[0m resource "aws_cloudfront_function" "releases_path_filter" {
+      [32m+[0m[0m arn             = (known after apply)
+      [32m+[0m[0m code            = <<-EOT
+            function handler(event) {
+                var uri = event.request.uri;
+                if (uri === '/pages' || uri.startsWith('/pages/') ||
+                    uri === '/unreleased' || uri.startsWith('/unreleased/')) {
+                    return {
+                        statusCode: 403,
+                        statusDescription: 'Forbidden'
+                    };
+                }
+                return event.request;
+            }
+        EOT
+      [32m+[0m[0m etag            = (known after apply)
+      [32m+[0m[0m id              = (known after apply)
+      [32m+[0m[0m live_stage_etag = (known after apply)
+      [32m+[0m[0m name            = "production-cudl-data-releases-path-filter"
+      [32m+[0m[0m publish         = true
+      [32m+[0m[0m runtime         = "cloudfront-js-2.0"
+      [32m+[0m[0m status          = (known after apply)
+      [32m+[0m[0m tags_all        = {
+          [32m+[0m[0m "Component"    = "cudl-data-workflows"
+          [32m+[0m[0m "Deployment"   = "Production"
+          [32m+[0m[0m "Environment"  = "Production"
+          [32m+[0m[0m "Project"      = "CUDL"
+          [32m+[0m[0m "Source"       = "https://github.com/cambridge-collection/cudl-terraform"
+          [32m+[0m[0m "Subcomponent" = "cudl-transform-lambda"
+          [32m+[0m[0m "terraform"    = "true"
+        }
+    }
+
+[1m  # module.base_architecture.aws_launch_template.this[0][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_launch_template" "this" {
+      [33m~[0m[0m default_version                      = 32 -> (known after apply)
+        id                                   = "lt-0302cfb1c3a16a16c"
+      [33m~[0m[0m image_id                             = "ami-07629f7f5098f95cf" [33m->[0m[0m "ami-0fac451d91e95f35c"
+      [33m~[0m[0m latest_version                       = 32 -> (known after apply)
+        name                                 = "production-cudl-ecs-lt"
+        tags                                 = {}
+        [90m# (17 unchanged attributes hidden)[0m[0m
+
+        [90m# (3 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.data.aws_iam_policy_document.dest-bucket[0][0m will be read during apply
+  # (depends on a resource or a module with changes pending)
+[0m [36m<=[0m[0m data "aws_iam_policy_document" "dest-bucket" {
+      [32m+[0m[0m id            = (known after apply)
+      [32m+[0m[0m json          = (known after apply)
+      [32m+[0m[0m minified_json = (known after apply)
+
+      [32m+[0m[0m statement {
+          [32m+[0m[0m actions   = [
+              [32m+[0m[0m "s3:GetObject",
+            ]
+          [32m+[0m[0m resources = [
+              [32m+[0m[0m "arn:aws:s3:::production-cul-cudl-data-releases/*",
+            ]
+          [32m+[0m[0m sid       = "AllowCloudFrontServicePrincipalReadOnly"
+
+          [32m+[0m[0m condition {
+              [32m+[0m[0m test     = "StringEquals"
+              [32m+[0m[0m values   = [
+                  [32m+[0m[0m "arn:aws:cloudfront::438117829123:distribution/EX5R6P57YE1WQ",
+                ]
+              [32m+[0m[0m variable = "AWS:SourceArn"
+            }
+
+          [32m+[0m[0m principals {
+              [32m+[0m[0m identifiers = [
+                  [32m+[0m[0m "cloudfront.amazonaws.com",
+                ]
+              [32m+[0m[0m type        = "Service"
+            }
+        }
+    }
+
+[1m  # module.cudl-data-processing.aws_cloudfront_distribution.this[0][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_cloudfront_distribution" "this" {
+        id                              = "EX5R6P57YE1WQ"
+        tags                            = {}
+        [90m# (25 unchanged attributes hidden)[0m[0m
+
+      [33m~[0m[0m default_cache_behavior {
+            [90m# (16 unchanged attributes hidden)[0m[0m
+
+          [33m~[0m[0m function_association (known after apply)
+
+            [90m# (1 unchanged block hidden)[0m[0m
+        }
+
+        [90m# (3 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_alias.create-transform-lambda-alias[0][0m will be [1m[31mdestroyed[0m
+  # (because index [0] is out of range for count)
+[0m  [31m-[0m[0m resource "aws_lambda_alias" "create-transform-lambda-alias" {
+      [31m-[0m[0m arn              = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_SOLR_Listener:LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m function_name    = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_SOLR_Listener" [90m-> null[0m[0m
+      [31m-[0m[0m function_version = "6" [90m-> null[0m[0m
+      [31m-[0m[0m id               = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_SOLR_Listener:LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m invoke_arn       = "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_SOLR_Listener:LIVE/invocations" [90m-> null[0m[0m
+      [31m-[0m[0m name             = "LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m region           = "eu-west-1" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_alias.create-transform-lambda-alias[1][0m will be [1m[31mdestroyed[0m
+  # (because index [1] is out of range for count)
+[0m  [31m-[0m[0m resource "aws_lambda_alias" "create-transform-lambda-alias" {
+      [31m-[0m[0m arn              = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener:LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m function_name    = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener" [90m-> null[0m[0m
+      [31m-[0m[0m function_version = "6" [90m-> null[0m[0m
+      [31m-[0m[0m id               = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener:LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m invoke_arn       = "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener:LIVE/invocations" [90m-> null[0m[0m
+      [31m-[0m[0m name             = "LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m region           = "eu-west-1" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_alias.create-transform-lambda-alias[2][0m will be [1m[31mdestroyed[0m
+  # (because index [2] is out of range for count)
+[0m  [31m-[0m[0m resource "aws_lambda_alias" "create-transform-lambda-alias" {
+      [31m-[0m[0m arn              = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS:LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m function_name    = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS" [90m-> null[0m[0m
+      [31m-[0m[0m function_version = "13" [90m-> null[0m[0m
+      [31m-[0m[0m id               = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS:LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m invoke_arn       = "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS:LIVE/invocations" [90m-> null[0m[0m
+      [31m-[0m[0m name             = "LIVE" [90m-> null[0m[0m
+      [31m-[0m[0m region           = "eu-west-1" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_event_source_mapping.sqs-trigger-lambda-transforms["2"][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_lambda_event_source_mapping" "sqs-trigger-lambda-transforms" {
+      [33m~[0m[0m function_name                      = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS" -> (known after apply)
+        id                                 = "3931bed1-e13d-499e-b4b0-b6d0a1c13616"
+        tags                               = {}
+        [90m# (24 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_function.create-transform-lambda-function[0][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_lambda_function" "create-transform-lambda-function" {
+        id                             = "production-AWSLambda_CUDLPackageData_SOLR_Listener"
+      [33m~[0m[0m image_uri                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d" [33m->[0m[0m "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:402837f03848d9c55645a3437e062362b18aaaf812dcc54e931a90a586fbda5e"
+      [33m~[0m[0m last_modified                  = "2026-03-11T15:05:29.000+0000" -> (known after apply)
+        tags                           = {}
+        [90m# (29 unchanged attributes hidden)[0m[0m
+
+      [33m~[0m[0m environment {
+          [33m~[0m[0m variables = {
+              [32m+[0m[0m "LOG_LEVEL"                    = "INFO"
+              [32m+[0m[0m "RELEASES_PARTITIONED"         = "TRUE"
+                [90m# (6 unchanged elements hidden)[0m[0m
+            }
+        }
+
+        [90m# (4 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_function.create-transform-lambda-function[1][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_lambda_function" "create-transform-lambda-function" {
+        id                             = "production-AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
+      [33m~[0m[0m image_uri                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:1bef571e90e2c78c78f847d611cf60be91d734065cd951358aa848f1c74a3b0d" [33m->[0m[0m "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:402837f03848d9c55645a3437e062362b18aaaf812dcc54e931a90a586fbda5e"
+      [33m~[0m[0m last_modified                  = "2026-03-11T15:05:29.000+0000" -> (known after apply)
+        tags                           = {}
+        [90m# (29 unchanged attributes hidden)[0m[0m
+
+      [33m~[0m[0m environment {
+          [33m~[0m[0m variables = {
+              [32m+[0m[0m "LOG_LEVEL"                    = "INFO"
+              [32m+[0m[0m "RELEASES_PARTITIONED"         = "TRUE"
+                [90m# (6 unchanged elements hidden)[0m[0m
+            }
+        }
+
+        [90m# (4 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_function.create-transform-lambda-function[2][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "aws_lambda_function" "create-transform-lambda-function" {
+      [33m~[0m[0m architectures                  = [
+          [31m-[0m[0m "x86_64",
+        ] -> (known after apply)
+      [33m~[0m[0m arn                            = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS" -> (known after apply)
+      [33m~[0m[0m code_sha256                    = "eRc5jdGxnCa7WsGsrke/2yEAKjJOli3+E7UjW3TQR+E=" -> (known after apply)
+      [33m~[0m[0m description                    = "Copies file from S3 to EFS" [33m->[0m[0m "Copies files verbatim from the releases bucket to the EFS mount"
+      [31m-[0m[0m handler                        = "uk.ac.cam.lib.cudl.awslambda.handlers.CopyToEFSFileHandler::handleRequest" [90m-> null[0m[0m
+      [33m~[0m[0m id                             = "production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS" -> (known after apply)
+      [32m+[0m[0m image_uri                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/efs-copier@sha256:50eaeb6fea6158e1d186e786dc438e0a286944396f60e3f114bc6ca43df6afaf"
+      [33m~[0m[0m invoke_arn                     = "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS/invocations" -> (known after apply)
+      [33m~[0m[0m last_modified                  = "2025-02-19T16:59:30.000+0000" -> (known after apply)
+      [31m-[0m[0m layers                         = [
+          [31m-[0m[0m "arn:aws:lambda:eu-west-1:438117829123:layer:production-properties:12",
+          [31m-[0m[0m "arn:aws:lambda:eu-west-1:464622532012:layer:dd-trace-java:4",
+          [31m-[0m[0m "arn:aws:lambda:eu-west-1:464622532012:layer:Datadog-Extension:23",
+        ] [90m-> null[0m[0m
+      [33m~[0m[0m package_type                   = "Zip" [33m->[0m[0m "Image" [31m# forces replacement[0m[0m
+      [33m~[0m[0m qualified_arn                  = "arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS:13" -> (known after apply)
+      [33m~[0m[0m qualified_invoke_arn           = "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS:13/invocations" -> (known after apply)
+      [33m~[0m[0m response_streaming_invoke_arn  = "arn:aws:apigateway:eu-west-1:lambda:path/2021-11-15/functions/arn:aws:lambda:eu-west-1:438117829123:function:production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS/response-streaming-invocations" -> (known after apply)
+      [31m-[0m[0m runtime                        = "java11" [90m-> null[0m[0m
+      [31m-[0m[0m s3_bucket                      = "cul-cudl.mvn.cudl.lib.cam.ac.uk" [90m-> null[0m[0m
+      [31m-[0m[0m s3_key                         = "release/uk/ac/cam/lib/cudl/awslambda/AWSLambda_Data_Transform/1.0/AWSLambda_Data_Transform-1.0-jar-with-dependencies.jar" [90m-> null[0m[0m
+      [32m+[0m[0m signing_job_arn                = (known after apply)
+      [32m+[0m[0m signing_profile_version_arn    = (known after apply)
+      [33m~[0m[0m source_code_hash               = "eRc5jdGxnCa7WsGsrke/2yEAKjJOli3+E7UjW3TQR+E=" -> (known after apply)
+      [33m~[0m[0m source_code_size               = 16433160 -> (known after apply)
+      [31m-[0m[0m tags                           = {} [90m-> null[0m[0m
+      [33m~[0m[0m version                        = "13" -> (known after apply)
+        [90m# (12 unchanged attributes hidden)[0m[0m
+
+      [32m+[0m[0m environment {
+          [32m+[0m[0m variables = {
+              [32m+[0m[0m "DST_EFS_ENABLED" = "true"
+              [32m+[0m[0m "DST_EFS_PREFIX"  = "/mnt/cudl-data-releases"
+              [32m+[0m[0m "LOG_LEVEL"       = "INFO"
+            }
+        }
+
+      [33m~[0m[0m logging_config (known after apply)
+      [31m-[0m[0m logging_config {
+          [31m-[0m[0m log_format            = "Text" [90m-> null[0m[0m
+          [31m-[0m[0m log_group             = "/aws/lambda/production-AWSLambda_CUDLPackageData_COPY_FILE_S3_to_EFS" [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+
+      [33m~[0m[0m tracing_config (known after apply)
+      [31m-[0m[0m tracing_config {
+          [31m-[0m[0m mode = "PassThrough" [90m-> null[0m[0m
+        }
+
+      [33m~[0m[0m vpc_config {
+          [33m~[0m[0m vpc_id                      = "vpc-066db035c68a7e3b9" -> (known after apply)
+            [90m# (3 unchanged attributes hidden)[0m[0m
+        }
+
+        [90m# (2 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_lambda_layer_version.transform-properties-layer[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "aws_lambda_layer_version" "transform-properties-layer" {
+      [33m~[0m[0m arn                         = "arn:aws:lambda:eu-west-1:438117829123:layer:production-properties:12" -> (known after apply)
+      [33m~[0m[0m code_sha256                 = "8bbXMuipukdlOXwKBbvX/nz9/idxHjDQpHQkH9R3jcE=" -> (known after apply)
+      [31m-[0m[0m compatible_architectures    = [] [90m-> null[0m[0m
+      [31m-[0m[0m compatible_runtimes         = [ [31m# forces replacement[0m[0m
+          [31m-[0m[0m "java11",
+        ] [90m-> null[0m[0m
+      [33m~[0m[0m created_date                = "2025-02-19T16:59:30.241+0000" -> (known after apply)
+      [33m~[0m[0m id                          = "arn:aws:lambda:eu-west-1:438117829123:layer:production-properties:12" -> (known after apply)
+      [33m~[0m[0m layer_arn                   = "arn:aws:lambda:eu-west-1:438117829123:layer:production-properties" -> (known after apply)
+      [32m+[0m[0m signing_job_arn             = (known after apply)
+      [32m+[0m[0m signing_profile_version_arn = (known after apply)
+      [33m~[0m[0m source_code_size            = 547 -> (known after apply)
+      [33m~[0m[0m version                     = "12" -> (known after apply)
+        [90m# (7 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.cudl-data-processing.aws_s3_bucket_policy.dest-bucket[0][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_s3_bucket_policy" "dest-bucket" {
+        id     = "production-cul-cudl-data-releases"
+      [33m~[0m[0m policy = jsonencode(
+            {
+              [31m-[0m[0m Statement = [
+                  [31m-[0m[0m {
+                      [31m-[0m[0m Action    = "s3:GetObject"
+                      [31m-[0m[0m Condition = {
+                          [31m-[0m[0m StringEquals = {
+                              [31m-[0m[0m "AWS:SourceArn" = "arn:aws:cloudfront::438117829123:distribution/EX5R6P57YE1WQ"
+                            }
+                        }
+                      [31m-[0m[0m Effect    = "Allow"
+                      [31m-[0m[0m Principal = {
+                          [31m-[0m[0m Service = "cloudfront.amazonaws.com"
+                        }
+                      [31m-[0m[0m Resource  = "arn:aws:s3:::production-cul-cudl-data-releases/*"
+                      [31m-[0m[0m Sid       = "AllowCloudFrontServicePrincipalReadOnly"
+                    },
+                ]
+              [31m-[0m[0m Version   = "2012-10-17"
+            }
+        ) -> (known after apply)
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.cudl_services.aws_ecs_service.this[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_ecs_service" "this" {
+        id                                 = "arn:aws:ecs:eu-west-1:438117829123:service/production-cudl-ecs/production-cudl-services-service"
+        name                               = "production-cudl-services-service"
+        tags                               = {}
+      [33m~[0m[0m task_definition                    = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-cudl-services:10" -> (known after apply)
+        [90m# (18 unchanged attributes hidden)[0m[0m
+
+        [90m# (5 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl_services.aws_ecs_task_definition.this[0m must be [1m[31mreplaced[0m
+[0m[32m+[0m/[31m-[0m[0m resource "aws_ecs_task_definition" "this" {
+      [33m~[0m[0m arn                      = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-cudl-services:10" -> (known after apply)
+      [33m~[0m[0m arn_without_revision     = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-cudl-services" -> (known after apply)
+      [33m~[0m[0m container_definitions    = (sensitive value) [31m# forces replacement[0m[0m
+      [33m~[0m[0m enable_fault_injection   = false -> (known after apply)
+      [33m~[0m[0m id                       = "production-cudl-services" -> (known after apply)
+      [33m~[0m[0m revision                 = 10 -> (known after apply)
+        tags                     = {
+            "Name" = "production-cudl-services-ecs-task-def"
+        }
+        [90m# (13 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.cudl_viewer.aws_ecs_service.this[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_ecs_service" "this" {
+      [33m~[0m[0m desired_count                      = 2 [33m->[0m[0m 1
+        id                                 = "arn:aws:ecs:eu-west-1:438117829123:service/production-cudl-ecs/production-cudl-viewer-service"
+        name                               = "production-cudl-viewer-service"
+        tags                               = {}
+      [33m~[0m[0m task_definition                    = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-cudl-viewer:23" -> (known after apply)
+        [90m# (17 unchanged attributes hidden)[0m[0m
+
+        [90m# (6 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.cudl_viewer.aws_ecs_task_definition.this[0m must be [1m[31mreplaced[0m
+[0m[32m+[0m/[31m-[0m[0m resource "aws_ecs_task_definition" "this" {
+      [33m~[0m[0m arn                      = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-cudl-viewer:23" -> (known after apply)
+      [33m~[0m[0m arn_without_revision     = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-cudl-viewer" -> (known after apply)
+      [33m~[0m[0m container_definitions    = (sensitive value) [31m# forces replacement[0m[0m
+      [33m~[0m[0m enable_fault_injection   = false -> (known after apply)
+      [33m~[0m[0m id                       = "production-cudl-viewer" -> (known after apply)
+      [33m~[0m[0m revision                 = 23 -> (known after apply)
+        tags                     = {
+            "Name" = "production-cudl-viewer-ecs-task-def"
+        }
+        [90m# (13 unchanged attributes hidden)[0m[0m
+
+        [90m# (1 unchanged block hidden)[0m[0m
+    }
+
+[1m  # module.cudl_viewer.aws_s3_object.task["production-cudl-viewer/cudl-global.properties"][0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_s3_object" "task" {
+      [33m~[0m[0m content                       = (sensitive value)
+        id                            = "production-cudl-viewer/cudl-global.properties"
+        tags                          = {}
+      [33m~[0m[0m version_id                    = "aLIW7jpuREI3IT.iDAx4GdeawKjLgrJH" -> (known after apply)
+        [90m# (25 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.rti_image_server.aws_cloudfront_distribution.static_site[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_cloudfront_distribution" "static_site" {
+        id                              = "EE7501Z09IBGO"
+        tags                            = {}
+        [90m# (25 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m origin {
+          [31m-[0m[0m connection_attempts         = 3 [90m-> null[0m[0m
+          [31m-[0m[0m connection_timeout          = 10 [90m-> null[0m[0m
+          [31m-[0m[0m domain_name                 = "production-cul-cudl-rti-images.s3.eu-west-1.amazonaws.com" [90m-> null[0m[0m
+          [31m-[0m[0m origin_access_control_id    = "E2PY3Z6NO870XL" [90m-> null[0m[0m
+          [31m-[0m[0m origin_id                   = "s3-origin" [90m-> null[0m[0m
+          [31m-[0m[0m response_completion_timeout = 0 [90m-> null[0m[0m
+            [90m# (1 unchanged attribute hidden)[0m[0m
+        }
+      [32m+[0m[0m origin {
+          [32m+[0m[0m connection_attempts         = 3
+          [32m+[0m[0m connection_timeout          = 10
+          [32m+[0m[0m domain_name                 = "production-cul-cudl-rti-images.s3.eu-west-1.amazonaws.com"
+          [32m+[0m[0m origin_access_control_id    = "E2PY3Z6NO870XL"
+          [32m+[0m[0m origin_id                   = "s3-origin"
+          [32m+[0m[0m response_completion_timeout = (known after apply)
+            [90m# (1 unchanged attribute hidden)[0m[0m
+
+          [32m+[0m[0m s3_origin_config {
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            }
+        }
+
+        [90m# (3 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.rti_image_server.aws_s3_bucket_cors_configuration.static_site_cors[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_s3_bucket_cors_configuration" "static_site_cors" {
+        id                    = "production-cul-cudl-rti-images"
+        [90m# (3 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m cors_rule {
+          [31m-[0m[0m allowed_headers = [
+              [31m-[0m[0m "*",
+            ] [90m-> null[0m[0m
+          [31m-[0m[0m allowed_methods = [
+              [31m-[0m[0m "GET",
+              [31m-[0m[0m "HEAD",
+            ] [90m-> null[0m[0m
+          [31m-[0m[0m allowed_origins = [
+              [31m-[0m[0m "*",
+            ] [90m-> null[0m[0m
+          [31m-[0m[0m expose_headers  = [] [90m-> null[0m[0m
+            id              = [90mnull[0m[0m
+          [31m-[0m[0m max_age_seconds = 3000 [90m-> null[0m[0m
+        }
+      [32m+[0m[0m cors_rule {
+          [32m+[0m[0m allowed_headers = [
+              [32m+[0m[0m "*",
+            ]
+          [32m+[0m[0m allowed_methods = [
+              [32m+[0m[0m "GET",
+              [32m+[0m[0m "HEAD",
+            ]
+          [32m+[0m[0m allowed_origins = [
+              [32m+[0m[0m "*",
+            ]
+          [32m+[0m[0m expose_headers  = [
+              [32m+[0m[0m [90mnull[0m[0m,
+            ]
+            id              = [90mnull[0m[0m
+          [32m+[0m[0m max_age_seconds = 3000
+        }
+    }
+
+[1m  # module.solr.aws_ecs_service.this[0m will be updated in-place
+[0m  [33m~[0m[0m resource "aws_ecs_service" "this" {
+        id                                 = "arn:aws:ecs:eu-west-1:438117829123:service/production-cudl-ecs/production-solr-service"
+        name                               = "production-solr-service"
+        tags                               = {}
+      [33m~[0m[0m task_definition                    = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-solr:18" -> (known after apply)
+        [90m# (18 unchanged attributes hidden)[0m[0m
+
+        [90m# (7 unchanged blocks hidden)[0m[0m
+    }
+
+[1m  # module.solr.aws_ecs_task_definition.this[0m must be [1m[31mreplaced[0m
+[0m[32m+[0m/[31m-[0m[0m resource "aws_ecs_task_definition" "this" {
+      [33m~[0m[0m arn                      = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-solr:18" -> (known after apply)
+      [33m~[0m[0m arn_without_revision     = "arn:aws:ecs:eu-west-1:438117829123:task-definition/production-solr" -> (known after apply)
+      [33m~[0m[0m container_definitions    = (sensitive value) [31m# forces replacement[0m[0m
+      [33m~[0m[0m enable_fault_injection   = false -> (known after apply)
+      [33m~[0m[0m id                       = "production-solr" -> (known after apply)
+      [33m~[0m[0m revision                 = 18 -> (known after apply)
+        tags                     = {
+            "Name" = "production-solr-ecs-task-def"
+        }
+        [90m# (13 unchanged attributes hidden)[0m[0m
+
+        [90m# (1 unchanged block hidden)[0m[0m
+    }
+
+[1mPlan:[0m 6 to add, 12 to change, 8 to destroy.
+[0m[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mRedundant ignore_changes element[0m
+[33m│[0m [0m
+[33m│[0m [0m[0m  on ../modules/cudl-data-processing/lambda.tf line 1, in resource "aws_lambda_function" "create-transform-lambda-function":
+[33m│[0m [0m   1: resource [4m"aws_lambda_function"[0m "create-transform-lambda-function" {[0m
+[33m│[0m [0m
+[33m│[0m [0mAdding an attribute name to ignore_changes tells Terraform to ignore future changes to the argument in configuration after the object has been created, retaining the
+[33m│[0m [0mvalue originally configured.
+[33m│[0m [0m
+[33m│[0m [0mThe attribute qualified_arn is decided by the provider alone and therefore there can be no configured value to compare with. Including this attribute in ignore_changes
+[33m│[0m [0mhas no effect. Remove the attribute from ignore_changes to quiet this warning.
+[33m│[0m [0m
+[33m│[0m [0m(and 2 more similar warnings elsewhere)
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mDeprecated attribute[0m
+[33m│[0m [0m
+[33m│[0m [0m[0m  on ../modules/cudl-data-processing/vpc.tf line 83, in resource "aws_security_group_rule" "efs_ingress_nfs_from_vpc":
+[33m│[0m [0m  83:   ipv6_cidr_blocks  = data.aws_vpc.existing_cudl_vpc[4m.ipv6_cidr_block[0m != "" ? [data.aws_vpc.existing_cudl_vpc.ipv6_cidr_block] : [][0m
+[33m│[0m [0m
+[33m│[0m [0mThe attribute "ipv6_cidr_block" is deprecated. Refer to the provider documentation for details.
+[33m│[0m [0m
+[33m│[0m [0m(and 36 more similar warnings elsewhere)
+[33m╵[0m[0m
+[90m
+─────────────────────────────────────────────────────────────────────────────[0m
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
