@@ -85,4 +85,3 @@ metadata_version=/v1/metadata/
 
 showReleaseStatus=true
 unreleasedDataDirectory=/srv/cudl-viewer/cudl-data/data/unreleased
-searchFacetLimit=200
