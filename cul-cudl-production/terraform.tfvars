@@ -73,7 +73,7 @@ transform-lambda-bucket-sqs-notifications = [
 transform-lambda-information = [
   {
     "name"                           = "AWSLambda_CUDLPackageData_SOLR_Listener"
-    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0854f72bcef57bfefe2325f6b279ae6434d64744a31c0198950ca319f435a1f3"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:65d27e09ec40294e0bd067ff1895da32c5a1f864b447f6a59c78a711fa5b7b4d"
     "queue_name"                     = "CUDLIndexQueue"
     "vpc_name"                       = "production-cudl-ecs-vpc"
     "subnet_names"                   = ["production-cudl-ecs-subnet-private-eu-west-1a", "production-cudl-ecs-subnet-private-eu-west-1b"]
@@ -97,7 +97,7 @@ transform-lambda-information = [
   },
   {
     "name"                           = "AWSLambda_CUDLPackageData_Collection_SOLR_Listener"
-    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:0854f72bcef57bfefe2325f6b279ae6434d64744a31c0198950ca319f435a1f3"
+    "image_uri"                      = "438117829123.dkr.ecr.eu-west-1.amazonaws.com/cudl/solr-listener@sha256:65d27e09ec40294e0bd067ff1895da32c5a1f864b447f6a59c78a711fa5b7b4d"
     "queue_name"                     = "CUDLIndexCollectionQueue"
     "vpc_name"                       = "production-cudl-ecs-vpc"
     "subnet_names"                   = ["production-cudl-ecs-subnet-private-eu-west-1a", "production-cudl-ecs-subnet-private-eu-west-1b"]
@@ -210,8 +210,8 @@ solr_domain_name       = "search"
 solr_application_port  = 8983
 solr_target_group_port = 8081
 solr_ecr_repositories = {
-  "cudl/solr-api" = "sha256:944fa38b81f5f1959d66cd00b7ec07828d4c44854dd7937d11870dda846bfb36",
-  "cudl/solr"     = "sha256:baf2e8cc5880e33ffe8b10062aca98b0e964599c28bdf14337c672ad2985cb34"
+  "cudl/solr-api" = "sha256:06b64f02f4cedf50f4e28aeebd290c54dc546fe22210a2d66722d24a625824f7",
+  "cudl/solr"     = "sha256:cc54c097bd3e755bc929caabc50e046d78c19083ca9bd3ddf3e88ca53ba89cc4"
 }
 solr_ecs_task_def_volumes     = { "solr-volume" = "/var/solr" }
 solr_container_name_api       = "solr-api"
