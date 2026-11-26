@@ -462,7 +462,7 @@ cudl_services_domain_name       = "services"
 cudl_services_target_group_port = 8085
 cudl_services_container_port    = 3000
 cudl_services_ecr_repositories = {
-  "cudl/services" = "sha256:7742e6781a774e3f9bab833b8dbb1714de30a8bce1d86d9868d1171e8fcf464a"
+  "cudl/services" = "sha256:22c08120fd21dfe088807b41b6ddc1873c29d6d4469fbd4ede1fa82fc1bb94b0"
 }
 cudl_services_health_check_status_code = "404"
 cudl_services_allowed_methods          = ["HEAD", "GET", "OPTIONS"]
